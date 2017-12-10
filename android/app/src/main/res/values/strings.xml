@@ -1,0 +1,4 @@
+<resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">V9kRigv5h0kGZm1rhSS3TDg-TgKg678fa9f4-af75-4806-89b9-bad9002337a3</string>
+    <string name="app_name">FingerMenuRestaurant</string>
+</resources>
