@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "2435373419",
+    "firebase_url": "https://fingermenu-restaurant.firebaseio.com",
+    "project_id": "fingermenu-restaurant",
+    "storage_bucket": "fingermenu-restaurant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2435373419:android:1fd542f40dc60b18",
+        "android_client_info": {
+          "package_name": "com.fingermenurestaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2435373419-8k8ook4vvq2aho9ufhe7ioi6b30v0lop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADVnwbjwUIpQeO2vGyX-3MghaQ_2EkLwM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

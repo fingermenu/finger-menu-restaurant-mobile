@@ -1,6 +1,6 @@
 // @flow
 
 import { AppRegistry } from 'react-native';
-import TrolleySmart from './src';
+import FingerMenuRestaurant from './src';
 
-AppRegistry.registerComponent('TrolleySmart', () => TrolleySmart);
+AppRegistry.registerComponent('FingerMenuRestaurant', () => FingerMenuRestaurant);
