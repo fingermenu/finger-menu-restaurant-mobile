@@ -1,1 +1,0 @@
-export CategoriesFilter from './CategoriesFilter';

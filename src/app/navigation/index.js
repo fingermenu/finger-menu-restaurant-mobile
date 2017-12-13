@@ -1,12 +1,12 @@
 // @flow
 
 import { Map } from 'immutable';
-import { UserAccessActionTypes } from 'micro-business-parse-server-common-react-native';
+import { UserAccessActionTypes } from 'micro-business-common-react';
 import { MessageType } from 'micro-business-common-react';
 import * as appUpdaterActions from 'micro-business-common-react/src/appUpdater/Actions';
 import * as messageBarActions from 'micro-business-common-react/src/messageBar/Actions';
 import * as netInfoActions from 'micro-business-common-react-native/src/netInfo/Actions';
-import * as userAccessActions from 'micro-business-parse-server-common-react-native/src/userAccess/Actions';
+import * as userAccessActions from 'micro-business-common-react/src/userAccess/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { addNavigationHelpers, NavigationActions, StackNavigator } from 'react-navigation';
@@ -16,11 +16,9 @@ import { connect } from 'react-redux';
 import CodePush from 'react-native-code-push';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 import { SplashContainer } from '../splash';
-import { SignUpSignInContainer } from '../signUpSignIn';
+import { SignUpSignInContainer } from 'micro-business-common-react-native';
+import HomeNavigationTab from './HomeNavigationTab';
 import { configureStore } from '../../framework/redux';
-import AppDrawer from './AppDrawer';
-/* import { SignInDisclaimerContainer } from '../disclaimer';*/
-import { SignInPricingDisclaimerContainer } from '../pricingDisclaimer';
 
 const AppNavigator = StackNavigator(
   {
@@ -28,20 +26,12 @@ const AppNavigator = StackNavigator(
       screen: SplashContainer,
       path: '/',
     },
-    /* SignInDisclaimer: {
-       *   screen: SignInDisclaimerContainer,
-       *   path: '/SignInDisclaimer',
-       * },*/
-    SignInPricingDisclaimer: {
-      screen: SignInPricingDisclaimerContainer,
-      path: '/SignInPricingDisclaimer',
-    },
     SignUpSignIn: {
-      screen: SignUpSignInContainer,
+      screen: props => <SignUpSignInContainer {...props} title="Finger Menu" />,
       path: '/SignUpSignIn',
     },
     App: {
-      screen: AppDrawer,
+      screen: HomeNavigationTab,
       path: '/App',
     },
   },
@@ -88,7 +78,7 @@ const navigationReducer = (state, action) => {
             index: 0,
             actions: [
               NavigationActions.navigate({
-                routeName: 'SignInPricingDisclaimer',
+                routeName: 'SignUpSignIn',
               }),
             ],
             key: null,
