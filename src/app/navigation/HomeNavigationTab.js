@@ -2,36 +2,33 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { BrowseProductsNavigationTab } from '../products';
-import { Color } from '../../framework/style/DefaultStyles';
-import { ProductsHeaderContainer } from '../products';
-import { ShoppingList } from '../shoppingList';
+import { DefaultColor } from '../../style';
+import { Home } from '../home';
+import { Account } from '../account';
 
 const HomeNavigationTab = TabNavigator(
   {
-    ShoppingList: {
-      screen: ShoppingList,
+    Home: {
+      screen: Home,
       path: '/',
       navigationOptions: {
-        tabBarLabel: 'Shopping List',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={26} style={{ color: tintColor }} />
-        ),
-        // header: null,
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
         headerStyle: {
-          backgroundColor: Color.primaryColorNormal,
+          backgroundColor: DefaultColor.primaryColorNormal,
         },
       },
     },
-    Browse: {
-      screen: BrowseProductsNavigationTab,
-      path: '/browse',
+    Account: {
+      screen: Account,
+      path: '/account',
       navigationOptions: {
-        tabBarLabel: 'Browse',
-        tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-cart' : 'ios-cart-outline'} size={26} style={{ color: tintColor }} />,
-        headerTitle: <ProductsHeaderContainer />,
+        tabBarLabel: 'Account',
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={focused ? 'ios-person' : 'ios-person-outline'} size={26} style={{ color: tintColor }} />
+        ),
         headerStyle: {
-          backgroundColor: Color.primaryColorNormal,
+          backgroundColor: DefaultColor.primaryColorNormal,
         },
       },
     },
@@ -53,10 +50,10 @@ const HomeNavigationTab = TabNavigator(
         marginBottom: 0,
       },
       style: {
-        backgroundColor: Color.primaryBackgroundColor, //'#3DC62A',
+        backgroundColor: DefaultColor.primaryBackgroundColor, //'#3DC62A',
       },
-      inactiveTintColor: Color.primaryColorDark,
-      activeTintColor: Color.primaryColorNormal, //'#FAFBFA',
+      inactiveTintColor: DefaultColor.primaryColorDark,
+      activeTintColor: DefaultColor.primaryColorNormal, //'#FAFBFA',
     },
     backBehavior: 'none',
   },

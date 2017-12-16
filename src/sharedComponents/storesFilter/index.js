@@ -1,1 +1,0 @@
-export StoresFilter from './StoresFilter';
