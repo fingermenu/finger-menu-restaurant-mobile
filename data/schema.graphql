@@ -1,7 +1,98 @@
+input AddRestaurantInput {
+  name: String!
+  websiteUrl: String
+  imageUrl: String
+  address: String
+  googleMapUrl: String
+  status: String
+  inheritParentRestaurantMenus: Boolean
+  clientMutationId: String
+}
+
+type AddRestaurantPayload {
+  errorMessage: String
+  restaurant: OwnedRestaurantTypeEdge
+  clientMutationId: String
+}
+
+type GeoLocation {
+  latitude: Float
+  longitude: Float
+}
+
+type Mutation {
+  addRestaurant(input: AddRestaurantInput!): AddRestaurantPayload
+}
+
 # An object with an ID
 interface Node {
   # The id of the object.
   id: ID!
+}
+
+type OwnedRestaurant implements Node {
+  id: ID!
+  name: String
+  websiteUrl: String
+  imageUrl: String
+  address: String
+  geoLocation: GeoLocation
+  phones: [Phone!]
+  status: String
+  googleMapUrl: String
+  inheritParentRestaurantMenus: Boolean
+  parentRestaurant: ParentOwnedRestaurant
+}
+
+# A connection to a list of items.
+type OwnedRestaurantTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [OwnedRestaurantTypeEdge]
+}
+
+# An edge in a connection.
+type OwnedRestaurantTypeEdge {
+  # The item at the end of the edge
+  node: OwnedRestaurant
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type ParentOwnedRestaurant implements Node {
+  id: ID!
+  name: String
+  websiteUrl: String
+  imageUrl: String
+  address: String
+  geoLocation: GeoLocation
+  phones: [Phone!]
+  status: String
+  googleMapUrl: String
+  inheritParentRestaurantMenus: Boolean
+}
+
+type Phone {
+  label: String
+  number: String
 }
 
 type Query {
@@ -17,6 +108,7 @@ type Query {
 
 type User implements Node {
   id: ID!
+  ownedRestaurants(after: String, first: Int, before: String, last: Int, ownedRestaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): OwnedRestaurantTypeConnection
 }
 
 type Viewer implements Node {
