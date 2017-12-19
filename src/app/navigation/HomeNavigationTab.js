@@ -3,13 +3,13 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { DefaultColor } from '../../style';
-import { Home } from '../home';
+import { MenuNavigationTab } from '../menu';
 import { Account } from '../account';
 
 const HomeNavigationTab = TabNavigator(
   {
-    Home: {
-      screen: Home,
+    Menus: {
+      screen: MenuNavigationTab,
       path: '/',
       navigationOptions: {
         tabBarLabel: 'Home',

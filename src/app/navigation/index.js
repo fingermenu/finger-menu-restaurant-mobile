@@ -17,7 +17,7 @@ import CodePush from 'react-native-code-push';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 import { SplashContainer } from '../splash';
 import { SignUpSignInContainer } from 'micro-business-common-react-native';
-import HomeNavigationTab from './HomeNavigationTab';
+import AppNavigationStack from './AppNavigationStack';
 import { configureStore } from '../../framework/redux';
 
 const AppNavigator = StackNavigator(
@@ -31,7 +31,7 @@ const AppNavigator = StackNavigator(
       path: '/SignUpSignIn',
     },
     App: {
-      screen: HomeNavigationTab,
+      screen: AppNavigationStack,
       path: '/App',
     },
   },
