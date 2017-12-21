@@ -1,5 +1,6 @@
 // @flow
 
+import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
 import MenuContainer from './MenuContainer';
@@ -8,25 +9,19 @@ const MenuNavigationTab = TabNavigator(
   {
     AllMenu: {
       screen: MenuContainer,
-      // path: '/',
       navigationOptions: {
         tabBarLabel: 'All',
-        // tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
         headerStyle: {
-          backgroundColor: DefaultColor.primaryColorNormal,
+          backgroundColor: DefaultColor.defaultBannerColor,
         },
       },
     },
     LunchMenu: {
       screen: MenuContainer,
-      // path: '/account',
       navigationOptions: {
         tabBarLabel: 'Lunch',
-        // tabBarIcon: ({ tintColor, focused }) => (
-        //   <Ionicons name={focused ? 'ios-person' : 'ios-person-outline'} size={26} style={{ color: tintColor }} />
-        // ),
         headerStyle: {
-          backgroundColor: DefaultColor.primaryColorNormal,
+          backgroundColor: DefaultColor.defaultBannerColor,
         },
       },
     },
@@ -48,7 +43,7 @@ const MenuNavigationTab = TabNavigator(
         marginBottom: 0,
       },
       style: {
-        backgroundColor: DefaultColor.primaryColorNormal,
+        backgroundColor: DefaultColor.defaultBannerColor,
       },
       activeTintColor: '#FAFBFA',
     },
@@ -56,4 +51,14 @@ const MenuNavigationTab = TabNavigator(
   },
 );
 
-export default MenuNavigationTab;
+class MenuNavigationTabWrapper extends Component {
+  static navigationOptions = ({ screenProps }) => ({
+    tabBarLabel: screenProps.t('home.label'),
+  });
+
+  render = () => {
+    return <MenuNavigationTab />;
+  };
+}
+
+export default MenuNavigationTabWrapper;

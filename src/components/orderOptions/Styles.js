@@ -19,6 +19,10 @@ export default StyleSheet.create({
   optionRowContainer: {
     flexDirection: 'row',
   },
+  checkbox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   optionName: {
     fontSize: 13,
   },

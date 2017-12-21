@@ -15,7 +15,7 @@ export default StackNavigator(
   },
   {
     cardStyle: {
-      backgroundColor: DefaultColor.primaryBackgroundColor,
+      backgroundColor: DefaultColor.defaultBackgroundColor,
     },
   },
 );

@@ -2,20 +2,21 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { translate } from 'react-i18next';
 import { DefaultColor } from '../../style';
-import { MenuNavigationTab } from '../menu';
+import { MenuNavigationTabWrapper } from '../menu';
 import { Account } from '../account';
+import i18n from '../../i18n';
 
 const HomeNavigationTab = TabNavigator(
   {
     Menus: {
-      screen: MenuNavigationTab,
+      screen: MenuNavigationTabWrapper,
       path: '/',
       navigationOptions: {
-        tabBarLabel: 'Home',
         tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
         headerStyle: {
-          backgroundColor: DefaultColor.primaryColorNormal,
+          backgroundColor: DefaultColor.defaultBannerColor,
         },
       },
     },
@@ -28,7 +29,7 @@ const HomeNavigationTab = TabNavigator(
           <Ionicons name={focused ? 'ios-person' : 'ios-person-outline'} size={26} style={{ color: tintColor }} />
         ),
         headerStyle: {
-          backgroundColor: DefaultColor.primaryColorNormal,
+          backgroundColor: DefaultColor.defaultBannerColor,
         },
       },
     },
@@ -50,13 +51,22 @@ const HomeNavigationTab = TabNavigator(
         marginBottom: 0,
       },
       style: {
-        backgroundColor: DefaultColor.primaryBackgroundColor, //'#3DC62A',
+        backgroundColor: DefaultColor.defaultBackgroundColor,
       },
-      inactiveTintColor: DefaultColor.primaryColorDark,
-      activeTintColor: DefaultColor.primaryColorNormal, //'#FAFBFA',
+      inactiveTintColor: DefaultColor.defaultThemeColor,
+      activeTintColor: DefaultColor.defaultBannerColor,
     },
     backBehavior: 'none',
   },
 );
 
-export default HomeNavigationTab;
+const WrappedHomeNavigationTab = () => {
+  return <HomeNavigationTab screenProps={{ t: i18n.getFixedT() }} />;
+};
+
+const WrappedHomeNavigationTabWithI18N = translate('translation', {
+  bindI18n: 'languageChanged',
+  bindStore: false,
+})(WrappedHomeNavigationTab);
+
+export default WrappedHomeNavigationTabWithI18N;

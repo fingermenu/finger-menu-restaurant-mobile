@@ -6,12 +6,22 @@ import { CheckBox } from 'react-native-elements';
 import Immutable from 'immutable';
 import { OrderOptionsProp } from './PropTypes';
 import Styles from './Styles';
+import { DefaultColor } from '../../style/DefaultStyles';
 
 class OrderOptionsListView extends Component {
   renderItem = ({ item }) => {
     return (
       <View style={Styles.optionRowContainer}>
-        <CheckBox center iconType="material" checkedIcon="clear" uncheckedIcon="add" checkedColor="red" checked={true} />
+        <View />
+        <CheckBox
+          style={Styles.checkbox}
+          center
+          iconType="MaterialIcons"
+          checkedIcon="check-box"
+          uncheckedIcon="check-box-outline-blank"
+          checkedColor={DefaultColor.defaultThemeColor}
+          checked={true}
+        />
         <Text style={Styles.optionName}>{item.name}</Text>
       </View>
     );

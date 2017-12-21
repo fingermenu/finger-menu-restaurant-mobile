@@ -8,7 +8,9 @@ import Config from 'react-native-config';
 import { MenuContext } from 'react-native-popup-menu';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
+import { I18nextProvider } from 'react-i18next';
 import Navigation, { reduxStore } from './app/navigation';
+import i18n from './i18n';
 
 const errorHandler = (e, isFatal) => {
   Alert.alert(
@@ -44,11 +46,13 @@ export default class FingerMenuRestaurant extends Component {
 
   render() {
     return (
-      <Provider store={this.state.store}>
-        <MenuContext>
-          <Navigation />
-        </MenuContext>
-      </Provider>
+      <I18nextProvider i18n={i18n}>
+        <Provider store={this.state.store}>
+          <MenuContext>
+            <Navigation />
+          </MenuContext>
+        </Provider>
+      </I18nextProvider>
     );
   }
 }
