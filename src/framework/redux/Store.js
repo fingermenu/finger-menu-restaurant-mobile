@@ -6,8 +6,8 @@ import {
   watchSignInWithUsernameAndPassword,
   watchSignInWithFacebook,
   watchSignOut,
-} from 'micro-business-parse-server-common-react-native';
-import { watchRefreshState } from 'micro-business-common-react-native';
+} from '@microbusiness/parse-server-common-react-native';
+import { watchRefreshState } from '@microbusiness/common-react-native';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import getReducers from './Reducers';

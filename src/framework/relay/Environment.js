@@ -1,7 +1,7 @@
 // @flow
 
+import { UserService } from '@microbusiness/parse-server-common-react-native';
 import Immutable from 'immutable';
-import { UserService } from 'micro-business-parse-server-common-react-native';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import Config from 'react-native-config';
 

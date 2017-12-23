@@ -1,8 +1,8 @@
 // @flow
 
+import { AppUpdaterReducer, MessageBarReducer, UserAccessReducer } from '@microbusiness/common-react';
+import { NetInfoReducer } from '@microbusiness/common-react-native';
 import { combineReducers } from 'redux';
-import { AppUpdaterReducer, MessageBarReducer, UserAccessReducer } from 'micro-business-common-react';
-import { NetInfoReducer } from 'micro-business-common-react-native';
 
 export default function getReducers(navigationReducer) {
   return combineReducers({

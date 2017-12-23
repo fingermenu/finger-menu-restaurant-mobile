@@ -1,10 +1,10 @@
 // @flow
 
+import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { View, ImageBackground, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
-import { TouchableItem } from 'micro-business-common-react-native';
 import Styles from './Styles';
 
 class LandingView extends Component {

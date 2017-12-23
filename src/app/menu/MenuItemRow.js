@@ -1,11 +1,11 @@
 // @flow
 
+import { TouchableItem } from '@microbusiness/common-react-native';
 import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Image, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { TouchableItem } from 'micro-business-common-react-native';
 import { MenuItemProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';

@@ -1,6 +1,6 @@
 // @flow
 
-import { configParseServerSdk } from 'micro-business-parse-server-common-react-native';
+import { configParseServerSdk } from '@microbusiness/parse-server-common-react-native';
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import { Provider } from 'react-redux';
