@@ -1,12 +1,12 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { Text } from 'react-native';
 
-class Home extends React.Component {
+class HomeView extends Component {
   render = () => {
     return <Text>Welcome to Home page.</Text>;
   };
 }
 
-export default Home;
+export default HomeView;
