@@ -4,7 +4,7 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Styles from './Styles';
-import { MenuItemsProps } from './PropTypes';
+import { MenuItemsProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 
 const MenuView = ({ menuItems, onViewMenuItemPressed, isFetchingTop, onRefresh, onEndReached }) => (
@@ -21,7 +21,7 @@ const MenuView = ({ menuItems, onViewMenuItemPressed, isFetchingTop, onRefresh, 
 );
 
 MenuView.propTypes = {
-  menuItems: MenuItemsProps,
+  menuItems: MenuItemsProp,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   isFetchingTop: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,

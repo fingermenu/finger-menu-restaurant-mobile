@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { translate } from 'react-i18next';
@@ -7,6 +7,9 @@ import { DefaultColor } from '../../style';
 import { MenuNavigationTabWrapper } from '../menu';
 import { Account } from '../account';
 import i18n from '../../i18n';
+import { HeaderContainer } from '../../components/header';
+import { InfoContainer } from '../info';
+import { OrdersContainer } from '../orders';
 
 const HomeNavigationTab = TabNavigator(
   {
@@ -15,22 +18,33 @@ const HomeNavigationTab = TabNavigator(
       path: '/',
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
-        headerStyle: {
-          backgroundColor: DefaultColor.defaultBannerColor,
-        },
       },
     },
-    Account: {
+    Info: {
+      screen: InfoContainer,
+      path: '/',
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={26} style={{ color: tintColor }} />
+        ),
+      },
+    },
+    Orders: {
+      screen: OrdersContainer,
+      path: '/',
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={26} style={{ color: tintColor }} />
+        ),
+      },
+    },
+    Assist: {
       screen: Account,
       path: '/account',
       navigationOptions: {
-        tabBarLabel: 'Account',
         tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={focused ? 'ios-person' : 'ios-person-outline'} size={26} style={{ color: tintColor }} />
+          <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={26} style={{ color: tintColor }} />
         ),
-        headerStyle: {
-          backgroundColor: DefaultColor.defaultBannerColor,
-        },
       },
     },
   },
@@ -60,9 +74,19 @@ const HomeNavigationTab = TabNavigator(
   },
 );
 
-const WrappedHomeNavigationTab = () => {
-  return <HomeNavigationTab screenProps={{ t: i18n.getFixedT() }} />;
-};
+// const WrappedHomeNavigationTab = () => {
+//   return <HomeNavigationTab screenProps={{ t: i18n.getFixedT()}} />;
+// };
+
+class WrappedHomeNavigationTab extends Component {
+  static navigationOptions = () => ({
+    headerTitle: <HeaderContainer />,
+  });
+
+  render = () => {
+    return <HomeNavigationTab screenProps={{ t: i18n.getFixedT() }} />;
+  };
+}
 
 const WrappedHomeNavigationTabWithI18N = translate('translation', {
   bindI18n: 'languageChanged',

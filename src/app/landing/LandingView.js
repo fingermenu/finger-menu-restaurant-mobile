@@ -4,7 +4,6 @@ import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { View, ImageBackground, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import Swiper from 'react-native-swiper';
 import Styles from './Styles';
 
 class LandingView extends Component {
@@ -16,7 +15,7 @@ class LandingView extends Component {
           uri: landing.uri,
         }}
       >
-        <TouchableItem onPress={() => this.props.navigateToMenu(1)}>
+        <TouchableItem onPress={this.props.navigateToMenu}>
           <View style={Styles.overlay}>
             <Text style={Styles.header}>{landing.headerText}</Text>
             <Text>{landing.introText}</Text>
@@ -27,30 +26,18 @@ class LandingView extends Component {
     );
   };
 
-  renderLandingPages = landings => {
-    return landings.map(_ => {
-      return this.renderLandingPage(_);
-    });
-  };
-
   render = () => {
-    return (
-      <Swiper showsButtons={true} scrollEnable={false}>
-        {this.renderLandingPages(this.props.landings)}
-      </Swiper>
-    );
+    return this.renderLandingPage(this.props.landing);
   };
 }
 
 LandingView.propTypes = {
-  landings: PropTypes.arrayOf(
-    PropTypes.shape({
-      uri: PropTypes.string,
-      headerText: PropTypes.string,
-      introText: PropTypes.string,
-      buttonText: PropTypes.string,
-    }),
-  ).isRequired,
+  landing: PropTypes.shape({
+    uri: PropTypes.string,
+    headerText: PropTypes.string,
+    introText: PropTypes.string,
+    buttonText: PropTypes.string,
+  }).isRequired,
   navigateToMenu: PropTypes.func.isRequired,
 };
 

@@ -3,10 +3,10 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 
-class HomeView extends Component {
+class TableDetailView extends Component {
   render = () => {
-    return <Text>Welcome to Home page.</Text>;
+    return <Text>Table detail</Text>;
   };
 }
 
-export default HomeView;
+export default TableDetailView;

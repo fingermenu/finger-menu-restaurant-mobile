@@ -4,9 +4,19 @@ import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
 import MenuContainer from './MenuContainer';
+import RecommendMenuContainer from '../recommendMenu/RecommendMenuContainer';
 
 const MenuNavigationTab = TabNavigator(
   {
+    RecommendMenu: {
+      screen: RecommendMenuContainer,
+      navigationOptions: {
+        tabBarLabel: 'Recommend',
+        headerStyle: {
+          backgroundColor: DefaultColor.defaultBannerColor,
+        },
+      },
+    },
     AllMenu: {
       screen: MenuContainer,
       navigationOptions: {
