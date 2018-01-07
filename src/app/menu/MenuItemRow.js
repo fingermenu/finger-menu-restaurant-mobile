@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { MenuItemProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
+import QuantityControl from '../../components/quantityControl/QuantityControl';
 
 class MenuItemRow extends Component {
   constructor(props, context) {
@@ -47,6 +48,9 @@ class MenuItemRow extends Component {
             <Text style={Styles.title}>{this.props.menuItem.name}</Text>
             <Text style={Styles.description}>{this.props.menuItem.description}</Text>
             <Text style={Styles.price}>{this.props.menuItem.priceToDisplay}</Text>
+          </View>
+          <View>
+            <QuantityControl onQuantityChanged={() => {}} />
           </View>
         </View>
       </TouchableItem>

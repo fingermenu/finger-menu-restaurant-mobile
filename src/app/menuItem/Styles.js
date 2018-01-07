@@ -5,11 +5,7 @@ import { Sizes } from '../../style/DefaultStyles';
 
 export default StyleSheet.create({
   container: {
-    // flex: 1,
-    flexDirection: 'column',
-    // padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1,
   },
   descriptionContainer: {
     padding: 10,

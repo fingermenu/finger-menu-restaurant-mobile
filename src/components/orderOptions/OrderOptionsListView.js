@@ -12,17 +12,20 @@ class OrderOptionsListView extends Component {
   renderItem = ({ item }) => {
     return (
       <View style={Styles.optionRowContainer}>
-        <View />
-        <CheckBox
-          style={Styles.checkbox}
-          center
-          iconType="MaterialIcons"
-          checkedIcon="check-box"
-          uncheckedIcon="check-box-outline-blank"
-          checkedColor={DefaultColor.defaultThemeColor}
-          checked={true}
-        />
-        <Text style={Styles.optionName}>{item.name}</Text>
+        <View style={Styles.checkboxContainer}>
+          <CheckBox
+            style={Styles.checkbox}
+            center
+            iconType="MaterialIcons"
+            checkedIcon="check-box"
+            uncheckedIcon="check-box-outline-blank"
+            checkedColor={DefaultColor.defaultThemeColor}
+            checked={true}
+          />
+        </View>
+        <View style={Styles.optionContainer}>
+          <Text style={Styles.optionName}>{item.name}</Text>
+        </View>
       </View>
     );
   };

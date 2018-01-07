@@ -39,6 +39,11 @@ export const DefaultStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   header: {
     height: HEIGHT,
   },

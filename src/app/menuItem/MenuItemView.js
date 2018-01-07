@@ -5,6 +5,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { MenuItemProp } from './PropTypes';
 import Styles from './Styles';
 import { OrderOptionsContainer } from '../../components/orderOptions';
+import { AddToOrderContainer } from '../../components/addToOrder';
 
 class MenuItemView extends Component {
   render = () => {
@@ -28,7 +29,7 @@ class MenuItemView extends Component {
           </View>
         </ScrollView>
         <View>
-          <Text>Checkout button</Text>
+          <AddToOrderContainer />
         </View>
       </View>
     );

@@ -5,15 +5,14 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import TablesView from './TablesView';
 import { TablesProp } from './PropTypes';
-import { DefaultColor } from '../../style';
 import { HeaderContainer } from '../../components/header';
 
 class TablesContainer extends Component {
   static navigationOptions = {
     headerTitle: <HeaderContainer />,
-    headerStyle: {
-      backgroundColor: DefaultColor.defaultThemeColor,
-    },
+    // headerStyle: {
+    //   backgroundColor: DefaultColor.defaultThemeColor,
+    // },
   };
   onTablePressed = (tableId, tableStatus) => {
     if (tableStatus === 'Empty') {
@@ -49,6 +48,27 @@ function mapStateToProps() {
     {
       id: 3,
       name: '3',
+      status: 'Empty',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+    },
+    {
+      id: 4,
+      name: '4',
+      status: 'Empty',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+    },
+    {
+      id: 5,
+      name: '5',
+      status: 'Empty',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+    },
+    {
+      id: 6,
+      name: '6',
       status: 'Empty',
       numberOfAdults: 0,
       numberOfChildren: 0,

@@ -19,6 +19,12 @@ export default StyleSheet.create({
   optionRowContainer: {
     flexDirection: 'row',
   },
+  checkboxContainer: {
+    flex: 30,
+  },
+  optionContainer: {
+    flex: 100,
+  },
   checkbox: {
     justifyContent: 'center',
     alignItems: 'center',

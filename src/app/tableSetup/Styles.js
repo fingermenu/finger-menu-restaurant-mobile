@@ -4,9 +4,9 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     // flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   tableContainer: {
@@ -20,26 +20,22 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  // Container: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+  headerText: {
+    fontSize: 30,
+    fontWeight: '700',
+  },
+  numberText: {
+    fontSize: 20,
+    fontWeight: '500',
   },
   tableBadgeContainer: {
     padding: 25,
-  },
-  tableBadgeEmpty: {
-    backgroundColor: 'grey',
-  },
-  tableBadgeTaken: {
-    backgroundColor: 'red',
-  },
-  tableBadgeReserve: {
-    backgroundColor: 'yellow',
-  },
-  tableBadgePaid: {
-    backgroundColor: 'green',
   },
   tableBadgeWrapper: {
     paddingLeft: 15,
