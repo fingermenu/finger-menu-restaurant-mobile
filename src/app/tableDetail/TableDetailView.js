@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 
 class TableDetailView extends Component {
   render = () => {
-    return <Text>Table detail</Text>;
+    return <Text>Table detail for {this.props.table.name}</Text>;
   };
 }
 

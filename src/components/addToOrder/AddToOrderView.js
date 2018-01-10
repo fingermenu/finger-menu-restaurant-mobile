@@ -11,7 +11,7 @@ class AddToOrderView extends Component {
   render = () => {
     return (
       <TouchableItem onPress={this.props.addToOrderPressed} style={Styles.container}>
-        <Text style={Styles.text}>Add to order</Text>
+        <Text style={Styles.text}>ADD {this.props.orderQuantity} TO ORDER</Text>
       </TouchableItem>
     );
   };
@@ -19,6 +19,8 @@ class AddToOrderView extends Component {
 
 AddToOrderView.propTypes = {
   addToOrderPressed: PropTypes.func.isRequired,
+  orderQuantity: PropTypes.number.isRequired,
+  menuItemId: PropTypes.string.isRequired,
 };
 
 export default AddToOrderView;

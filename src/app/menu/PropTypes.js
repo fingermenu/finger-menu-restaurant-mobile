@@ -8,6 +8,7 @@ export const MenuItemProp = PropTypes.shape({
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
   priceToDisplay: PropTypes.number,
+  orderedQuantity: PropTypes.number,
 }).isRequired;
 
 export const MenuItemsProp = PropTypes.arrayOf(MenuItemProp).isRequired;

@@ -5,11 +5,13 @@ import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Image, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { MenuItemProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
-import QuantityControl from '../../components/quantityControl/QuantityControl';
+import { QuantityControlContainer } from '../../components/quantityControl';
+import { DefaultColor } from '../../style';
 
 class MenuItemRow extends Component {
   constructor(props, context) {
@@ -32,9 +34,17 @@ class MenuItemRow extends Component {
     }
   };
 
+  onQuantityIncrease = () => {
+    this.props.onAddMenuItemToOrder(this.props.menuItem.id);
+  };
+
+  onQuantityDecrease = () => {
+    this.props.onRemoveMenuItemFromOrder(this.props.menuItem.id);
+  };
+
   render = () => {
     return (
-      <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItem.id)}>
+      <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItem)}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
             <Image
@@ -50,7 +60,18 @@ class MenuItemRow extends Component {
             <Text style={Styles.price}>{this.props.menuItem.priceToDisplay}</Text>
           </View>
           <View>
-            <QuantityControl onQuantityChanged={() => {}} />
+            <Icon
+              name="dot-single"
+              type="entypo"
+              color={this.props.orderQuantity > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
+            />
+          </View>
+          <View>
+            <QuantityControlContainer
+              quantity={this.props.orderQuantity}
+              onQuantityIncrease={this.onQuantityIncrease}
+              onQuantityDecrease={this.onQuantityDecrease}
+            />
           </View>
         </View>
       </TouchableItem>
@@ -60,7 +81,10 @@ class MenuItemRow extends Component {
 
 MenuItemRow.propTypes = {
   menuItem: MenuItemProp,
+  orderQuantity: PropTypes.number.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
+  onAddMenuItemToOrder: PropTypes.func.isRequired,
+  onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
 };
 
 export default MenuItemRow;

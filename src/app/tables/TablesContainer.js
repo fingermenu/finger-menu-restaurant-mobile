@@ -14,9 +14,11 @@ class TablesContainer extends Component {
     //   backgroundColor: DefaultColor.defaultThemeColor,
     // },
   };
-  onTablePressed = (tableId, tableStatus) => {
-    if (tableStatus === 'Empty') {
-      this.props.navigateToTableSetup(tableId);
+  onTablePressed = table => {
+    if (table.status === 'Empty' || table.status === 'Reserved') {
+      this.props.navigateToTableSetup(table);
+    } else if (table.status === 'Taken') {
+      this.props.navigateToTableDetail(table);
     }
   };
 
@@ -48,8 +50,8 @@ function mapStateToProps() {
     {
       id: 3,
       name: '3',
-      status: 'Empty',
-      numberOfAdults: 0,
+      status: 'Taken',
+      numberOfAdults: 2,
       numberOfChildren: 0,
     },
     {
@@ -62,14 +64,14 @@ function mapStateToProps() {
     {
       id: 5,
       name: '5',
-      status: 'Empty',
-      numberOfAdults: 0,
-      numberOfChildren: 0,
+      status: 'Taken',
+      numberOfAdults: 4,
+      numberOfChildren: 2,
     },
     {
       id: 6,
       name: '6',
-      status: 'Empty',
+      status: 'Reserved',
       numberOfAdults: 0,
       numberOfChildren: 0,
     },
@@ -82,12 +84,21 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToTableSetup: tableId =>
+    navigateToTableSetup: table =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'TableSetup',
           params: {
-            tableId,
+            table,
+          },
+        }),
+      ),
+    navigateToTableDetail: table =>
+      dispatch(
+        NavigationActions.navigate({
+          routeName: 'TableDetail',
+          params: {
+            table,
           },
         }),
       ),

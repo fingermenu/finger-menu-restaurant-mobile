@@ -6,7 +6,8 @@ import { DefaultColor } from '../../style';
 import { MenuItemContainer } from '../menuItem';
 import { TablesContainer } from '../tables';
 import { TableSetupContainer } from '../tableSetup';
-import LandingContainer from '../landing/LandingContainer';
+import { LandingContainer } from '../landing';
+import { TableDetailContainer } from '../tableDetail';
 
 export default StackNavigator(
   {
@@ -15,6 +16,9 @@ export default StackNavigator(
     },
     TableSetup: {
       screen: TableSetupContainer,
+    },
+    TableDetail: {
+      screen: TableDetailContainer,
     },
     Landing: {
       screen: LandingContainer,

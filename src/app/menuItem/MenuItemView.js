@@ -6,9 +6,29 @@ import { MenuItemProp } from './PropTypes';
 import Styles from './Styles';
 import { OrderOptionsContainer } from '../../components/orderOptions';
 import { AddToOrderContainer } from '../../components/addToOrder';
+import QuantityControl from '../../components/quantityControl/QuantityControl';
 
 class MenuItemView extends Component {
+  constructor() {
+    super();
+    this.state = {
+      quantity: 1,
+    };
+  }
+
+  onQuantityIncrease = () => {
+    this.setState({ quantity: this.state.quantity + 1 });
+  };
+
+  onQuantityDecrease = () => {
+    if (this.state.quantity > 0) {
+      this.setState({ quantity: this.state.quantity - 1 });
+    }
+  };
+
   render = () => {
+    const { quantity } = this.state;
+
     return (
       <View style={Styles.container}>
         <ScrollView>
@@ -27,9 +47,12 @@ class MenuItemView extends Component {
           <View style={Styles.optionsContainer}>
             <OrderOptionsContainer orderOptions={this.props.menuItem.orderOptions} />
           </View>
+          <View style={Styles.quantity}>
+            <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
+          </View>
         </ScrollView>
         <View>
-          <AddToOrderContainer />
+          <AddToOrderContainer menuItemId={this.props.menuItem.id} orderQuantity={quantity} />
         </View>
       </View>
     );

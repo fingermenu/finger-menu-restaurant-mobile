@@ -1,3 +1,3 @@
 // @flow
 
-export QuantityControl from './QuantityControl';
+export QuantityControlContainer from './QuantityControlContainer';

@@ -11,7 +11,7 @@ import Styles from './Styles';
 class TablesView extends Component {
   renderItem = item => {
     return (
-      <TouchableItem onPress={() => this.props.onTablePressed(item.item.id, item.item.status)}>
+      <TouchableItem onPress={() => this.props.onTablePressed(item.item)}>
         <View style={Styles.tableContainer}>
           <Badge
             value={item.item.name}
@@ -23,7 +23,7 @@ class TablesView extends Component {
           <View style={Styles.tableTextContainer}>
             <View style={Styles.textContainer}>
               <Icon name="human-handsdown" size={13} type="material-community" />
-              <Text>10</Text>
+              <Text>{item.item.numberOfAdults}</Text>
             </View>
             {/*<View style={Styles.textContainer}>*/}
             {/*<Icon name='human-child' size={13} type='material-community'/>*/}

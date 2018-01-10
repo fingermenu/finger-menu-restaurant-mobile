@@ -12,6 +12,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  quantity: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     width: Sizes.screenWidth,
     height: 200,

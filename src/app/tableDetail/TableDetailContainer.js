@@ -1,17 +1,13 @@
 // @flow
 
 import React, { Component } from 'react';
-import TableSetupView from './TableSetupView';
-import { NavigationActions } from 'react-navigation';
+import TableDetailView from './TableDetailView';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
-class TableSetupContainer extends Component {
-  onSetupTablePressed = () => {
-    this.props.navigateToAppHome(this.props.table.id);
-  };
-
+class TableDetailContainer extends Component {
   render = () => {
-    return <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} />;
+    return <TableDetailView table={this.props.table} />;
   };
 }
 
@@ -48,4 +44,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableSetupContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TableDetailContainer);

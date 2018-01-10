@@ -18,16 +18,24 @@ export default StyleSheet.create({
   },
   optionRowContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
   },
   checkboxContainer: {
-    flex: 30,
+    flex: 10,
   },
   optionContainer: {
     flex: 100,
   },
   checkbox: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    margin: 0,
+    padding: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    backgroundColor: DefaultColor.defaultBackgroundColor,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   optionName: {
     fontSize: 13,

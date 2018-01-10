@@ -14,8 +14,8 @@ class OrderOptionsListView extends Component {
       <View style={Styles.optionRowContainer}>
         <View style={Styles.checkboxContainer}>
           <CheckBox
-            style={Styles.checkbox}
-            center
+            containerStyle={Styles.checkbox}
+            // center
             iconType="MaterialIcons"
             checkedIcon="check-box"
             uncheckedIcon="check-box-outline-blank"
