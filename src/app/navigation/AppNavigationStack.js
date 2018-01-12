@@ -8,6 +8,7 @@ import { TablesContainer } from '../tables';
 import { TableSetupContainer } from '../tableSetup';
 import { LandingContainer } from '../landing';
 import { TableDetailContainer } from '../tableDetail';
+import { OrderConfirmedContainer } from '../orderConfirmed';
 
 export default StackNavigator(
   {
@@ -28,6 +29,9 @@ export default StackNavigator(
     },
     MenuItem: {
       screen: MenuItemContainer,
+    },
+    OrderConfirmed: {
+      screen: OrderConfirmedContainer,
     },
   },
   {

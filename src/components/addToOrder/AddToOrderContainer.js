@@ -11,39 +11,48 @@ import { NavigationActions } from 'react-navigation';
 
 class AddToOrderContainer extends Component {
   onAddMenuItemToOrder = () => {
-    const menuItemId = this.props.menuItemId;
+    const menuItemId = this.props.menuItem.id;
     const startingOrderId = this.props.orders.length;
-
-    // const o = Array.from(Array(this.props.orderQuantity).keys()).map(function(num) {
-    //   return {
-    //     id: startingOrderId + num + 1,
+    //
+    // let orders = [];
+    // for (let i = 1; i <= this.props.orderQuantity; i++) {
+    //   orders.push({
+    //     id: startingOrderId + i,
     //     menuItemId,
-    //   }
+    //     menuItem: this.props.menuItem,
+    //   });
+    // }
+
+    // const newOrders = this.props.orders.push({
+    //   id: startingOrderId + 1,
+    //   menuItemId,
+    //   menuItem: this.props.menuItem,
+    //   quantity: this.props.orderQuantity,
     // });
-    let orders = [];
-    for (let i = 1; i <= this.props.orderQuantity; i++) {
-      orders.push({
-        id: startingOrderId + i,
-        menuItemId,
-      });
-    }
 
-    const newOrders = this.props.orders.concat(orders);
-
-    this.props.ordersActions.menuOrderChanged(Map({ orders: Immutable.fromJS(newOrders) }));
+    this.props.ordersActions.menuOrderChanged(
+      Map({
+        orders: Immutable.fromJS(this.props.orders).push({
+          id: startingOrderId + 1,
+          menuItemId,
+          menuItem: this.props.menuItem,
+          quantity: this.props.orderQuantity,
+        }),
+      }),
+    );
     this.props.goBack();
   };
 
   render = () => {
     return (
-      <OrderFooterView orderQuantity={this.props.orderQuantity} menuItemId={this.props.menuItemId} addToOrderPressed={this.onAddMenuItemToOrder} />
+      <OrderFooterView orderQuantity={this.props.orderQuantity} menuItemId={this.props.menuItem.id} addToOrderPressed={this.onAddMenuItemToOrder} />
     );
   };
 }
 
 AddToOrderContainer.propTypes = {
   orderQuantity: PropTypes.number.isRequired,
-  menuItemId: PropTypes.string.isRequired,
+  menuItem: PropTypes.object.isRequired,
   ordersActions: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
 };

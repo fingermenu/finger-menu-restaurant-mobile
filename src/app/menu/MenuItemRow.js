@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { MenuItemProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
-import { QuantityControlContainer } from '../../components/quantityControl';
+// import { QuantityControlContainer } from '../../components/quantityControl';
 import { DefaultColor } from '../../style';
 
 class MenuItemRow extends Component {
@@ -35,7 +35,7 @@ class MenuItemRow extends Component {
   };
 
   onQuantityIncrease = () => {
-    this.props.onAddMenuItemToOrder(this.props.menuItem.id);
+    this.props.onAddMenuItemToOrder(this.props.menuItem);
   };
 
   onQuantityDecrease = () => {
@@ -63,14 +63,7 @@ class MenuItemRow extends Component {
             <Icon
               name="dot-single"
               type="entypo"
-              color={this.props.orderQuantity > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
-            />
-          </View>
-          <View>
-            <QuantityControlContainer
-              quantity={this.props.orderQuantity}
-              onQuantityIncrease={this.onQuantityIncrease}
-              onQuantityDecrease={this.onQuantityDecrease}
+              color={this.props.isOrdered > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
             />
           </View>
         </View>
@@ -83,8 +76,8 @@ MenuItemRow.propTypes = {
   menuItem: MenuItemProp,
   orderQuantity: PropTypes.number.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
-  onAddMenuItemToOrder: PropTypes.func.isRequired,
-  onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
+  // onAddMenuItemToOrder: PropTypes.func.isRequired,
+  // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
 };
 
 export default MenuItemRow;

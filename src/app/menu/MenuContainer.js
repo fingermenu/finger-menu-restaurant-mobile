@@ -1,6 +1,5 @@
 // @flow
 
-import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
@@ -20,22 +19,23 @@ class MenuContainer extends Component {
     this.props.navigateToMenuItem(menuItem);
   };
 
-  onAddMenuItemToOrder = menuItemId => {
-    const newOrders = Immutable.fromJS(this.props.orders).concat({
-      id: this.props.orders.length + 1,
-      menuItemId: menuItemId,
-    });
-
-    this.props.ordersActions.menuOrderChanged(Map({ orders: newOrders }));
-  };
-
-  onRemoveMenuItemFromOrder = menuItemId => {
-    const orders = Immutable.fromJS(this.props.orders);
-    const orderToRemoveIndex = orders.findIndex(order => order.get('menuItemId') === menuItemId);
-    if (orderToRemoveIndex >= 0) {
-      this.props.ordersActions.menuOrderChanged(Map({ orders: orders.delete(orderToRemoveIndex) }));
-    }
-  };
+  // onAddMenuItemToOrder = menuItem => {
+  //   const newOrders = Immutable.fromJS(this.props.orders).concat({
+  //     id: this.props.orders.length + 1,
+  //     menuItemId: menuItem.Id,
+  //     menuItem,
+  //   });
+  //
+  //   this.props.ordersActions.menuOrderChanged(Map({ orders: newOrders }));
+  // };
+  //
+  // onRemoveMenuItemFromOrder = menuItemId => {
+  //   const orders = Immutable.fromJS(this.props.orders);
+  //   const orderToRemoveIndex = orders.findIndex(order => order.get('menuItemId') === menuItemId);
+  //   if (orderToRemoveIndex >= 0) {
+  //     this.props.ordersActions.menuOrderChanged(Map({ orders: orders.delete(orderToRemoveIndex) }));
+  //   }
+  // };
 
   onRefresh = () => {
     // if (this.props.relay.isLoading()) {

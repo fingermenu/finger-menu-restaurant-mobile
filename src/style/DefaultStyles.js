@@ -51,4 +51,8 @@ export const DefaultStyles = StyleSheet.create({
     fontSize: 14,
     color: DEFAULT_FONT_COLOR,
   },
+  iconContainerStyle: {
+    height: 32,
+    width: 32,
+  },
 });

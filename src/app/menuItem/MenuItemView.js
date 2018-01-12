@@ -52,7 +52,7 @@ class MenuItemView extends Component {
           </View>
         </ScrollView>
         <View>
-          <AddToOrderContainer menuItemId={this.props.menuItem.id} orderQuantity={quantity} />
+          <AddToOrderContainer menuItem={this.props.menuItem} orderQuantity={quantity} />
         </View>
       </View>
     );

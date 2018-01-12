@@ -11,8 +11,14 @@ import { OrdersProp } from '../orders/PropTypes';
 import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 
 class MenuView extends Component {
-  getQuantity = item => {
-    return Immutable.fromJS(this.props.orders).count(order => order.get('menuItemId') === item.id);
+  getTotalOrderQuantity = () => {
+    return Immutable.fromJS(this.props.orders).reduce((total, value) => {
+      return total + value.get('quantity');
+    }, 0);
+  };
+
+  hasOrdered = item => {
+    return Immutable.fromJS(this.props.orders).findIndex(order => order.get('menuItemId') === item.id) >= 0;
   };
 
   render = () => {
@@ -23,10 +29,10 @@ class MenuView extends Component {
           renderItem={info => (
             <MenuItemRow
               menuItem={info.item}
-              orderQuantity={this.getQuantity(info.item)}
+              isOrdered={this.hasOrdered(info.item)}
               onViewMenuItemPressed={this.props.onViewMenuItemPressed}
-              onAddMenuItemToOrder={this.props.onAddMenuItemToOrder}
-              onRemoveMenuItemFromOrder={this.props.onRemoveMenuItemFromOrder}
+              // onAddMenuItemToOrder={this.props.onAddMenuItemToOrder}
+              // onRemoveMenuItemFromOrder={this.props.onRemoveMenuItemFromOrder}
             />
           )}
           keyExtractor={item => item.id}
@@ -34,7 +40,7 @@ class MenuView extends Component {
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
         />
-        {this.props.orders.length > 0 ? <PlaceOrderControlContainer totalOrderQuantity={this.props.orders.length} /> : <View />}
+        {this.props.orders.length > 0 ? <PlaceOrderControlContainer totalOrderQuantity={this.getTotalOrderQuantity()} /> : <View />}
       </View>
     );
   };
@@ -44,8 +50,8 @@ MenuView.propTypes = {
   menuItems: MenuItemsProp,
   orders: OrdersProp,
   onViewMenuItemPressed: PropTypes.func.isRequired,
-  onAddMenuItemToOrder: PropTypes.func.isRequired,
-  onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
+  // onAddMenuItemToOrder: PropTypes.func.isRequired,
+  // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
   isFetchingTop: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onEndReached: PropTypes.func.isRequired,
