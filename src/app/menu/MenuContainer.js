@@ -79,7 +79,7 @@ class MenuContainer extends Component {
 MenuContainer.propTypes = {
   menuItems: MenuItemsProp,
   orders: OrdersProp,
-  ordersActions: PropTypes.func.isRequired,
+  ordersActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

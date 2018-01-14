@@ -52,9 +52,9 @@ MenuView.propTypes = {
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,
   // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
-  isFetchingTop: PropTypes.bool.isRequired,
-  onRefresh: PropTypes.func.isRequired,
-  onEndReached: PropTypes.func.isRequired,
+  isFetchingTop: PropTypes.bool,
+  onRefresh: PropTypes.func,
+  onEndReached: PropTypes.func,
 };
 
 export default MenuView;

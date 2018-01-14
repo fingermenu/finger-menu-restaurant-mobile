@@ -79,7 +79,7 @@ class TablesView extends Component {
 }
 
 TablesView.propTypes = {
-  menuItems: TablesProp,
+  tables: TablesProp,
   onTablePressed: PropTypes.func.isRequired,
 };
 

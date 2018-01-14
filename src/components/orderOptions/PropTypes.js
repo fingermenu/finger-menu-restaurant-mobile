@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const OrderOptionProp = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  priceToDisplay: PropTypes.number,
+  priceToDisplay: PropTypes.string,
   type: PropTypes.string.isRequired,
 }).isRequired;
 

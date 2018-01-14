@@ -8,8 +8,4 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
-  iconContainerStyle: {
-    height: 32,
-    width: 32,
-  },
 });

@@ -71,7 +71,7 @@ class OrdersContainer extends Component {
 
 OrdersContainer.propTypes = {
   orders: OrdersProp,
-  ordersActions: PropTypes.func.isRequired,
+  ordersActions: PropTypes.object.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
 };

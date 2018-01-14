@@ -28,7 +28,7 @@ class TablesContainer extends Component {
 }
 
 TablesContainer.propTypes = {
-  menuItems: TablesProp,
+  tables: TablesProp,
 };
 
 function mapStateToProps() {

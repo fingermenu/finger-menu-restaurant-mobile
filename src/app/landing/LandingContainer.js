@@ -35,6 +35,7 @@ function mapStateToProps() {
 
   return {
     landing: mockLanding,
+    restaurantName: '43 Degree',
   };
 }
 

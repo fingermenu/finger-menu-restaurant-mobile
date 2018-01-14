@@ -3,11 +3,11 @@
 import PropTypes from 'prop-types';
 
 export const MenuItemProp = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
-  priceToDisplay: PropTypes.number,
+  priceToDisplay: PropTypes.string,
   orderedQuantity: PropTypes.number,
 }).isRequired;
 

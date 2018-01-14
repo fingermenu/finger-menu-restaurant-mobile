@@ -74,7 +74,7 @@ class MenuItemRow extends Component {
 
 MenuItemRow.propTypes = {
   menuItem: MenuItemProp,
-  orderQuantity: PropTypes.number.isRequired,
+  isOrdered: PropTypes.bool.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,
   // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,

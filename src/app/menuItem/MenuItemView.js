@@ -7,7 +7,7 @@ import Styles from './Styles';
 import { OrderOptionsContainer } from '../../components/orderOptions';
 import { AddToOrderContainer } from '../../components/addToOrder';
 import QuantityControl from '../../components/quantityControl/QuantityControl';
-import { OrderItemProp } from '../orders/PropTypes';
+import { OrderItemPropOptional } from '../orders/PropTypes';
 
 class MenuItemView extends Component {
   constructor() {
@@ -72,7 +72,7 @@ class MenuItemView extends Component {
 
 MenuItemView.propTypes = {
   menuItem: MenuItemProp,
-  order: OrderItemProp,
+  order: OrderItemPropOptional,
 };
 
 export default MenuItemView;
