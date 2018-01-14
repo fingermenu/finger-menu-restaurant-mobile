@@ -11,72 +11,66 @@ import { HeaderContainer } from '../../components/header';
 import { InfoContainer } from '../info';
 import { OrdersContainer } from '../orders';
 
-const HomeNavigationTab = TabNavigator(
-  {
-    Menus: {
-      screen: MenuNavigationTabWrapper,
-      path: '/',
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
-      },
-    },
-    Info: {
-      screen: InfoContainer,
-      path: '/',
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={26} style={{ color: tintColor }} />
-        ),
-      },
-    },
-    Orders: {
-      screen: OrdersContainer,
-      path: '/',
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={26} style={{ color: tintColor }} />
-        ),
-      },
-    },
-    Assist: {
-      screen: Account,
-      path: '/account',
-      navigationOptions: {
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={26} style={{ color: tintColor }} />
-        ),
-      },
+const tabScreens = {
+  Menus: {
+    screen: MenuNavigationTabWrapper,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
     },
   },
-  {
-    tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
-    lazy: true,
-    tabBarOptions: {
-      showIcon: true,
-      tabStyle: {
-        height: 49,
-      },
-      labelStyle: {
-        fontSize: 9,
-      },
-      iconStyle: {
-        marginBottom: 0,
-      },
-      style: {
-        backgroundColor: DefaultColor.defaultBackgroundColor,
-      },
-      inactiveTintColor: DefaultColor.defaultThemeColor,
-      activeTintColor: DefaultColor.defaultBannerColor,
+  Info: {
+    screen: InfoContainer,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={26} style={{ color: tintColor }} />
+      ),
     },
-    backBehavior: 'none',
   },
-);
+  Orders: {
+    screen: OrdersContainer,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={26} style={{ color: tintColor }} />
+      ),
+    },
+  },
+  Assist: {
+    screen: Account,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={26} style={{ color: tintColor }} />
+      ),
+    },
+  },
+};
 
-// const WrappedHomeNavigationTab = () => {
-//   return <HomeNavigationTab screenProps={{ t: i18n.getFixedT()}} />;
-// };
+const tabConfig = {
+  tabBarPosition: 'bottom',
+  animationEnabled: false,
+  swipeEnabled: false,
+  lazy: true,
+  tabBarOptions: {
+    showIcon: true,
+    tabStyle: {
+      height: 49,
+    },
+    labelStyle: {
+      fontSize: 9,
+    },
+    iconStyle: {
+      marginBottom: 0,
+    },
+    style: {
+      backgroundColor: DefaultColor.defaultBackgroundColor,
+    },
+    inactiveTintColor: DefaultColor.defaultThemeColor,
+    activeTintColor: DefaultColor.defaultBannerColor,
+  },
+  backBehavior: 'none',
+};
+
+const HomeNavigationTab = TabNavigator(tabScreens, tabConfig);
+const HomeNavigationOrdersTab = TabNavigator(tabScreens, { ...tabConfig, initialRouteName: 'Orders' });
 
 class WrappedHomeNavigationTab extends Component {
   static navigationOptions = () => ({
@@ -92,5 +86,22 @@ const WrappedHomeNavigationTabWithI18N = translate('translation', {
   bindI18n: 'languageChanged',
   bindStore: false,
 })(WrappedHomeNavigationTab);
+
+// TODO: Following is a workaround of navigating parent tabs within sub stack navigation, see
+// https://github.com/react-navigation/react-navigation/issues/1715, from appwudo commented on 23 Sep 2017 comment
+class WrappedHomeNavigationOrdersTab extends Component {
+  static navigationOptions = () => ({
+    headerTitle: <HeaderContainer />,
+  });
+
+  render = () => {
+    return <HomeNavigationOrdersTab screenProps={{ t: i18n.getFixedT() }} />;
+  };
+}
+
+export const WrappedHomeNavigationTabWithI18NOrders = translate('translation', {
+  bindI18n: 'languageChanged',
+  bindStore: false,
+})(WrappedHomeNavigationOrdersTab);
 
 export default WrappedHomeNavigationTabWithI18N;

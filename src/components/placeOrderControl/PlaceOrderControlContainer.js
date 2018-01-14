@@ -31,14 +31,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(
         NavigationActions.reset({
           index: 0,
-          key: 'HomeNavigationTab',
           actions: [
             NavigationActions.navigate({
-              routeName: 'Assist',
+              routeName: 'HomeOrders',
             }),
-            // NavigationActions.navigate({
-            //   routeName: 'Assist',
-            // }),
           ],
         }),
       ),

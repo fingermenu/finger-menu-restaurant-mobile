@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
 import { TouchableItem } from '@microbusiness/common-react-native';
 import { TablesProp } from './PropTypes';
-import { Badge, Icon } from 'react-native-elements';
+import { Badge } from 'react-native-elements';
 import Styles from './Styles';
 
 class TablesView extends Component {
@@ -21,14 +21,8 @@ class TablesView extends Component {
             wrapperStyle={Styles.tableBadgeWrapper}
           />
           <View style={Styles.tableTextContainer}>
-            <View style={Styles.textContainer}>
-              <Icon name="human-handsdown" size={13} type="material-community" />
-              <Text>{item.item.numberOfAdults}</Text>
-            </View>
-            {/*<View style={Styles.textContainer}>*/}
-            {/*<Icon name='human-child' size={13} type='material-community'/>*/}
-            {/*<Text>2</Text>*/}
-            {/*</View>*/}
+            <Text>{item.item.numberOfAdults}</Text>
+            <Text>{item.item.numberOfChildren}</Text>
           </View>
         </View>
       </TouchableItem>

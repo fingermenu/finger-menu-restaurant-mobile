@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import { DefaultStyles } from '../../style/';
-import { NumberPad } from '../../components/numberPad';
 
 class TableSetupView extends Component {
   render = () => {
@@ -17,15 +16,23 @@ class TableSetupView extends Component {
         <View>
           <View style={DefaultStyles.rowContainer}>
             <Icon name="human-handsdown" size={35} type="material-community" />
-            <Text style={Styles.numberText}>10</Text>
+            <Text style={Styles.numberText}>{this.props.table.numberOfAdults}</Text>
           </View>
           <View style={DefaultStyles.rowContainer}>
             <Icon name="human-child" size={25} type="material-community" />
-            <Text style={Styles.numberText}>2</Text>
+            <Text style={Styles.numberText}>{this.props.table.numberOfChildren}</Text>
+          </View>
+          <View style={DefaultStyles.rowContainer}>
+            <Icon name="human-child" size={25} type="material-community" />
+            <Text style={Styles.numberText}>{this.props.table.customerName}</Text>
+          </View>
+          <View style={DefaultStyles.rowContainer}>
+            <Icon name="human-child" size={25} type="material-community" />
+            <Text style={Styles.numberText}>{this.props.table.reservation}</Text>
           </View>
         </View>
         <Button title="Set table" onPress={this.props.onSetupTablePressed} />
-        <NumberPad onNumberPressed={() => {}} onOkPressed={() => {}} onClearPressed={() => {}} />
+        {/*<NumberPad onNumberPressed={() => {}} onOkPressed={() => {}} onClearPressed={() => {}} />*/}
       </View>
     );
   };

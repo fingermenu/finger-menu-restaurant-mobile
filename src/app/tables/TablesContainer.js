@@ -39,6 +39,8 @@ function mapStateToProps() {
       status: 'Empty',
       numberOfAdults: 0,
       numberOfChildren: 0,
+      customerName: '',
+      reservation: '',
     },
     {
       id: 2,
@@ -46,6 +48,8 @@ function mapStateToProps() {
       status: 'Empty',
       numberOfAdults: 0,
       numberOfChildren: 0,
+      customerName: '',
+      reservation: '',
     },
     {
       id: 3,
@@ -53,6 +57,8 @@ function mapStateToProps() {
       status: 'Taken',
       numberOfAdults: 2,
       numberOfChildren: 0,
+      customerName: '',
+      reservation: '',
     },
     {
       id: 4,
@@ -60,6 +66,8 @@ function mapStateToProps() {
       status: 'Empty',
       numberOfAdults: 0,
       numberOfChildren: 0,
+      customerName: '',
+      reservation: '',
     },
     {
       id: 5,
@@ -67,6 +75,8 @@ function mapStateToProps() {
       status: 'Taken',
       numberOfAdults: 4,
       numberOfChildren: 2,
+      customerName: '',
+      reservation: '',
     },
     {
       id: 6,
@@ -74,6 +84,8 @@ function mapStateToProps() {
       status: 'Reserved',
       numberOfAdults: 0,
       numberOfChildren: 0,
+      customerName: '',
+      reservation: '',
     },
   ];
 

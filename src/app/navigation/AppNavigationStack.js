@@ -1,7 +1,7 @@
 // @flow
 
 import { StackNavigator } from 'react-navigation';
-import HomeNavigationTab from './HomeNavigationTab';
+import HomeNavigationTab, { WrappedHomeNavigationTabWithI18NOrders } from './HomeNavigationTab';
 import { DefaultColor } from '../../style';
 import { MenuItemContainer } from '../menuItem';
 import { TablesContainer } from '../tables';
@@ -26,6 +26,9 @@ export default StackNavigator(
     },
     Home: {
       screen: HomeNavigationTab,
+    },
+    HomeOrders: {
+      screen: WrappedHomeNavigationTabWithI18NOrders,
     },
     MenuItem: {
       screen: MenuItemContainer,
