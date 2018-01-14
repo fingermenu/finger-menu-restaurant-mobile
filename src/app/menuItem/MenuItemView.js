@@ -7,6 +7,7 @@ import Styles from './Styles';
 import { OrderOptionsContainer } from '../../components/orderOptions';
 import { AddToOrderContainer } from '../../components/addToOrder';
 import QuantityControl from '../../components/quantityControl/QuantityControl';
+import { OrderItemProp } from '../orders/PropTypes';
 
 class MenuItemView extends Component {
   constructor() {
@@ -16,17 +17,27 @@ class MenuItemView extends Component {
     };
   }
 
+  componentWillMount = () => {
+    if (this.props.order) {
+      this.setState({ quantity: this.props.order.quantity });
+    }
+  };
+
   onQuantityIncrease = () => {
     this.setState({ quantity: this.state.quantity + 1 });
   };
 
   onQuantityDecrease = () => {
-    if (this.state.quantity > 0) {
+    if (this.state.quantity > 1) {
       this.setState({ quantity: this.state.quantity - 1 });
     }
   };
 
   render = () => {
+    // if (this.props.order){
+    //   this.setState({quantity: this.props.order.quantity});
+    // }
+
     const { quantity } = this.state;
 
     return (
@@ -52,7 +63,7 @@ class MenuItemView extends Component {
           </View>
         </ScrollView>
         <View>
-          <AddToOrderContainer menuItem={this.props.menuItem} orderQuantity={quantity} />
+          <AddToOrderContainer order={this.props.order} menuItem={this.props.menuItem} orderQuantity={quantity} />
         </View>
       </View>
     );
@@ -61,6 +72,7 @@ class MenuItemView extends Component {
 
 MenuItemView.propTypes = {
   menuItem: MenuItemProp,
+  order: OrderItemProp,
 };
 
 export default MenuItemView;

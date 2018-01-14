@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import Immutable, { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
@@ -14,12 +15,20 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
-  onViewOrderItemPressed = menuItem => {
-    this.props.navigateToMenuItem(menuItem);
+  onViewOrderItemPressed = (menuItem, order) => {
+    this.props.navigateToMenuItem(menuItem, order);
   };
 
   onConfirmOrderPressed = () => {
     this.props.navigateToOrderConfirmed();
+  };
+
+  onRemoveOrderPressed = orderId => {
+    const orders = Immutable.fromJS(this.props.orders);
+    const orderToRemoveIndex = orders.findIndex(order => order.get('id') === orderId);
+    if (orderToRemoveIndex >= 0) {
+      this.props.ordersActions.menuOrderChanged(Map({ orders: orders.delete(orderToRemoveIndex) }));
+    }
   };
   onRefresh = () => {
     // if (this.props.relay.isLoading()) {
@@ -51,6 +60,7 @@ class OrdersContainer extends Component {
         orders={this.props.orders}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
+        onRemoveOrderPressed={this.onRemoveOrderPressed}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.OnRefresh}
         onEndReached={this.OnEndReached}
@@ -75,12 +85,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     ordersActions: bindActionCreators(OrdersActions, dispatch),
-    navigateToMenuItem: menuItem =>
+    navigateToMenuItem: (menuItem, order) =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'MenuItem',
           params: {
             menuItem,
+            order,
           },
         }),
       ),

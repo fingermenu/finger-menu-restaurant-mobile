@@ -19,7 +19,13 @@ class OrdersView extends Component {
 
         <FlatList
           data={this.props.orders}
-          renderItem={info => <OrderItemRow orderItem={info.item} onViewOrderItemPressed={this.props.onViewOrderItemPressed} />}
+          renderItem={info => (
+            <OrderItemRow
+              orderItem={info.item}
+              onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+              onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+            />
+          )}
           keyExtractor={item => item.id}
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
@@ -34,6 +40,7 @@ class OrdersView extends Component {
 OrdersView.propTypes = {
   orders: OrdersProp,
   onViewOrderItemPressed: PropTypes.func.isRequired,
+  onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,
 };
 

@@ -8,6 +8,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as OrdersActions from '../../app/orders/Actions';
 import { NavigationActions } from 'react-navigation';
+import { MenuItemProp } from '../../app/menuItem/PropTypes';
+import { OrderItemProp } from '../../app/orders/PropTypes';
 
 class AddToOrderContainer extends Component {
   onAddMenuItemToOrder = () => {
@@ -43,16 +45,40 @@ class AddToOrderContainer extends Component {
     this.props.goBack();
   };
 
+  onUpdateOrder = () => {
+    if (this.props.order) {
+      this.props.order.quantity = this.props.orderQuantity;
+      const index = Immutable.fromJS(this.props.orders).findIndex(order => order.get('id') === this.props.order.id);
+
+      if (index >= 0) {
+        this.props.ordersActions.menuOrderChanged(
+          Map({
+            orders: Immutable.fromJS(this.props.orders).set(index, this.props.order),
+          }),
+        );
+      }
+    }
+
+    this.props.goBack();
+  };
+
   render = () => {
     return (
-      <OrderFooterView orderQuantity={this.props.orderQuantity} menuItemId={this.props.menuItem.id} addToOrderPressed={this.onAddMenuItemToOrder} />
+      <OrderFooterView
+        isUpdatingOrder={this.props.order !== null}
+        orderQuantity={this.props.orderQuantity}
+        menuItemId={this.props.menuItem.id}
+        addToOrderPressed={this.onAddMenuItemToOrder}
+        updateOrderPressed={this.onUpdateOrder}
+      />
     );
   };
 }
 
 AddToOrderContainer.propTypes = {
   orderQuantity: PropTypes.number.isRequired,
-  menuItem: PropTypes.object.isRequired,
+  menuItem: MenuItemProp,
+  order: OrderItemProp,
   ordersActions: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
 };

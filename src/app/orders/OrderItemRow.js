@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { MenuItemProp } from './PropTypes';
+import { OrderItemProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
 import { DefaultStyles } from '../../style';
@@ -21,7 +21,8 @@ class OrderItemRow extends Component {
   }
 
   shouldComponentUpdate = nextProps => {
-    return this.state.orderItem.equals(Immutable.fromJS(nextProps.orderItem));
+    const nextOrderItem = Immutable.fromJS(nextProps.orderItem);
+    return this.state.orderItem.get('id') === nextOrderItem.get('id');
   };
 
   componentWillReceiveProps = nextProps => {
@@ -34,13 +35,18 @@ class OrderItemRow extends Component {
 
   render = () => {
     return (
-      <TouchableItem onPress={() => this.props.onViewOrderItemPressed(this.props.orderItem.menuItem)}>
+      <TouchableItem onPress={() => this.props.onViewOrderItemPressed(this.props.orderItem.menuItem, this.props.orderItem)}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowTextContainer}>
             <Text>{this.props.orderItem.quantity}x</Text>
             <Text style={Styles.title}>{this.props.orderItem.menuItem.name}</Text>
             <Text style={Styles.price}>{this.props.orderItem.menuItem.priceToDisplay}</Text>
-            <TouchableIcon iconName="ios-trash-outline" iconType="ionicon" iconContainerStyle={DefaultStyles.iconContainerStyle} />
+            <TouchableIcon
+              onPress={() => this.props.onRemoveOrderPressed(this.props.orderItem.id)}
+              iconName="ios-remove-circle-outline"
+              iconType="ionicon"
+              iconContainerStyle={DefaultStyles.iconContainerStyle}
+            />
           </View>
         </View>
       </TouchableItem>
@@ -49,9 +55,10 @@ class OrderItemRow extends Component {
 }
 
 OrderItemRow.propTypes = {
-  menuItem: MenuItemProp,
+  orderItem: OrderItemProp,
   orderQuantity: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
+  onRemoveOrderPressed: PropTypes.func.isRequired,
 };
 
 export default OrderItemRow;
