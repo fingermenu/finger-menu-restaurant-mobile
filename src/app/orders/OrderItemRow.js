@@ -36,10 +36,17 @@ class OrderItemRow extends Component {
   render = () => {
     return (
       <TouchableItem onPress={() => this.props.onViewOrderItemPressed(this.props.orderItem.menuItem, this.props.orderItem)}>
-        <View style={Styles.rowContainer}>
-          <View style={Styles.rowTextContainer}>
-            <Text>{this.props.orderItem.quantity}x</Text>
+        <View style={[DefaultStyles.rowContainer, { padding: 15 }]}>
+          <View style={Styles.quantityContainer}>
+            <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
+          </View>
+          <View style={Styles.titleContainer}>
             <Text style={Styles.title}>{this.props.orderItem.menuItem.name}</Text>
+            <Text style={Styles.extraOptions}>Extra 1</Text>
+            <Text style={Styles.extraOptions}>Extra 2</Text>
+            <Text style={Styles.extraOptions}>Extra 3</Text>
+          </View>
+          <View style={DefaultStyles.rowContainer}>
             <Text style={Styles.price}>{this.props.orderItem.menuItem.priceToDisplay}</Text>
             <TouchableIcon
               onPress={() => this.props.onRemoveOrderPressed(this.props.orderItem.id)}

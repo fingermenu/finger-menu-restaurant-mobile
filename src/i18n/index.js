@@ -22,6 +22,7 @@ i18next.init({
         email: { label: 'Email' },
         password: { label: 'Password' },
         retypePassword: { label: 'Retype Password' },
+        setupTable: { label: 'Setup Table', button: 'Setup' },
       },
     },
     zh: {
@@ -38,6 +39,7 @@ i18next.init({
         email: { label: '电子邮件' },
         password: { label: '密码' },
         retypePassword: { label: '重新输入密码' },
+        setupTable: { label: '设置桌子', button: '完成' },
       },
     },
   },

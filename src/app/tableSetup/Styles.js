@@ -7,25 +7,13 @@ export default StyleSheet.create({
     // flex: 1,
     // flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  tableContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   tableTextContainer: {
-    // flex: 1,
-    // flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
-  // Container: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   headerText: {
     fontSize: 30,
     fontWeight: '700',

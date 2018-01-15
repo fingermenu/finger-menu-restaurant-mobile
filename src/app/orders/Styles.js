@@ -1,6 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -10,13 +11,6 @@ export default StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
   },
-  rowContainer: {
-    // flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   rowTextContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -24,15 +18,27 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
   },
+  quantity: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: DefaultColor.defaultThemeColor,
+  },
+  quantityContainer: {
+    flex: 10,
+  },
+  titleContainer: {
+    flex: 100,
+  },
   image: {
     width: 50,
     height: 50,
   },
   title: {
+    fontSize: 26,
     fontWeight: '700',
   },
-  description: {
-    fontSize: 13,
+  extraOptions: {
+    fontSize: 18,
   },
   price: {
     fontSize: 14,

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import TableSetupView from './TableSetupView';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 
 class TableSetupContainer extends Component {
   onSetupTablePressed = () => {
@@ -48,4 +49,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableSetupContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(TableSetupContainer));

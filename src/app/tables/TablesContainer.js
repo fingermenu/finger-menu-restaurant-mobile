@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import TablesView from './TablesView';
 import { TablesProp } from './PropTypes';
 import { HeaderContainer } from '../../components/header';
+import { MenuItems } from '../menu/MenuContainer';
 
 class TablesContainer extends Component {
   static navigationOptions = {
@@ -41,6 +42,7 @@ function mapStateToProps() {
       numberOfChildren: 0,
       customerName: '',
       reservation: '',
+      orders: [],
     },
     {
       id: 2,
@@ -50,6 +52,7 @@ function mapStateToProps() {
       numberOfChildren: 0,
       customerName: '',
       reservation: '',
+      orders: [],
     },
     {
       id: 3,
@@ -59,6 +62,7 @@ function mapStateToProps() {
       numberOfChildren: 0,
       customerName: '',
       reservation: '',
+      orders: [],
     },
     {
       id: 4,
@@ -68,6 +72,7 @@ function mapStateToProps() {
       numberOfChildren: 0,
       customerName: '',
       reservation: '',
+      orders: [],
     },
     {
       id: 5,
@@ -75,8 +80,22 @@ function mapStateToProps() {
       status: 'Taken',
       numberOfAdults: 4,
       numberOfChildren: 2,
-      customerName: '',
+      customerName: 'John',
       reservation: '',
+      orders: [
+        {
+          id: 1,
+          menuItemId: 1,
+          menuItem: MenuItems[0],
+          quantity: 2,
+        },
+        {
+          id: 2,
+          menuItemId: 3,
+          menuItem: MenuItems[2],
+          quantity: 4,
+        },
+      ],
     },
     {
       id: 6,
@@ -86,6 +105,7 @@ function mapStateToProps() {
       numberOfChildren: 0,
       customerName: '',
       reservation: '',
+      orders: [],
     },
   ];
 

@@ -5,10 +5,16 @@ import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  bannerContainer: {
+    flex: 10,
+  },
+  languageContainer: {
+    flex: 1,
   },
   touchableContainer: {
     // padding: 10,

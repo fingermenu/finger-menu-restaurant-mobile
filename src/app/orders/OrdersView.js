@@ -7,6 +7,7 @@ import OrderItemRow from './OrderItemRow';
 import { Button } from 'react-native-elements';
 import Styles from './Styles';
 import { OrdersProp } from './PropTypes';
+import { ListItemSeparator } from '../../components/list';
 
 class OrdersView extends Component {
   render = () => {
@@ -30,6 +31,7 @@ class OrdersView extends Component {
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
+          ItemSeparatorComponent={() => <ListItemSeparator />}
         />
         <Button title="Confirm Order" onPress={this.props.onConfirmOrderPressed} />
       </View>
