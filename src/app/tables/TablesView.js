@@ -7,6 +7,7 @@ import { TouchableItem } from '@microbusiness/common-react-native';
 import { TablesProp } from './PropTypes';
 import { Badge } from 'react-native-elements';
 import Styles from './Styles';
+import { translate } from 'react-i18next';
 
 class TablesView extends Component {
   renderItem = item => {
@@ -30,10 +31,11 @@ class TablesView extends Component {
   };
 
   render = () => {
+    const { t } = this.props;
     return (
       <View style={Styles.container}>
         <View>
-          <Text>Manage tables</Text>
+          <Text>{t('table.manageTable')}</Text>
         </View>
         <FlatList
           data={this.props.tables}
@@ -79,8 +81,8 @@ class TablesView extends Component {
 }
 
 TablesView.propTypes = {
-  tables: TablesProp,
+  menuItems: TablesProp,
   onTablePressed: PropTypes.func.isRequired,
 };
 
-export default TablesView;
+export default translate()(TablesView);

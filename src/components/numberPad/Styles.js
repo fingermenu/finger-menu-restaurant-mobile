@@ -6,11 +6,13 @@ import { DefaultColor } from '../../style';
 export default StyleSheet.create({
   container: {
     // flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignItems: 'stretch',
   },
   numberContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 5,
   },
   touchableContainer: {
@@ -23,9 +25,10 @@ export default StyleSheet.create({
   iconContainer: {
     backgroundColor: '#EFF0F1',
   },
-  selectedIconContainer: {
+  selectedNumberContainer: {
     backgroundColor: DefaultColor.defaultThemeColor,
-    borderColor: DefaultColor.defaultBackgroundColor,
+    borderColor: DefaultColor.defaultButtonColor,
     borderWidth: 2,
+    padding: 5,
   },
 });

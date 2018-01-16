@@ -4,15 +4,20 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    // flex: 1,
-    // flexDirection: 'row',
-    justifyContent: 'space-between',
-    // alignItems: 'center',
+    flex: 1,
   },
   tableTextContainer: {
     flexDirection: 'row',
-    // justifyContent: 'center',
     alignItems: 'center',
+    padding: 5,
+  },
+  labelContainer: {
+    flex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  valueContainer: {
+    flex: 50,
   },
   headerText: {
     fontSize: 30,
@@ -33,9 +38,5 @@ export default StyleSheet.create({
   tableText: {
     color: 'orange',
     fontSize: 20,
-  },
-  tableLegendsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });

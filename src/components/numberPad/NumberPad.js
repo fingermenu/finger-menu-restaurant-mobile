@@ -4,51 +4,77 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { Range } from 'immutable';
+import Immutable, { Range } from 'immutable';
 import Styles from './Styles';
-import { DefaultColor } from '../../style';
 
+// TODO: Consider replace it with redux form.
 class NumberPad extends Component {
   constructor() {
     super();
     this.state = {
-      selectedIndex: 0,
+      numbers: [],
     };
   }
-  updateIndex = selectedIndex => {
-    this.setState({ selectedIndex });
+
+  componentWillMount = () => {
+    this.setState({ numbers: this.getNumArrayList().toJS() });
   };
 
-  onNumberPressed = item => {
-    this.updateIndex(item);
-    this.props.onNumberPressed(item);
+  getNumArrayList = () => {
+    const initValue = this.props.initialValue;
+    return Range(0, this.props.maxNumber).map(function(num) {
+      return { id: num, name: num.toString(), isSelected: num === initValue };
+    });
+  };
+
+  updateIndex = selectedIndex => {
+    let numList = Immutable.fromJS(this.state.numbers);
+
+    const prevSelected = numList.findIndex(num => num.get('isSelected') === true);
+
+    if (prevSelected >= 0) {
+      numList = numList.updateIn([prevSelected, 'isSelected'], function() {
+        return false;
+      });
+    }
+
+    numList = numList.updateIn([selectedIndex, 'isSelected'], function() {
+      return true;
+    });
+
+    this.setState({ numbers: numList.toJS() });
+  };
+
+  onNumberPressed = number => {
+    this.updateIndex(number);
+    this.props.onNumberPressed(number);
   };
 
   renderNumber = item => {
     return (
       <View style={Styles.numberContainer}>
         <Avatar
-          small
+          width={item.item.isSelected ? 50 : 40}
+          height={item.item.isSelected ? 50 : 40}
           rounded
           title={item.item.name}
-          onPress={() => this.onNumberPressed(item)}
+          onPress={() => this.onNumberPressed(item.item.id)}
           activeOpacity={0.7}
-          overlayContainerStyle={item.item.isSelected ? { backgroundColor: DefaultColor.defaultBannerColor } : {}}
+          overlayContainerStyle={item.item.isSelected ? Styles.selectedNumberContainer : {}}
         />
       </View>
     );
   };
 
   render = () => {
-    const numberArray = Range(0, 10)
-      .map(function(num) {
-        return { id: num, name: num.toString(), isSelected: false };
-      })
-      .toJS();
-    numberArray[0].isSelected = true;
+    // this.updateIndex(this.props.initialValue);
     return (
-      <View>
-        <FlatList data={numberArray} numColumns={this.props.numColumns} renderItem={this.renderNumber} keyExtractor={item => item.id} />
+      <View style={Styles.container}>
+        {this.props.isHorizontal ? (
+          <FlatList data={this.state.numbers} horizontal={this.props.isHorizontal} renderItem={this.renderNumber} keyExtractor={item => item.id} />
+        ) : (
+          <FlatList data={this.state.numbers} numColumns={this.props.numColumns} renderItem={this.renderNumber} keyExtractor={item => item.id} />
+        )}
       </View>
     );
   };
@@ -56,6 +82,9 @@ class NumberPad extends Component {
 
 NumberPad.propTypes = {
   numColumns: PropTypes.number,
+  maxNumber: PropTypes.number,
+  isHorizontal: PropTypes.bool,
+  initialValue: PropTypes.number,
   onNumberPressed: PropTypes.func.isRequired,
   onOkPressed: PropTypes.func.isRequired,
   onClearPressed: PropTypes.func.isRequired,
@@ -63,6 +92,9 @@ NumberPad.propTypes = {
 
 NumberPad.defaultProps = {
   numColumns: 3,
+  maxNumber: 10,
+  isHorizontal: false,
+  initialValue: 0,
 };
 
 export default NumberPad;

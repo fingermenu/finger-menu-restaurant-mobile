@@ -38,8 +38,8 @@ class TableDetailView extends Component {
           refreshing={this.props.isFetchingTop}
         />
         <View style={Styles.buttonsContainer}>
-          <Button title="Set paid" />
-          <Button title="Reset table" />
+          <Button title="Set paid" backgroundColor={DefaultColor.defaultButtonColor} />
+          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} />
         </View>
         <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} onPress={() => {}}>
           <ActionButton.Item buttonColor="#9b59b6" title="Drink" onPress={() => {}}>

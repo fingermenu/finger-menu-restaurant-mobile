@@ -17,15 +17,17 @@ class QuantityControl extends Component {
           iconContainerStyle={DefaultStyles.iconContainerStyle}
           iconType="material-community"
           onPress={this.props.onQuantityIncrease}
+          pressColor={DefaultColor.touchableIconPressColor}
           iconColor={DefaultColor.iconColor}
           iconDisabledColor={DefaultColor.defaultFontColorDisabled}
         />
-        <Text>{this.props.quantity}</Text>
+        <Text style={DefaultStyles.primaryFont}>{this.props.quantity}</Text>
         <TouchableIcon
           iconName="minus"
           iconContainerStyle={DefaultStyles.iconContainerStyle}
           iconType="material-community"
           onPress={this.props.onQuantityDecrease}
+          pressColor={DefaultColor.touchableIconPressColor}
           iconColor={DefaultColor.iconColor}
           iconDisabledColor={DefaultColor.defaultFontColorDisabled}
         />

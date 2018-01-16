@@ -51,6 +51,23 @@ class HeaderView extends Component {
               />
             </View>
           </TouchableItem>
+          <TouchableItem
+            accessibilityComponentType="button"
+            accessibilityTraits="button"
+            delayPressIn={0}
+            pressColor={DefaultColor.touchableIconPressColor}
+            onPress={() => this.props.changeLanguage('zh')}
+            borderless
+          >
+            <View style={Styles.touchableContainer}>
+              <Avatar
+                rounded
+                overlayContainerStyle={this.props.isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
+                source={ImageUtility.getImageSource('chinese')}
+                activeOpacity={0.7}
+              />
+            </View>
+          </TouchableItem>
         </View>
       </View>
     );
