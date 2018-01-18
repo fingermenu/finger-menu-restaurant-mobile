@@ -4,28 +4,21 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    // flex: 1,
-    // flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  tableContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1,
   },
   tableTextContainer: {
-    // flex: 1,
-    // flexDirection: 'row',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+  },
+  labelContainer: {
+    flex: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // Container: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
+  valueContainer: {
+    flex: 50,
+  },
   headerText: {
     fontSize: 30,
     fontWeight: '700',
@@ -45,9 +38,5 @@ export default StyleSheet.create({
   tableText: {
     color: 'orange',
     fontSize: 20,
-  },
-  tableLegendsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });

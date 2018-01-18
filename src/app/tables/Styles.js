@@ -42,13 +42,13 @@ export default StyleSheet.create({
     backgroundColor: 'green',
   },
   tableBadgeWrapper: {
-    paddingLeft: 15,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingLeft: 20,
+    // paddingTop: 20,
+    paddingBottom: 20,
   },
   tableText: {
     color: 'orange',
-    fontSize: 20,
+    fontSize: 36,
   },
   tableLegendsContainer: {
     flexDirection: 'row',

@@ -5,8 +5,8 @@ import HeaderView from './HeaderView';
 import { translate } from 'react-i18next';
 
 class HeaderContainer extends Component {
-  changeLanguage = () => {
-    this.props.i18n.changeLanguage('zh');
+  changeLanguage = lang => {
+    this.props.i18n.changeLanguage(lang);
   };
 
   render = () => {
