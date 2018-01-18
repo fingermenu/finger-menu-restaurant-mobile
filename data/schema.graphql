@@ -34,6 +34,7 @@ input AddRestaurantInput {
   googleMapUrl: String
   status: String
   inheritParentRestaurantMenus: Boolean
+  pin: String
   clientMutationId: String
 }
 
@@ -74,9 +75,34 @@ type GeoLocation {
   longitude: Float
 }
 
+type Language implements Node {
+  id: ID!
+  key: String
+  name: String
+  imageUrl: String
+}
+
 input LanguageStringTuple {
   language: String!
   value: String!
+}
+
+# A connection to a list of items.
+type LanguageTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [LanguageTypeEdge]
+}
+
+# An edge in a connection.
+type LanguageTypeEdge {
+  # The item at the end of the edge
+  node: Language
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 type MenuItem implements Node {
@@ -143,6 +169,8 @@ type ParentRestaurant implements Node {
   status: String
   googleMapUrl: String
   inheritParentRestaurantMenus: Boolean
+  pin: String
+  tables: [Table!]
 }
 
 type Phone {
@@ -172,6 +200,7 @@ type Restaurant implements Node {
   status: String
   googleMapUrl: String
   inheritParentRestaurantMenus: Boolean
+  pin: String
   parentRestaurant: ParentRestaurant
 }
 
@@ -193,13 +222,52 @@ type RestaurantTypeEdge {
   cursor: String!
 }
 
+type Table implements Node {
+  id: ID!
+  name: String
+  status: String
+  tableState: TableState
+}
+
+type TableState implements Node {
+  id: ID!
+  key: String
+  name: String
+  imageUrl: String
+}
+
+# A connection to a list of items.
+type TableStateTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [TableStateTypeEdge]
+}
+
+# An edge in a connection.
+type TableStateTypeEdge {
+  # The item at the end of the edge
+  node: TableState
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 type User implements Node {
   id: ID!
+  choiceItem(choiceItemId: ID!): ChoiceItem
   choiceItems(after: String, first: Int, before: String, last: Int, choiceItemIds: [ID!], name: String, description: String, sortOption: String): ChoiceItemTypeConnection
+  menuItem(menuItemId: ID!): MenuItem
   menuItems(after: String, first: Int, before: String, last: Int, menuItemIds: [ID!], name: String, description: String, sortOption: String): MenuItemTypeConnection
+  restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
 }
 
 type Viewer implements Node {
   id: ID!
+  language(languageId: ID!): Language
+  languages(after: String, first: Int, before: String, last: Int, languageIds: [ID!], key: String, name: String, sortOption: String): LanguageTypeConnection
+  tableState(tableStateId: ID!): TableState
+  tableStates(after: String, first: Int, before: String, last: Int, tableStateIds: [ID!], key: String, name: String, sortOption: String): TableStateTypeConnection
 }
