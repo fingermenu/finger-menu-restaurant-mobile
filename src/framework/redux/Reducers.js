@@ -4,6 +4,7 @@ import { AppUpdaterReducer, MessageBarReducer, UserAccessReducer } from '@microb
 import { NetInfoReducer } from '@microbusiness/common-react-native';
 import { combineReducers } from 'redux';
 import { OrdersReducer } from '../../app/orders';
+import { reducer as formReducer } from 'redux-form';
 
 export default function getReducers(navigationReducer) {
   return combineReducers({
@@ -12,6 +13,7 @@ export default function getReducers(navigationReducer) {
     netInfo: NetInfoReducer,
     appUpdater: AppUpdaterReducer,
     messageBar: MessageBarReducer,
+    form: formReducer,
     orders: OrdersReducer,
   });
 }

@@ -6,12 +6,12 @@ import { NavigationActions } from 'react-navigation';
 import PinView from './PinView';
 
 class PinContainer extends Component {
-  onOkPressed = () => {
-    this.props.navigateToTarget('');
+  onPinMatched = () => {
+    //this.props.navigateToTarget('');
   };
 
   render = () => {
-    return <PinView onOkPressed={this.onOkPressed} />;
+    return <PinView onPinMatched={this.onPinMatched} />;
   };
 }
 
