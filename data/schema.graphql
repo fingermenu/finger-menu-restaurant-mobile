@@ -170,6 +170,7 @@ type ParentRestaurant implements Node {
   googleMapUrl: String
   inheritParentRestaurantMenus: Boolean
   pin: String
+  languages: [Language!]
   tables: [Table!]
 }
 
