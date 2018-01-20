@@ -229,6 +229,10 @@ type Table implements Node {
   id: ID!
   name: String
   status: String
+  numberOfAdults: Int
+  numberOfChildren: Int
+  customerName: String
+  notes: String
   tableState: TableState
 }
 
