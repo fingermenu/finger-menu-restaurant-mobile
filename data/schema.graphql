@@ -50,6 +50,7 @@ type ChoiceItem implements Node {
   description: String
   menuItemPageUrl: String
   imageUrl: String
+  tags: [Tag!]
 }
 
 # A connection to a list of items.
@@ -111,6 +112,7 @@ type Menu implements Node {
   description: String
   menuPageUrl: String
   imageUrl: String
+  tags: [Tag!]
 }
 
 type MenuItem implements Node {
@@ -119,6 +121,7 @@ type MenuItem implements Node {
   description: String
   menuItemPageUrl: String
   imageUrl: String
+  tags: [Tag!]
 }
 
 # A connection to a list of items.
