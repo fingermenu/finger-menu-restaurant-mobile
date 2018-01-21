@@ -44,6 +44,16 @@ type AddRestaurantPayload {
   clientMutationId: String
 }
 
+type BeServedWithMenuItemPrice implements Node {
+  id: ID!
+  currentPrice: Float
+  wasPrice: Float
+  validFrom: String
+  validUntil: String
+  menuItem: MenuItem
+  choiceItemPrices: [ChoiceItemPrice!]
+}
+
 type ChoiceItem implements Node {
   id: ID!
   name: String
@@ -51,6 +61,33 @@ type ChoiceItem implements Node {
   menuItemPageUrl: String
   imageUrl: String
   tags: [Tag!]
+}
+
+type ChoiceItemPrice implements Node {
+  id: ID!
+  currentPrice: Float
+  wasPrice: Float
+  validFrom: String
+  validUntil: String
+  choiceItem: ChoiceItem
+}
+
+# A connection to a list of items.
+type ChoiceItemPriceTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ChoiceItemPriceTypeEdge]
+}
+
+# An edge in a connection.
+type ChoiceItemPriceTypeEdge {
+  # The item at the end of the edge
+  node: ChoiceItemPrice
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 # A connection to a list of items.
@@ -112,6 +149,7 @@ type Menu implements Node {
   description: String
   menuPageUrl: String
   imageUrl: String
+  menuItemPrices: [MenuItemPrice!]
   tags: [Tag!]
 }
 
@@ -122,6 +160,35 @@ type MenuItem implements Node {
   menuItemPageUrl: String
   imageUrl: String
   tags: [Tag!]
+}
+
+type MenuItemPrice implements Node {
+  id: ID!
+  currentPrice: Float
+  wasPrice: Float
+  validFrom: String
+  validUntil: String
+  menuItem: MenuItem
+  toBeServedWithMenuItemPrices: [BeServedWithMenuItemPrice!]
+  choiceItemPrices: [ChoiceItemPrice!]
+}
+
+# A connection to a list of items.
+type MenuItemPriceTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [MenuItemPriceTypeEdge]
+}
+
+# An edge in a connection.
+type MenuItemPriceTypeEdge {
+  # The item at the end of the edge
+  node: MenuItemPrice
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 # A connection to a list of items.
@@ -385,8 +452,12 @@ type User implements Node {
   menus(after: String, first: Int, before: String, last: Int, menuIds: [ID!], name: String, description: String, sortOption: String): MenuTypeConnection
   choiceItem(choiceItemId: ID!): ChoiceItem
   choiceItems(after: String, first: Int, before: String, last: Int, choiceItemIds: [ID!], name: String, description: String, sortOption: String): ChoiceItemTypeConnection
+  choiceItemPrice(choiceItemPriceId: ID!): ChoiceItemPrice
+  choiceItemPrices(after: String, first: Int, before: String, last: Int, choiceItemPriceIds: [ID!], sortOption: String): ChoiceItemPriceTypeConnection
   menuItem(menuItemId: ID!): MenuItem
   menuItems(after: String, first: Int, before: String, last: Int, menuItemIds: [ID!], name: String, description: String, sortOption: String): MenuItemTypeConnection
+  menuItemPrice(menuItemPriceId: ID!): MenuItemPrice
+  menuItemPrices(after: String, first: Int, before: String, last: Int, menuItemPriceIds: [ID!], sortOption: String): MenuItemPriceTypeConnection
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
 }
