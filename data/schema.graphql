@@ -396,6 +396,24 @@ type TableStateTypeEdge {
   cursor: String!
 }
 
+# A connection to a list of items.
+type TableTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [TableTypeEdge]
+}
+
+# An edge in a connection.
+type TableTypeEdge {
+  # The item at the end of the edge
+  node: Table
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 type Tag implements Node {
   id: ID!
   name: String
@@ -460,6 +478,8 @@ type User implements Node {
   menuItemPrices(after: String, first: Int, before: String, last: Int, menuItemPriceIds: [ID!], sortOption: String): MenuItemPriceTypeConnection
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
+  table(tableId: ID!): Table
+  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], name: String, restaurantId: ID, sortOption: String): TableTypeConnection
 }
 
 type Viewer implements Node {
