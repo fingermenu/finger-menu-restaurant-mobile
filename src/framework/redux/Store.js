@@ -7,7 +7,7 @@ import {
   watchSignInWithFacebook,
   watchSignOut,
 } from '@microbusiness/parse-server-common-react-native';
-import { watchRefreshState } from '@microbusiness/common-react-native';
+import { watchRefreshState, watchReadValue, watchWriteValue } from '@microbusiness/common-react-native';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import getReducers from './Reducers';
@@ -20,6 +20,8 @@ const rootSagas = function* sagas() {
     watchSignInWithFacebook(),
     watchSignOut(),
     watchRefreshState(),
+    watchWriteValue(),
+    watchReadValue(),
   ];
 };
 

@@ -1,9 +1,9 @@
 // @flow
 
 import { UserAccessActionTypes } from '@microbusiness/common-react';
-import { MessageType } from '@microbusiness/common-react';
+import { NotificationType } from '@microbusiness/common-react';
 import * as appUpdaterActions from '@microbusiness/common-react/src/appUpdater/Actions';
-import * as messageBarActions from '@microbusiness/common-react/src/messageBar/Actions';
+import * as notificationActions from '@microbusiness/common-react/src/notification/Actions';
 import * as netInfoActions from '@microbusiness/common-react-native/src/netInfo/Actions';
 import * as userAccessActions from '@microbusiness/common-react/src/userAccess/Actions';
 import { SignUpSignInContainer } from '@microbusiness/common-react-native';
@@ -148,7 +148,7 @@ class AppWithNavigationState extends Component {
 
           case CodePush.SyncStatus.UNKNOWN_ERROR:
             if (this.props.netInfo.netInfoExists && this.props.netInfo.isConnected) {
-              this.props.messageBarActions.add('Failed to update the application', MessageType.ERROR);
+              this.props.notificationActions.add('Failed to update the application', NotificationType.ERROR);
             }
 
             this.props.appUpdaterActions.failed('Failed to update the application');
@@ -199,22 +199,23 @@ class AppWithNavigationState extends Component {
   };
 
   componentWillReceiveProps = nextProps => {
-    nextProps.messagesInfo.forEach(messageInfo => {
-      if (messageInfo.messageType === MessageType.ERROR) {
-        Alert.alert('Error', messageInfo.message);
+    nextProps.notifications.forEach(notification => {
+      if (notification.get('type') === NotificationType.ERROR) {
+        Alert.alert('Error', notification.get('message'));
+      } else if (notification.get('type') === NotificationType.WARNING) {
+        Alert.alert('Warning', notification.get('message'));
+      } else if (notification.get('type') === NotificationType.INFO) {
+        Alert.alert('Info', notification.get('message'));
+      } else if (notification.get('type') === NotificationType.SUCCESS) {
+        Alert.alert('Success', notification.get('message'));
       }
+
+      this.props.notificationActions.remove(notification.get('id'));
     });
 
-    nextProps.messagesInfo.forEach(messageInfo => this.props.messageBarActions.remove(messageInfo.messageId));
-
-    nextProps.userAccessFailedOperations.forEach(failedOperation => {
-      this.props.messageBarActions.add(failedOperation.errorMessage, MessageType.ERROR);
-
-      this.props.userAccessActions.acknowledgeFailedOperation(
-        Map({
-          operationId: failedOperation.operationId,
-        }),
-      );
+    nextProps.userAccessFailedOperations.keySeq().forEach(operationId => {
+      this.props.notificationActions.add(nextProps.userAccessFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      this.props.userAccessActions.acknowledgeFailedOperation(Map({ operationId }));
     });
   };
 
@@ -245,7 +246,7 @@ AppWithNavigationState.propTypes = {
   appUpdaterActions: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  messageBarActions: PropTypes.object.isRequired,
+  notificationActions: PropTypes.object.isRequired,
   userAccessActions: PropTypes.object.isRequired,
   goBack: PropTypes.func.isRequired,
   netInfo: PropTypes.shape({
@@ -263,8 +264,8 @@ function mapStateToProps(state) {
   return {
     navigation: state.navigation,
     netInfo: state.netInfo.toJS(),
-    messagesInfo: state.messageBar.get('messages').toJS(),
-    userAccessFailedOperations: state.userAccess.get('failedOperations').toJS(),
+    notifications: state.notification.get('notifications'),
+    userAccessFailedOperations: state.userAccess.get('failedOperations'),
   };
 }
 
@@ -273,7 +274,7 @@ function mapDispatchToProps(dispatch) {
     netInfoActions: bindActionCreators(netInfoActions, dispatch),
     appUpdaterActions: bindActionCreators(appUpdaterActions, dispatch),
     dispatch,
-    messageBarActions: bindActionCreators(messageBarActions, dispatch),
+    notificationActions: bindActionCreators(notificationActions, dispatch),
     userAccessActions: bindActionCreators(userAccessActions, dispatch),
     goBack: () => dispatch(NavigationActions.back()),
   };

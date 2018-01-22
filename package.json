@@ -26,9 +26,9 @@
     "codepush:android": "code-push release-react fingermenu-restaurant-android android && code-push promote fingermenu-restaurant-android Staging Production"
   },
   "dependencies": {
-    "@microbusiness/common-react": "^1.1.4",
-    "@microbusiness/common-react-native": "^1.1.26",
-    "@microbusiness/parse-server-common-react-native": "^1.1.15",
+    "@microbusiness/common-react": "^1.1.10",
+    "@microbusiness/common-react-native": "^1.1.30",
+    "@microbusiness/parse-server-common-react-native": "^1.1.19",
     "email-validator": "1.1.1",
     "i18next": "^10.3.0",
     "immutable": "^4.0.0-rc.9",
