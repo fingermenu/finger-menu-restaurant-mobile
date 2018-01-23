@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+// import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
 import { TouchableItem } from '@microbusiness/common-react-native';
@@ -22,8 +23,8 @@ class TablesView extends Component {
             wrapperStyle={Styles.tableBadgeWrapper}
           />
           <View style={Styles.tableTextContainer}>
-            <Text>{item.item.numberOfAdults}</Text>
-            <Text>{item.item.numberOfChildren}</Text>
+            <Text>{item.item.numberOfAdults ? item.item.numberOfAdults : 0}</Text>
+            <Text>{item.item.numberOfChildren ? item.item.numberOfAdults : 0}</Text>
           </View>
         </View>
       </TouchableItem>
@@ -32,6 +33,24 @@ class TablesView extends Component {
 
   render = () => {
     const { t } = this.props;
+    // const groupedTables = Immutable.fromJS(this.props.tables)
+    //   .groupBy(t => t.getIn(['tableState', 'key']))
+    //   .mapEntries(([key, value]) => [
+    //     key,
+    //     {
+    //       key,
+    //       tables: value,
+    //       count: value.count(),
+    //     },
+    //   ])
+    //   .sortBy(_ => _.key)
+    //   .valueSeq()
+    //   .toJS();
+
+    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
+    // const emptyCount = groupedTables.getIn(['empty', 'tables']).count();
+    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
+    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
     return (
       <View style={Styles.container}>
         <View>

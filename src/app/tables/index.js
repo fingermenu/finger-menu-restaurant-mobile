@@ -1,3 +1,3 @@
 // @flow
 
-export TablesContainer from './TablesContainer';
+export Tables from './Tables';

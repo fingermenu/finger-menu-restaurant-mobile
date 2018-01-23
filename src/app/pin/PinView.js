@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import Immutable, { Range } from 'immutable';
+import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor } from '../../style';
@@ -40,7 +41,7 @@ class PinView extends Component {
     }, '');
 
     // If matching pin
-    if (pinString === '1234') {
+    if (pinString === this.props.matchingPin) {
       this.props.onPinMatched();
     } else {
       this.setState({
@@ -111,5 +112,9 @@ class PinView extends Component {
     );
   };
 }
+
+PinView.propTypes = {
+  pin: PropTypes.string.isRequired,
+};
 
 export default PinView;

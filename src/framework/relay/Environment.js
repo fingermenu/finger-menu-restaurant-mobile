@@ -4,6 +4,7 @@ import { UserService } from '@microbusiness/parse-server-common-react-native';
 import Immutable from 'immutable';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import Config from 'react-native-config';
+import i18n from '../../i18n/';
 
 const fetchQuery = async (operation, variables) => {
   const sessionToken = await UserService.getCurrentUserSession();
@@ -13,6 +14,7 @@ const fetchQuery = async (operation, variables) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       authorization: sessionToken,
+      'Accept-Language': i18n.language,
     },
     body: JSON.stringify({
       query: operation.text,
@@ -21,7 +23,7 @@ const fetchQuery = async (operation, variables) => {
   });
 
   const result = await response.json();
-
+  console.log(JSON.stringify(result));
   if (result.errors && result.errors.length > 0) {
     const errorMessage = Immutable.fromJS(result.errors)
       .map(error => error.get('message'))

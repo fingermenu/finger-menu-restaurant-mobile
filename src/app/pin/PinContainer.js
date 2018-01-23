@@ -7,24 +7,35 @@ import PinView from './PinView';
 
 class PinContainer extends Component {
   onPinMatched = () => {
-    //this.props.navigateToTarget('');
+    this.props.navigateToTables(this.props.restaurant);
   };
 
   render = () => {
-    return <PinView onPinMatched={this.onPinMatched} />;
+    return <PinView onPinMatched={this.onPinMatched} matchingPin={this.props.restaurant.pin} />;
   };
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state, props) {
+  return {
+    restaurant: props.user.restaurants.edges[0].node,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToTarget: targetPage =>
+    navigateToTables: restaurant =>
       dispatch(
-        NavigationActions.navigate({
-          routeName: targetPage,
+        NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              routeName: 'Tables',
+              params: {
+                restaurantName: restaurant.name,
+                restaurantId: restaurant.id,
+              },
+            }),
+          ],
         }),
       ),
   };
