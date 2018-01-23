@@ -4,7 +4,7 @@ import { UserService } from '@microbusiness/parse-server-common-react-native';
 import Immutable from 'immutable';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import Config from 'react-native-config';
-import i18n from '../../i18n/';
+// import i18n from '../../i18n';
 
 const fetchQuery = async (operation, variables) => {
   const sessionToken = await UserService.getCurrentUserSession();
@@ -14,7 +14,7 @@ const fetchQuery = async (operation, variables) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       authorization: sessionToken,
-      'Accept-Language': i18n.language,
+      'Accept-Language': 'en_NZ',
     },
     body: JSON.stringify({
       query: operation.text,
