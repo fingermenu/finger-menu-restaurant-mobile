@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-// import Immutable from 'immutable';
+import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
 import { TouchableItem } from '@microbusiness/common-react-native';
@@ -31,26 +31,53 @@ class TablesView extends Component {
     );
   };
 
+  renderBadgeSummaryItem = item => {
+    let style = null;
+    switch (item.item.key) {
+      case 'taken':
+        style = Styles.tableBadgeTaken;
+        break;
+
+      case 'empty':
+        style = Styles.tableBadgeEmpty;
+        break;
+
+      case 'reserve':
+        style = Styles.tableBadgeReserve;
+        break;
+
+      case 'paid':
+        style = Styles.tableBadgePaid;
+        break;
+    }
+
+    return (
+      <Badge
+        value={item.item.key + ' ' + item.item.count}
+        textStyle={Styles.tableText}
+        component={TouchableNative}
+        containerStyle={[Styles.tableBadgeContainer, style]}
+        wrapperStyle={Styles.tableBadgeWrapper}
+      />
+    );
+  };
+
   render = () => {
     const { t } = this.props;
-    // const groupedTables = Immutable.fromJS(this.props.tables)
-    //   .groupBy(t => t.getIn(['tableState', 'key']))
-    //   .mapEntries(([key, value]) => [
-    //     key,
-    //     {
-    //       key,
-    //       tables: value,
-    //       count: value.count(),
-    //     },
-    //   ])
-    //   .sortBy(_ => _.key)
-    //   .valueSeq()
-    //   .toJS();
+    const groupedTables = Immutable.fromJS(this.props.tables)
+      .groupBy(t => t.getIn(['tableState', 'key']))
+      .mapEntries(([key, value]) => [
+        key,
+        {
+          key,
+          tables: value,
+          count: value.count(),
+        },
+      ])
+      .sortBy(_ => _.key)
+      .valueSeq()
+      .toJS();
 
-    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
-    // const emptyCount = groupedTables.getIn(['empty', 'tables']).count();
-    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
-    // const takenCount = groupedTables.getIn(['taken', 'tables']).count();
     return (
       <View style={Styles.container}>
         <View>
@@ -65,33 +92,13 @@ class TablesView extends Component {
           renderItem={this.renderItem}
         />
         <View style={Styles.tableLegendsContainer}>
-          <Badge
-            value="T 2"
-            textStyle={Styles.tableText}
-            component={TouchableNative}
-            containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
-            wrapperStyle={Styles.tableBadgeWrapper}
-          />
-          <Badge
-            value="N 3"
-            textStyle={Styles.tableText}
-            component={TouchableNative}
-            containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeEmpty]}
-            wrapperStyle={Styles.tableBadgeWrapper}
-          />
-          <Badge
-            value="R 1"
-            textStyle={Styles.tableText}
-            component={TouchableNative}
-            containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeReserve]}
-            wrapperStyle={Styles.tableBadgeWrapper}
-          />
-          <Badge
-            value="$ 2"
-            textStyle={Styles.tableText}
-            component={TouchableNative}
-            containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgePaid]}
-            wrapperStyle={Styles.tableBadgeWrapper}
+          <FlatList
+            data={groupedTables}
+            keyExtractor={item => {
+              return item.key;
+            }}
+            numColumns={4}
+            renderItem={this.renderBadgeSummaryItem}
           />
         </View>
       </View>
