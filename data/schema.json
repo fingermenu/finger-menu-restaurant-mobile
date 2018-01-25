@@ -2109,6 +2109,18 @@
               "deprecationReason": null
             },
             {
+              "name": "size",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Size",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "toBeServedWithMenuItemPrices",
               "description": null,
               "args": [],
@@ -2353,6 +2365,18 @@
               "deprecationReason": null
             },
             {
+              "name": "size",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Size",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "choiceItemPrices",
               "description": null,
               "args": [],
@@ -2460,6 +2484,18 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "ChoiceItem",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "size",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Size",
                 "ofType": null
               },
               "isDeprecated": false,

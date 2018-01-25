@@ -51,6 +51,7 @@ type BeServedWithMenuItemPrice implements Node {
   validFrom: String
   validUntil: String
   menuItem: MenuItem
+  size: Size
   choiceItemPrices: [ChoiceItemPrice!]
 }
 
@@ -70,6 +71,7 @@ type ChoiceItemPrice implements Node {
   validFrom: String
   validUntil: String
   choiceItem: ChoiceItem
+  size: Size
 }
 
 # A connection to a list of items.
@@ -169,6 +171,7 @@ type MenuItemPrice implements Node {
   validFrom: String
   validUntil: String
   menuItem: MenuItem
+  size: Size
   toBeServedWithMenuItemPrices: [BeServedWithMenuItemPrice!]
   choiceItemPrices: [ChoiceItemPrice!]
 }
