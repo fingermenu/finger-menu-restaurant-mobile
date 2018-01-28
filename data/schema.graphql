@@ -243,6 +243,59 @@ interface Node {
   id: ID!
 }
 
+type Order implements Node {
+  id: ID!
+  customerName: String
+  notes: String
+  totalPrice: Float
+  placedAt: String
+  table: Table
+  orderState: OrderState
+}
+
+type OrderState implements Node {
+  id: ID!
+  key: String
+  name: String
+  imageUrl: String
+}
+
+# A connection to a list of items.
+type OrderStateTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [OrderStateTypeEdge]
+}
+
+# An edge in a connection.
+type OrderStateTypeEdge {
+  # The item at the end of the edge
+  node: OrderState
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# A connection to a list of items.
+type OrderTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [OrderTypeEdge]
+}
+
+# An edge in a connection.
+type OrderTypeEdge {
+  # The item at the end of the edge
+  node: Order
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 # Information about pagination in a connection.
 type PageInfo {
   # When paginating forwards, are there more items?
@@ -482,13 +535,17 @@ type User implements Node {
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   table(tableId: ID!): Table
-  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], name: String, restaurantId: ID, sortOption: String): TableTypeConnection
+  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
+  order(orderId: ID!): Order
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], tableId: ID!, name: String, customerName: String, notes: String, orderState: String, sortOption: String): OrderTypeConnection
 }
 
 type Viewer implements Node {
   id: ID!
   language(languageId: ID!): Language
   languages(after: String, first: Int, before: String, last: Int, languageIds: [ID!], key: String, name: String, sortOption: String): LanguageTypeConnection
+  orderState(orderStateId: ID!): OrderState
+  orderStates(after: String, first: Int, before: String, last: Int, orderStateIds: [ID!], key: String, name: String, sortOption: String): OrderStateTypeConnection
   tableState(tableStateId: ID!): TableState
   tableStates(after: String, first: Int, before: String, last: Int, tableStateIds: [ID!], key: String, name: String, sortOption: String): TableStateTypeConnection
 }
