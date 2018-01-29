@@ -28,7 +28,7 @@
   "dependencies": {
     "@microbusiness/common-react": "^1.1.11",
     "@microbusiness/common-react-native": "^1.1.34",
-    "@microbusiness/parse-server-common-react-native": "^1.1.24",
+    "@microbusiness/parse-server-common-react-native": "^1.1.25",
     "email-validator": "1.1.1",
     "i18next": "^10.3.0",
     "immutable": "^4.0.0-rc.9",
