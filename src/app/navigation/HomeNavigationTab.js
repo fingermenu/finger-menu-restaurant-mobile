@@ -4,16 +4,19 @@ import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { translate } from 'react-i18next';
 import { DefaultColor } from '../../style';
-import { MenuNavigationTabWrapper } from '../menu';
+// import { MenuNavigationTabWrapper } from '../menu';
+
 import { Account } from '../account';
 import i18n from '../../i18n';
 import { HeaderContainer } from '../../components/header';
 import { InfoContainer } from '../info';
 import { OrdersContainer } from '../orders';
+import { Menus } from '../menus';
 
 const tabScreens = {
   Menus: {
-    screen: MenuNavigationTabWrapper,
+    // screen: MenuNavigationTabWrapper,
+    screen: Menus,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
     },

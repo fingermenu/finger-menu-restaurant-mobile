@@ -8,7 +8,7 @@ import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStora
 import PinView from './PinView';
 import { bindActionCreators } from 'redux';
 
-class PinContainer extends Component {
+class OfflinePinContainer extends Component {
   componentWillMount = () => {
     this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
 
@@ -26,9 +26,13 @@ class PinContainer extends Component {
   };
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    restaurant: props.user.restaurants.edges[0].node,
+    restaurant: {
+      id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+      name: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
+      pin: state.asyncStorage.getIn(['keyValues', 'pin']),
+    },
   };
 }
 
@@ -49,4 +53,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(OfflinePinContainer);

@@ -1,40 +1,27 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { environment } from '../../framework/relay';
 import { graphql, QueryRenderer } from 'react-relay';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { environment } from '../../framework/relay';
 import { LoadingInProgress } from '@microbusiness/common-react-native';
 import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
-import { DefaultColor } from '../../style';
-import TablesRelayContainer from './TablesRelayContainer';
-import { HeaderContainer } from '../../components/header/';
+import MenusRelayContainer from './MenusRelayContainer';
 
-class Tables extends Component {
-  static navigationOptions = () => ({
-    title: 'Tables',
-    headerTitle: <HeaderContainer />,
-    headerTintColor: DefaultColor.headerIconDefaultColor,
-    headerStyle: {
-      backgroundColor: DefaultColor.defaultBannerColor,
-    },
-  });
-
+class Menus extends Component {
   render() {
     return (
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TablesQuery($count: Int!, $cursor: String, $restaurantId: ID!) {
+          query MenusQuery($restaurantId: ID!) {
             user {
-              ...TablesRelayContainer_user
+              ...MenusRelayContainer_user
             }
           }
         `}
         variables={{
-          cursor: null,
-          count: 1000,
           restaurantId: this.props.restaurantId,
         }}
         render={({ error, props, retry }) => {
@@ -43,7 +30,7 @@ class Tables extends Component {
           }
 
           if (props) {
-            return <TablesRelayContainer user={props.user} />;
+            return <MenusRelayContainer user={props.user} />;
           }
 
           return <LoadingInProgress />;
@@ -53,7 +40,7 @@ class Tables extends Component {
   }
 }
 
-Tables.propTypes = {
+Menus.propTypes = {
   restaurantId: PropTypes.string.isRequired,
 };
 
@@ -63,4 +50,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Tables);
+export default connect(mapStateToProps)(Menus);

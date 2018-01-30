@@ -9,7 +9,7 @@ export default StyleSheet.create({
   tableTextContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    padding: 15,
   },
   labelContainer: {
     flex: 10,

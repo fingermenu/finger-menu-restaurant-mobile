@@ -3,14 +3,19 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
+import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor, DefaultStyles } from '../../style';
+import FormTextInput from '../../components/FormTextInput/FormTextInput';
 
 class TableSetupView extends Component {
   render = () => {
+    const { handleSubmit } = this.props;
+
     return (
       <View style={Styles.container}>
         <View style={DefaultStyles.rowContainer}>
@@ -22,13 +27,20 @@ class TableSetupView extends Component {
               <Icon name="human-handsdown" size={35} type="material-community" />
             </View>
             <View style={Styles.valueContainer}>
-              <NumberPad
-                isHorizontal={true}
-                maxNumber={16}
-                initialValue={2}
-                onNumberPressed={() => {}}
-                onOkPressed={() => {}}
-                onClearPressed={() => {}}
+              <Field
+                name="numberOfAdults"
+                component={props => (
+                  <NumberPad
+                    isHorizontal={true}
+                    maxNumber={16}
+                    initialValue={2}
+                    onNumberPressed={param => {
+                      props.input.onChange(param);
+                    }}
+                    onOkPressed={() => {}}
+                    onClearPressed={() => {}}
+                  />
+                )}
               />
             </View>
             {/*<Text style={Styles.numberText}>{this.props.table.numberOfAdults}</Text>*/}
@@ -38,13 +50,20 @@ class TableSetupView extends Component {
               <Icon name="human-child" size={35} type="material-community" />
             </View>
             <View style={Styles.valueContainer}>
-              <NumberPad
-                isHorizontal={true}
-                maxNumber={10}
-                initialValue={0}
-                onNumberPressed={() => {}}
-                onOkPressed={() => {}}
-                onClearPressed={() => {}}
+              <Field
+                name="numberOfChildren"
+                component={props => (
+                  <NumberPad
+                    isHorizontal={true}
+                    maxNumber={10}
+                    initialValue={0}
+                    onNumberPressed={param => {
+                      props.input.onChange(param);
+                    }}
+                    onOkPressed={() => {}}
+                    onClearPressed={() => {}}
+                  />
+                )}
               />
             </View>
             {/*<Text style={Styles.numberText}>{this.props.table.numberOfAdults}</Text>*/}
@@ -54,17 +73,22 @@ class TableSetupView extends Component {
               <Text style={Styles.numberText}>Name</Text>
             </View>
             <View style={Styles.valueContainer}>
-              <Text style={Styles.numberText}>{this.props.table.customerName}</Text>
+              {/*<Text style={Styles.numberText}>{this.props.table.customerName}</Text>*/}
+              <Field name="name" component={FormTextInput} />
             </View>
           </View>
           <View style={Styles.tableTextContainer}>
-            <Text style={Styles.numberText}>Reservation</Text>
-            <Text style={Styles.numberText}>{this.props.table.reservation}</Text>
+            <View style={Styles.labelContainer}>
+              <Text style={Styles.numberText}>Reservation</Text>
+            </View>
+            <View style={Styles.valueContainer}>
+              {/*<Text style={Styles.numberText}>{this.props.table.customerName}</Text>*/}
+              <Field name="notes" component={FormTextInput} />
+            </View>
           </View>
         </View>
         {/*<Button title={t('setupTable.label')} onPress={this.props.onSetupTablePressed} />*/}
-        <Button title="Setup" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.props.onSetupTablePressed} />
-        {/*<NumberPad onNumberPressed={() => {}} onOkPressed={() => {}} onClearPressed={() => {}} />*/}
+        <Button title="Setup" backgroundColor={DefaultColor.defaultButtonColor} onPress={handleSubmit(this.props.onSetupTablePressed)} />
       </View>
     );
   };
@@ -75,4 +99,10 @@ TableSetupView.propTypes = {
   table: TableProp,
 };
 
-export default TableSetupView;
+function mapStateToProps() {
+  return {
+    initialValues: { numberOfAdults: 2, numberOfChildren: 0 },
+  };
+}
+
+export default connect(mapStateToProps)(reduxForm({ form: 'setupTable', enableReinitialize: true })(TableSetupView));

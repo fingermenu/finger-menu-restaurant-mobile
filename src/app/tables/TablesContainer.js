@@ -3,31 +3,30 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import TablesView from './TablesView';
-import { TablesProp } from './PropTypes';
 
 class TablesContainer extends Component {
   onTablePressed = table => {
-    if (table.status === 'Empty' || table.status === 'Reserved') {
+    if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
       this.props.navigateToTableSetup(table);
-    } else if (table.status === 'Taken') {
+    } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
       this.props.navigateToTableDetail(table);
     }
   };
 
   render = () => {
-    return <TablesView tables={this.props.tables} onTablePressed={this.onTablePressed} />;
+    return <TablesView tables={this.props.user.tables.edges.map(_ => _.node)} onTablePressed={this.onTablePressed} />;
   };
 }
 
 TablesContainer.propTypes = {
-  tables: TablesProp,
+  navigateToTableSetup: PropTypes.func.isRequired,
+  navigateToTableDetail: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    tables: props.user.restaurant.tables,
-  };
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

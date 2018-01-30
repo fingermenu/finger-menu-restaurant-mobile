@@ -1,33 +1,32 @@
 // @flow
 
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createPaginationContainer, graphql } from 'react-relay';
 import TablesContainer from './TablesContainer';
 
-export default createFragmentContainer(
+export default createPaginationContainer(
   TablesContainer,
   {
     user: graphql`
       fragment TablesRelayContainer_user on User {
         id
-        restaurant(restaurantId: $restaurantId) {
-          id
-          name
-          websiteUrl
-          phones {
-            label
-            number
+        tables(first: $count, after: $cursor, restaurantId: $restaurantId) @connection(key: "User_tables") {
+          pageInfo {
+            hasNextPage
+            endCursor
           }
-          tables {
-            id
-            name
-            tableState {
+          edges {
+            node {
               id
-              key
               name
+              tableState {
+                id
+                key
+                name
+              }
+              numberOfAdults
+              numberOfChildren
+              customerName
             }
-            numberOfAdults
-            numberOfChildren
-            customerName
           }
         }
       }
@@ -36,21 +35,26 @@ export default createFragmentContainer(
   {
     direction: 'forward',
     getConnectionFromProps(props) {
-      return props.user && props.user.restanurant;
+      return props.user && props.user.tables;
     },
-    getFragmentVariables(prevVars) {
+    getFragmentVariables(prevVars, totalCount) {
       return {
         ...prevVars,
+        count: totalCount,
       };
     },
-    getVariables(props, fragmentVariables) {
+    getVariables(props, { count, cursor }, fragmentVariables) {
       return {
+        count,
+        cursor,
         restaurantId: fragmentVariables.restaurantId,
       };
     },
-    variables: {},
+    variables: {
+      cursor: null,
+    },
     query: graphql`
-      query TablesRelayContainer_user_FragmentQuery($restaurantId: ID!) {
+      query TablesRelayContainerPaginationQuery($restaurantId: ID!, $count: Int!, $cursor: String) {
         user {
           ...TablesRelayContainer_user
         }

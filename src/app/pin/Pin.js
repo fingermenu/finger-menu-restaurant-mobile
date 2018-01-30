@@ -3,12 +3,29 @@
 import React, { Component } from 'react';
 import { environment } from '../../framework/relay';
 import { graphql, QueryRenderer } from 'react-relay';
+import { connect } from 'react-redux';
 import { LoadingInProgress } from '@microbusiness/common-react-native';
 import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import PinRelayContainer from './PinRelayContainer';
+import OfflinePinContainer from './OfflinePinContainer';
+import { Map } from 'immutable';
+import { bindActionCreators } from 'redux';
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 
 class Pin extends Component {
+  componentWillMount = () => {
+    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
+
+    this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));
+
+    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantName' }));
+  };
+
   render() {
+    if (this.props.offlineMode) {
+      return <OfflinePinContainer />;
+    }
+
     return (
       <QueryRenderer
         environment={environment}
@@ -39,4 +56,16 @@ class Pin extends Component {
   }
 }
 
-export default Pin;
+function mapStateToProps(state) {
+  return {
+    offlineMode: !!state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pin);

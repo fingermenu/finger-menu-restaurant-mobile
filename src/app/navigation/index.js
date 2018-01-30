@@ -37,6 +37,8 @@ const AppNavigator = StackNavigator(
           termAndConditionUrl="http://www.fingermenu.co.nz"
           companyName="FingerMenu Ltd"
           backgroundImageUrl="https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Fbackground_black.jpg?alt=media&token=3d708597-4084-4a64-9fa7-ced59cf9f245"
+          labelTextColor="white"
+          inputPlaceholderTextColor="white"
         />
       ),
       path: '/SignUpSignIn',

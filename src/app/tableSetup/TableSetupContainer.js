@@ -5,10 +5,23 @@ import TableSetupView from './TableSetupView';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
+import { UpdateTable } from '../../framework/relay/mutations';
+import Environment from '../../framework/relay/Environment';
 
 class TableSetupContainer extends Component {
-  onSetupTablePressed = () => {
+  onSetupTablePressed = value => {
+    UpdateTable.commit(
+      Environment,
+      this.props.userId,
+      this.props.table.id,
+      'taken',
+      value.numberOfAdults,
+      value.numberOfChildren,
+      value.name,
+      value.notes,
+    );
     this.props.navigateToAppHome(this.props.table.id);
+    // TODO: Save table id into state.
   };
 
   render = () => {
@@ -27,21 +40,20 @@ function mapStateToProps(state, props) {
 
   return {
     table: props.navigation.state.params && props.navigation.state.params.table ? props.navigation.state.params.table : mockTable,
+    initialValue: { numberOfAdults: 2 },
+    userId: state.userAccess.get('userInfo').get('id'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToAppHome: tableId =>
+    navigateToAppHome: () =>
       dispatch(
         NavigationActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({
               routeName: 'Landing',
-              params: {
-                tableId,
-              },
             }),
           ],
         }),

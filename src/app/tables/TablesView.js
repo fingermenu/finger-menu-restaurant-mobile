@@ -12,6 +12,7 @@ import { translate } from 'react-i18next';
 
 class TablesView extends Component {
   renderItem = item => {
+    const style = this.getTableStyle(item.item.tableState ? item.item.tableState.key : 'empty');
     return (
       <TouchableItem onPress={() => this.props.onTablePressed(item.item)}>
         <View style={Styles.tableContainer}>
@@ -19,41 +20,40 @@ class TablesView extends Component {
             value={item.item.name}
             textStyle={Styles.tableText}
             component={TouchableNative}
-            containerStyle={Styles.tableBadgeContainer}
+            containerStyle={[Styles.tableBadgeContainer, style]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
           <View style={Styles.tableTextContainer}>
             <Text>{item.item.numberOfAdults ? item.item.numberOfAdults : 0}</Text>
-            <Text>{item.item.numberOfChildren ? item.item.numberOfAdults : 0}</Text>
+            <Text>{item.item.numberOfChildren ? item.item.numberOfChildren : 0}</Text>
           </View>
         </View>
       </TouchableItem>
     );
   };
 
-  renderBadgeSummaryItem = item => {
-    let style = null;
-    switch (item.item.key) {
+  getTableStyle = tableState => {
+    switch (tableState) {
       case 'taken':
-        style = Styles.tableBadgeTaken;
-        break;
+        return Styles.tableBadgeTaken;
 
       case 'empty':
-        style = Styles.tableBadgeEmpty;
-        break;
+        return Styles.tableBadgeEmpty;
 
-      case 'reserve':
-        style = Styles.tableBadgeReserve;
-        break;
+      case 'reserved':
+        return Styles.tableBadgeReserve;
 
       case 'paid':
-        style = Styles.tableBadgePaid;
-        break;
+        return Styles.tableBadgePaid;
     }
+  };
+
+  renderBadgeSummaryItem = item => {
+    const style = this.getTableStyle(item.key);
 
     return (
       <Badge
-        value={item.item.key + ' ' + item.item.count}
+        value={item.key + ' ' + item.count}
         textStyle={Styles.tableText}
         component={TouchableNative}
         containerStyle={[Styles.tableBadgeContainer, style]}
@@ -65,18 +65,18 @@ class TablesView extends Component {
   render = () => {
     const { t } = this.props;
     const groupedTables = Immutable.fromJS(this.props.tables)
-      .groupBy(t => t.getIn(['tableState', 'key']))
+      .groupBy(t => (t.has('tableState') ? t.getIn(['tableState', 'key']) : 'empty'))
       .mapEntries(([key, value]) => [
         key,
         {
-          key,
+          key: key ? key : 'empty',
           tables: value,
           count: value.count(),
         },
       ])
       .sortBy(_ => _.key)
-      .valueSeq()
-      .toJS();
+      .valueSeq();
+    // .toJS();
 
     return (
       <View style={Styles.container}>
@@ -92,14 +92,31 @@ class TablesView extends Component {
           renderItem={this.renderItem}
         />
         <View style={Styles.tableLegendsContainer}>
-          <FlatList
-            data={groupedTables}
-            keyExtractor={item => {
-              return item.key;
-            }}
-            numColumns={4}
-            renderItem={this.renderBadgeSummaryItem}
-          />
+          {this.renderBadgeSummaryItem({
+            key: 'empty',
+            count: groupedTables.filter(t => t.key === 'empty').first() ? groupedTables.filter(t => t.key === 'empty').first().count : 0,
+          })}
+          {this.renderBadgeSummaryItem({
+            key: 'taken',
+            count: groupedTables.filter(t => t.key === 'taken').first() ? groupedTables.filter(t => t.key === 'taken').first().count : 0,
+          })}
+          {this.renderBadgeSummaryItem({
+            key: 'reserved',
+            count: groupedTables.filter(t => t.key === 'reserved').first() ? groupedTables.filter(t => t.key === 'reserved').first().count : 0,
+          })}
+          {this.renderBadgeSummaryItem({
+            key: 'paid',
+            count: groupedTables.filter(t => t.key === 'paid').first() ? groupedTables.filter(t => t.key === 'paid').first().count : 0,
+          })}
+
+          {/*<FlatList*/}
+          {/*data={groupedTables}*/}
+          {/*keyExtractor={item => {*/}
+          {/*return item.key;*/}
+          {/*}}*/}
+          {/*numColumns={4}*/}
+          {/*renderItem={this.renderBadgeSummaryItem}*/}
+          {/*/>*/}
         </View>
       </View>
     );

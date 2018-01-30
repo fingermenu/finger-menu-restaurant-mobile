@@ -16,7 +16,7 @@ export default function FormTextInput(props) {
         // onBlur={input.onBlur}
         onFocus={input.onFocus}
         value={input.value}
-        maxLength={4}
+        // maxLength={4}
       />
     </View>
   );
