@@ -5670,16 +5670,12 @@
               "name": "name",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "LanguageStringTuple",
-                    "ofType": null
-                  }
+                  "kind": "INPUT_OBJECT",
+                  "name": "LanguageStringTuple",
+                  "ofType": null
                 }
               },
               "defaultValue": null

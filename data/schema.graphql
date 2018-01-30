@@ -500,7 +500,7 @@ type TagTypeEdge {
 
 input UpdateTableInput {
   id: ID!
-  name: [LanguageStringTuple]!
+  name: [LanguageStringTuple]
   status: String
   tableState: String
   numberOfAdults: Int
