@@ -33,7 +33,7 @@ class TableSetupView extends Component {
                   <NumberPad
                     isHorizontal={true}
                     maxNumber={16}
-                    initialValue={2}
+                    initialValue={props.input.value}
                     onNumberPressed={param => {
                       props.input.onChange(param);
                     }}
@@ -56,7 +56,7 @@ class TableSetupView extends Component {
                   <NumberPad
                     isHorizontal={true}
                     maxNumber={10}
-                    initialValue={0}
+                    initialValue={props.input.value}
                     onNumberPressed={param => {
                       props.input.onChange(param);
                     }}
@@ -73,7 +73,6 @@ class TableSetupView extends Component {
               <Text style={Styles.numberText}>Name</Text>
             </View>
             <View style={Styles.valueContainer}>
-              {/*<Text style={Styles.numberText}>{this.props.table.customerName}</Text>*/}
               <Field name="name" component={FormTextInput} />
             </View>
           </View>
@@ -82,7 +81,6 @@ class TableSetupView extends Component {
               <Text style={Styles.numberText}>Reservation</Text>
             </View>
             <View style={Styles.valueContainer}>
-              {/*<Text style={Styles.numberText}>{this.props.table.customerName}</Text>*/}
               <Field name="notes" component={FormTextInput} />
             </View>
           </View>
@@ -115,9 +113,14 @@ TableSetupView.propTypes = {
   table: TableProp,
 };
 
-function mapStateToProps() {
+function mapStateToProps(state, props) {
   return {
-    initialValues: { numberOfAdults: 2, numberOfChildren: 0 },
+    initialValues: {
+      numberOfAdults: props.table.numberOfAdults ? props.table.numberOfAdults : 2,
+      numberOfChildren: props.table.numberOfChildren ? props.table.numberOfChildren : 0,
+      name: props.table.customerName ? props.table.customerName : '',
+      notes: props.table.notes ? props.table.notes : '',
+    },
   };
 }
 
