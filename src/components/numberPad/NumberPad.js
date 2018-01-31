@@ -22,9 +22,18 @@ class NumberPad extends Component {
 
   getNumArrayList = () => {
     const initValue = this.props.initialValue;
-    return Range(0, this.props.maxNumber).map(function(num) {
-      return { id: num, name: num.toString(), isSelected: num === initValue };
-    });
+    let numArray = Range(0, this.props.maxNumber)
+      .map(function(num) {
+        return { id: num, name: num.toString(), isSelected: num === initValue };
+      })
+      .toList();
+
+    if (this.props.supportReset && this.props.maxNumber === 10) {
+      numArray = numArray.insert(9, { id: -1, name: ' ' });
+      numArray = numArray.insert(11, { id: -2, name: ' ' });
+    }
+
+    return numArray;
   };
 
   updateIndex = selectedIndex => {
@@ -46,6 +55,10 @@ class NumberPad extends Component {
   };
 
   onNumberPressed = number => {
+    if (number < 0) {
+      return;
+    }
+
     this.updateIndex(number);
     this.props.onNumberPressed(number);
   };
@@ -85,6 +98,7 @@ NumberPad.propTypes = {
   isHorizontal: PropTypes.bool,
   initialValue: PropTypes.number,
   supportHighlight: PropTypes.bool,
+  supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
   onOkPressed: PropTypes.func.isRequired,
   onClearPressed: PropTypes.func.isRequired,
@@ -96,6 +110,7 @@ NumberPad.defaultProps = {
   isHorizontal: false,
   initialValue: 0,
   supportHighlight: true,
+  supportReset: false,
 };
 
 export default NumberPad;

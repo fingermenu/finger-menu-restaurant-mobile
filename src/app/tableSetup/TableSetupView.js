@@ -19,7 +19,7 @@ class TableSetupView extends Component {
     return (
       <View style={Styles.container}>
         <View style={DefaultStyles.rowContainer}>
-          <Text style={Styles.headerText}>Setup table #{this.props.table.name}</Text>
+          <Text style={Styles.headerText}>Setup table {this.props.table.name}</Text>
         </View>
         <View>
           <View style={Styles.tableTextContainer}>
@@ -88,7 +88,22 @@ class TableSetupView extends Component {
           </View>
         </View>
         {/*<Button title={t('setupTable.label')} onPress={this.props.onSetupTablePressed} />*/}
-        <Button title="Setup" backgroundColor={DefaultColor.defaultButtonColor} onPress={handleSubmit(this.props.onSetupTablePressed)} />
+        <View style={DefaultStyles.rowContainer}>
+          <Button
+            title="Give to Guest"
+            backgroundColor={DefaultColor.defaultButtonColor}
+            icon={{ name: 'ios-body-outline', type: 'ionicon' }}
+            buttonStyle={Styles.button}
+            onPress={handleSubmit(this.props.onSetupTablePressed)}
+          />
+          <Button
+            title="Reserve"
+            backgroundColor="orange"
+            icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
+            buttonStyle={Styles.button}
+            onPress={handleSubmit(this.props.onReserveTablePressed)}
+          />
+        </View>
       </View>
     );
   };
@@ -96,6 +111,7 @@ class TableSetupView extends Component {
 
 TableSetupView.propTypes = {
   onSetupTablePressed: PropTypes.func.isRequired,
+  onReserveTablePressed: PropTypes.func.isRequired,
   table: TableProp,
 };
 

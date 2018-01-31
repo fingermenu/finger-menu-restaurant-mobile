@@ -39,4 +39,7 @@ export default StyleSheet.create({
     color: 'orange',
     fontSize: 20,
   },
+  button: {
+    width: 250,
+  },
 });

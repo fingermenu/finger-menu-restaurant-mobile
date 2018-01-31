@@ -91,6 +91,7 @@ class PinView extends Component {
     return (
       <View style={Styles.container}>
         <View style={Styles.pinViewContainer}>
+          <Text style={Styles.text}>Welcome to {this.props.restaurantName}</Text>
           <Text style={Styles.text}>Enter Your Pin</Text>
           <View style={Styles.pinContainer}>
             <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={item => item.id} />
@@ -98,9 +99,10 @@ class PinView extends Component {
           {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
           <View style={Styles.pinPadContainer}>
             <NumberPad
-              maxNumber={9}
+              maxNumber={10}
               numColumns={3}
               supportHighlight={false}
+              supportReset={true}
               initialValue=""
               onNumberPressed={this.onPinNumberPressed}
               onOkPressed={() => {}}
@@ -114,7 +116,8 @@ class PinView extends Component {
 }
 
 PinView.propTypes = {
-  pin: PropTypes.string.isRequired,
+  matchingPin: PropTypes.string.isRequired,
+  restaurantName: PropTypes.string.isRequired,
 };
 
 export default PinView;

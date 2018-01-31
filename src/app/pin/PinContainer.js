@@ -22,7 +22,7 @@ class PinContainer extends Component {
   };
 
   render = () => {
-    return <PinView onPinMatched={this.onPinMatched} matchingPin={this.props.restaurant.pin} />;
+    return <PinView onPinMatched={this.onPinMatched} matchingPin={this.props.restaurant.pin} restaurantName={this.props.restaurant.name} />;
   };
 }
 

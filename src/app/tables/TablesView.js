@@ -4,9 +4,8 @@ import React, { Component } from 'react';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
-import { TouchableItem } from '@microbusiness/common-react-native';
 import { TablesProp } from './PropTypes';
-import { Badge } from 'react-native-elements';
+import { Badge, Button } from 'react-native-elements';
 import Styles from './Styles';
 import { translate } from 'react-i18next';
 
@@ -14,21 +13,26 @@ class TablesView extends Component {
   renderItem = item => {
     const style = this.getTableStyle(item.item.tableState ? item.item.tableState.key : 'empty');
     return (
-      <TouchableItem onPress={() => this.props.onTablePressed(item.item)}>
+      <View style={Styles.tableOuterContainer}>
         <View style={Styles.tableContainer}>
-          <Badge
-            value={item.item.name}
-            textStyle={Styles.tableText}
-            component={TouchableNative}
-            containerStyle={[Styles.tableBadgeContainer, style]}
-            wrapperStyle={Styles.tableBadgeWrapper}
+          <Button
+            raised
+            large
+            borderRadius={3}
+            title={item.item.name}
+            containerViewStyle={Styles.tableItemContainer}
+            buttonStyle={[style, Styles.tableButton]}
+            onPress={() => this.props.onTablePressed(item.item)}
           />
           <View style={Styles.tableTextContainer}>
             <Text>{item.item.numberOfAdults ? item.item.numberOfAdults : 0}</Text>
             <Text>{item.item.numberOfChildren ? item.item.numberOfChildren : 0}</Text>
           </View>
         </View>
-      </TouchableItem>
+        <Text numberOfLines={1} style={Styles.customerNameText}>
+          {item.item.customerName}
+        </Text>
+      </View>
     );
   };
 

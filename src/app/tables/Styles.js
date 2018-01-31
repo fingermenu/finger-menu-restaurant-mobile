@@ -14,9 +14,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tableOuterContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   tableTextContainer: {
-    // flex: 1,
-    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -26,20 +28,29 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tableItemContainer: {
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
   tableBadgeContainer: {
     padding: 25,
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tableBadgeEmpty: {
     backgroundColor: 'grey',
   },
   tableBadgeTaken: {
-    backgroundColor: 'red',
+    backgroundColor: 'green',
   },
   tableBadgeReserve: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'orange',
   },
   tableBadgePaid: {
-    backgroundColor: 'green',
+    backgroundColor: 'blue',
   },
   tableBadgeWrapper: {
     paddingLeft: 20,
@@ -47,11 +58,18 @@ export default StyleSheet.create({
     paddingBottom: 20,
   },
   tableText: {
-    color: 'orange',
-    fontSize: 36,
+    color: 'black',
+    fontSize: 30,
+  },
+  tableButton: {
+    width: 100,
+    margin: 5,
   },
   tableLegendsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  customerNameText: {
+    width: 50,
   },
 });

@@ -9,23 +9,34 @@ import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
 class TableSetupContainer extends Component {
-  onSetupTablePressed = value => {
+  updateTable = (value, tableStateKey) => {
     UpdateTable.commit(
       Environment,
       this.props.userId,
       this.props.table.id,
-      'taken',
+      tableStateKey,
       value.numberOfAdults,
       value.numberOfChildren,
       value.name,
       value.notes,
     );
+  };
+
+  onSetupTablePressed = value => {
+    this.updateTable(value, 'taken');
     this.props.navigateToAppHome(this.props.table.id);
     // TODO: Save table id into state.
   };
 
+  onReserveTablePressed = value => {
+    this.updateTable(value, 'reserved');
+    this.props.goBack();
+  };
+
   render = () => {
-    return <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} />;
+    return (
+      <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} onReserveTablePressed={this.onReserveTablePressed} />
+    );
   };
 }
 
@@ -58,6 +69,7 @@ function mapDispatchToProps(dispatch) {
           ],
         }),
       ),
+    goBack: () => dispatch(NavigationActions.back()),
   };
 }
 
