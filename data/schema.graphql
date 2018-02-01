@@ -569,15 +569,15 @@ type User implements Node {
   size(sizeId: ID!): Size
   sizes(after: String, first: Int, before: String, last: Int, sizeIds: [ID!], name: String, sortOption: String): SizeTypeConnection
   menu(menuId: ID!): Menu
-  menus(after: String, first: Int, before: String, last: Int, menuIds: [ID!], name: String, description: String, sortOption: String): MenuTypeConnection
+  menus(after: String, first: Int, before: String, last: Int, menuIds: [ID!], restaurantId: ID, name: String, description: String, sortOption: String): MenuTypeConnection
   choiceItem(choiceItemId: ID!): ChoiceItem
   choiceItems(after: String, first: Int, before: String, last: Int, choiceItemIds: [ID!], name: String, description: String, sortOption: String): ChoiceItemTypeConnection
   choiceItemPrice(choiceItemPriceId: ID!): ChoiceItemPrice
-  choiceItemPrices(after: String, first: Int, before: String, last: Int, choiceItemPriceIds: [ID!], sortOption: String): ChoiceItemPriceTypeConnection
+  choiceItemPrices(after: String, first: Int, before: String, last: Int, choiceItemPriceIds: [ID!], menuItemPriceId: ID, sortOption: String): ChoiceItemPriceTypeConnection
   menuItem(menuItemId: ID!): MenuItem
   menuItems(after: String, first: Int, before: String, last: Int, menuItemIds: [ID!], name: String, description: String, sortOption: String): MenuItemTypeConnection
   menuItemPrice(menuItemPriceId: ID!): MenuItemPrice
-  menuItemPrices(after: String, first: Int, before: String, last: Int, menuItemPriceIds: [ID!], sortOption: String): MenuItemPriceTypeConnection
+  menuItemPrices(after: String, first: Int, before: String, last: Int, menuItemPriceIds: [ID!], menuId: ID, sortOption: String): MenuItemPriceTypeConnection
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   table(tableId: ID!): Table
