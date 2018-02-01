@@ -62,7 +62,7 @@ input CancelOrderInput {
 
 type CancelOrderPayload {
   errorMessage: String
-  order: Order
+  order: OrderTypeEdge
   clientMutationId: String
 }
 
@@ -367,7 +367,7 @@ input PlaceOrderInput {
 
 type PlaceOrderPayload {
   errorMessage: String
-  order: Order
+  order: OrderTypeEdge
   clientMutationId: String
 }
 
@@ -540,7 +540,7 @@ input UpdateOrderInput {
 
 type UpdateOrderPayload {
   errorMessage: String
-  order: Order
+  order: OrderTypeEdge
   clientMutationId: String
 }
 

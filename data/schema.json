@@ -5975,7 +5975,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Order",
+                "name": "OrderTypeEdge",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -6125,7 +6125,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Order",
+                "name": "OrderTypeEdge",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -6207,7 +6207,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Order",
+                "name": "OrderTypeEdge",
                 "ofType": null
               },
               "isDeprecated": false,
