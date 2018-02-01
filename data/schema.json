@@ -1378,7 +1378,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "tableId",
+                  "name": "restaurantId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1388,6 +1388,16 @@
                       "name": "ID",
                       "ofType": null
                     }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "tableId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },
@@ -5774,6 +5784,20 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "restaurantId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "customerName",
               "description": null,
               "type": {
@@ -5799,16 +5823,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "restaurantId",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null
@@ -6020,6 +6034,20 @@
               "defaultValue": null
             },
             {
+              "name": "restaurantId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "customerName",
               "description": null,
               "type": {
@@ -6045,16 +6073,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "restaurantId",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null

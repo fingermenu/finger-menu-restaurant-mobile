@@ -356,10 +356,10 @@ type Phone {
 }
 
 input PlaceOrderInput {
+  restaurantId: ID!
   customerName: String
   notes: String
   totalPrice: Float
-  restaurantId: ID
   tableId: ID
   details: [OrderMenuItemPriceInput!]
   clientMutationId: String
@@ -529,10 +529,10 @@ type TagTypeEdge {
 
 input UpdateOrderInput {
   id: ID!
+  restaurantId: ID!
   customerName: String
   notes: String
   totalPrice: Float
-  restaurantId: ID
   tableId: ID
   details: [OrderMenuItemPriceInput!]
   clientMutationId: String
@@ -583,7 +583,7 @@ type User implements Node {
   table(tableId: ID!): Table
   tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], tableId: ID!, name: String, customerName: String, notes: String, orderState: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], restaurantId: ID!, tableId: ID, name: String, customerName: String, notes: String, orderState: String, sortOption: String): OrderTypeConnection
 }
 
 type Viewer implements Node {
