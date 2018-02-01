@@ -5743,7 +5743,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "Table",
+                "name": "TableTypeEdge",
                 "ofType": null
               },
               "isDeprecated": false,
