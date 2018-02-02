@@ -25,10 +25,10 @@ class MenuView extends Component {
     return (
       <View style={Styles.container}>
         <FlatList
-          data={this.props.menuItems}
+          data={this.props.menuItemPrices}
           renderItem={info => (
             <MenuItemRow
-              menuItem={info.item}
+              menuItemPrice={info.item}
               isOrdered={this.hasOrdered(info.item)}
               onViewMenuItemPressed={this.props.onViewMenuItemPressed}
               // onAddMenuItemToOrder={this.props.onAddMenuItemToOrder}
@@ -47,7 +47,7 @@ class MenuView extends Component {
 }
 
 MenuView.propTypes = {
-  menuItems: MenuItemsProp,
+  menuItemPrices: MenuItemsProp,
   orders: OrdersProp,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,

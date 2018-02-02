@@ -5,6 +5,9 @@ import TableSetupView from './TableSetupView';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
+import { Map } from 'immutable';
+import { bindActionCreators } from 'redux';
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
@@ -24,8 +27,10 @@ class TableSetupContainer extends Component {
 
   onSetupTablePressed = value => {
     this.updateTable(value, 'taken');
-    this.props.navigateToAppHome(this.props.table.id);
-    // TODO: Save table id into state.
+    this.props.navigateToAppHome();
+
+    // Save the table into storage
+    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
   };
 
   onReserveTablePressed = value => {
@@ -58,6 +63,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
     navigateToAppHome: () =>
       dispatch(
         NavigationActions.reset({

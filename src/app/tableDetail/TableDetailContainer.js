@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { TableProp } from '../tables/PropTypes';
+import { UpdateTable } from '../../framework/relay/mutations';
+import Environment from '../../framework/relay/Environment';
 
 class TableDetailContainer extends Component {
   onViewOrderItemPressed = () => {
@@ -16,12 +18,18 @@ class TableDetailContainer extends Component {
     return true;
   };
 
+  onResetTablePressed = () => {
+    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'empty', 0, 0, '', '');
+    this.props.goBack();
+  };
+
   render = () => {
     return (
       <TableDetailView
         table={this.props.table}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
+        onResetTablePressed={this.onResetTablePressed}
       />
     );
   };
@@ -43,6 +51,7 @@ function mapStateToProps(state, props) {
   };
 
   return {
+    userId: state.userAccess.get('userInfo').get('id'),
     table: props.navigation.state.params && props.navigation.state.params.table ? props.navigation.state.params.table : mockTable,
   };
 }
@@ -63,6 +72,7 @@ function mapDispatchToProps(dispatch) {
           ],
         }),
       ),
+    goBack: () => dispatch(NavigationActions.back()),
   };
 }
 

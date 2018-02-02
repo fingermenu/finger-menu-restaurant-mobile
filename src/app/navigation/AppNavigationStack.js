@@ -3,7 +3,7 @@
 import { StackNavigator } from 'react-navigation';
 import HomeNavigationTab, { WrappedHomeNavigationTabWithI18NOrders } from './HomeNavigationTab';
 import { DefaultColor } from '../../style';
-import { MenuItemContainer } from '../menuItem';
+import { MenuItem } from '../menuItem';
 import { Tables } from '../tables';
 import { TableSetupContainer } from '../tableSetup';
 import { LandingContainer } from '../landing';
@@ -35,7 +35,7 @@ export default StackNavigator(
       screen: WrappedHomeNavigationTabWithI18NOrders,
     },
     MenuItem: {
-      screen: MenuItemContainer,
+      screen: MenuItem,
     },
     OrderConfirmed: {
       screen: OrderConfirmedContainer,

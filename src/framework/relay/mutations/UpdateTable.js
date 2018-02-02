@@ -12,31 +12,39 @@ const mutation = graphql`
     updateTable(input: $input) {
       errorMessage
       table {
-        id
-        name
-        numberOfAdults
-        numberOfChildren
-        customerName
-        notes
-        tableState {
+        __typename
+        cursor
+        node {
           id
-          key
           name
+          numberOfAdults
+          numberOfChildren
+          customerName
+          notes
+          tableState {
+            id
+            key
+            name
+          }
         }
       }
     }
   }
 `;
 
-const sharedUpdater = (store, userId, tablesEdge) => {
+const sharedUpdater = (store, userId, tableEdge) => {
   const userProxy = store.get(userId);
+  if (!userProxy) {
+    return;
+  }
+
   const connection = ConnectionHandler.getConnection(userProxy, 'User_tables');
 
   if (!connection) {
     return;
   }
 
-  ConnectionHandler.insertEdgeAfter(connection, tablesEdge);
+  ConnectionHandler.insertEdgeAfter(connection, tableEdge);
 };
 
 const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChildren, customerName, notes) => {
@@ -59,9 +67,9 @@ const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChi
       if (errorMessage) {
         reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
       } else {
-        const tablesEdge = payload.getLinkedRecord('tables');
+        const tableEdge = payload.getLinkedRecord('table');
 
-        sharedUpdater(store, userId, tablesEdge);
+        sharedUpdater(store, userId, tableEdge);
       }
     },
     optimisticUpdater: store => {

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 // import PropTypes from 'prop-types';
 import { DefaultColor } from '../../style';
-import MenuContainer from '../menu/MenuContainer';
+import { Menu } from '../menu';
 import { connect } from 'react-redux';
 
 class MenusNavigationTabContainer extends Component {
@@ -18,7 +18,7 @@ class MenusNavigationTabContainer extends Component {
     for (let i = 0; i < this.props.menus.length; i++) {
       const menu = this.props.menus[i];
       MenusScreens[menu.id] = {
-        screen: MenuContainer,
+        screen: props => <Menu {...props} menuId={menu.id} />,
         navigationOptions: {
           tabBarLabel: menu.name,
           headerStyle: {

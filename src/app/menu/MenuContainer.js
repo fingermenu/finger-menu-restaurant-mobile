@@ -4,19 +4,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import PropTypes from 'prop-types';
 import MenuView from './MenuView';
-import { MenuItemsProp } from './PropTypes';
 import * as OrdersActions from '../orders/Actions';
 import { OrdersProp } from '../orders/PropTypes';
+import { Map } from 'immutable';
 
 class MenuContainer extends Component {
   state = {
     isFetchingTop: false,
   };
 
-  onViewMenuItemPressed = menuItem => {
-    this.props.navigateToMenuItem(menuItem);
+  componentWillMount = () => {
+    this.props.AsyncStorageActions.readValue(Map({ key: 'servingTable' }));
+  };
+
+  onViewMenuItemPressed = menuItemPriceId => {
+    this.props.navigateToMenuItem(menuItemPriceId);
   };
 
   // onAddMenuItemToOrder = menuItem => {
@@ -63,7 +68,8 @@ class MenuContainer extends Component {
   render = () => {
     return (
       <MenuView
-        menuItems={this.props.menuItems}
+        // menuItems={this.props.menuItems}
+        menuItemPrices={this.props.user.menuItemPrices.edges.map(_ => _.node)}
         orders={this.props.orders}
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
@@ -77,7 +83,6 @@ class MenuContainer extends Component {
 }
 
 MenuContainer.propTypes = {
-  menuItems: MenuItemsProp,
   orders: OrdersProp,
   ordersActions: PropTypes.object.isRequired,
 };
@@ -141,20 +146,22 @@ const mockMenuItems = [
 
 function mapStateToProps(state) {
   return {
-    menuItems: mockMenuItems,
+    table: state.asyncStorage.getIn(['keyValues', 'servingTable']),
+    // menuItems: mockMenuItems,
     orders: state.orders.get('orders').toJS(),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
     ordersActions: bindActionCreators(OrdersActions, dispatch),
-    navigateToMenuItem: menuItem =>
+    navigateToMenuItem: menuItemPriceId =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'MenuItem',
           params: {
-            menuItem,
+            menuItemPriceId,
           },
         }),
       ),

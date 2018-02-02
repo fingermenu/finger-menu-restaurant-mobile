@@ -2,9 +2,9 @@
 
 import React, { Component } from 'react';
 import { Text, View, Image, ScrollView } from 'react-native';
-import { MenuItemProp } from './PropTypes';
+import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
-import { OrderOptionsContainer } from '../../components/orderOptions';
+// import { OrderOptionsContainer } from '../../components/orderOptions';
 import { AddToOrderContainer } from '../../components/addToOrder';
 import QuantityControl from '../../components/quantityControl/QuantityControl';
 import { OrderItemPropOptional } from '../orders/PropTypes';
@@ -47,23 +47,21 @@ class MenuItemView extends Component {
             <Image
               style={Styles.image}
               source={{
-                uri: this.props.menuItem.imageUrl,
+                uri: this.props.menuItemPrice.menuItem.imageUrl,
               }}
             />
           </View>
           <View style={Styles.descriptionContainer}>
-            <Text style={Styles.title}>{this.props.menuItem.name}</Text>
-            <Text style={Styles.description}>{this.props.menuItem.description}</Text>
+            <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
+            <Text style={Styles.description}>{this.props.menuItemPrice.menuItem.description}</Text>
           </View>
-          <View style={Styles.optionsContainer}>
-            <OrderOptionsContainer orderOptions={this.props.menuItem.orderOptions} />
-          </View>
+          <View style={Styles.optionsContainer}>{/*<OrderOptionsContainer orderOptions={this.props.menuItem.orderOptions} />*/}</View>
           <View style={Styles.quantity}>
             <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
           </View>
         </ScrollView>
         <View>
-          <AddToOrderContainer order={this.props.order} menuItem={this.props.menuItem} orderQuantity={quantity} />
+          <AddToOrderContainer order={this.props.order} menuItemPrice={this.props.menuItemPrice} orderQuantity={quantity} />
         </View>
       </View>
     );
@@ -71,7 +69,7 @@ class MenuItemView extends Component {
 }
 
 MenuItemView.propTypes = {
-  menuItem: MenuItemProp,
+  menuItemPrice: MenuItemPriceProp,
   order: OrderItemPropOptional,
 };
 

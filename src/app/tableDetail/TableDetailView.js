@@ -3,10 +3,12 @@
 import React, { Component } from 'react';
 import { FlatList, Text, TouchableNative, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
+import PropTypes from 'prop-types';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
 import { Badge, Button, Icon } from 'react-native-elements';
 import { DefaultColor } from '../../style';
+import { TableProp } from '../tables/PropTypes';
 
 class TableDetailView extends Component {
   render = () => {
@@ -39,7 +41,7 @@ class TableDetailView extends Component {
         />
         <View style={Styles.buttonsContainer}>
           <Button title="Set paid" backgroundColor={DefaultColor.defaultButtonColor} />
-          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} />
+          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.props.onResetTablePressed} />
         </View>
         <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} onPress={() => {}}>
           <ActionButton.Item buttonColor="#9b59b6" title="Drink" onPress={() => {}}>
@@ -56,5 +58,10 @@ class TableDetailView extends Component {
     );
   };
 }
+
+TableDetailView.propTypes = {
+  table: TableProp,
+  onResetTablePressed: PropTypes.func.isRequired,
+};
 
 export default TableDetailView;

@@ -7,7 +7,7 @@ import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component<any, Props, State> {
   render = () => {
-    return <MenuItemView menuItem={this.props.menuItem} order={this.props.order} />;
+    return <MenuItemView menuItemPrice={this.props.user.menuItemPrice} order={this.props.order} />;
   };
 }
 
@@ -15,10 +15,8 @@ MenuItemContainer.propTypes = {
   menuItem: MenuItemProp,
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    menuItem: props.navigation.state.params && props.navigation.state.params.menuItem ? props.navigation.state.params.menuItem : null,
-    order: props.navigation.state.params && props.navigation.state.params.order ? props.navigation.state.params.order : null,
     orders: state.orders.get('orders').toJS(),
   };
 }

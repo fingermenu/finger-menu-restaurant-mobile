@@ -7,5 +7,10 @@ export const MenuItemProp = PropTypes.shape({
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string,
-  priceToDisplay: PropTypes.string,
+});
+
+export const MenuItemPriceProp = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  currentPrice: PropTypes.string,
+  menuItem: MenuItemProp,
 }).isRequired;

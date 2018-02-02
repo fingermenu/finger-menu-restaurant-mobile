@@ -19,45 +19,37 @@ class MenuItemRow extends Component {
 
     this.onViewMenuItemPressed = debounce(this.props.onViewMenuItemPressed, config.navigationDelay);
 
-    this.state = { menuItem: Immutable.fromJS(props.menuItem) };
+    this.state = { menuItemPrice: Immutable.fromJS(props.menuItemPrice) };
   }
 
   shouldComponentUpdate = nextProps => {
-    return this.state.menuItem.equals(Immutable.fromJS(nextProps.menuItem));
+    return this.state.menuItemPrice.equals(Immutable.fromJS(nextProps.menuItemPrice));
   };
 
   componentWillReceiveProps = nextProps => {
-    const menuItem = Immutable.fromJS(nextProps.menuItem);
+    const menuItemPrice = Immutable.fromJS(nextProps.menuItemPrice);
 
-    if (!this.state.menuItem.equals(menuItem)) {
-      this.setState({ menuItem });
+    if (!this.state.menuItemPrice.equals(menuItemPrice)) {
+      this.setState({ menuItemPrice });
     }
-  };
-
-  onQuantityIncrease = () => {
-    this.props.onAddMenuItemToOrder(this.props.menuItem);
-  };
-
-  onQuantityDecrease = () => {
-    this.props.onRemoveMenuItemFromOrder(this.props.menuItem.id);
   };
 
   render = () => {
     return (
-      <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItem)}>
+      <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItemPrice.id)}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
             <Image
               style={Styles.image}
               source={{
-                uri: this.props.menuItem.imageUrl,
+                uri: this.props.menuItemPrice.menuItem.imageUrl,
               }}
             />
           </View>
           <View style={Styles.rowTextContainer}>
-            <Text style={Styles.title}>{this.props.menuItem.name}</Text>
-            <Text style={Styles.description}>{this.props.menuItem.description}</Text>
-            <Text style={Styles.price}>{this.props.menuItem.priceToDisplay}</Text>
+            <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
+            <Text style={Styles.description}>{this.props.menuItemPrice.menuItem.description}</Text>
+            <Text style={Styles.price}>{this.props.menuItemPrice.currentPrice}</Text>
           </View>
           <View>
             <Icon
@@ -73,7 +65,7 @@ class MenuItemRow extends Component {
 }
 
 MenuItemRow.propTypes = {
-  menuItem: MenuItemProp,
+  menuItemPrice: MenuItemProp,
   isOrdered: PropTypes.bool.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,
