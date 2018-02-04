@@ -3,9 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import PinView from './PinView';
-import { bindActionCreators } from 'redux';
 
 class OfflinePinContainer extends Component {
   onPinMatched = () => {
@@ -31,7 +29,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
     navigateToTables: () =>
       dispatch(
         NavigationActions.reset({

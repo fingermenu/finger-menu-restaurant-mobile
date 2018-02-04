@@ -17,6 +17,7 @@ class Pin extends Component {
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantName' }));
+    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
   };
 
   render() {

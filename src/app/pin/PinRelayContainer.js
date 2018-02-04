@@ -19,6 +19,14 @@ export default createPaginationContainer(
               id
               name
               pin
+              configurations {
+                printers {
+                  type
+                  name
+                  hostname
+                  port
+                }
+              }
             }
           }
         }

@@ -13,6 +13,7 @@ class PinContainer extends Component {
     this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
+    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(this.props.restaurant.configurations) }));
   };
 
   onPinMatched = () => {
