@@ -1,6 +1,6 @@
 // @flow
 
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { Dimensions } from 'react-native';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
@@ -37,7 +37,7 @@ export const Sizes = {
   screenHeight: screen.height,
 };
 
-export const DefaultStyles = StyleSheet.create({
+export const DefaultStyles = {
   container: {
     flex: 1,
   },
@@ -65,4 +65,4 @@ export const DefaultStyles = StyleSheet.create({
     height: 48,
     width: 48,
   },
-});
+};
