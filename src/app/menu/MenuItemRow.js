@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { View, Image, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { MenuItemProp } from './PropTypes';
+import { MenuItemPriceProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
 // import { QuantityControlContainer } from '../../components/quantityControl';
@@ -39,12 +39,16 @@ class MenuItemRow extends Component {
       <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItemPrice.id)}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
-            <Image
-              style={Styles.image}
-              source={{
-                uri: this.props.menuItemPrice.menuItem.imageUrl,
-              }}
-            />
+            {this.props.menuItemPrice.menuItem.imageUrl ? (
+              <Image
+                style={Styles.image}
+                source={{
+                  uri: this.props.menuItemPrice.menuItem.imageUrl,
+                }}
+              />
+            ) : (
+              <View />
+            )}
           </View>
           <View style={Styles.rowTextContainer}>
             <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
@@ -65,7 +69,7 @@ class MenuItemRow extends Component {
 }
 
 MenuItemRow.propTypes = {
-  menuItemPrice: MenuItemProp,
+  menuItemPrice: MenuItemPriceProp.isRequired,
   isOrdered: PropTypes.bool.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,

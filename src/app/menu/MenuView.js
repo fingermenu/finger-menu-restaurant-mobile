@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Styles from './Styles';
-import { MenuItemsProp } from './PropTypes';
+import { MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 import { OrdersProp } from '../orders/PropTypes';
 import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
@@ -47,7 +47,7 @@ class MenuView extends Component {
 }
 
 MenuView.propTypes = {
-  menuItemPrices: MenuItemsProp,
+  menuItemPrices: MenuItemPricesProp.isRequired,
   orders: OrdersProp,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   // onAddMenuItemToOrder: PropTypes.func.isRequired,
