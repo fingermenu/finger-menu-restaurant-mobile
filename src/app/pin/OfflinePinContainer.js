@@ -2,27 +2,20 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
 import { NavigationActions } from 'react-navigation';
 import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import PinView from './PinView';
 import { bindActionCreators } from 'redux';
 
 class OfflinePinContainer extends Component {
-  componentWillMount = () => {
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
-
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
-
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
-  };
-
   onPinMatched = () => {
     this.props.navigateToTables();
   };
 
   render = () => {
-    return <PinView onPinMatched={this.onPinMatched} matchingPin={this.props.restaurant.pin} restaurantName={this.props.restaurant.name} />;
+    const { restaurant: { pin, name } } = this.props;
+
+    return <PinView onPinMatched={this.onPinMatched} matchingPin={pin} restaurantName={name} />;
   };
 }
 

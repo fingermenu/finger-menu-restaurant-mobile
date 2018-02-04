@@ -11,9 +11,7 @@ import { bindActionCreators } from 'redux';
 class PinContainer extends Component {
   componentWillMount = () => {
     this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
-
     this.props.AsyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
-
     this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
   };
 

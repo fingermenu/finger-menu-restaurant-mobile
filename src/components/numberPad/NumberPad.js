@@ -100,8 +100,6 @@ NumberPad.propTypes = {
   supportHighlight: PropTypes.bool,
   supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
-  onOkPressed: PropTypes.func.isRequired,
-  onClearPressed: PropTypes.func.isRequired,
 };
 
 NumberPad.defaultProps = {

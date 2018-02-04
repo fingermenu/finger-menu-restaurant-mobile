@@ -15,14 +15,17 @@ import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStora
 class Pin extends Component {
   componentWillMount = () => {
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
-
     this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));
-
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantName' }));
   };
 
   render() {
     if (this.props.offlineMode) {
+      const { restaurant: { pin, name } } = this.props;
+      if (!pin || !name) {
+        return <LoadingInProgress />;
+      }
+
       return <OfflinePinContainer />;
     }
 
@@ -59,6 +62,10 @@ class Pin extends Component {
 function mapStateToProps(state) {
   return {
     offlineMode: !!state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    restaurant: {
+      name: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
+      pin: state.asyncStorage.getIn(['keyValues', 'pin']),
+    },
   };
 }
 
