@@ -11,7 +11,7 @@ export const MenuItemProp = PropTypes.shape({
 
 export const MenuItemPriceProp = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  currentPrice: PropTypes.number,
+  currentPrice: PropTypes.number.isRequired,
   menuItem: MenuItemProp.isRequired,
 });
 

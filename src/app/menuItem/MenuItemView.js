@@ -44,12 +44,16 @@ class MenuItemView extends Component {
       <View style={Styles.container}>
         <ScrollView>
           <View style={Styles.imageContainer}>
-            <Image
-              style={Styles.image}
-              source={{
-                uri: this.props.menuItemPrice.menuItem.imageUrl,
-              }}
-            />
+            {this.props.menuItemPrice.menuItem.imageUrl ? (
+              <Image
+                style={Styles.image}
+                source={{
+                  uri: this.props.menuItemPrice.menuItem.imageUrl,
+                }}
+              />
+            ) : (
+              <View />
+            )}
           </View>
           <View style={Styles.descriptionContainer}>
             <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
@@ -69,7 +73,7 @@ class MenuItemView extends Component {
 }
 
 MenuItemView.propTypes = {
-  menuItemPrice: MenuItemPriceProp,
+  menuItemPrice: MenuItemPriceProp.isRequired,
   order: OrderItemPropOptional,
 };
 
