@@ -8,8 +8,6 @@ import { DefaultStyles } from '../../style/DefaultStyles';
 import Styles from './Styles';
 import { DefaultColor } from '../../style';
 
-console.log(DefaultStyles);
-
 class QuantityControl extends Component {
   render = () => {
     return (
