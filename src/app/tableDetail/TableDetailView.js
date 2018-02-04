@@ -62,6 +62,8 @@ class TableDetailView extends Component {
 TableDetailView.propTypes = {
   table: TableProp,
   onResetTablePressed: PropTypes.func.isRequired,
+  onViewOrderItemPressed: PropTypes.func.isRequired,
+  onRemoveOrderPressed: PropTypes.func.isRequired,
 };
 
 export default TableDetailView;

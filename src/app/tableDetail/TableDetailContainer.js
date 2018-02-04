@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import TableDetailView from './TableDetailView';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import PropTypes from 'prop-types';
 import { TableProp } from '../tables/PropTypes';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
@@ -37,22 +36,12 @@ class TableDetailContainer extends Component {
 
 TableDetailContainer.propTypes = {
   table: TableProp,
-  onViewOrderItemPressed: PropTypes.func.isRequired,
-  onRemoveOrderPressed: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, props) {
-  const mockTable = {
-    id: 1,
-    name: '1',
-    status: 'Empty',
-    numberOfAdults: 0,
-    numberOfChildren: 0,
-  };
-
   return {
     userId: state.userAccess.get('userInfo').get('id'),
-    table: props.navigation.state.params && props.navigation.state.params.table ? props.navigation.state.params.table : mockTable,
+    table: props.navigation.state.params.table,
   };
 }
 
