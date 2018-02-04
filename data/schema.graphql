@@ -346,6 +346,7 @@ type ParentRestaurant implements Node {
   menus: [Menu!]
   languages: [Language!]
   tables: [Table!]
+  configurations: RestaurantConfigurations!
 }
 
 type ParentTag implements Node {
@@ -380,6 +381,13 @@ type PlaceOrderPayload {
   clientMutationId: String
 }
 
+type Printer {
+  name: String
+  type: String
+  hostname: String
+  port: Int
+}
+
 type Query {
   user: User
   viewer: Viewer
@@ -406,7 +414,12 @@ type Restaurant implements Node {
   menus: [Menu!]
   languages: [Language!]
   tables: [Table!]
+  configurations: RestaurantConfigurations!
   parentRestaurant: ParentRestaurant
+}
+
+type RestaurantConfigurations {
+  printers: [Printer!]
 }
 
 # A connection to a list of items.
