@@ -47,7 +47,7 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
-  orders: OrdersProp,
+  orders: OrdersProp.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,

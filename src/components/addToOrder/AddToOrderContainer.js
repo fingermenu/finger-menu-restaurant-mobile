@@ -87,7 +87,7 @@ AddToOrderContainer.propTypes = {
   orderQuantity: PropTypes.number.isRequired,
   menuItemPrice: MenuItemPriceProp,
   order: OrderItemProp,
-  ordersActions: PropTypes.func.isRequired,
+  ordersActions: PropTypes.object.isRequired,
   goBack: PropTypes.func.isRequired,
 };
 

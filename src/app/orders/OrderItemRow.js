@@ -62,7 +62,7 @@ class OrderItemRow extends Component {
 }
 
 OrderItemRow.propTypes = {
-  orderItem: OrderItemProp,
+  orderItem: OrderItemProp.isRequired,
   orderQuantity: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
