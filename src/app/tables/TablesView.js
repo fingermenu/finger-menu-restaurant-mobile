@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
-import { TablesProp } from './PropTypes';
 import { Badge, Button } from 'react-native-elements';
 import Styles from './Styles';
 import { translate } from 'react-i18next';
@@ -128,7 +127,6 @@ class TablesView extends Component {
 }
 
 TablesView.propTypes = {
-  menuItems: TablesProp,
   onTablePressed: PropTypes.func.isRequired,
 };
 
