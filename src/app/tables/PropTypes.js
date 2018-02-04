@@ -3,7 +3,7 @@
 import PropTypes from 'prop-types';
 
 export const TableProp = PropTypes.shape({
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   status: PropTypes.string,
   numberOfAdults: PropTypes.number,

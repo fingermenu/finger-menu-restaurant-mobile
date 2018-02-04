@@ -46,16 +46,8 @@ class TableSetupContainer extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const mockTable = {
-    id: 1,
-    name: '1',
-    status: 'Empty',
-    numberOfAdults: 0,
-    numberOfChildren: 0,
-  };
-
   return {
-    table: props.navigation.state.params && props.navigation.state.params.table ? props.navigation.state.params.table : mockTable,
+    table: props.navigation.state.params.table,
     initialValue: { numberOfAdults: 2 },
     userId: state.userAccess.get('userInfo').get('id'),
   };
