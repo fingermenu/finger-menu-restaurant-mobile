@@ -15,6 +15,6 @@ export default function getReducers(navigationReducer) {
     asyncStorage: AsyncStorageReducer,
     notification: NotificationReducer,
     form: formReducer,
-    orders: OrdersReducer,
+    order: OrdersReducer,
   });
 }

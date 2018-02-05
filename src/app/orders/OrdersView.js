@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import OrderItemRow from './OrderItemRow';
 import { Button } from 'react-native-elements';
 import Styles from './Styles';
-import { OrdersProp } from './PropTypes';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor } from '../../style';
 
@@ -28,7 +27,7 @@ class OrdersView extends Component {
               onRemoveOrderPressed={this.props.onRemoveOrderPressed}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.ordrItemId}
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
@@ -36,7 +35,7 @@ class OrdersView extends Component {
         />
         <Button
           title="Confirm Order"
-          disabled={this.props.orders.length === 0}
+          // disabled={this.props.orders.length === 0}
           icon={{ name: 'md-checkmark', type: 'ionicon' }}
           backgroundColor={DefaultColor.defaultButtonColor}
           onPress={this.props.onConfirmOrderPressed}
@@ -47,7 +46,7 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
-  orders: OrdersProp.isRequired,
+  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,

@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { MenuItemProp } from './PropTypes';
 import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component<any, Props, State> {
@@ -12,13 +11,11 @@ class MenuItemContainer extends Component<any, Props, State> {
 }
 
 MenuItemContainer.propTypes = {
-  menuItem: MenuItemProp,
+  // menuItem: MenuItemProp,
 };
 
-function mapStateToProps(state) {
-  return {
-    orders: state.orders.get('orders').toJS(),
-  };
+function mapStateToProps() {
+  return {};
 }
 
 export default connect(mapStateToProps)(MenuItemContainer);

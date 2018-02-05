@@ -8,6 +8,7 @@ import { translate } from 'react-i18next';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as OrdersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
@@ -26,11 +27,23 @@ class TableSetupContainer extends Component {
   };
 
   onSetupTablePressed = value => {
-    this.updateTable(value, 'taken');
+    // this.updateTable(value, 'taken');
     this.props.navigateToAppHome();
 
     // Save the table into storage
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
+    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
+    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
+    this.props.OrdersActions.setOrder(
+      Map({
+        restaurantId: this.props.restaurantId,
+        tableId: this.props.table.id,
+        customerName: value.name,
+        notes: value.notes,
+        numberOfAdults: value.numberOfAdults,
+        numberOfChildren: value.numberOfChildren,
+      }),
+    );
   };
 
   onReserveTablePressed = value => {
@@ -50,12 +63,14 @@ function mapStateToProps(state, props) {
     table: props.navigation.state.params.table,
     initialValue: { numberOfAdults: 2 },
     userId: state.userAccess.get('userInfo').get('id'),
+    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+    OrdersActions: bindActionCreators(OrdersActions, dispatch),
     navigateToAppHome: () =>
       dispatch(
         NavigationActions.reset({

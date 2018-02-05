@@ -38,7 +38,7 @@ class MenuItem extends Component {
           }
 
           if (props) {
-            return <MenuItemRelayContainer user={props.user} menuItemPriceId={this.props.productId} order={this.props.order} />;
+            return <MenuItemRelayContainer user={props.user} menuItemPriceId={this.props.menuItemPriceId} order={this.props.order} />;
           }
 
           return <LoadingInProgress />;

@@ -7,18 +7,17 @@ import PropTypes from 'prop-types';
 import Styles from './Styles';
 import { MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
-import { OrdersProp } from '../orders/PropTypes';
 import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 
 class MenuView extends Component {
   getTotalOrderQuantity = () => {
     return Immutable.fromJS(this.props.orders).reduce((total, value) => {
-      return total + value.get('quantity');
+      return total + value.getIn(['data', 'quantity']);
     }, 0);
   };
 
   hasOrdered = item => {
-    return Immutable.fromJS(this.props.orders).findIndex(order => order.get('menuItemId') === item.id) >= 0;
+    return Immutable.fromJS(this.props.orders).findIndex(order => order.getIn(['data', 'menuItemPriceId']) === item.id) >= 0;
   };
 
   render = () => {
@@ -27,13 +26,7 @@ class MenuView extends Component {
         <FlatList
           data={this.props.menuItemPrices}
           renderItem={info => (
-            <MenuItemRow
-              menuItemPrice={info.item}
-              isOrdered={this.hasOrdered(info.item)}
-              onViewMenuItemPressed={this.props.onViewMenuItemPressed}
-              // onAddMenuItemToOrder={this.props.onAddMenuItemToOrder}
-              // onRemoveMenuItemFromOrder={this.props.onRemoveMenuItemFromOrder}
-            />
+            <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />
           )}
           keyExtractor={item => item.id}
           onEndReached={this.props.onEndReached}
@@ -48,10 +41,8 @@ class MenuView extends Component {
 
 MenuView.propTypes = {
   menuItemPrices: MenuItemPricesProp.isRequired,
-  orders: OrdersProp,
+  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
-  // onAddMenuItemToOrder: PropTypes.func.isRequired,
-  // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
   isFetchingTop: PropTypes.bool,
   onRefresh: PropTypes.func,
   onEndReached: PropTypes.func,

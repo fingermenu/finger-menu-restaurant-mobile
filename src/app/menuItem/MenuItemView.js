@@ -7,7 +7,7 @@ import Styles from './Styles';
 // import { OrderOptionsContainer } from '../../components/orderOptions';
 import { AddToOrderContainer } from '../../components/addToOrder';
 import QuantityControl from '../../components/quantityControl/QuantityControl';
-import { OrderItemPropOptional } from '../orders/PropTypes';
+import PropTypes from 'prop-types';
 
 class MenuItemView extends Component {
   constructor() {
@@ -19,7 +19,7 @@ class MenuItemView extends Component {
 
   componentWillMount = () => {
     if (this.props.order) {
-      this.setState({ quantity: this.props.order.quantity });
+      this.setState({ quantity: this.props.order.data.quantity });
     }
   };
 
@@ -34,10 +34,6 @@ class MenuItemView extends Component {
   };
 
   render = () => {
-    // if (this.props.order){
-    //   this.setState({quantity: this.props.order.quantity});
-    // }
-
     const { quantity } = this.state;
 
     return (
@@ -74,7 +70,7 @@ class MenuItemView extends Component {
 
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
-  order: OrderItemPropOptional,
+  order: PropTypes.object,
 };
 
 export default MenuItemView;

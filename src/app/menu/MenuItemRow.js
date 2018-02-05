@@ -59,6 +59,7 @@ class MenuItemRow extends Component {
             <Icon
               name="dot-single"
               type="entypo"
+              size={36}
               color={this.props.isOrdered > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
             />
           </View>

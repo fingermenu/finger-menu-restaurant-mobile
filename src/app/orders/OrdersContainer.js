@@ -1,34 +1,40 @@
 // @flow
 
 import React, { Component } from 'react';
-import Immutable, { Map } from 'immutable';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import OrdersView from './OrdersView';
 import PropTypes from 'prop-types';
-import { OrdersProp } from './PropTypes';
 import * as OrdersActions from './Actions';
+import { PlaceOrder } from '../../framework/relay/mutations';
+import Environment from '../../framework/relay/Environment';
 
 class OrdersContainer extends Component {
   state = {
     isFetchingTop: false,
   };
 
-  onViewOrderItemPressed = (menuItem, order) => {
-    this.props.navigateToMenuItem(menuItem, order);
+  onViewOrderItemPressed = (menuItemPriceId, order) => {
+    this.props.navigateToMenuItem(menuItemPriceId, order);
   };
 
   onConfirmOrderPressed = () => {
+    PlaceOrder.commit(
+      Environment,
+      this.props.userId,
+      this.props.tableOrder
+        .set('details', this.props.tableOrder.get('details').valueSeq())
+        .update('details', detail => detail.map(_ => _.delete('menuItem')))
+        .toJS(),
+    );
+
     this.props.navigateToOrderConfirmed();
   };
 
-  onRemoveOrderPressed = orderId => {
-    const orders = Immutable.fromJS(this.props.orders);
-    const orderToRemoveIndex = orders.findIndex(order => order.get('id') === orderId);
-    if (orderToRemoveIndex >= 0) {
-      this.props.ordersActions.menuOrderChanged(Map({ orders: orders.delete(orderToRemoveIndex) }));
-    }
+  onRemoveOrderPressed = orderItemId => {
+    this.props.ordersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
   };
   onRefresh = () => {
     // if (this.props.relay.isLoading()) {
@@ -70,27 +76,44 @@ class OrdersContainer extends Component {
 }
 
 OrdersContainer.propTypes = {
-  orders: OrdersProp,
-  ordersActions: PropTypes.object.isRequired,
+  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  OrdersActions: PropTypes.object.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
+  const orders = state.order.getIn(['tableOrder', 'details']).isEmpty()
+    ? []
+    : state.order
+        .getIn(['tableOrder', 'details'])
+        .toSeq()
+        .mapEntries(([key, value]) => [
+          key,
+          {
+            data: value.toJS(),
+            orderItemId: key,
+          },
+        ])
+        .toList()
+        .toJS();
+
   return {
-    orders: state.orders.get('orders').toJS(),
+    orders: orders,
+    tableOrder: state.order.get('tableOrder'),
+    userId: state.userAccess.get('userInfo').get('id'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    ordersActions: bindActionCreators(OrdersActions, dispatch),
-    navigateToMenuItem: (menuItem, order) =>
+    OrdersActions: bindActionCreators(OrdersActions, dispatch),
+    navigateToMenuItem: (menuItemPriceId, order) =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'MenuItem',
           params: {
-            menuItem,
+            menuItemPriceId,
             order,
           },
         }),

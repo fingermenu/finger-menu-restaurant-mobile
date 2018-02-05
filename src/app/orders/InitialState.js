@@ -1,7 +1,9 @@
 // @flow
 
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 
 export default Map({
-  orders: List(),
+  tableOrder: Map({
+    details: Map(),
+  }),
 });
