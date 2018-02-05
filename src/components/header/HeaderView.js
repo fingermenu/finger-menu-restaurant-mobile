@@ -22,7 +22,7 @@ class HeaderView extends Component {
             accessibilityTraits="button"
             delayPressIn={0}
             pressColor={DefaultColor.touchableIconPressColor}
-            onPress={() => this.props.changeLanguage('en')}
+            onPress={() => this.props.changeLanguage('en_NZ')}
             borderless
           >
             <View style={Styles.touchableContainer}>
@@ -56,14 +56,14 @@ class HeaderView extends Component {
             accessibilityTraits="button"
             delayPressIn={0}
             pressColor={DefaultColor.touchableIconPressColor}
-            onPress={() => this.props.changeLanguage('zh')}
+            onPress={() => this.props.changeLanguage('jp')}
             borderless
           >
             <View style={Styles.touchableContainer}>
               <Avatar
                 rounded
                 overlayContainerStyle={this.props.isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
-                source={ImageUtility.getImageSource('chinese')}
+                source={ImageUtility.getImageSource('japanese')}
                 activeOpacity={0.7}
               />
             </View>
