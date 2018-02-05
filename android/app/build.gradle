@@ -33,7 +33,7 @@ import com.android.build.OutputFile
  *   bundleInRelease: true,
  *
  *   // whether to bundle JS and assets in another build variant (if configured).
- *   // See http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Variants
+ *   // See http://tools.android.com/tech-docs/new-buildEnter or paste your release notes for en-GB here-system/user-guide#TOC-Build-Variants
  *   // The configuration property can be in the following formats
  *   //         'bundleIn${productFlavor}${buildType}'
  *   //         'bundleIn${buildType}'
@@ -113,7 +113,7 @@ android {
         targetSdkVersion 26
         minSdkVersion project.ext.minimumSdkVersion
         versionCode 1600000001
-        versionName "1.2.1"
+        versionName "0.0.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
