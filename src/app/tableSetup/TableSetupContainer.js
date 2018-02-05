@@ -27,7 +27,7 @@ class TableSetupContainer extends Component {
   };
 
   onSetupTablePressed = value => {
-    // this.updateTable(value, 'taken');
+    this.updateTable(value, 'taken');
     this.props.navigateToAppHome();
 
     // Save the table into storage
