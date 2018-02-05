@@ -2,7 +2,7 @@ apply plugin: "com.android.application"
 
 project.ext.envConfigFiles = [
     debug: ".env.development",
-    release: ".env.production",
+    release: ".env.development",
     anycustombuildlowercase: ".env",
 ]
 
@@ -100,7 +100,7 @@ def enableProguardInReleaseBuilds = false
 
 ext.versionMajor = 0
 ext.versionMinor = 0
-ext.versionPatch = 2
+ext.versionPatch = 3
 ext.isSnapshot = false
 ext.minimumSdkVersion = 16
 
@@ -112,8 +112,8 @@ android {
         applicationId "com.fingermenurestaurant"
         targetSdkVersion 26
         minSdkVersion project.ext.minimumSdkVersion
-        versionCode 1600000002
-        versionName "0.0.2"
+        versionCode 1600000003
+        versionName "0.0.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
