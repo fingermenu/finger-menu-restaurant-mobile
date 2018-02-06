@@ -16,8 +16,8 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
-  onViewOrderItemPressed = (menuItemPriceId, order) => {
-    this.props.navigateToMenuItem(menuItemPriceId, order);
+  onViewOrderItemPressed = (menuItemPriceId, order, orderItemId) => {
+    this.props.navigateToMenuItem(menuItemPriceId, order, orderItemId);
   };
 
   onConfirmOrderPressed = () => {
@@ -34,7 +34,7 @@ class OrdersContainer extends Component {
   };
 
   onRemoveOrderPressed = orderItemId => {
-    this.props.ordersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
+    this.props.OrdersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
   };
   onRefresh = () => {
     // if (this.props.relay.isLoading()) {
@@ -108,13 +108,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     OrdersActions: bindActionCreators(OrdersActions, dispatch),
-    navigateToMenuItem: (menuItemPriceId, order) =>
+    navigateToMenuItem: (menuItemPriceId, order, orderItemId) =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'MenuItem',
           params: {
             menuItemPriceId,
             order,
+            orderItemId,
           },
         }),
       ),

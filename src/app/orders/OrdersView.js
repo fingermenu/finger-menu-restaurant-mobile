@@ -22,7 +22,9 @@ class OrdersView extends Component {
           data={this.props.orders}
           renderItem={info => (
             <OrderItemRow
-              orderItem={info.item}
+              orderItem={info.item.data}
+              orderItemId={info.item.orderItemId}
+              menuItem={info.item.data.menuItem}
               onViewOrderItemPressed={this.props.onViewOrderItemPressed}
               onRemoveOrderPressed={this.props.onRemoveOrderPressed}
             />

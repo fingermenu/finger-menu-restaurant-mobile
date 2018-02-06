@@ -6,7 +6,7 @@ import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component<any, Props, State> {
   render = () => {
-    return <MenuItemView menuItemPrice={this.props.user.menuItemPrice} order={this.props.order} />;
+    return <MenuItemView menuItemPrice={this.props.user.menuItemPrice} order={this.props.order} orderItemId={this.props.orderItemId} />;
   };
 }
 

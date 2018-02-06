@@ -32,6 +32,7 @@
     "email-validator": "1.1.1",
     "i18next": "^10.3.0",
     "immutable": "^4.0.0-rc.9",
+    "js-joda": "^1.6.2",
     "lodash.debounce": "^4.0.8",
     "monet": "^0.8.10",
     "prop-types": "15.6.0",

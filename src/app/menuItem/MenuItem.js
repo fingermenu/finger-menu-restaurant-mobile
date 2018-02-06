@@ -38,7 +38,14 @@ class MenuItem extends Component {
           }
 
           if (props) {
-            return <MenuItemRelayContainer user={props.user} menuItemPriceId={this.props.menuItemPriceId} order={this.props.order} />;
+            return (
+              <MenuItemRelayContainer
+                user={props.user}
+                menuItemPriceId={this.props.menuItemPriceId}
+                order={this.props.order}
+                orderItemId={this.props.orderItemId}
+              />
+            );
           }
 
           return <LoadingInProgress />;
@@ -50,12 +57,14 @@ class MenuItem extends Component {
 
 MenuItem.propTypes = {
   menuItemPriceId: PropTypes.string.isRequired,
+  orderItemId: PropTypes.string,
 };
 
 function mapStateToProps(state, props) {
   return {
     menuItemPriceId: props.navigation.state.params.menuItemPriceId,
     order: props.navigation.state.params && props.navigation.state.params.order ? props.navigation.state.params.order : null,
+    orderItemId: props.navigation.state.params && props.navigation.state.params.orderItemId ? props.navigation.state.params.orderItemId : null,
   };
 }
 

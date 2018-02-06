@@ -26,6 +26,7 @@ class TableDetailContainer extends Component {
     return (
       <TableDetailView
         table={this.props.table}
+        order={this.props.order}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         onResetTablePressed={this.onResetTablePressed}
@@ -41,7 +42,8 @@ TableDetailContainer.propTypes = {
 function mapStateToProps(state, props) {
   return {
     userId: state.userAccess.get('userInfo').get('id'),
-    table: props.navigation.state.params.table,
+    order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
+    table: props.user.table,
   };
 }
 

@@ -25,10 +25,10 @@ class AddToOrderContainer extends Component {
   };
 
   onUpdateOrder = () => {
-    if (this.props.order) {
+    if (this.props.orderItemId) {
       this.props.OrdersActions.updateOrderItem(
         Map({
-          orderItemId: this.props.order.orderItemId,
+          orderItemId: this.props.orderItemId,
           menuItemPriceId: this.props.menuItemPrice.id,
           menuItem: this.props.menuItemPrice.menuItem,
           quantity: this.props.orderQuantity,
@@ -43,7 +43,7 @@ class AddToOrderContainer extends Component {
   render = () => {
     return (
       <OrderFooterView
-        isUpdatingOrder={this.props.order !== null}
+        isUpdatingOrder={this.props.orderItemId !== null}
         orderQuantity={this.props.orderQuantity}
         addToOrderPressed={this.onAddMenuItemToOrder}
         updateOrderPressed={this.onUpdateOrder}
@@ -66,7 +66,7 @@ AddToOrderContainer.propTypes = {
 
 function mapStateToProps(state, props) {
   return {
-    order: props.order,
+    orderItemId: props.orderItemId,
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
     tableId: state.asyncStorage.getIn(['keyValues', 'servingTableId']),
     customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),

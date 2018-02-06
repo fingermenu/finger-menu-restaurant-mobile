@@ -7,7 +7,7 @@ import { MenuItem } from '../menuItem';
 import { Tables } from '../tables';
 import { TableSetupContainer } from '../tableSetup';
 import { LandingContainer } from '../landing';
-import { TableDetailContainer } from '../tableDetail';
+import { TableDetail } from '../tableDetail';
 import { OrderConfirmedContainer } from '../orderConfirmed';
 import { Pin } from '../pin/';
 
@@ -23,7 +23,7 @@ export default StackNavigator(
       screen: TableSetupContainer,
     },
     TableDetail: {
-      screen: TableDetailContainer,
+      screen: TableDetail,
     },
     Landing: {
       screen: LandingContainer,

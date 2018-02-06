@@ -19,7 +19,7 @@ class MenuItemView extends Component {
 
   componentWillMount = () => {
     if (this.props.order) {
-      this.setState({ quantity: this.props.order.data.quantity });
+      this.setState({ quantity: this.props.order.quantity });
     }
   };
 
@@ -61,7 +61,7 @@ class MenuItemView extends Component {
           </View>
         </ScrollView>
         <View>
-          <AddToOrderContainer order={this.props.order} menuItemPrice={this.props.menuItemPrice} orderQuantity={quantity} />
+          <AddToOrderContainer orderItemId={this.props.orderItemId} menuItemPrice={this.props.menuItemPrice} orderQuantity={quantity} />
         </View>
       </View>
     );
@@ -71,6 +71,7 @@ class MenuItemView extends Component {
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
   order: PropTypes.object,
+  orderItemId: PropTypes.string,
 };
 
 export default MenuItemView;

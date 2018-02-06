@@ -26,10 +26,12 @@ class TableDetailView extends Component {
           <Text style={Styles.price}>$76</Text>
         </View>
         <FlatList
-          data={this.props.table.orders}
+          data={this.props.order.details}
           renderItem={info => (
             <OrderItemRow
               orderItem={info.item}
+              orderItemId={this.props.order.id}
+              menuItem={info.item.menuItemPrice.menuItem}
               onViewOrderItemPressed={this.props.onViewOrderItemPressed}
               onRemoveOrderPressed={this.props.onRemoveOrderPressed}
             />
