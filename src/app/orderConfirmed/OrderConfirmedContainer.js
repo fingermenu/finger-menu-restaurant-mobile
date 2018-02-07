@@ -7,7 +7,7 @@ import { NavigationActions } from 'react-navigation';
 
 class OrderConfirmedContainer extends Component {
   onAddMoreOrdersPressed = () => {
-    this.props.navigateToAppHome();
+    // this.props.navigateToAppHome();
   };
 
   render = () => {

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList, Text, TouchableNative, View } from 'react-native';
+import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import PropTypes from 'prop-types';
 import OrderItemRow from '../orders/OrderItemRow';
@@ -25,22 +25,29 @@ class TableDetailView extends Component {
           />
           <Text style={Styles.price}>$76</Text>
         </View>
-        <FlatList
-          data={this.props.order.details}
-          renderItem={info => (
-            <OrderItemRow
-              orderItem={info.item}
-              orderItemId={this.props.order.id}
-              menuItem={info.item.menuItemPrice.menuItem}
-              onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-              onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-            />
-          )}
-          keyExtractor={item => item.id}
-          onEndReached={this.props.onEndReached}
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.isFetchingTop}
-        />
+        {this.props.order && this.props.order.details ? (
+          <FlatList
+            data={this.props.order.details}
+            renderItem={info => (
+              <OrderItemRow
+                orderItem={info.item}
+                orderItemId={this.props.order.id}
+                menuItem={info.item.menuItemPrice.menuItem}
+                onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+                onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+              />
+            )}
+            keyExtractor={item => item.id}
+            onEndReached={this.props.onEndReached}
+            onRefresh={this.props.onRefresh}
+            refreshing={this.props.isFetchingTop}
+          />
+        ) : (
+          <ScrollView>
+            <Text>Text to display when no orders</Text>
+          </ScrollView>
+        )}
+
         <View style={Styles.buttonsContainer}>
           <Button title="Set paid" backgroundColor={DefaultColor.defaultButtonColor} />
           <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.props.onResetTablePressed} />

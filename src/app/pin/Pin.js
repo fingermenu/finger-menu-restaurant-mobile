@@ -13,6 +13,9 @@ import { bindActionCreators } from 'redux';
 import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 
 class Pin extends Component {
+  static navigationOptions = () => ({
+    header: null,
+  });
   componentWillMount = () => {
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));

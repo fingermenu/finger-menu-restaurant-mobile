@@ -12,7 +12,7 @@ class LandingContainer extends Component {
   };
 
   render = () => {
-    return <LandingView restaurantName="43 Degree" landing={this.props.landing} navigateToMenu={this.props.navigateToMenu} />;
+    return <LandingView restaurantName={this.props.restaurantName} landing={this.props.landing} navigateToMenu={this.props.navigateToMenu} />;
   };
 }
 
@@ -24,18 +24,18 @@ LandingContainer.propTypes = {
   navigateToMenu: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
+function mapStateToProps(state) {
   const mockLanding = {
     uri:
-      'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Fcover1.jpg?alt=media&token=8ed40cad-acd4-48f2-a886-ff694aa066ef',
-    headerText: '43 Degree',
+      'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
+    headerText: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
     introText: 'this is a great coffee',
     buttonText: 'Lunch menu',
   };
 
   return {
     landing: mockLanding,
-    restaurantName: '43 Degree',
+    restaurantName: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
   };
 }
 

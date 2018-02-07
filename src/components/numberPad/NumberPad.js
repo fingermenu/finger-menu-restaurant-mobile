@@ -67,13 +67,14 @@ class NumberPad extends Component {
     return (
       <View style={Styles.numberContainer}>
         <Avatar
-          width={this.props.supportHighlight && item.item.isSelected ? 50 : 40}
-          height={this.props.supportHighlight && item.item.isSelected ? 50 : 40}
+          width={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
+          height={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
           rounded
           title={item.item.name}
           onPress={() => this.onNumberPressed(item.item.id)}
-          activeOpacity={0.7}
-          overlayContainerStyle={this.props.supportHighlight && item.item.isSelected ? Styles.selectedNumberContainer : {}}
+          activeOpacity={0.6}
+          opacity={0.5}
+          overlayContainerStyle={this.props.supportHighlight && item.item.isSelected ? Styles.selectedNumberContainer : Styles.defaultNumberContainer}
         />
       </View>
     );
@@ -100,6 +101,7 @@ NumberPad.propTypes = {
   supportHighlight: PropTypes.bool,
   supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
+  numberHeight: PropTypes.number,
 };
 
 NumberPad.defaultProps = {
@@ -109,6 +111,7 @@ NumberPad.defaultProps = {
   initialValue: 0,
   supportHighlight: true,
   supportReset: false,
+  numberHeight: 50,
 };
 
 export default NumberPad;

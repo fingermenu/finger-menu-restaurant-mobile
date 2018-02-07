@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, ImageBackground, Text, View } from 'react-native';
 import Immutable, { Range } from 'immutable';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
@@ -89,19 +89,31 @@ class PinView extends Component {
 
   render = () => {
     return (
-      <View style={Styles.container}>
-        <View style={Styles.pinViewContainer}>
-          <Text style={Styles.text}>Welcome to {this.props.restaurantName}</Text>
-          <Text style={Styles.text}>Enter Your Pin</Text>
-          <View style={Styles.pinContainer}>
-            <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={item => item.id} />
-          </View>
-          {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
-          <View style={Styles.pinPadContainer}>
-            <NumberPad maxNumber={10} numColumns={3} supportHighlight={false} supportReset={true} onNumberPressed={this.onPinNumberPressed} />
-          </View>
+      <ImageBackground
+        blurRadius={0.4}
+        style={Styles.pinViewContainer}
+        source={{
+          uri:
+            'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
+        }}
+      >
+        {/*<Text style={Styles.text}>Welcome to {this.props.restaurantName}</Text>*/}
+        <Text style={Styles.text}>Enter Your Pin</Text>
+        <View style={Styles.pinContainer}>
+          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={item => item.id} />
         </View>
-      </View>
+        {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
+        <View style={Styles.pinPadContainer}>
+          <NumberPad
+            maxNumber={10}
+            numColumns={3}
+            supportHighlight={false}
+            supportReset={true}
+            onNumberPressed={this.onPinNumberPressed}
+            numberHeight={100}
+          />
+        </View>
+      </ImageBackground>
     );
   };
 }

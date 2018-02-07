@@ -12,8 +12,8 @@ class PlaceOrderControlView extends Component {
     return (
       <TouchableItem onPress={this.props.placeOrderPressed} style={Styles.container}>
         <View style={Styles.textContainer}>
-          <Text style={Styles.text}>PLACE ORDER</Text>
-          <Text style={Styles.text}> {this.props.totalOrderQuantity}</Text>
+          <Text style={Styles.text}>View Order</Text>
+          <Text style={Styles.text}> {this.props.totalOrderQuantity} Items</Text>
         </View>
       </TouchableItem>
     );

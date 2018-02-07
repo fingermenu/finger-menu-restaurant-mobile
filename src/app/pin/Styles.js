@@ -3,18 +3,20 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // container: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   pinViewContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   pinContainer: {
     height: 50,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   errorContainer: {
     flex: 1,
@@ -22,7 +24,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   pinPadContainer: {
-    height: 300,
+    height: 400,
   },
   errorText: {
     fontSize: 25,
@@ -30,6 +32,7 @@ export default StyleSheet.create({
     color: 'red',
   },
   text: {
-    fontSize: 25,
+    fontSize: 36,
+    color: 'white',
   },
 });

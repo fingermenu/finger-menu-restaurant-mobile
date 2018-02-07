@@ -19,7 +19,7 @@ class TableSetupView extends Component {
     return (
       <View style={Styles.container}>
         <View style={DefaultStyles.rowContainer}>
-          <Text style={Styles.headerText}>Setup table {this.props.table.name}</Text>
+          <Text style={Styles.headerText}>Table {this.props.table.name}</Text>
         </View>
         <View>
           <View style={Styles.tableTextContainer}>

@@ -13,6 +13,10 @@ import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
 class TableSetupContainer extends Component {
+  static navigationOptions = {
+    headerTitle: 'Setup Table',
+  };
+
   updateTable = (value, tableStateKey) => {
     UpdateTable.commit(
       Environment,

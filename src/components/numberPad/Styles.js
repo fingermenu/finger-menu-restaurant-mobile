@@ -29,4 +29,10 @@ export default StyleSheet.create({
     borderWidth: 2,
     padding: 5,
   },
+  defaultNumberContainer: {
+    backgroundColor: 'grey',
+    borderColor: DefaultColor.defaultButtonColor,
+    borderWidth: 2,
+    padding: 5,
+  },
 });

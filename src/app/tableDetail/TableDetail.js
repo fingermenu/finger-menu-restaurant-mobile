@@ -11,6 +11,9 @@ import { connect } from 'react-redux';
 import TableDetailRelayContainer from './TableDetailRelayContainer';
 
 class TableDetail extends Component {
+  static navigationOptions = {
+    headerTitle: 'Table Detail',
+  };
   state = {
     dateRange: {
       from: ZonedDateTime.now()

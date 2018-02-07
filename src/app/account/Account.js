@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { Text, View } from 'react-native';
-import { ButtonGroup } from 'react-native-elements';
+import { ButtonGroup, Button } from 'react-native-elements';
 import { translate } from 'react-i18next';
+import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 class Account extends React.Component {
   constructor() {
@@ -39,9 +41,31 @@ class Account extends React.Component {
       <View>
         <Text>{t('home.label')}</Text>
         <ButtonGroup onPress={this.updateIndex} selectedIndex={selectedIndex} buttons={buttons} containerStyle={{ height: 100 }} />
+        <Button title="Waitress Mode" onPress={this.props.navigateToPin} />
       </View>
     );
   };
 }
 
-export default translate()(Account);
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    navigateToPin: () =>
+      dispatch(
+        NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              routeName: 'Pin',
+            }),
+          ],
+        }),
+      ),
+    goBack: () => dispatch(NavigationActions.back()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Account));
