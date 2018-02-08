@@ -269,9 +269,9 @@ type Order implements Node {
   customerName: String
   notes: String
   totalPrice: Float
-  placedAt: String
+  placedAt: String!
   cancelledAt: String
-  restaurant: Restaurant
+  restaurant: Restaurant!
   table: Table
   details: [OrderMenuItemPrice!]
 }
@@ -335,7 +335,6 @@ type ParentRestaurant implements Node {
   id: ID!
   name: String
   websiteUrl: String
-  imageUrl: String
   address: String
   geoLocation: GeoLocation
   phones: [Phone!]
@@ -403,7 +402,6 @@ type Restaurant implements Node {
   id: ID!
   name: String
   websiteUrl: String
-  imageUrl: String
   address: String
   geoLocation: GeoLocation
   phones: [Phone!]
@@ -419,7 +417,15 @@ type Restaurant implements Node {
 }
 
 type RestaurantConfigurations {
+  images: RestaurantImages
   printers: [Printer!]
+}
+
+type RestaurantImages {
+  primaryLandingPageBackgroundImageUrl: String
+  secondaryLandingPageBackgroundImageUrl: String
+  primaryTopBannerImageUrl: String
+  secondaryTopBannerImageUrl: String
 }
 
 # A connection to a list of items.
@@ -607,7 +613,7 @@ type User implements Node {
   table(tableId: ID!): Table
   tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], restaurantId: ID!, dateRange: DateRange!, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, orderState: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], restaurantId: ID!, dateRange: DateRange!, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
 }
 
 type Viewer implements Node {
