@@ -343,7 +343,6 @@ type ParentRestaurant implements Node {
   inheritParentRestaurantMenus: Boolean
   pin: String
   menus: [Menu!]
-  languages: [Language!]
   tables: [Table!]
   configurations: RestaurantConfigurations!
 }
@@ -410,7 +409,6 @@ type Restaurant implements Node {
   inheritParentRestaurantMenus: Boolean
   pin: String
   menus: [Menu!]
-  languages: [Language!]
   tables: [Table!]
   configurations: RestaurantConfigurations!
   parentRestaurant: ParentRestaurant
