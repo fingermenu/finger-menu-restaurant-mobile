@@ -27,11 +27,6 @@ export default createPaginationContainer(
                   port
                 }
               }
-              languages {
-                key
-                name
-                imageUrl
-              }
             }
           }
         }

@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@microbusiness/common-react": "^1.1.11",
     "@microbusiness/common-react-native": "^1.1.36",
-    "@microbusiness/parse-server-common-react-native": "^1.1.27",
+    "@microbusiness/parse-server-common-react-native": "^1.1.31",
     "email-validator": "1.1.1",
     "i18next": "^10.3.0",
     "immutable": "^4.0.0-rc.9",
@@ -67,7 +67,7 @@
   "devDependencies": {
     "adm-zip": "^0.4.7",
     "babel-eslint": "8.2.1",
-    "babel-jest": "22.1.0",
+    "babel-jest": "22.2.0",
     "babel-plugin-relay": "1.4.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "6.23.0",
@@ -81,9 +81,9 @@
     "eslint-plugin-jest": "^21.7.0",
     "eslint-plugin-react": "7.6.1",
     "eslint-plugin-react-native": "3.2.1",
-    "flow-bin": "0.64.0",
+    "flow-bin": "0.65.0",
     "husky": "^0.14.3",
-    "jest": "22.1.4",
+    "jest": "22.2.1",
     "lint-staged": "^6.1.0",
     "plist": "^2.1.0",
     "prettier": "1.10.2",

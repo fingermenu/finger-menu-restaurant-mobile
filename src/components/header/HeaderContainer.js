@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import HeaderView from './HeaderView';
 import { LanguagesProp } from './PropTypes';
@@ -20,12 +19,4 @@ HeaderContainer.propTypes = {
   languages: LanguagesProp.isRequired,
 };
 
-function mapStateToProps(state) {
-  const languages = state.asyncStorage.getIn(['keyValues', 'restaurantLanguages']);
-
-  return {
-    languages: languages ? JSON.parse(languages) : [],
-  };
-}
-
-export default connect(mapStateToProps)(translate()(HeaderContainer));
+export default translate()(HeaderContainer);
