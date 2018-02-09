@@ -10,11 +10,11 @@ import Styles from './Styles';
 class AddToOrderView extends Component {
   render = () => {
     return this.props.isUpdatingOrder ? (
-      <TouchableItem onPress={this.props.updateOrderPressed} style={Styles.container}>
+      <TouchableItem onPress={this.props.handleSubmit(this.props.updateOrderPressed)} style={Styles.container}>
         <Text style={Styles.text}>Update Order</Text>
       </TouchableItem>
     ) : (
-      <TouchableItem onPress={this.props.addToOrderPressed} style={Styles.container}>
+      <TouchableItem onPress={this.props.handleSubmit(this.props.addToOrderPressed)} style={Styles.container}>
         <Text style={Styles.text}>ADD {this.props.orderQuantity} TO ORDER</Text>
       </TouchableItem>
     );

@@ -12,19 +12,37 @@ import { MenuItemPriceProp } from '../../app/menuItem/PropTypes';
 import { OrderItemProp } from '../../app/orders/PropTypes';
 
 class AddToOrderContainer extends Component {
-  onAddMenuItemToOrder = () => {
+  getSelectedChoiceItemPrices = choiceItems => {
+    let choiceItemPriceList = List();
+
+    for (let itemId in choiceItems) {
+      if (choiceItems[itemId]) {
+        choiceItemPriceList = choiceItemPriceList.push(
+          Map({
+            choiceItemPriceId: itemId,
+            choiceItemPrice: this.props.menuItemPrice.choiceItemPrices.filter(c => c.id === itemId)[0],
+            quantity: 1,
+          }),
+        );
+      }
+    }
+
+    return choiceItemPriceList;
+  };
+
+  onAddMenuItemToOrder = choiceItems => {
     this.props.OrdersActions.addOrderItem(
       Map({
         menuItemPriceId: this.props.menuItemPrice.id,
         menuItem: this.props.menuItemPrice.menuItem,
         quantity: this.props.orderQuantity,
-        orderChoiceItemPrices: List(),
+        orderChoiceItemPrices: this.getSelectedChoiceItemPrices(choiceItems),
       }),
     );
     this.props.goBack();
   };
 
-  onUpdateOrder = () => {
+  onUpdateOrder = choiceItems => {
     if (this.props.orderItemId) {
       this.props.OrdersActions.updateOrderItem(
         Map({
@@ -32,7 +50,7 @@ class AddToOrderContainer extends Component {
           menuItemPriceId: this.props.menuItemPrice.id,
           menuItem: this.props.menuItemPrice.menuItem,
           quantity: this.props.orderQuantity,
-          orderChoiceItemPrices: List(),
+          orderChoiceItemPrices: this.getSelectedChoiceItemPrices(choiceItems),
         }),
       );
     }
@@ -47,6 +65,7 @@ class AddToOrderContainer extends Component {
         orderQuantity={this.props.orderQuantity}
         addToOrderPressed={this.onAddMenuItemToOrder}
         updateOrderPressed={this.onUpdateOrder}
+        handleSubmit={this.props.handleSubmit}
       />
     );
   };
@@ -71,6 +90,7 @@ function mapStateToProps(state, props) {
     tableId: state.asyncStorage.getIn(['keyValues', 'servingTableId']),
     customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
     customerNotes: state.asyncStorage.getIn(['keyValues', 'servingCustomerNotes']),
+    handleSubmit: props.handleSubmit,
   };
 }
 

@@ -18,6 +18,15 @@ export default createFragmentContainer(
             description
             imageUrl
           }
+          choiceItemPrices {
+            id
+            currentPrice
+            choiceItem {
+              description
+              id
+              name
+            }
+          }
         }
       }
     `,

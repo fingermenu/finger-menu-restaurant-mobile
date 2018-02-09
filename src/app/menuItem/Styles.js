@@ -15,6 +15,7 @@ export default StyleSheet.create({
   quantity: {
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   image: {
     width: Sizes.screenWidth,

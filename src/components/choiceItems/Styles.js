@@ -27,6 +27,8 @@ export default StyleSheet.create({
   },
   optionContainer: {
     flex: 100,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   checkbox: {
     margin: 0,
@@ -38,9 +40,10 @@ export default StyleSheet.create({
     // alignItems: 'center',
   },
   optionName: {
-    fontSize: 13,
+    fontSize: 26,
   },
   price: {
-    fontSize: 14,
+    fontSize: 26,
+    color: DefaultColor.defaultFontColor,
   },
 });

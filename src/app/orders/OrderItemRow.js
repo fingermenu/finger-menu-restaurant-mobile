@@ -33,6 +33,16 @@ class OrderItemRow extends Component {
     }
   };
 
+  renderChoiceItems = choiceItems => {
+    let items = choiceItems.map(choiceItem => (
+      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
+        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
+      </Text>
+    ));
+
+    return items;
+  };
+
   render = () => {
     return (
       <TouchableItem
@@ -44,9 +54,7 @@ class OrderItemRow extends Component {
           </View>
           <View style={Styles.titleContainer}>
             <Text style={Styles.title}>{this.props.menuItem.name}</Text>
-            <Text style={Styles.extraOptions}>Extra 1</Text>
-            <Text style={Styles.extraOptions}>Extra 2</Text>
-            <Text style={Styles.extraOptions}>Extra 3</Text>
+            {this.renderChoiceItems(this.props.orderItem.orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
             <Text style={Styles.price}>{this.props.menuItem.priceToDisplay}</Text>
