@@ -7,7 +7,7 @@ import { NavigationActions } from 'react-navigation';
 
 class OrderConfirmedContainer extends Component {
   onAddMoreOrdersPressed = () => {
-    // this.props.navigateToAppHome();
+    this.props.navigateToPn();
   };
 
   render = () => {
@@ -21,13 +21,13 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToAppHome: () =>
+    navigateToPn: () =>
       dispatch(
         NavigationActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({
-              routeName: 'Home',
+              routeName: 'Pin',
             }),
           ],
         }),

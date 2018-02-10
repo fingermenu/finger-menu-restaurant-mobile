@@ -43,6 +43,7 @@ class TableSetupContainer extends Component {
         restaurantId: this.props.restaurantId,
         tableId: this.props.table.id,
         customerName: value.name,
+        totalPrice: 0,
         notes: value.notes,
         numberOfAdults: value.numberOfAdults,
         numberOfChildren: value.numberOfChildren,

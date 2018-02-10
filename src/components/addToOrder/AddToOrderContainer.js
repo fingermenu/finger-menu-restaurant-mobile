@@ -34,6 +34,7 @@ class AddToOrderContainer extends Component {
     this.props.OrdersActions.addOrderItem(
       Map({
         menuItemPriceId: this.props.menuItemPrice.id,
+        currentPrice: this.props.menuItemPrice.currentPrice,
         menuItem: this.props.menuItemPrice.menuItem,
         quantity: this.props.orderQuantity,
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(choiceItems),
@@ -47,6 +48,7 @@ class AddToOrderContainer extends Component {
       this.props.OrdersActions.updateOrderItem(
         Map({
           orderItemId: this.props.orderItemId,
+          currentPrice: this.props.menuItemPrice.currentPrice,
           menuItemPriceId: this.props.menuItemPrice.id,
           menuItem: this.props.menuItemPrice.menuItem,
           quantity: this.props.orderQuantity,

@@ -21,14 +21,25 @@ class OrdersContainer extends Component {
   };
 
   onConfirmOrderPressed = () => {
-    PlaceOrder.commit(
-      Environment,
-      this.props.userId,
-      this.props.tableOrder
-        .set('details', this.props.tableOrder.get('details').valueSeq())
-        .update('details', detail => detail.map(_ => _.delete('menuItem')))
-        .toJS(),
-    );
+    const totalPrice = this.props.tableOrder.get('details').reduce((v, s) => {
+      return (
+        v +
+        s.get('quantity') *
+          (s.get('currentPrice') +
+            s.get('orderChoiceItemPrices').reduce((ov, os) => {
+              return ov + os.get('quantity') * os.getIn(['choiceItemPrice', 'currentPrice']);
+            }, 0))
+      );
+    }, 0);
+
+    const orders = this.props.tableOrder
+      .set('totalPrice', totalPrice)
+      .set('details', this.props.tableOrder.get('details').valueSeq())
+      .update('details', detail => detail.map(_ => _.delete('menuItem').delete('currentPrice')))
+      .update('details', detail => detail.map(_ => _.update('orderChoiceItemPrices', choice => choice.map(oc => oc.delete('choiceItemPrice')))))
+      .toJS();
+
+    PlaceOrder.commit(Environment, this.props.userId, orders);
 
     this.props.navigateToOrderConfirmed();
   };

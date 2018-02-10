@@ -25,6 +25,7 @@ class OrdersView extends Component {
               orderItem={info.item.data}
               orderItemId={info.item.orderItemId}
               menuItem={info.item.data.menuItem}
+              menuItemCurrentPrice={info.item.data.currentPrice}
               onViewOrderItemPressed={this.props.onViewOrderItemPressed}
               onRemoveOrderPressed={this.props.onRemoveOrderPressed}
             />
