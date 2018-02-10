@@ -26,20 +26,22 @@ class Menu extends Component {
           count: 1000,
           menuId: this.props.menuId,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return <MenuRelayContainer user={props.user} />;
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
   }
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <MenuRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 }
 
 Menu.propTypes = {

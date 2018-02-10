@@ -3,53 +3,46 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import Immutable, { Range } from 'immutable';
 import Styles from './Styles';
+import Number from './Number';
 
 // TODO: Consider replace it with redux form.
 class NumberPad extends Component {
-  constructor() {
-    super();
+  constructor(props, context) {
+    super(props, context);
+
     this.state = {
-      numbers: [],
+      numbers: NumberPad.getNumArrayList(props).toJS(),
     };
   }
 
-  componentWillMount = () => {
-    this.setState({ numbers: this.getNumArrayList().toJS() });
+  render = () => {
+    const { isHorizontal, numColumns } = this.props;
+    const { numbers } = this.state;
+
+    return (
+      <View style={Styles.container}>
+        {isHorizontal ? (
+          <FlatList data={numbers} horizontal renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+        ) : (
+          <FlatList data={numbers} numColumns={numColumns} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+        )}
+      </View>
+    );
   };
 
-  getNumArrayList = () => {
-    const initValue = this.props.initialValue;
-    let numArray = Range(0, this.props.maxNumber)
-      .map(function(num) {
-        return { id: num, name: num.toString(), isSelected: num === initValue };
-      })
-      .toList();
-
-    if (this.props.supportReset && this.props.maxNumber === 10) {
-      numArray = numArray.insert(9, { id: -1, name: ' ' });
-      numArray = numArray.insert(11, { id: -2, name: ' ' });
-    }
-
-    return numArray;
-  };
+  keyExtractor = item => item.id;
 
   updateIndex = selectedIndex => {
     let numList = Immutable.fromJS(this.state.numbers);
-
     const prevSelected = numList.findIndex(num => num.get('isSelected') === true);
 
     if (prevSelected >= 0) {
-      numList = numList.updateIn([prevSelected, 'isSelected'], function() {
-        return false;
-      });
+      numList = numList.setIn([prevSelected, 'isSelected'], false);
     }
 
-    numList = numList.updateIn([selectedIndex, 'isSelected'], function() {
-      return true;
-    });
+    numList = numList.setIn([selectedIndex, 'isSelected'], true);
 
     this.setState({ numbers: numList.toJS() });
   };
@@ -63,33 +56,28 @@ class NumberPad extends Component {
     this.props.onNumberPressed(number);
   };
 
-  renderNumber = item => {
-    return (
-      <View style={Styles.numberContainer}>
-        <Avatar
-          width={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
-          height={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
-          rounded
-          title={item.item.name}
-          onPress={() => this.onNumberPressed(item.item.id)}
-          activeOpacity={0.6}
-          opacity={0.5}
-          overlayContainerStyle={this.props.supportHighlight && item.item.isSelected ? Styles.selectedNumberContainer : Styles.defaultNumberContainer}
-        />
-      </View>
-    );
-  };
+  renderNumber = item => (
+    <Number
+      item={item.item}
+      numberHeight={this.props.numberHeight}
+      supportHighlight={this.props.supportHighlight}
+      onNumberPresse={this.onNumberPressed}
+    />
+  );
 
-  render = () => {
-    return (
-      <View style={Styles.container}>
-        {this.props.isHorizontal ? (
-          <FlatList data={this.state.numbers} horizontal={this.props.isHorizontal} renderItem={this.renderNumber} keyExtractor={item => item.id} />
-        ) : (
-          <FlatList data={this.state.numbers} numColumns={this.props.numColumns} renderItem={this.renderNumber} keyExtractor={item => item.id} />
-        )}
-      </View>
-    );
+  static getNumArrayList = ({ initialValue, maxNumber, supportReset }) => {
+    const initValue = initialValue;
+
+    let numArray = Range(0, maxNumber)
+      .map(num => ({ id: num, name: num.toString(), isSelected: num === initValue }))
+      .toList();
+
+    if (supportReset && maxNumber === 10) {
+      numArray = numArray.insert(9, { id: -1, name: ' ' });
+      numArray = numArray.insert(11, { id: -2, name: ' ' });
+    }
+
+    return numArray;
   };
 }
 
