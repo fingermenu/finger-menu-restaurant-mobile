@@ -61,7 +61,7 @@ class NumberPad extends Component {
       item={item.item}
       numberHeight={this.props.numberHeight}
       supportHighlight={this.props.supportHighlight}
-      onNumberPresse={this.onNumberPressed}
+      onNumberPressed={this.onNumberPressed}
     />
   );
 
@@ -73,8 +73,8 @@ class NumberPad extends Component {
       .toList();
 
     if (supportReset && maxNumber === 10) {
-      numArray = numArray.insert(9, { id: -1, name: ' ' });
-      numArray = numArray.insert(11, { id: -2, name: ' ' });
+      numArray = numArray.insert(9, { id: -1, name: ' ', isSelected: false });
+      numArray = numArray.insert(11, { id: -2, name: ' ', isSelected: false });
     }
 
     return numArray;

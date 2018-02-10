@@ -35,11 +35,11 @@ class Number extends Component {
 
 Number.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     isSelected: PropTypes.bool.isRequired,
   }),
-  numberheight: PropTypes.number.isRequired,
+  numberHeight: PropTypes.number.isRequired,
   supportHighlight: PropTypes.bool.isRequired,
   onNumberPressed: PropTypes.func.isRequired,
 };
