@@ -100,7 +100,7 @@ def enableProguardInReleaseBuilds = false
 
 ext.versionMajor = 0
 ext.versionMinor = 0
-ext.versionPatch = 4
+ext.versionPatch = 5
 ext.isSnapshot = false
 ext.minimumSdkVersion = 16
 
@@ -112,8 +112,8 @@ android {
         applicationId "com.fingermenurestaurant"
         targetSdkVersion 26
         minSdkVersion project.ext.minimumSdkVersion
-        versionCode 1600000004
-        versionName "0.0.4"
+        versionCode 1600000005
+        versionName "0.0.5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -178,6 +178,7 @@ private String generateVersionName() {
 }
 
 dependencies {
+    compile project(':react-native-tcp')
     compile project(':react-native-config')
     compile project(':react-native-exception-handler')
     compile project(':react-native-maps')
