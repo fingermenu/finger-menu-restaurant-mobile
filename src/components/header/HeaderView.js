@@ -11,6 +11,8 @@ import Styles from './Styles';
 
 class HeaderView extends Component {
   render = () => {
+    const { isSelected } = this.props;
+
     return (
       <ImageBackground
         style={Styles.container}
@@ -26,13 +28,13 @@ class HeaderView extends Component {
             accessibilityTraits="button"
             delayPressIn={0}
             pressColor={DefaultColor.touchableIconPressColor}
-            onPress={() => this.props.changeLanguage('en_NZ')}
+            onPress={this.changeLanguageToENNZ}
             borderless
           >
             <View style={Styles.touchableContainer}>
               <Avatar
                 rounded
-                overlayContainerStyle={this.props.isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
+                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
                 source={ImageUtility.getImageSource('english')}
                 activeOpacity={0.7}
               />
@@ -43,13 +45,13 @@ class HeaderView extends Component {
             accessibilityTraits="button"
             delayPressIn={0}
             pressColor={DefaultColor.touchableIconPressColor}
-            onPress={() => this.props.changeLanguage('zh')}
+            onPress={this.changeLanguageToZH}
             borderless
           >
             <View style={Styles.touchableContainer}>
               <Avatar
                 rounded
-                overlayContainerStyle={this.props.isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
+                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
                 source={ImageUtility.getImageSource('chinese')}
                 activeOpacity={0.7}
               />
@@ -60,13 +62,13 @@ class HeaderView extends Component {
             accessibilityTraits="button"
             delayPressIn={0}
             pressColor={DefaultColor.touchableIconPressColor}
-            onPress={() => this.props.changeLanguage('jp')}
+            onPress={this.changeLanguageToJP}
             borderless
           >
             <View style={Styles.touchableContainer}>
               <Avatar
                 rounded
-                overlayContainerStyle={this.props.isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
+                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
                 source={ImageUtility.getImageSource('japanese')}
                 activeOpacity={0.7}
               />
@@ -76,9 +78,22 @@ class HeaderView extends Component {
       </ImageBackground>
     );
   };
+
+  changeLanguageToENNZ = () => {
+    this.props.changeLanguage('en_NZ');
+  };
+
+  changeLanguageToZH = () => {
+    this.props.changeLanguage('zh');
+  };
+
+  changeLanguageToJP = () => {
+    this.props.changeLanguage('jp');
+  };
 }
 
 HeaderView.propTypes = {
+  isSelected: PropTypes.bool.isRequired,
   changeLanguage: PropTypes.func.isRequired,
 };
 
