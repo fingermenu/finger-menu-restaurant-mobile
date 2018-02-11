@@ -57,7 +57,7 @@ class OrderItemRow extends Component {
             {this.renderChoiceItems(this.props.orderItem.orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
-            <Text style={Styles.price}>{this.props.menuItem.priceToDisplay}</Text>
+            <Text style={Styles.price}>${this.props.menuItemCurrentPrice}</Text>
             <TouchableIcon
               onPress={() => this.props.onRemoveOrderPressed(this.props.orderItemId)}
               iconName="ios-remove-circle-outline"
@@ -78,6 +78,7 @@ OrderItemRow.propTypes = {
   orderItem: OrderItemDetailProp.isRequired,
   orderItemId: PropTypes.string.isRequired,
   menuItem: PropTypes.object.isRequired,
+  menuItemCurrentPrice: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
 };

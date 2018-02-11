@@ -53,7 +53,7 @@ class MenuItemRow extends Component {
           <View style={Styles.rowTextContainer}>
             <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
             <Text style={Styles.description}>{this.props.menuItemPrice.menuItem.description}</Text>
-            <Text style={Styles.price}>{this.props.menuItemPrice.currentPrice}</Text>
+            <Text style={Styles.price}>${this.props.menuItemPrice.currentPrice}</Text>
           </View>
           <View>
             <Icon

@@ -23,7 +23,7 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={Styles.price}>$76</Text>
+          <Text style={Styles.price}>{this.props.order ? this.props.order.totalPrice : 0}</Text>
         </View>
         {this.props.order && this.props.order.details ? (
           <FlatList
@@ -33,6 +33,7 @@ class TableDetailView extends Component {
                 orderItem={info.item}
                 orderItemId={this.props.order.id}
                 menuItem={info.item.menuItemPrice.menuItem}
+                menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
                 onViewOrderItemPressed={this.props.onViewOrderItemPressed}
                 onRemoveOrderPressed={this.props.onRemoveOrderPressed}
               />

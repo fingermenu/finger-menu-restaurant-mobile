@@ -13,7 +13,7 @@ const mutation = graphql`
   }
 `;
 
-const commit = (environment, userId, { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details }) => {
+const commit = (environment, userId, { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice }) => {
   return commitMutation(environment, {
     mutation,
     variables: {
@@ -24,6 +24,7 @@ const commit = (environment, userId, { restaurantId, numberOfAdults, numberOfChi
         numberOfChildren,
         customerName,
         notes,
+        totalPrice,
         details,
       },
     },
