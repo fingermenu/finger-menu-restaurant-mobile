@@ -37,7 +37,7 @@ class NumberPad extends Component {
 
       numbers = this.state.numbers
         .filterNot(val => val.get('id') === number0.get('id') || val.get('id') === button0.get('id') || val.get('id') === button1.get('id'))
-        .sort((val1, val2) => val1.get('id') > val2.get('id'))
+        .sort((val1, val2) => this.compareNumbers(val1.get('id'), val2.get('id')))
         .toList()
         .push(button0)
         .push(number0)
@@ -45,7 +45,7 @@ class NumberPad extends Component {
         .toArray();
     } else {
       numbers = this.state.numbers
-        .sort((val1, val2) => val1.get('id') > val2.get('id'))
+        .sort((val1, val2) => this.compareNumbers(val1.get('id'), val2.get('id')))
         .valueSeq()
         .toArray();
     }
@@ -62,6 +62,16 @@ class NumberPad extends Component {
   };
 
   keyExtractor = item => item.get('id');
+
+  compareNumbers = (num1, num2) => {
+    if (num1 === num2) {
+      return 0;
+    } else if (num1 > num2) {
+      return 1;
+    }
+
+    return -1;
+  };
 
   updateIndex = id => {
     this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
