@@ -1,9 +1,17 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { translate } from 'react-i18next';
 import HeaderView from './HeaderView';
 
-const HeaderContainer = ({ i18n: { changeLanguage } }) => <HeaderView changeLanguage={changeLanguage} />;
+class HeaderContainer extends Component {
+  render = () => {
+    return <HeaderView changeLanguage={this.changeLanguage} />;
+  };
+
+  changeLanguage = language => {
+    this.props.i18n.changeLanguage(language);
+  };
+}
 
 export default translate()(HeaderContainer);

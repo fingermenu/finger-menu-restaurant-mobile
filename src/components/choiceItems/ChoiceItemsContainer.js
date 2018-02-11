@@ -1,14 +1,10 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import ChoiceItemsListView from './ChoiceItemsListView';
 import { OrderOptionsProp } from './PropTypes';
 
-class ChoiceItemsContainer extends Component {
-  render = () => {
-    return <ChoiceItemsListView choiceItemPrices={this.props.choiceItemPrices} />;
-  };
-}
+const ChoiceItemsContainer = ({ choiceItemPrices }) => <ChoiceItemsListView choiceItemPrices={choiceItemPrices} />;
 
 ChoiceItemsContainer.propTypes = {
   choiceItemPrices: OrderOptionsProp,

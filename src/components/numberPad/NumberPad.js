@@ -1,37 +1,54 @@
 // @flow
 
+import { Map, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
-import Immutable, { Range } from 'immutable';
 import Styles from './Styles';
 import Number from './Number';
-
-const initialStateWithoutResetButtons = Range(0, 10)
-  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
-  .toJS();
-
-const initialStateWithResetButtons = Range(0, 9)
-  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
-  .toList()
-  .push({ id: -1, name: ' ', isSelected: false })
-  .push({ id: 9, name: '9', isSelected: false })
-  .push({ id: -1, name: ' ', isSelected: false })
-  .toJS();
 
 // TODO: Consider replace it with redux form.
 class NumberPad extends Component {
   constructor(props, context) {
     super(props, context);
 
+    let numbers = Range(0, props.maxNumber).reduce(
+      (reduction, idx) => reduction.set(idx.toString(), Map({ id: idx, name: idx.toString(), isSelected: idx === props.initialValue })),
+      Map(),
+    );
+
+    if (props.supportReset && props.maxNumber === 10) {
+      numbers = numbers.set('-1', Map({ id: -1, name: ' ', isSelected: false })).set('-2', Map({ id: -2, name: ' ', isSelected: false }));
+    }
+
     this.state = {
-      numbers: this.props.supportReset ? initialStateWithResetButtons : initialStateWithoutResetButtons,
+      numbers,
     };
   }
 
   render = () => {
-    const { isHorizontal, numColumns } = this.props;
-    const { numbers } = this.state;
+    const { isHorizontal, numColumns, supportReset, maxNumber } = this.props;
+    let numbers;
+
+    if (supportReset && maxNumber === 10) {
+      const number0 = this.state.numbers.get('0');
+      const button0 = this.state.numbers.get('-1');
+      const button1 = this.state.numbers.get('-2');
+
+      numbers = this.state.numbers
+        .filterNot(val => val.get('id') === number0.get('id') || val.get('id') === button0.get('id') || val.get('id') === button1.get('id'))
+        .sort((val1, val2) => val1.get('id') > val2.get('id'))
+        .toList()
+        .push(button0)
+        .push(number0)
+        .push(button1)
+        .toArray();
+    } else {
+      numbers = this.state.numbers
+        .sort((val1, val2) => val1.get('id') > val2.get('id'))
+        .valueSeq()
+        .toArray();
+    }
 
     return (
       <View style={Styles.container}>
@@ -44,33 +61,24 @@ class NumberPad extends Component {
     );
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => item.get('id');
 
-  updateIndex = selectedIndex => {
-    let numList = Immutable.fromJS(this.state.numbers);
-    const prevSelected = numList.findIndex(num => num.get('isSelected') === true);
-
-    if (prevSelected >= 0) {
-      numList = numList.setIn([prevSelected, 'isSelected'], false);
-    }
-
-    numList = numList.setIn([selectedIndex, 'isSelected'], true);
-
-    this.setState({ numbers: numList.toJS() });
+  updateIndex = id => {
+    this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
   };
 
-  onNumberPressed = number => {
-    if (number < 0) {
+  onNumberPressed = id => {
+    if (id < 0) {
       return;
     }
 
-    this.updateIndex(number);
-    this.props.onNumberPressed(number);
+    this.updateIndex(id);
+    this.props.onNumberPressed(id);
   };
 
   renderNumber = item => (
     <Number
-      item={item.item}
+      item={item.item.toJS()}
       numberHeight={this.props.numberHeight}
       supportHighlight={this.props.supportHighlight}
       onNumberPressed={this.onNumberPressed}
@@ -85,6 +93,8 @@ NumberPad.propTypes = {
   supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
   numberHeight: PropTypes.number,
+  maxNumber: PropTypes.number,
+  initialValue: PropTypes.number,
 };
 
 NumberPad.defaultProps = {
@@ -93,6 +103,8 @@ NumberPad.defaultProps = {
   supportHighlight: true,
   supportReset: false,
   numberHeight: 50,
+  initialValue: 0,
+  maxNumber: 10,
 };
 
 export default NumberPad;

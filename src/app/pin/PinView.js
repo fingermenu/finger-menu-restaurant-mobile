@@ -8,6 +8,7 @@ import { Icon } from 'react-native-elements';
 import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor } from '../../style';
 import Styles from './Styles';
+import packageInfo from '../../../package.json';
 
 class PinView extends Component {
   constructor() {
@@ -97,10 +98,10 @@ class PinView extends Component {
             'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
         }}
       >
-        {/*<Text style={Styles.text}>Welcome to {this.props.restaurantName}</Text>*/}
+        <Text style={Styles.text}>Version {packageInfo.version}</Text>
         <Text style={Styles.text}>Enter Your Pin</Text>
         <View style={Styles.pinContainer}>
-          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={item => item.id} />
+          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={this.keyExtractor} />
         </View>
         {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
         <View style={Styles.pinPadContainer}>
@@ -109,6 +110,8 @@ class PinView extends Component {
       </ImageBackground>
     );
   };
+
+  keyExtractor = item => item.id;
 }
 
 PinView.propTypes = {

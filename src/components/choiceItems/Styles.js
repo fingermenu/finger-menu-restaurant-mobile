@@ -30,15 +30,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  checkbox: {
-    margin: 0,
-    padding: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    backgroundColor: DefaultColor.defaultBackgroundColor,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-  },
   optionName: {
     fontSize: 26,
   },

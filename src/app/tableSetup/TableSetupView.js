@@ -10,7 +10,7 @@ import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { FormTextInput } from '../../components/formTextInput';
+import { TextInput } from '../../components/redux-form-components';
 
 class TableSetupView extends Component {
   render = () => {
@@ -37,13 +37,10 @@ class TableSetupView extends Component {
                     onNumberPressed={param => {
                       props.input.onChange(param);
                     }}
-                    onOkPressed={() => {}}
-                    onClearPressed={() => {}}
                   />
                 )}
               />
             </View>
-            {/*<Text style={Styles.numberText}>{this.props.table.numberOfAdults}</Text>*/}
           </View>
           <View style={Styles.tableTextContainer}>
             <View style={Styles.labelContainer}>
@@ -60,20 +57,17 @@ class TableSetupView extends Component {
                     onNumberPressed={param => {
                       props.input.onChange(param);
                     }}
-                    onOkPressed={() => {}}
-                    onClearPressed={() => {}}
                   />
                 )}
               />
             </View>
-            {/*<Text style={Styles.numberText}>{this.props.table.numberOfAdults}</Text>*/}
           </View>
           <View style={Styles.tableTextContainer}>
             <View style={Styles.labelContainer}>
               <Text style={Styles.numberText}>Name</Text>
             </View>
             <View style={Styles.valueContainer}>
-              <Field name="name" component={FormTextInput} />
+              <Field name="name" component={TextInput} />
             </View>
           </View>
           <View style={Styles.tableTextContainer}>
@@ -81,11 +75,10 @@ class TableSetupView extends Component {
               <Text style={Styles.numberText}>Reservation</Text>
             </View>
             <View style={Styles.valueContainer}>
-              <Field name="notes" component={FormTextInput} />
+              <Field name="notes" component={TextInput} />
             </View>
           </View>
         </View>
-        {/*<Button title={t('setupTable.label')} onPress={this.props.onSetupTablePressed} />*/}
         <View style={DefaultStyles.rowContainer}>
           <Button
             title="Give to Guest"
