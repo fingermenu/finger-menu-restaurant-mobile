@@ -10,7 +10,7 @@ import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor, DefaultStyles } from '../../style';
-import FormTextInput from '../../components/FormTextInput/FormTextInput';
+import { FormTextInput } from '../../components/formTextInput';
 
 class TableSetupView extends Component {
   render = () => {
