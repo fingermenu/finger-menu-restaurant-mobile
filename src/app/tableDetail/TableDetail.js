@@ -14,6 +14,7 @@ class TableDetail extends Component {
   static navigationOptions = {
     headerTitle: 'Table Detail',
   };
+
   state = {
     dateRange: {
       from: ZonedDateTime.now()
