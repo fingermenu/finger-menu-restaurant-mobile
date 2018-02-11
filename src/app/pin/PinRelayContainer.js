@@ -26,6 +26,12 @@ export default createPaginationContainer(
                   hostname
                   port
                 }
+                images {
+                  primaryLandingPageBackgroundImageUrl
+                  secondaryLandingPageBackgroundImageUrl
+                  primaryTopBannerImageUrl
+                  secondaryTopBannerImageUrl
+                }
               }
             }
           }
