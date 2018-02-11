@@ -3,9 +3,11 @@
 import { UserAccessActionTypes } from '@microbusiness/common-react';
 import { NotificationType } from '@microbusiness/common-react';
 import * as appUpdaterActions from '@microbusiness/common-react/src/appUpdater/Actions';
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import * as notificationActions from '@microbusiness/common-react/src/notification/Actions';
 import * as netInfoActions from '@microbusiness/common-react-native/src/netInfo/Actions';
 import * as userAccessActions from '@microbusiness/common-react/src/userAccess/Actions';
+import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import { SignUpSignInContainer } from '@microbusiness/common-react-native';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
@@ -230,6 +232,16 @@ class AppWithNavigationState extends Component {
       this.props.notificationActions.add(nextProps.userAccessFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
       this.props.userAccessActions.acknowledgeFailedOperation(Map({ operationId }));
     });
+
+    nextProps.asyncStorageFailedOperations.keySeq().forEach(operationId => {
+      this.props.notificationActions.add(nextProps.asyncStorageFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      this.props.asyncStorageActions.acknowledgeFailedOperation(Map({ operationId }));
+    });
+
+    nextProps.escPosPrinterFailedOperations.keySeq().forEach(operationId => {
+      this.props.notificationActions.add(nextProps.escPosPrinterFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      this.props.escPosPrinterActions.acknowledgeFailedOperation(Map({ operationId }));
+    });
   };
 
   render = () => (
@@ -256,11 +268,13 @@ class AppWithNavigationState extends Component {
 
 AppWithNavigationState.propTypes = {
   netInfoActions: PropTypes.object.isRequired,
+  asyncStorageActions: PropTypes.object.isRequired,
   appUpdaterActions: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   notificationActions: PropTypes.object.isRequired,
   userAccessActions: PropTypes.object.isRequired,
+  escPosPrinterActions: PropTypes.object.isRequired,
   goBack: PropTypes.func.isRequired,
   netInfo: PropTypes.shape({
     netInfoExists: PropTypes.bool.isRequired,
@@ -279,6 +293,8 @@ function mapStateToProps(state) {
     netInfo: state.netInfo.toJS(),
     notifications: state.notification.get('notifications'),
     userAccessFailedOperations: state.userAccess.get('failedOperations'),
+    asyncStorageFailedOperations: state.asyncStorage.get('failedOperations'),
+    escPosPrinterFailedOperations: state.escPosPrinter.get('failedOperations'),
   };
 }
 
@@ -286,9 +302,11 @@ function mapDispatchToProps(dispatch) {
   return {
     netInfoActions: bindActionCreators(netInfoActions, dispatch),
     appUpdaterActions: bindActionCreators(appUpdaterActions, dispatch),
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     dispatch,
     notificationActions: bindActionCreators(notificationActions, dispatch),
     userAccessActions: bindActionCreators(userAccessActions, dispatch),
+    escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }

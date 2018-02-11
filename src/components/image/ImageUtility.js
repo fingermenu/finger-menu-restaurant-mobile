@@ -1,14 +1,5 @@
-import Images from './Images';
+import images from './Images';
 
-const ImageUtility = {
-  getImageSource: imageName => {
-    const name = imageName.toLowerCase();
-    if (Images[name]) {
-      return Images[name];
-    }
-
-    return Images.defaultItem;
-  },
-};
-
-export default ImageUtility;
+export default class ImageUtility {
+  static getImageSource = name => images.get(name);
+}

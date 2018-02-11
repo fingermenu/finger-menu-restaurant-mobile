@@ -19,7 +19,7 @@
       "allowTemplateLiterals": true
     }],
     "react/prop-types": 0,
-    "react/jsx-no-bind": 0,
+    "react/jsx-no-bind": 1,
     "react/display-name": 0,
     "new-cap": 0,
     "react-native/no-unused-styles": 2,

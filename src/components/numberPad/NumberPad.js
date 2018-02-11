@@ -3,53 +3,58 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import Immutable, { Range } from 'immutable';
 import Styles from './Styles';
+import Number from './Number';
+
+const initialStateWithoutResetButtons = Range(0, 10)
+  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
+  .toJS();
+
+const initialStateWithResetButtons = Range(0, 9)
+  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
+  .toList()
+  .push({ id: -1, name: ' ', isSelected: false })
+  .push({ id: 9, name: '9', isSelected: false })
+  .push({ id: -1, name: ' ', isSelected: false })
+  .toJS();
 
 // TODO: Consider replace it with redux form.
 class NumberPad extends Component {
-  constructor() {
-    super();
+  constructor(props, context) {
+    super(props, context);
+
     this.state = {
-      numbers: [],
+      numbers: this.props.supportReset ? initialStateWithResetButtons : initialStateWithoutResetButtons,
     };
   }
 
-  componentWillMount = () => {
-    this.setState({ numbers: this.getNumArrayList().toJS() });
+  render = () => {
+    const { isHorizontal, numColumns } = this.props;
+    const { numbers } = this.state;
+
+    return (
+      <View style={Styles.container}>
+        {isHorizontal ? (
+          <FlatList data={numbers} horizontal renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+        ) : (
+          <FlatList data={numbers} numColumns={numColumns} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+        )}
+      </View>
+    );
   };
 
-  getNumArrayList = () => {
-    const initValue = this.props.initialValue;
-    let numArray = Range(0, this.props.maxNumber)
-      .map(function(num) {
-        return { id: num, name: num.toString(), isSelected: num === initValue };
-      })
-      .toList();
-
-    if (this.props.supportReset && this.props.maxNumber === 10) {
-      numArray = numArray.insert(9, { id: -1, name: ' ' });
-      numArray = numArray.insert(11, { id: -2, name: ' ' });
-    }
-
-    return numArray;
-  };
+  keyExtractor = item => item.id;
 
   updateIndex = selectedIndex => {
     let numList = Immutable.fromJS(this.state.numbers);
-
     const prevSelected = numList.findIndex(num => num.get('isSelected') === true);
 
     if (prevSelected >= 0) {
-      numList = numList.updateIn([prevSelected, 'isSelected'], function() {
-        return false;
-      });
+      numList = numList.setIn([prevSelected, 'isSelected'], false);
     }
 
-    numList = numList.updateIn([selectedIndex, 'isSelected'], function() {
-      return true;
-    });
+    numList = numList.setIn([selectedIndex, 'isSelected'], true);
 
     this.setState({ numbers: numList.toJS() });
   };
@@ -63,41 +68,19 @@ class NumberPad extends Component {
     this.props.onNumberPressed(number);
   };
 
-  renderNumber = item => {
-    return (
-      <View style={Styles.numberContainer}>
-        <Avatar
-          width={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
-          height={this.props.supportHighlight && item.item.isSelected ? this.props.numberHeight : this.props.numberHeight - 10}
-          rounded
-          title={item.item.name}
-          onPress={() => this.onNumberPressed(item.item.id)}
-          activeOpacity={0.6}
-          opacity={0.5}
-          overlayContainerStyle={this.props.supportHighlight && item.item.isSelected ? Styles.selectedNumberContainer : Styles.defaultNumberContainer}
-        />
-      </View>
-    );
-  };
-
-  render = () => {
-    return (
-      <View style={Styles.container}>
-        {this.props.isHorizontal ? (
-          <FlatList data={this.state.numbers} horizontal={this.props.isHorizontal} renderItem={this.renderNumber} keyExtractor={item => item.id} />
-        ) : (
-          <FlatList data={this.state.numbers} numColumns={this.props.numColumns} renderItem={this.renderNumber} keyExtractor={item => item.id} />
-        )}
-      </View>
-    );
-  };
+  renderNumber = item => (
+    <Number
+      item={item.item}
+      numberHeight={this.props.numberHeight}
+      supportHighlight={this.props.supportHighlight}
+      onNumberPressed={this.onNumberPressed}
+    />
+  );
 }
 
 NumberPad.propTypes = {
   numColumns: PropTypes.number,
-  maxNumber: PropTypes.number,
   isHorizontal: PropTypes.bool,
-  initialValue: PropTypes.number,
   supportHighlight: PropTypes.bool,
   supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
@@ -106,9 +89,7 @@ NumberPad.propTypes = {
 
 NumberPad.defaultProps = {
   numColumns: 3,
-  maxNumber: 10,
   isHorizontal: false,
-  initialValue: 0,
   supportHighlight: true,
   supportReset: false,
   numberHeight: 50,

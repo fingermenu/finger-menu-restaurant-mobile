@@ -8,6 +8,7 @@ import {
   watchSignOut,
 } from '@microbusiness/parse-server-common-react-native';
 import { watchRefreshState, watchReadValue, watchWriteValue } from '@microbusiness/common-react-native';
+import { watchEscPosPrinterPrintDocument } from '@microbusiness/printer-react-native';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import getReducers from './Reducers';
@@ -22,6 +23,7 @@ const rootSagas = function* sagas() {
     watchRefreshState(),
     watchWriteValue(),
     watchReadValue(),
+    watchEscPosPrinterPrintDocument(),
   ];
 };
 
