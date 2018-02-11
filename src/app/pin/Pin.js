@@ -47,20 +47,22 @@ class Pin extends Component {
           cursor: null,
           count: 30,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return <PinRelayContainer user={props.user} />;
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
   }
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <PinRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 }
 
 function mapStateToProps(state) {

@@ -37,20 +37,22 @@ class Tables extends Component {
           count: 1000,
           restaurantId: this.props.restaurantId,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return <TablesRelayContainer user={props.user} />;
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
   }
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <TablesRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 }
 
 Tables.propTypes = {

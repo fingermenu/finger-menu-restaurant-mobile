@@ -54,20 +54,22 @@ class TableDetail extends Component {
           restaurantId: this.props.restaurantId,
           dateRange: this.state.dateRange,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return <TableDetailRelayContainer user={props.user} />;
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
   }
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <TableDetailRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 }
 
 TableDetail.propTypes = {

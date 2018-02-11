@@ -10,14 +10,6 @@ import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenuItemRelayContainer from './MenuItemRelayContainer';
 
 class MenuItem extends Component {
-  // static navigationOptions = ({ navigation }) => ({
-  //   title: navigation.state.params ? (navigation.state.params.title ? navigation.state.params.title : '') : '',
-  //   headerStyle: {
-  //     backgroundColor: Color.secondaryColorAction,
-  //   },
-  //   headerTintColor: Color.headerIconDefaultColor,
-  // });
-
   render = () => {
     return (
       <QueryRenderer
@@ -32,26 +24,28 @@ class MenuItem extends Component {
         variables={{
           menuItemPriceId: this.props.menuItemPriceId,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return (
-              <MenuItemRelayContainer
-                user={props.user}
-                menuItemPriceId={this.props.menuItemPriceId}
-                order={this.props.order}
-                orderItemId={this.props.orderItemId}
-              />
-            );
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
+  };
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return (
+        <MenuItemRelayContainer
+          user={props.user}
+          menuItemPriceId={this.props.menuItemPriceId}
+          order={this.props.order}
+          orderItemId={this.props.orderItemId}
+        />
+      );
+    }
+
+    return <LoadingInProgress />;
   };
 }
 
