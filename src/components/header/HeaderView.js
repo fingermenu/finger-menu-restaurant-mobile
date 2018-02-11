@@ -3,15 +3,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, ImageBackground } from 'react-native';
-import { TouchableItem } from '@microbusiness/common-react-native';
-import { DefaultColor, DefaultStyles } from '../../style';
-import { Avatar } from 'react-native-elements';
-import { ImageUtility } from '../image';
+import { DefaultStyles } from '../../style';
 import Styles from './Styles';
+import LangaugeSelector from './LangaugeSelector';
+import i18n from '../../i18n';
 
 class HeaderView extends Component {
   render = () => {
-    const { isSelected } = this.props;
+    const { changeLanguage } = this.props;
 
     return (
       <ImageBackground
@@ -23,77 +22,17 @@ class HeaderView extends Component {
       >
         <View style={Styles.bannerContainer}>{/*<Text>43 Degrees</Text>*/}</View>
         <View style={[DefaultStyles.rowContainer, Styles.languageContainer]}>
-          <TouchableItem
-            accessibilityComponentType="button"
-            accessibilityTraits="button"
-            delayPressIn={0}
-            pressColor={DefaultColor.touchableIconPressColor}
-            onPress={this.changeLanguageToENNZ}
-            borderless
-          >
-            <View style={Styles.touchableContainer}>
-              <Avatar
-                rounded
-                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
-                source={ImageUtility.getImageSource('english')}
-                activeOpacity={0.7}
-              />
-            </View>
-          </TouchableItem>
-          <TouchableItem
-            accessibilityComponentType="button"
-            accessibilityTraits="button"
-            delayPressIn={0}
-            pressColor={DefaultColor.touchableIconPressColor}
-            onPress={this.changeLanguageToZH}
-            borderless
-          >
-            <View style={Styles.touchableContainer}>
-              <Avatar
-                rounded
-                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
-                source={ImageUtility.getImageSource('chinese')}
-                activeOpacity={0.7}
-              />
-            </View>
-          </TouchableItem>
-          <TouchableItem
-            accessibilityComponentType="button"
-            accessibilityTraits="button"
-            delayPressIn={0}
-            pressColor={DefaultColor.touchableIconPressColor}
-            onPress={this.changeLanguageToJP}
-            borderless
-          >
-            <View style={Styles.touchableContainer}>
-              <Avatar
-                rounded
-                overlayContainerStyle={isSelected ? Styles.selectedIconContainer : Styles.iconContainer}
-                source={ImageUtility.getImageSource('japanese')}
-                activeOpacity={0.7}
-              />
-            </View>
-          </TouchableItem>
+          <LangaugeSelector isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
+          <LangaugeSelector isSelected={i18n.language.localeCompare('jp') === 0} language="zh" changeLanguage={changeLanguage} />
+          <LangaugeSelector isSelected={i18n.language.localeCompare('jp') === 0} language="jp" changeLanguage={changeLanguage} />
+          <LangaugeSelector isSelected={i18n.language.localeCompare('ko') === 0} language="ko" changeLanguage={changeLanguage} />
         </View>
       </ImageBackground>
     );
   };
-
-  changeLanguageToENNZ = () => {
-    this.props.changeLanguage('en_NZ');
-  };
-
-  changeLanguageToZH = () => {
-    this.props.changeLanguage('zh');
-  };
-
-  changeLanguageToJP = () => {
-    this.props.changeLanguage('jp');
-  };
 }
 
 HeaderView.propTypes = {
-  isSelected: PropTypes.bool.isRequired,
   changeLanguage: PropTypes.func.isRequired,
 };
 

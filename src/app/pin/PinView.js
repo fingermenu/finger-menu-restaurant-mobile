@@ -104,14 +104,7 @@ class PinView extends Component {
         </View>
         {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
         <View style={Styles.pinPadContainer}>
-          <NumberPad
-            maxNumber={10}
-            numColumns={3}
-            supportHighlight={false}
-            supportReset={true}
-            onNumberPressed={this.onPinNumberPressed}
-            numberHeight={100}
-          />
+          <NumberPad numColumns={3} supportHighlight={false} supportReset={true} onNumberPressed={this.onPinNumberPressed} numberHeight={100} />
         </View>
       </ImageBackground>
     );

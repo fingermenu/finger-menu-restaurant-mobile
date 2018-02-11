@@ -1,8 +1,11 @@
-const Images = {
-  chinese: require('../../../assets/img/Chinese.png'),
-  english: require('../../../assets/img/English.png'),
-  japanese: require('../../../assets/img/Japanese.png'),
-  korean: require('../../../assets/img/Korean.png'),
-};
+// @flow
 
-export default Images;
+import { Map } from 'immutable';
+
+const images = Map()
+  .set('en_NZ', require('../../../assets/images/en_NZ.png'))
+  .set('zh', require('../../../assets/images/zh.png'))
+  .set('jp', require('../../../assets/images/jp.png'))
+  .set('ko', require('../../../assets/images/ko.png'));
+
+export default images;

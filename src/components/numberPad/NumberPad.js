@@ -7,13 +7,25 @@ import Immutable, { Range } from 'immutable';
 import Styles from './Styles';
 import Number from './Number';
 
+const initialStateWithoutResetButtons = Range(0, 10)
+  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
+  .toJS();
+
+const initialStateWithResetButtons = Range(0, 9)
+  .map(num => ({ id: num, name: num.toString(), isSelected: false }))
+  .toList()
+  .push({ id: -1, name: ' ', isSelected: false })
+  .push({ id: 9, name: '9', isSelected: false })
+  .push({ id: -1, name: ' ', isSelected: false })
+  .toJS();
+
 // TODO: Consider replace it with redux form.
 class NumberPad extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      numbers: NumberPad.getNumArrayList(props).toJS(),
+      numbers: this.props.supportReset ? initialStateWithResetButtons : initialStateWithoutResetButtons,
     };
   }
 
@@ -64,28 +76,11 @@ class NumberPad extends Component {
       onNumberPressed={this.onNumberPressed}
     />
   );
-
-  static getNumArrayList = ({ initialValue, maxNumber, supportReset }) => {
-    const initValue = initialValue;
-
-    let numArray = Range(0, maxNumber)
-      .map(num => ({ id: num, name: num.toString(), isSelected: num === initValue }))
-      .toList();
-
-    if (supportReset && maxNumber === 10) {
-      numArray = numArray.insert(9, { id: -1, name: ' ', isSelected: false });
-      numArray = numArray.insert(11, { id: -2, name: ' ', isSelected: false });
-    }
-
-    return numArray;
-  };
 }
 
 NumberPad.propTypes = {
   numColumns: PropTypes.number,
-  maxNumber: PropTypes.number,
   isHorizontal: PropTypes.bool,
-  initialValue: PropTypes.number,
   supportHighlight: PropTypes.bool,
   supportReset: PropTypes.bool,
   onNumberPressed: PropTypes.func.isRequired,
@@ -94,9 +89,7 @@ NumberPad.propTypes = {
 
 NumberPad.defaultProps = {
   numColumns: 3,
-  maxNumber: 10,
   isHorizontal: false,
-  initialValue: 0,
   supportHighlight: true,
   supportReset: false,
   numberHeight: 50,
