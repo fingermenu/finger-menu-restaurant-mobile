@@ -12,17 +12,40 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
 class MenuItemView extends Component {
-  constructor() {
-    super();
-    this.state = {
-      quantity: 1,
-    };
-  }
+  state = {
+    quantity: 1,
+  };
 
   componentWillMount = () => {
     if (this.props.order) {
       this.setState({ quantity: this.props.order.quantity });
     }
+  };
+
+  render = () => {
+    const { quantity } = this.state;
+    const { handleSubmit, menuItemPrice: { menuItem: { name, description, imageUrl }, choiceItemPrices }, orderItemId, menuItemPrice } = this.props;
+
+    return (
+      <View style={Styles.container}>
+        <ScrollView>
+          <View style={Styles.imageContainer}>{imageUrl ? <Image style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
+          <View style={Styles.descriptionContainer}>
+            <Text style={Styles.title}>{name}</Text>
+            <Text style={Styles.description}>{description}</Text>
+          </View>
+          <View style={Styles.optionsContainer}>
+            <ChoiceItemsContainer choiceItemPrices={choiceItemPrices} />
+          </View>
+        </ScrollView>
+        <View>
+          <View style={Styles.quantity}>
+            <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
+          </View>
+          <AddToOrderContainer orderItemId={orderItemId} menuItemPrice={menuItemPrice} orderQuantity={quantity} handleSubmit={handleSubmit} />
+        </View>
+      </View>
+    );
   };
 
   onQuantityIncrease = () => {
@@ -33,51 +56,6 @@ class MenuItemView extends Component {
     if (this.state.quantity > 1) {
       this.setState({ quantity: this.state.quantity - 1 });
     }
-  };
-
-  render = () => {
-    const { quantity } = this.state;
-    const { handleSubmit } = this.props;
-
-    return (
-      <View style={Styles.container}>
-        <ScrollView>
-          <View style={Styles.imageContainer}>
-            {this.props.menuItemPrice.menuItem.imageUrl ? (
-              <Image
-                style={Styles.image}
-                source={{
-                  uri: this.props.menuItemPrice.menuItem.imageUrl,
-                }}
-              />
-            ) : (
-              <View />
-            )}
-          </View>
-          <View style={Styles.descriptionContainer}>
-            <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
-            <Text style={Styles.description}>{this.props.menuItemPrice.menuItem.description}</Text>
-          </View>
-          <View style={Styles.optionsContainer}>
-            <ChoiceItemsContainer
-              choiceItemPrices={this.props.menuItemPrice.choiceItemPrices}
-              onChoiceItemPricesSelectionChanged={value => this.onChoiceItemPricesSelectionChanged(value)}
-            />
-          </View>
-        </ScrollView>
-        <View>
-          <View style={Styles.quantity}>
-            <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
-          </View>
-          <AddToOrderContainer
-            orderItemId={this.props.orderItemId}
-            menuItemPrice={this.props.menuItemPrice}
-            orderQuantity={quantity}
-            handleSubmit={handleSubmit}
-          />
-        </View>
-      </View>
-    );
   };
 }
 
