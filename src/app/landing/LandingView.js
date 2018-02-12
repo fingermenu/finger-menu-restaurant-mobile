@@ -7,19 +7,21 @@ import PropTypes from 'prop-types';
 import Styles from './Styles';
 
 class LandingView extends Component {
-  renderLandingPage = landing => {
+  renderLandingPage = () => {
     return (
       <ImageBackground
         style={Styles.backgroundImage}
         source={{
-          uri: landing.uri,
+          uri: this.props.backgroundImageUrl,
         }}
       >
         <TouchableItem onPress={this.props.navigateToMenu}>
           <View style={Styles.overlay}>
-            <Text style={Styles.header}>{landing.headerText}</Text>
-            <Text>{landing.introText}</Text>
-            <Text style={Styles.button}>{landing.buttonText}</Text>
+            <Text style={Styles.welcomeText}>{this.props.welcomeText}</Text>
+            <Text style={Styles.restaurantName}>{this.props.restaurantName}</Text>
+            <Text style={Styles.subTitle}>{this.props.restaurantSubTitle}</Text>
+            <Text style={Styles.openingHour}>{this.props.openingHourText}</Text>
+            <Text style={Styles.button}>Enter</Text>
           </View>
         </TouchableItem>
       </ImageBackground>
@@ -32,12 +34,11 @@ class LandingView extends Component {
 }
 
 LandingView.propTypes = {
-  landing: PropTypes.shape({
-    uri: PropTypes.string,
-    headerText: PropTypes.string,
-    introText: PropTypes.string,
-    buttonText: PropTypes.string,
-  }).isRequired,
+  restaurantName: PropTypes.string.isRequired,
+  restaurantSubTitle: PropTypes.string.isRequired,
+  welcomeText: PropTypes.string.isRequired,
+  openingHourText: PropTypes.string.isRequired,
+  backgroundImageUrl: PropTypes.string.isRequired,
   navigateToMenu: PropTypes.func.isRequired,
 };
 

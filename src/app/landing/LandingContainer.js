@@ -12,30 +12,36 @@ class LandingContainer extends Component {
   };
 
   render = () => {
-    return <LandingView restaurantName={this.props.restaurantName} landing={this.props.landing} navigateToMenu={this.props.navigateToMenu} />;
+    return (
+      <LandingView
+        restaurantName={this.props.restaurantName}
+        restaurantSubTitle={this.props.restaurantSubTitle}
+        welcomeText={this.props.welcomeText}
+        openingHourText={this.props.openingHourText}
+        backgroundImageUrl={this.props.backgroundImageUrl}
+        navigateToMenu={this.props.navigateToMenu}
+      />
+    );
   };
 }
 
 LandingContainer.propTypes = {
   restaurantName: PropTypes.string.isRequired,
-  landing: PropTypes.shape({
-    uri: PropTypes.string,
-  }).isRequired,
+  restaurantSubTitle: PropTypes.string.isRequired,
+  welcomeText: PropTypes.string.isRequired,
+  openingHourText: PropTypes.string.isRequired,
+  backgroundImageUrl: PropTypes.string.isRequired,
   navigateToMenu: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  const mockLanding = {
-    uri:
-      'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
-    headerText: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
-    introText: 'this is a great coffee',
-    buttonText: 'Lunch menu',
-  };
-
   return {
-    landing: mockLanding,
     restaurantName: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
+    restaurantSubTitle: 'Japanese Food & Bar',
+    welcomeText: 'Traditional Japanese Food',
+    openingHourText: 'Monday - Sunday',
+    backgroundImageUrl:
+      'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
   };
 }
 

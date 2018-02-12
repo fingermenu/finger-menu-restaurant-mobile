@@ -15,9 +15,23 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(52, 52, 52, 0.5)',
   },
-  header: {
+  welcomeText: {
     fontWeight: 'bold',
     fontSize: 36,
+    color: 'white',
+  },
+  restaurantName: {
+    fontWeight: 'bold',
+    fontSize: 36,
+    color: 'white',
+  },
+  subTitle: {
+    fontSize: 20,
+    color: 'white',
+  },
+  openingHour: {
+    fontSize: 30,
+    color: 'white',
   },
   button: {
     borderWidth: 1,
