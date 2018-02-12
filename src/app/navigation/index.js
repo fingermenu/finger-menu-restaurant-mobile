@@ -246,14 +246,7 @@ class AppWithNavigationState extends Component {
 
   render = () => (
     <View style={{ flex: 1 }}>
-      <PopupDialog
-        ref={popupDialog => {
-          this.popupDialog = popupDialog;
-        }}
-        dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })}
-        width={200}
-        haveOverlay={true}
-      >
+      <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay={true}>
         <View />
       </PopupDialog>
       <AppNavigator
@@ -264,6 +257,10 @@ class AppWithNavigationState extends Component {
       />
     </View>
   );
+
+  setPopupDialogRef = ref => {
+    this.popupDialog = ref;
+  };
 }
 
 AppWithNavigationState.propTypes = {

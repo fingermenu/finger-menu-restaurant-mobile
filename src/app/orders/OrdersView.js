@@ -20,25 +20,15 @@ class OrdersView extends Component {
 
         <FlatList
           data={this.props.orders}
-          renderItem={info => (
-            <OrderItemRow
-              orderItem={info.item.data}
-              orderItemId={info.item.orderItemId}
-              menuItem={info.item.data.menuItem}
-              menuItemCurrentPrice={info.item.data.currentPrice}
-              onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-              onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-            />
-          )}
-          keyExtractor={item => item.ordrItemId}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
-          ItemSeparatorComponent={() => <ListItemSeparator />}
+          ItemSeparatorComponent={this.renderSeparator}
         />
         <Button
           title="Confirm Order"
-          // disabled={this.props.orders.length === 0}
           icon={{ name: 'md-checkmark', type: 'ionicon' }}
           backgroundColor={DefaultColor.defaultButtonColor}
           onPress={this.props.onConfirmOrderPressed}
@@ -46,6 +36,21 @@ class OrdersView extends Component {
       </View>
     );
   };
+
+  keyExtractor = item => item.orderItemId;
+
+  renderItem = info => (
+    <OrderItemRow
+      orderItem={info.item.data}
+      orderItemId={info.item.orderItemId}
+      menuItem={info.item.data.menuItem}
+      menuItemCurrentPrice={info.item.data.currentPrice}
+      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+    />
+  );
+
+  renderSeparator = () => <ListItemSeparator />;
 }
 
 OrdersView.propTypes = {

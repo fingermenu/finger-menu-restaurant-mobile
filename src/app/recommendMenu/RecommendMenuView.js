@@ -14,8 +14,8 @@ class RecommendMenuView extends Component {
         <FlatList
           horizontal={true}
           data={this.props.recommendMenuItems}
-          renderItem={info => <RecommendMenuItem menuItem={info.item} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />}
-          keyExtractor={item => item.id}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
@@ -23,6 +23,10 @@ class RecommendMenuView extends Component {
       </View>
     );
   };
+
+  keyExtractor = item => item.id;
+
+  renderItem = info => <RecommendMenuItem menuItem={info.item} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />;
 }
 
 RecommendMenuView.propTypes = {

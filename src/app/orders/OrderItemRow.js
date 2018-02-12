@@ -33,21 +33,9 @@ class OrderItemRow extends Component {
     }
   };
 
-  renderChoiceItems = choiceItems => {
-    let items = choiceItems.map(choiceItem => (
-      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
-        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
-      </Text>
-    ));
-
-    return items;
-  };
-
   render = () => {
     return (
-      <TouchableItem
-        onPress={() => this.props.onViewOrderItemPressed(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId)}
-      >
+      <TouchableItem onPress={this.onViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, { padding: 15 }]}>
           <View style={Styles.quantityContainer}>
             <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
@@ -59,7 +47,7 @@ class OrderItemRow extends Component {
           <View style={DefaultStyles.rowContainer}>
             <Text style={Styles.price}>${this.props.menuItemCurrentPrice}</Text>
             <TouchableIcon
-              onPress={() => this.props.onRemoveOrderPressed(this.props.orderItemId)}
+              onPress={this.onRemoveOrderPressed}
               iconName="ios-remove-circle-outline"
               iconType="ionicon"
               iconColor={DefaultColor.iconColor}
@@ -72,6 +60,21 @@ class OrderItemRow extends Component {
       </TouchableItem>
     );
   };
+
+  renderChoiceItems = choiceItems => {
+    let items = choiceItems.map(choiceItem => (
+      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
+        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
+      </Text>
+    ));
+
+    return items;
+  };
+
+  onViewOrderItemPressed = () =>
+    this.props.onViewOrderItemPressed(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
+
+  onRemoveOrderPressed = () => this.props.onRemoveOrderPressed(this.props.orderItemId);
 }
 
 OrderItemRow.propTypes = {
