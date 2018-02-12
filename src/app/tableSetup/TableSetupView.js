@@ -72,7 +72,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
 TableSetupView.propTypes = {
   onSetupTablePressed: PropTypes.func.isRequired,
   onReserveTablePressed: PropTypes.func.isRequired,
-  table: TableProp,
+  table: TableProp.isRequired,
 };
 
 function mapStateToProps(state, props) {

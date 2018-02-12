@@ -4,67 +4,13 @@ import React, { Component } from 'react';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View, TouchableNative } from 'react-native';
-import { Badge, Button } from 'react-native-elements';
-import Styles from './Styles';
+import { Badge } from 'react-native-elements';
 import { translate } from 'react-i18next';
+import TableView from './TableView';
+import Styles from './Styles';
+import Common from './Common';
 
 class TablesView extends Component {
-  renderItem = item => {
-    const style = this.getTableStyle(item.item.tableState ? item.item.tableState.key : 'empty');
-    return (
-      <View style={Styles.tableOuterContainer}>
-        <View style={Styles.tableContainer}>
-          <Button
-            raised
-            large
-            borderRadius={3}
-            title={item.item.name}
-            containerViewStyle={Styles.tableItemContainer}
-            buttonStyle={[style, Styles.tableButton]}
-            onPress={() => this.props.onTablePressed(item.item)}
-          />
-          <View style={Styles.tableTextContainer}>
-            <Text>{item.item.numberOfAdults ? item.item.numberOfAdults : 0}</Text>
-            <Text>{item.item.numberOfChildren ? item.item.numberOfChildren : 0}</Text>
-          </View>
-        </View>
-        <Text numberOfLines={1} style={Styles.customerNameText}>
-          {item.item.customerName}
-        </Text>
-      </View>
-    );
-  };
-
-  getTableStyle = tableState => {
-    switch (tableState) {
-      case 'taken':
-        return Styles.tableBadgeTaken;
-
-      case 'empty':
-        return Styles.tableBadgeEmpty;
-
-      case 'reserved':
-        return Styles.tableBadgeReserve;
-
-      case 'paid':
-        return Styles.tableBadgePaid;
-    }
-  };
-
-  renderBadgeSummaryItem = item => {
-    const style = this.getTableStyle(item.key);
-
-    return (
-      <Badge
-        value={item.key + ' ' + item.count}
-        textStyle={Styles.tableText}
-        component={TouchableNative}
-        containerStyle={[Styles.tableBadgeContainer, style]}
-        wrapperStyle={Styles.tableBadgeWrapper}
-      />
-    );
-  };
-
   render = () => {
     const { t } = this.props;
     const groupedTables = Immutable.fromJS(this.props.tables)
@@ -79,21 +25,13 @@ class TablesView extends Component {
       ])
       .sortBy(_ => _.key)
       .valueSeq();
-    // .toJS();
 
     return (
       <View style={Styles.container}>
         <View>
           <Text>{t('table.manageTable')}</Text>
         </View>
-        <FlatList
-          data={this.props.tables}
-          keyExtractor={item => {
-            return item.id;
-          }}
-          numColumns={3}
-          renderItem={this.renderItem}
-        />
+        <FlatList data={this.props.tables} keyExtractor={this.keyExtractor} numColumns={3} renderItem={this.renderItem} />
         <View style={Styles.tableLegendsContainer}>
           {this.renderBadgeSummaryItem({
             key: 'empty',
@@ -111,17 +49,26 @@ class TablesView extends Component {
             key: 'paid',
             count: groupedTables.filter(t => t.key === 'paid').first() ? groupedTables.filter(t => t.key === 'paid').first().count : 0,
           })}
-
-          {/*<FlatList*/}
-          {/*data={groupedTables}*/}
-          {/*keyExtractor={item => {*/}
-          {/*return item.key;*/}
-          {/*}}*/}
-          {/*numColumns={4}*/}
-          {/*renderItem={this.renderBadgeSummaryItem}*/}
-          {/*/>*/}
         </View>
       </View>
+    );
+  };
+
+  keyExtractor = item => item.id;
+
+  renderItem = item => <TableView table={item.item} onTablePressed={this.props.onTablePressed} />;
+
+  renderBadgeSummaryItem = item => {
+    const style = Common.getTableStyle(item.key);
+
+    return (
+      <Badge
+        value={item.key + ' ' + item.count}
+        textStyle={Styles.tableText}
+        component={TouchableNative}
+        containerStyle={[Styles.tableBadgeContainer, style]}
+        wrapperStyle={Styles.tableBadgeWrapper}
+      />
     );
   };
 }

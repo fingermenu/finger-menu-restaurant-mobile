@@ -12,6 +12,7 @@ import * as OrdersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
+import { TableProp } from '../tables/PropTypes';
 
 class TableSetupContainer extends Component {
   static navigationOptions = {
@@ -61,12 +62,14 @@ class TableSetupContainer extends Component {
     this.props.goBack();
   };
 
-  render = () => {
-    return (
-      <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} onReserveTablePressed={this.onReserveTablePressed} />
-    );
-  };
+  render = () => (
+    <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} onReserveTablePressed={this.onReserveTablePressed} />
+  );
 }
+
+TableSetupContainer.propTypes = {
+  table: TableProp.isRequired,
+};
 
 function mapStateToProps(state, props) {
   return {
