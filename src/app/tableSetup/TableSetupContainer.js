@@ -11,10 +11,15 @@ import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStora
 import * as OrdersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
+import { DefaultColor } from '../../style';
 
 class TableSetupContainer extends Component {
   static navigationOptions = {
     headerTitle: 'Setup Table',
+    headerStyle: {
+      backgroundColor: DefaultColor.defaultBannerColor,
+    },
+    headerTintColor: DefaultColor.defaultTopHeaderFontColor,
   };
 
   updateTable = (value, tableStateKey) => {

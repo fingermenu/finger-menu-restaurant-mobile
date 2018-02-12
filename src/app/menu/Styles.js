@@ -1,26 +1,29 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
   },
   rowContainer: {
-    // flex: 1,
     flexDirection: 'row',
-    padding: 5,
+    // padding: 10,
+    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 1,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
   rowTextContainer: {
     flex: 1,
     flexDirection: 'column',
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
   },
   title: {
     fontWeight: '700',

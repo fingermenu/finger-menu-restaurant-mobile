@@ -1,10 +1,11 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   itemSeparator: {
-    height: 1,
-    backgroundColor: '#cccccc',
+    height: 2,
+    backgroundColor: DefaultColor.defaultBackgroundColor,
   },
 });

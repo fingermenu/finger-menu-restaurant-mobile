@@ -61,7 +61,7 @@ const tabConfig = {
       marginBottom: 0,
     },
     style: {
-      backgroundColor: DefaultColor.defaultBackgroundColor,
+      backgroundColor: DefaultColor.defaultHomeTabBackgroundColor,
     },
     inactiveTintColor: DefaultColor.defaultThemeColor,
     activeTintColor: DefaultColor.defaultBannerColor,

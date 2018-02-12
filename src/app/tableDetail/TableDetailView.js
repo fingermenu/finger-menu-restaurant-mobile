@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
 import { Badge, Button, Icon } from 'react-native-elements';
-import { DefaultColor } from '../../style';
+import { DefaultColor, DefaultStyles } from '../../style';
 import { TableProp } from '../tables/PropTypes';
 
 class TableDetailView extends Component {
@@ -15,7 +15,7 @@ class TableDetailView extends Component {
     return (
       <View style={Styles.container}>
         <View style={Styles.headerContainer}>
-          <Text>Table : {this.props.table.name}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>Table : {this.props.table.name}</Text>
           <Badge
             value="Taken"
             textStyle={Styles.tableText}

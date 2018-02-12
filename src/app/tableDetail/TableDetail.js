@@ -9,10 +9,15 @@ import { LoadingInProgress } from '@microbusiness/common-react-native';
 import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import { connect } from 'react-redux';
 import TableDetailRelayContainer from './TableDetailRelayContainer';
+import { DefaultColor } from '../../style';
 
 class TableDetail extends Component {
   static navigationOptions = {
     headerTitle: 'Table Detail',
+    headerStyle: {
+      backgroundColor: DefaultColor.defaultBannerColor,
+    },
+    headerTintColor: DefaultColor.defaultTopHeaderFontColor,
   };
 
   state = {

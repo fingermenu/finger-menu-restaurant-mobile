@@ -10,5 +10,6 @@ export default StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
     backgroundColor: DefaultColor.defaultBackgroundColor,
+    borderWidth: 0,
   },
 });

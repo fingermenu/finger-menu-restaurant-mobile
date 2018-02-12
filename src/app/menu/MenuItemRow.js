@@ -11,7 +11,7 @@ import { MenuItemPriceProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
 // import { QuantityControlContainer } from '../../components/quantityControl';
-import { DefaultColor } from '../../style';
+import { DefaultColor, DefaultStyles } from '../../style';
 
 class MenuItemRow extends Component {
   constructor(props, context) {
@@ -51,9 +51,9 @@ class MenuItemRow extends Component {
             )}
           </View>
           <View style={Styles.rowTextContainer}>
-            <Text style={Styles.title}>{this.props.menuItemPrice.menuItem.name}</Text>
-            <Text style={Styles.description}>{this.props.menuItemPrice.menuItem.description}</Text>
-            <Text style={Styles.price}>${this.props.menuItemPrice.currentPrice}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>{this.props.menuItemPrice.menuItem.name}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{this.props.menuItemPrice.menuItem.description}</Text>
+            <Text style={DefaultStyles.primaryFont}>${this.props.menuItemPrice.currentPrice}</Text>
           </View>
           <View>
             <Icon

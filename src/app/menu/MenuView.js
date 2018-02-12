@@ -8,6 +8,7 @@ import Styles from './Styles';
 import { MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
+import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
   getTotalOrderQuantity = () => {
@@ -16,8 +17,19 @@ class MenuView extends Component {
     }, 0);
   };
 
+  renderItemSeparator = () => {
+    return <ListItemSeparator />;
+  };
+  renderRow = info => {
+    return <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />;
+  };
+
   hasOrdered = item => {
     return Immutable.fromJS(this.props.orders).findIndex(order => order.getIn(['data', 'menuItemPriceId']) === item.id) >= 0;
+  };
+
+  keyExtractor = item => {
+    return item.id;
   };
 
   render = () => {
@@ -25,13 +37,12 @@ class MenuView extends Component {
       <View style={Styles.container}>
         <FlatList
           data={this.props.menuItemPrices}
-          renderItem={info => (
-            <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />
-          )}
-          keyExtractor={item => item.id}
+          renderItem={this.renderRow}
+          keyExtractor={this.keyExtractor}
           onEndReached={this.props.onEndReached}
           onRefresh={this.props.onRefresh}
           refreshing={this.props.isFetchingTop}
+          ItemSeparatorComponent={this.renderItemSeparator}
         />
         {this.props.orders.length > 0 ? <PlaceOrderControlContainer totalOrderQuantity={this.getTotalOrderQuantity()} /> : <View />}
       </View>
