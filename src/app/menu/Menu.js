@@ -10,7 +10,7 @@ import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenuRelayContainer from './MenuRelayContainer';
 
 class Menu extends Component {
-  render() {
+  render = () => {
     return (
       <QueryRenderer
         environment={environment}
@@ -29,7 +29,7 @@ class Menu extends Component {
         render={this.renderRelayComponent}
       />
     );
-  }
+  };
 
   renderRelayComponent = ({ error, props, retry }) => {
     if (error) {

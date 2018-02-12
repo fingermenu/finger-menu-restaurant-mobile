@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { Field, reduxForm } from 'redux-form';
@@ -8,97 +8,66 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
-import NumberPad from '../../components/numberPad/NumberPad';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { TextInput } from '../../components/redux-form-components';
+import { NumberPad, TextInput } from '../../components/redux-form-components';
 
-class TableSetupView extends Component {
-  render = () => {
-    const { handleSubmit } = this.props;
-
-    return (
-      <View style={Styles.container}>
-        <View style={DefaultStyles.rowContainer}>
-          <Text style={Styles.headerText}>Table {this.props.table.name}</Text>
+const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePressed, table: { name } }) => (
+  <View style={Styles.container}>
+    <View style={DefaultStyles.rowContainer}>
+      <Text style={Styles.headerText}>Table {name}</Text>
+    </View>
+    <View>
+      <View style={Styles.tableTextContainer}>
+        <View style={Styles.labelContainer}>
+          <Icon name="human-handsdown" size={35} type="material-community" />
         </View>
-        <View>
-          <View style={Styles.tableTextContainer}>
-            <View style={Styles.labelContainer}>
-              <Icon name="human-handsdown" size={35} type="material-community" />
-            </View>
-            <View style={Styles.valueContainer}>
-              <Field
-                name="numberOfAdults"
-                component={props => (
-                  <NumberPad
-                    isHorizontal={true}
-                    maxNumber={16}
-                    initialValue={props.input.value}
-                    onNumberPressed={param => {
-                      props.input.onChange(param);
-                    }}
-                  />
-                )}
-              />
-            </View>
-          </View>
-          <View style={Styles.tableTextContainer}>
-            <View style={Styles.labelContainer}>
-              <Icon name="human-child" size={35} type="material-community" />
-            </View>
-            <View style={Styles.valueContainer}>
-              <Field
-                name="numberOfChildren"
-                component={props => (
-                  <NumberPad
-                    isHorizontal={true}
-                    maxNumber={10}
-                    initialValue={props.input.value}
-                    onNumberPressed={param => {
-                      props.input.onChange(param);
-                    }}
-                  />
-                )}
-              />
-            </View>
-          </View>
-          <View style={Styles.tableTextContainer}>
-            <View style={Styles.labelContainer}>
-              <Text style={Styles.numberText}>Name</Text>
-            </View>
-            <View style={Styles.valueContainer}>
-              <Field name="name" component={TextInput} />
-            </View>
-          </View>
-          <View style={Styles.tableTextContainer}>
-            <View style={Styles.labelContainer}>
-              <Text style={Styles.numberText}>Reservation</Text>
-            </View>
-            <View style={Styles.valueContainer}>
-              <Field name="notes" component={TextInput} />
-            </View>
-          </View>
-        </View>
-        <View style={DefaultStyles.rowContainer}>
-          <Button
-            title="Give to Guest"
-            backgroundColor={DefaultColor.defaultButtonColor}
-            icon={{ name: 'ios-body-outline', type: 'ionicon' }}
-            buttonStyle={Styles.button}
-            onPress={handleSubmit(this.props.onSetupTablePressed)}
-          />
-          <Button
-            title="Reserve"
-            backgroundColor="orange"
-            icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
-            buttonStyle={Styles.button}
-            onPress={handleSubmit(this.props.onReserveTablePressed)}
-          />
+        <View style={Styles.valueContainer}>
+          <Field name="numberOfAdults" component={NumberPad} isHorizontal={true} maxNumber={16} />
         </View>
       </View>
-    );
-  };
-}
+      <View style={Styles.tableTextContainer}>
+        <View style={Styles.labelContainer}>
+          <Icon name="human-child" size={35} type="material-community" />
+        </View>
+        <View style={Styles.valueContainer}>
+          <Field name="numberOfChildren" component={NumberPad} isHorizontal={true} maxNumber={10} />
+        </View>
+      </View>
+      <View style={Styles.tableTextContainer}>
+        <View style={Styles.labelContainer}>
+          <Text style={Styles.numberText}>Name</Text>
+        </View>
+        <View style={Styles.valueContainer}>
+          <Field name="name" component={TextInput} />
+        </View>
+      </View>
+      <View style={Styles.tableTextContainer}>
+        <View style={Styles.labelContainer}>
+          <Text style={Styles.numberText}>Reservation</Text>
+        </View>
+        <View style={Styles.valueContainer}>
+          <Field name="notes" component={TextInput} />
+        </View>
+      </View>
+    </View>
+    <View style={DefaultStyles.rowContainer}>
+      <Button
+        title="Give to Guest"
+        backgroundColor={DefaultColor.defaultButtonColor}
+        icon={{ name: 'ios-body-outline', type: 'ionicon' }}
+        buttonStyle={Styles.button}
+        onPress={handleSubmit(onSetupTablePressed)}
+      />
+      <Button
+        title="Reserve"
+        backgroundColor="orange"
+        icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
+        buttonStyle={Styles.button}
+        onPress={handleSubmit(onReserveTablePressed)}
+      />
+    </View>
+  </View>
+);
 
 TableSetupView.propTypes = {
   onSetupTablePressed: PropTypes.func.isRequired,
