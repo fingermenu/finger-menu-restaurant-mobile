@@ -61,15 +61,12 @@ class OrderItemRow extends Component {
     );
   };
 
-  renderChoiceItems = choiceItems => {
-    let items = choiceItems.map(choiceItem => (
+  renderChoiceItems = choiceItems =>
+    choiceItems.map(choiceItem => (
       <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
         {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
       </Text>
     ));
-
-    return items;
-  };
 
   onViewOrderItemPressed = () =>
     this.props.onViewOrderItemPressed(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
