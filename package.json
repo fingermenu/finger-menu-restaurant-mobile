@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -40,7 +40,7 @@
     "react": "16.2.0",
     "react-i18next": "^7.3.6",
     "react-immutable-proptypes": "2.1.0",
-    "react-native": "0.52.2",
+    "react-native": "0.53.0",
     "react-native-action-button": "^2.8.4",
     "react-native-code-push": "^5.2.1",
     "react-native-config": "^0.11.5",
