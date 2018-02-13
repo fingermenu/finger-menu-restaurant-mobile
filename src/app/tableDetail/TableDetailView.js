@@ -28,17 +28,8 @@ class TableDetailView extends Component {
         {this.props.order && this.props.order.details ? (
           <FlatList
             data={this.props.order.details}
-            renderItem={info => (
-              <OrderItemRow
-                orderItem={info.item}
-                orderItemId={this.props.order.id}
-                menuItem={info.item.menuItemPrice.menuItem}
-                menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-                onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-                onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-              />
-            )}
-            keyExtractor={item => item.id}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
             onEndReached={this.props.onEndReached}
             onRefresh={this.props.onRefresh}
             refreshing={this.props.isFetchingTop}
@@ -53,20 +44,33 @@ class TableDetailView extends Component {
           <Button title="Set paid" backgroundColor={DefaultColor.defaultButtonColor} />
           <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.props.onResetTablePressed} />
         </View>
-        <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} onPress={() => {}}>
-          <ActionButton.Item buttonColor="#9b59b6" title="Drink" onPress={() => {}}>
+        <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50}>
+          <ActionButton.Item buttonColor="#9b59b6" title="Drink">
             <Icon name="md-create" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor="#3498db" title="Desert" onPress={() => {}}>
+          <ActionButton.Item buttonColor="#3498db" title="Desert">
             <Icon name="md-notifications-off" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor="#1abc9c" title="Kids" onPress={() => {}}>
+          <ActionButton.Item buttonColor="#1abc9c" title="Kids">
             <Icon name="md-done-all" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
       </View>
     );
   };
+
+  keyExtractor = item => item.id;
+
+  renderItem = info => (
+    <OrderItemRow
+      orderItem={info.item}
+      orderItemId={this.props.order.id}
+      menuItem={info.item.menuItemPrice.menuItem}
+      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+    />
+  );
 }
 
 TableDetailView.propTypes = {

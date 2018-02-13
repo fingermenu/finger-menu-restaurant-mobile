@@ -10,7 +10,7 @@ import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenusRelayContainer from './MenusRelayContainer';
 
 class Menus extends Component {
-  render() {
+  render = () => {
     return (
       <QueryRenderer
         environment={environment}
@@ -24,20 +24,22 @@ class Menus extends Component {
         variables={{
           restaurantId: this.props.restaurantId,
         }}
-        render={({ error, props, retry }) => {
-          if (error) {
-            return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-          }
-
-          if (props) {
-            return <MenusRelayContainer user={props.user} />;
-          }
-
-          return <LoadingInProgress />;
-        }}
+        render={this.renderRelayComponent}
       />
     );
-  }
+  };
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <MenusRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 }
 
 Menus.propTypes = {

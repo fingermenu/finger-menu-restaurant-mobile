@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { MenuItemPriceProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
-// import { QuantityControlContainer } from '../../components/quantityControl';
 import { DefaultColor, DefaultStyles } from '../../style';
 
 class MenuItemRow extends Component {
@@ -36,7 +35,7 @@ class MenuItemRow extends Component {
 
   render = () => {
     return (
-      <TouchableItem onPress={() => this.props.onViewMenuItemPressed(this.props.menuItemPrice.id)}>
+      <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
             {this.props.menuItemPrice.menuItem.imageUrl ? (
@@ -67,14 +66,14 @@ class MenuItemRow extends Component {
       </TouchableItem>
     );
   };
+
+  onViewMenuItemPressed = () => this.props.onViewMenuItemPressed(this.props.menuItemPrice.id);
 }
 
 MenuItemRow.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
   isOrdered: PropTypes.bool.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
-  // onAddMenuItemToOrder: PropTypes.func.isRequired,
-  // onRemoveMenuItemFromOrder: PropTypes.func.isRequired,
 };
 
 export default MenuItemRow;
