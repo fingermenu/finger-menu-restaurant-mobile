@@ -39,7 +39,7 @@ function mapStateToProps(state) {
     restaurantName: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
     restaurantSubTitle: 'Japanese Food & Bar',
     welcomeText: 'Traditional Japanese Food',
-    openingHourText: 'Monday - Sunday',
+    openingHourText: 'Monday - Sunday\n11am - 2pm | 5pm - 10pm\n',
     backgroundImageUrl:
       'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
   };

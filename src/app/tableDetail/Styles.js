@@ -39,14 +39,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
   },
-  title: {
-    fontWeight: '700',
-  },
-  description: {
-    fontSize: 13,
-  },
-  price: {
-    fontSize: 20,
-    fontWeight: '700',
+  emptyOrdersContainer: {
+    paddingTop: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

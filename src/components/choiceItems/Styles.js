@@ -11,16 +11,18 @@ export default StyleSheet.create({
   },
   sectionTitle: {
     fontWeight: '700',
+    fontSize: 26,
   },
   sectionHeader: {
     padding: 5,
-    backgroundColor: DefaultColor.defaultFontColorDisabled,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
   optionRowContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
   checkboxContainer: {
     flex: 10,
@@ -35,6 +37,6 @@ export default StyleSheet.create({
   },
   price: {
     fontSize: 26,
-    color: DefaultColor.defaultFontColor,
+    color: '#4CC0B6',
   },
 });

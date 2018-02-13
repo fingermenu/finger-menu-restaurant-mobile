@@ -2,32 +2,43 @@
 
 import { StyleSheet } from 'react-native';
 import { Sizes } from '../../style/DefaultStyles';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
   descriptionContainer: {
     padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
-  quantity: {
-    justifyContent: 'center',
+  nameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
+    backgroundColor: '#F3F6FB',
   },
   image: {
     width: Sizes.screenWidth,
-    height: 200,
+    height: 300,
   },
   title: {
     fontWeight: '700',
   },
   description: {
-    fontSize: 13,
+    fontSize: 20,
+    color: DefaultColor.defaultFontColorDisabled,
   },
   price: {
-    fontSize: 14,
+    fontSize: 20,
+    color: '#4CC0B6',
   },
 });

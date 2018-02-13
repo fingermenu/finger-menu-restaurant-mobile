@@ -6,10 +6,12 @@ import { Field } from 'redux-form';
 import Styles from './Styles';
 import PropTypes from 'prop-types';
 import { CheckBox } from '../../components/redux-form-components';
+import { ListItemSeparator } from '../list';
 
 class ChoiceItemsListView extends Component {
   render = () => (
     <View>
+      {this.renderSectionHeader('Would you like some sides?')}
       <FlatList data={this.props.choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
     </View>
   );
@@ -23,14 +25,15 @@ class ChoiceItemsListView extends Component {
       </View>
       <View style={Styles.optionContainer}>
         <Text style={Styles.optionName}>{item.choiceItem.name}</Text>
-        <Text style={Styles.price}>{item.currentPrice}</Text>
+        <Text style={Styles.price}>${item.currentPrice}</Text>
       </View>
     </View>
   );
 
-  renderSectionHeader = ({ section }) => (
+  renderSectionHeader = sectionTitle => (
     <View style={Styles.sectionHeader}>
-      <Text style={Styles.sectionTitle}>{section.optionType}</Text>
+      <Text style={Styles.sectionTitle}>{sectionTitle}</Text>
+      <ListItemSeparator />
     </View>
   );
 }

@@ -23,7 +23,7 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={Styles.price}>{this.props.order ? this.props.order.totalPrice : 0}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>${this.props.order ? this.props.order.totalPrice : 0}</Text>
         </View>
         {this.props.order && this.props.order.details ? (
           <FlatList
@@ -35,8 +35,8 @@ class TableDetailView extends Component {
             refreshing={this.props.isFetchingTop}
           />
         ) : (
-          <ScrollView>
-            <Text>Text to display when no orders</Text>
+          <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
+            <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
           </ScrollView>
         )}
 

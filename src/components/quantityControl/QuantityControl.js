@@ -11,20 +11,20 @@ import { DefaultColor } from '../../style';
 const QuantityControl = ({ onQuantityIncrease, onQuantityDecrease, quantity }) => (
   <View style={[DefaultStyles.rowContainer, Styles.container]}>
     <TouchableIcon
-      iconName="plus"
+      iconName="minus"
       iconContainerStyle={DefaultStyles.iconContainerStyle}
       iconType="material-community"
-      onPress={onQuantityIncrease}
+      onPress={onQuantityDecrease}
       pressColor={DefaultColor.touchableIconPressColor}
       iconColor={DefaultColor.iconColor}
       iconDisabledColor={DefaultColor.defaultFontColorDisabled}
     />
     <Text style={DefaultStyles.primaryFont}>{quantity}</Text>
     <TouchableIcon
-      iconName="minus"
+      iconName="plus"
       iconContainerStyle={DefaultStyles.iconContainerStyle}
       iconType="material-community"
-      onPress={onQuantityDecrease}
+      onPress={onQuantityIncrease}
       pressColor={DefaultColor.touchableIconPressColor}
       iconColor={DefaultColor.iconColor}
       iconDisabledColor={DefaultColor.defaultFontColorDisabled}

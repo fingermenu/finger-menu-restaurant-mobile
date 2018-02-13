@@ -8,8 +8,17 @@ import { graphql, QueryRenderer } from 'react-relay';
 import { LoadingInProgress } from '@microbusiness/common-react-native';
 import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenuItemRelayContainer from './MenuItemRelayContainer';
+import { DefaultColor } from '../../style';
 
 class MenuItem extends Component {
+  static navigationOptions = {
+    headerTitle: 'Item',
+    headerStyle: {
+      backgroundColor: DefaultColor.defaultBannerColor,
+    },
+    headerTintColor: DefaultColor.defaultTopHeaderFontColor,
+  };
+
   render = () => {
     return (
       <QueryRenderer

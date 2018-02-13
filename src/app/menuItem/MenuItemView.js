@@ -10,6 +10,7 @@ import QuantityControl from '../../components/quantityControl/QuantityControl';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { DefaultStyles } from '../../style';
 
 class MenuItemView extends Component {
   state = {
@@ -31,7 +32,10 @@ class MenuItemView extends Component {
         <ScrollView>
           <View style={Styles.imageContainer}>{imageUrl ? <Image style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
           <View style={Styles.descriptionContainer}>
-            <Text style={Styles.title}>{name}</Text>
+            <View style={Styles.nameContainer}>
+              <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
+              <Text style={Styles.price}>${menuItemPrice.currentPrice}</Text>
+            </View>
             <Text style={Styles.description}>{description}</Text>
           </View>
           <View style={Styles.optionsContainer}>
@@ -39,7 +43,8 @@ class MenuItemView extends Component {
           </View>
         </ScrollView>
         <View>
-          <View style={Styles.quantity}>
+          <View style={Styles.quantityContainer}>
+            <Text style={DefaultStyles.primaryLabelFont}>Quantity</Text>
             <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
           </View>
           <AddToOrderContainer orderItemId={orderItemId} menuItemPrice={menuItemPrice} orderQuantity={quantity} handleSubmit={handleSubmit} />

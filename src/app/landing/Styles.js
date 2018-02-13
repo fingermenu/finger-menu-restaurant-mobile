@@ -1,7 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
-import { Sizes } from '../../style';
+import { DefaultColor, Sizes } from '../../style';
 
 export default StyleSheet.create({
   backgroundImage: {
@@ -32,11 +32,17 @@ export default StyleSheet.create({
   openingHour: {
     fontSize: 30,
     color: 'white',
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    paddingTop: 50,
   },
   button: {
-    borderWidth: 1,
-    borderColor: 'white',
-    padding: 5,
-    // backgroundColor: '#3DC62A',
+    backgroundColor: DefaultColor.actionButtonColor,
+    width: 300,
+    height: 45,
+    borderColor: 'transparent',
+    borderWidth: 0,
+    borderRadius: 5,
   },
 });

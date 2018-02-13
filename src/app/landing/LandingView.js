@@ -3,6 +3,7 @@
 import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { View, ImageBackground, Text } from 'react-native';
+import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import Styles from './Styles';
 
@@ -21,9 +22,11 @@ class LandingView extends Component {
             <Text style={Styles.restaurantName}>{this.props.restaurantName}</Text>
             <Text style={Styles.subTitle}>{this.props.restaurantSubTitle}</Text>
             <Text style={Styles.openingHour}>{this.props.openingHourText}</Text>
-            <Text style={Styles.button}>Enter</Text>
           </View>
         </TouchableItem>
+        <View style={Styles.buttonContainer}>
+          <Button title="Start Order" buttonStyle={Styles.button} onPress={this.props.navigateToMenu} />
+        </View>
       </ImageBackground>
     );
   };
