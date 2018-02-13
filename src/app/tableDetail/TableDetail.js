@@ -1,13 +1,12 @@
 // @flow
 
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
 import { ZonedDateTime, ChronoUnit } from 'js-joda';
-import { environment } from '../../framework/relay';
-import { LoadingInProgress } from '@microbusiness/common-react-native';
-import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import { connect } from 'react-redux';
+import { environment } from '../../framework/relay';
 import TableDetailRelayContainer from './TableDetailRelayContainer';
 import { DefaultColor } from '../../style';
 
@@ -32,6 +31,18 @@ class TableDetail extends Component {
         .plusSeconds(59)
         .toString(),
     },
+  };
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <TableDetailRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
   };
 
   render() {
@@ -64,18 +75,6 @@ class TableDetail extends Component {
       />
     );
   }
-
-  renderRelayComponent = ({ error, props, retry }) => {
-    if (error) {
-      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-    }
-
-    if (props) {
-      return <TableDetailRelayContainer user={props.user} />;
-    }
-
-    return <LoadingInProgress />;
-  };
 }
 
 TableDetail.propTypes = {

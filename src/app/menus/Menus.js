@@ -1,15 +1,26 @@
 // @flow
 
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { environment } from '../../framework/relay';
-import { LoadingInProgress } from '@microbusiness/common-react-native';
-import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenusRelayContainer from './MenusRelayContainer';
 
 class Menus extends Component {
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <MenusRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
+
   render = () => {
     return (
       <QueryRenderer
@@ -27,18 +38,6 @@ class Menus extends Component {
         render={this.renderRelayComponent}
       />
     );
-  };
-
-  renderRelayComponent = ({ error, props, retry }) => {
-    if (error) {
-      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-    }
-
-    if (props) {
-      return <MenusRelayContainer user={props.user} />;
-    }
-
-    return <LoadingInProgress />;
   };
 }
 

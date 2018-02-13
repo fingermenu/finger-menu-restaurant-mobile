@@ -3,10 +3,10 @@
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import OrdersView from './OrdersView';
-import PropTypes from 'prop-types';
 import * as OrdersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
@@ -47,6 +47,7 @@ class OrdersContainer extends Component {
   onRemoveOrderPressed = orderItemId => {
     this.props.OrdersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
   };
+
   onRefresh = () => {
     // if (this.props.relay.isLoading()) {
     //   return;
@@ -88,7 +89,7 @@ class OrdersContainer extends Component {
 
 OrdersContainer.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.object).isRequired,
-  OrdersActions: PropTypes.object.isRequired,
+  OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
 };
@@ -97,17 +98,17 @@ function mapStateToProps(state) {
   const orders = state.order.getIn(['tableOrder', 'details']).isEmpty()
     ? []
     : state.order
-        .getIn(['tableOrder', 'details'])
-        .toSeq()
-        .mapEntries(([key, value]) => [
-          key,
-          {
-            data: value.toJS(),
-            orderItemId: key,
-          },
-        ])
-        .toList()
-        .toJS();
+      .getIn(['tableOrder', 'details'])
+      .toSeq()
+      .mapEntries(([key, value]) => [
+        key,
+        {
+          data: value.toJS(),
+          orderItemId: key,
+        },
+      ])
+      .toList()
+      .toJS();
 
   return {
     orders: orders,

@@ -1,7 +1,6 @@
 // @flow
 
-import { UserAccessActionTypes } from '@microbusiness/common-react';
-import { NotificationType } from '@microbusiness/common-react';
+import { NotificationType, UserAccessActionTypes } from '@microbusiness/common-react';
 import * as appUpdaterActions from '@microbusiness/common-react/src/appUpdater/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import * as notificationActions from '@microbusiness/common-react/src/notification/Actions';
@@ -59,7 +58,35 @@ const navigationReducer = (state, action) => {
   let newState;
 
   switch (action.type) {
-    case UserAccessActionTypes.USER_ACCESS_SIGNOUT_IN_PROGRESS:
+  case UserAccessActionTypes.USER_ACCESS_SIGNOUT_IN_PROGRESS:
+    newState = AppNavigator.router.getStateForAction(
+      NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({
+            routeName: 'SignUpSignIn',
+          }),
+        ],
+        key: null,
+      }),
+      state,
+    );
+    break;
+
+  case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
+    if (action.payload.get('userExists')) {
+      newState = AppNavigator.router.getStateForAction(
+        NavigationActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              routeName: 'App',
+            }),
+          ],
+        }),
+        state,
+      );
+    } else {
       newState = AppNavigator.router.getStateForAction(
         NavigationActions.reset({
           index: 0,
@@ -72,56 +99,28 @@ const navigationReducer = (state, action) => {
         }),
         state,
       );
-      break;
+    }
+    break;
 
-    case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
-      if (action.payload.get('userExists')) {
-        newState = AppNavigator.router.getStateForAction(
-          NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({
-                routeName: 'App',
-              }),
-            ],
+  case UserAccessActionTypes.USER_ACCESS_SIGNUP_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
+  case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
+  case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_FACEBOOK_SUCCEEDED:
+    newState = AppNavigator.router.getStateForAction(
+      NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({
+            routeName: 'App',
           }),
-          state,
-        );
-      } else {
-        newState = AppNavigator.router.getStateForAction(
-          NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({
-                routeName: 'SignUpSignIn',
-              }),
-            ],
-            key: null,
-          }),
-          state,
-        );
-      }
-      break;
+        ],
+      }),
+      state,
+    );
+    break;
 
-    case UserAccessActionTypes.USER_ACCESS_SIGNUP_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
-    case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
-    case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_FACEBOOK_SUCCEEDED:
-      newState = AppNavigator.router.getStateForAction(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'App',
-            }),
-          ],
-        }),
-        state,
-      );
-      break;
-
-    default:
-      newState = AppNavigator.router.getStateForAction(action, state);
-      break;
+  default:
+    newState = AppNavigator.router.getStateForAction(action, state);
+    break;
   }
 
   return newState || state;
@@ -130,6 +129,67 @@ const navigationReducer = (state, action) => {
 export const reduxStore = configureStore(navigationReducer);
 
 class AppWithNavigationState extends Component {
+  componentWillMount() {
+    this.props.netInfoActions.refreshState(Map());
+
+    CodePush.sync(
+      {
+        updateDialog: true,
+        installMode: CodePush.InstallMode.IMMEDIATE,
+      },
+      status => {
+        switch (status) {
+        case CodePush.SyncStatus.UPDATE_INSTALLED:
+          this.props.appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.UNKNOWN_ERROR:
+          if (this.props.netInfo.netInfoExists && this.props.netInfo.isConnected) {
+            this.props.notificationActions.add('Failed to update the application', NotificationType.ERROR);
+          }
+
+          this.props.appUpdaterActions.failed('Failed to update the application');
+
+          break;
+
+        case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+          this.props.appUpdaterActions.downloadingUpdate(0);
+
+          break;
+
+        case CodePush.SyncStatus.INSTALLING_UPDATE:
+          this.props.appUpdaterActions.installingUpdate();
+
+          break;
+
+        case CodePush.SyncStatus.UP_TO_DATE:
+          this.props.appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
+          this.props.appUpdaterActions.checkingForUpdate();
+
+          break;
+
+        case CodePush.SyncStatus.UPDATE_IGNORED:
+          this.props.appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.SYNC_IN_PROGRESS:
+        case CodePush.SyncStatus.AWAITING_USER_ACTION:
+          break;
+
+        default:
+          break;
+        }
+      },
+      ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate(receivedBytes / totalBytes * 100),
+    );
+  }
+
   componentDidMount = () => {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
@@ -143,73 +203,6 @@ class AppWithNavigationState extends Component {
 
         return false;
       });
-    }
-  };
-
-  componentWillMount() {
-    this.props.netInfoActions.refreshState(Map());
-
-    CodePush.sync(
-      {
-        updateDialog: true,
-        installMode: CodePush.InstallMode.IMMEDIATE,
-      },
-      status => {
-        switch (status) {
-          case CodePush.SyncStatus.UPDATE_INSTALLED:
-            this.props.appUpdaterActions.succeeded();
-
-            break;
-
-          case CodePush.SyncStatus.UNKNOWN_ERROR:
-            if (this.props.netInfo.netInfoExists && this.props.netInfo.isConnected) {
-              this.props.notificationActions.add('Failed to update the application', NotificationType.ERROR);
-            }
-
-            this.props.appUpdaterActions.failed('Failed to update the application');
-
-            break;
-
-          case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
-            this.props.appUpdaterActions.downloadingUpdate(0);
-
-            break;
-
-          case CodePush.SyncStatus.INSTALLING_UPDATE:
-            this.props.appUpdaterActions.installingUpdate();
-
-            break;
-
-          case CodePush.SyncStatus.UP_TO_DATE:
-            this.props.appUpdaterActions.succeeded();
-
-            break;
-
-          case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
-            this.props.appUpdaterActions.checkingForUpdate();
-
-            break;
-
-          case CodePush.SyncStatus.UPDATE_IGNORED:
-            this.props.appUpdaterActions.succeeded();
-
-            break;
-
-          case CodePush.SyncStatus.SYNC_IN_PROGRESS:
-          case CodePush.SyncStatus.AWAITING_USER_ACTION:
-            break;
-
-          default:
-            break;
-        }
-      },
-      ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate(receivedBytes / totalBytes * 100),
-    );
-  }
-
-  componentWillUnmount = () => {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress');
     }
   };
 
@@ -244,9 +237,19 @@ class AppWithNavigationState extends Component {
     });
   };
 
+  componentWillUnmount = () => {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress');
+    }
+  };
+
+  setPopupDialogRef = ref => {
+    this.popupDialog = ref;
+  };
+
   render = () => (
     <View style={{ flex: 1 }}>
-      <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay={true}>
+      <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay>
         <View />
       </PopupDialog>
       <AppNavigator
@@ -257,21 +260,17 @@ class AppWithNavigationState extends Component {
       />
     </View>
   );
-
-  setPopupDialogRef = ref => {
-    this.popupDialog = ref;
-  };
 }
 
 AppWithNavigationState.propTypes = {
-  netInfoActions: PropTypes.object.isRequired,
-  asyncStorageActions: PropTypes.object.isRequired,
-  appUpdaterActions: PropTypes.object.isRequired,
+  netInfoActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  appUpdaterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   dispatch: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-  notificationActions: PropTypes.object.isRequired,
-  userAccessActions: PropTypes.object.isRequired,
-  escPosPrinterActions: PropTypes.object.isRequired,
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  notificationActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  userAccessActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
   netInfo: PropTypes.shape({
     netInfoExists: PropTypes.bool.isRequired,

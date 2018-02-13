@@ -17,12 +17,12 @@ class Account extends React.Component {
   }
   updateIndex(selectedIndex) {
     switch (selectedIndex) {
-      case 0:
-        this.props.i18n.changeLanguage('en');
-        break;
-      case 1:
-        this.props.i18n.changeLanguage('zh');
-        break;
+    case 0:
+      this.props.i18n.changeLanguage('en');
+      break;
+    case 1:
+      this.props.i18n.changeLanguage('zh');
+      break;
     }
 
     this.setState({ selectedIndex });

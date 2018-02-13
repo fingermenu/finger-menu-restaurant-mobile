@@ -25,6 +25,10 @@ class PinView extends Component {
     }
   };
 
+  onPinNumberPressed = number => {
+    this.setPinNumber(number);
+  };
+
   getPinArray = () => {
     return Range(0, 4)
       .map(function(num) {
@@ -34,21 +38,6 @@ class PinView extends Component {
         };
       })
       .toJS();
-  };
-
-  validate = pins => {
-    const pinString = Immutable.fromJS(pins).reduce((v, s) => {
-      return v + s.get('value');
-    }, '');
-
-    // If matching pin
-    if (pinString === this.props.matchingPin) {
-      this.props.onPinMatched();
-    } else {
-      this.setState({
-        error: true,
-      });
-    }
   };
 
   setPinNumber = number => {
@@ -71,14 +60,27 @@ class PinView extends Component {
     }
   };
 
+  validate = pins => {
+    const pinString = Immutable.fromJS(pins).reduce((v, s) => {
+      return v + s.get('value');
+    }, '');
+
+    // If matching pin
+    if (pinString === this.props.matchingPin) {
+      this.props.onPinMatched();
+    } else {
+      this.setState({
+        error: true,
+      });
+    }
+  };
+
   resetPins = () => {
     const newPins = this.getPinArray();
     this.setState({ pins: newPins, error: false });
   };
 
-  onPinNumberPressed = number => {
-    this.setPinNumber(number);
-  };
+  keyExtractor = item => item.id;
 
   renderPinItem = item => {
     return (
@@ -101,17 +103,15 @@ class PinView extends Component {
         <Text style={Styles.text}>Version {packageInfo.version}</Text>
         <Text style={Styles.text}>Enter Your Pin</Text>
         <View style={Styles.pinContainer}>
-          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal={true} keyExtractor={this.keyExtractor} />
+          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal keyExtractor={this.keyExtractor} />
         </View>
         {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
         <View style={Styles.pinPadContainer}>
-          <NumberPad numColumns={3} supportHighlight={false} supportReset={true} onNumberPressed={this.onPinNumberPressed} numberHeight={100} />
+          <NumberPad numColumns={3} supportHighlight={false} supportReset onNumberPressed={this.onPinNumberPressed} numberHeight={100} />
         </View>
       </ImageBackground>
     );
   };
-
-  keyExtractor = item => item.id;
 }
 
 PinView.propTypes = {

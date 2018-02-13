@@ -2,10 +2,9 @@
 
 import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { DefaultColor } from '../../style';
 import { Menu } from '../menu';
-import { connect } from 'react-redux';
 
 class MenusNavigationTabContainer extends Component {
   static navigationOptions = ({ screenProps }) => ({

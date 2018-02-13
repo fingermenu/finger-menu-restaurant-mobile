@@ -6,6 +6,8 @@ import { DefaultColor } from '../../style/DefaultStyles';
 import Styles from './Styles';
 
 export default class CheckBox extends Component {
+  onChange = () => this.props.input.onChange(!this.props.input.value);
+
   render = () => {
     const { input, ...rest } = this.props;
 
@@ -23,6 +25,4 @@ export default class CheckBox extends Component {
       />
     );
   };
-
-  onChange = () => this.props.input.onChange(!this.props.input.value);
 }

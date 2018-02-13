@@ -7,6 +7,6 @@ export const ChoiceItemPriceProp = PropTypes.shape({
   name: PropTypes.string.isRequired,
   priceToDisplay: PropTypes.string,
   type: PropTypes.string.isRequired,
-}).isRequired;
+});
 
-export const ChoiceItemPricesProp = PropTypes.arrayOf(ChoiceItemPriceProp).isRequired;
+export const ChoiceItemPricesProp = PropTypes.arrayOf(ChoiceItemPriceProp);

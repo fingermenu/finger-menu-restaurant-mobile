@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import OrderConfirmedView from './OrderConfirmedView';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import OrderConfirmedView from './OrderConfirmedView';
 
 class OrderConfirmedContainer extends Component {
   onAddMoreOrdersPressed = () => {

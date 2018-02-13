@@ -26,6 +26,40 @@ class NumberPad extends Component {
     };
   }
 
+  onNumberPressed = id => {
+    if (id < 0) {
+      return;
+    }
+
+    this.updateIndex(id);
+    this.props.onNumberPressed(id);
+  };
+
+  updateIndex = id => {
+    this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
+  };
+
+  compareNumbers = (num1, num2) => {
+    if (num1 === num2) {
+      return 0;
+    } else if (num1 > num2) {
+      return 1;
+    }
+
+    return -1;
+  };
+
+  keyExtractor = item => item.get('id');
+
+  renderNumber = item => (
+    <Number
+      item={item.item.toJS()}
+      numberHeight={this.props.numberHeight}
+      supportHighlight={this.props.supportHighlight}
+      onNumberPressed={this.onNumberPressed}
+    />
+  );
+
   render = () => {
     const { isHorizontal, numColumns, supportReset, maxNumber } = this.props;
     let numbers;
@@ -60,40 +94,6 @@ class NumberPad extends Component {
       </View>
     );
   };
-
-  keyExtractor = item => item.get('id');
-
-  compareNumbers = (num1, num2) => {
-    if (num1 === num2) {
-      return 0;
-    } else if (num1 > num2) {
-      return 1;
-    }
-
-    return -1;
-  };
-
-  updateIndex = id => {
-    this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
-  };
-
-  onNumberPressed = id => {
-    if (id < 0) {
-      return;
-    }
-
-    this.updateIndex(id);
-    this.props.onNumberPressed(id);
-  };
-
-  renderNumber = item => (
-    <Number
-      item={item.item.toJS()}
-      numberHeight={this.props.numberHeight}
-      supportHighlight={this.props.supportHighlight}
-      onNumberPressed={this.onNumberPressed}
-    />
-  );
 }
 
 NumberPad.propTypes = {

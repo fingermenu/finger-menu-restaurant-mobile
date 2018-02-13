@@ -1,7 +1,7 @@
 // @flow
 
-import ActionTypes from './ActionTypes';
 import uuid from 'uuid/v4';
+import ActionTypes from './ActionTypes';
 
 export function setOrder(payload) {
   return {

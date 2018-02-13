@@ -1,21 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, FlatList } from 'react-native';
 import { Field } from 'redux-form';
 import Styles from './Styles';
-import PropTypes from 'prop-types';
 import { CheckBox } from '../../components/redux-form-components';
 import { ListItemSeparator } from '../list';
 
 class ChoiceItemsListView extends Component {
-  render = () => (
-    <View>
-      {this.renderSectionHeader('Would you like some sides?')}
-      <FlatList data={this.props.choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
-    </View>
-  );
-
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
@@ -36,10 +29,17 @@ class ChoiceItemsListView extends Component {
       <ListItemSeparator />
     </View>
   );
+
+  render = () => (
+    <View>
+      {this.renderSectionHeader('Would you like some sides?')}
+      <FlatList data={this.props.choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
+    </View>
+  );
 }
 
 ChoiceItemsListView.propTypes = {
-  choiceItemPrices: PropTypes.object.isRequired,
+  choiceItemPrices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default ChoiceItemsListView;

@@ -20,11 +20,6 @@ class OrderItemRow extends Component {
     this.state = { orderItem: Immutable.fromJS(props.orderItem) };
   }
 
-  shouldComponentUpdate = nextProps => {
-    const nextOrderItem = Immutable.fromJS(nextProps.orderItem);
-    return this.state.orderItem.get('id') === nextOrderItem.get('id');
-  };
-
   componentWillReceiveProps = nextProps => {
     const orderItem = Immutable.fromJS(nextProps.orderItem);
 
@@ -32,6 +27,23 @@ class OrderItemRow extends Component {
       this.setState({ orderItem });
     }
   };
+
+  shouldComponentUpdate = nextProps => {
+    const nextOrderItem = Immutable.fromJS(nextProps.orderItem);
+    return this.state.orderItem.get('id') === nextOrderItem.get('id');
+  };
+
+  onViewOrderItemPressed = () =>
+    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
+
+  onRemoveOrderPressed = () => this.props.onRemoveOrderPressed(this.props.orderItemId);
+
+  renderChoiceItems = choiceItems =>
+    choiceItems.map(choiceItem => (
+      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
+        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
+      </Text>
+    ));
 
   render = () => {
     return (
@@ -60,24 +72,12 @@ class OrderItemRow extends Component {
       </TouchableItem>
     );
   };
-
-  renderChoiceItems = choiceItems =>
-    choiceItems.map(choiceItem => (
-      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
-        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
-      </Text>
-    ));
-
-  onViewOrderItemPressed = () =>
-    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
-
-  onRemoveOrderPressed = () => this.props.onRemoveOrderPressed(this.props.orderItemId);
 }
 
 OrderItemRow.propTypes = {
   orderItem: OrderItemDetailProp.isRequired,
   orderItemId: PropTypes.string.isRequired,
-  menuItem: PropTypes.object.isRequired,
+  menuItem: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   menuItemCurrentPrice: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,

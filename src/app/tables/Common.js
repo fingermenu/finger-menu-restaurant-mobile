@@ -5,17 +5,17 @@ import Styles from './Styles';
 export default class Common {
   static getTableStyle = tableState => {
     switch (tableState) {
-      case 'taken':
-        return Styles.tableBadgeTaken;
+    case 'taken':
+      return Styles.tableBadgeTaken;
 
-      case 'empty':
-        return Styles.tableBadgeEmpty;
+    case 'empty':
+      return Styles.tableBadgeEmpty;
 
-      case 'reserved':
-        return Styles.tableBadgeReserve;
+    case 'reserved':
+      return Styles.tableBadgeReserve;
 
-      case 'paid':
-        return Styles.tableBadgePaid;
+    case 'paid':
+      return Styles.tableBadgePaid;
     }
   };
 }

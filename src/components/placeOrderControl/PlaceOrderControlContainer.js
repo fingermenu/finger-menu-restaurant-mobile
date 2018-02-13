@@ -2,9 +2,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PlaceOrderControlView from './PlaceOrderControlView';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import PlaceOrderControlView from './PlaceOrderControlView';
 
 class PlaceOrderControlContainer extends Component {
   onPlaceOrderPressed = () => {

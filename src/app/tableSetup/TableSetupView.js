@@ -22,7 +22,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
           <Icon name="human-handsdown" size={35} type="material-community" />
         </View>
         <View style={Styles.valueContainer}>
-          <Field name="numberOfAdults" component={NumberPad} isHorizontal={true} maxNumber={16} />
+          <Field name="numberOfAdults" component={NumberPad} isHorizontal maxNumber={16} />
         </View>
       </View>
       <View style={Styles.tableTextContainer}>
@@ -30,7 +30,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
           <Icon name="human-child" size={35} type="material-community" />
         </View>
         <View style={Styles.valueContainer}>
-          <Field name="numberOfChildren" component={NumberPad} isHorizontal={true} maxNumber={10} />
+          <Field name="numberOfChildren" component={NumberPad} isHorizontal maxNumber={10} />
         </View>
       </View>
       <View style={Styles.tableTextContainer}>

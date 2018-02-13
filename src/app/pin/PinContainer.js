@@ -1,12 +1,12 @@
 // @flow
 
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { NavigationActions } from 'react-navigation';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
-import PinView from './PinView';
 import { bindActionCreators } from 'redux';
+import PinView from './PinView';
 
 class PinContainer extends Component {
   componentWillMount = () => {

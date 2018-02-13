@@ -16,7 +16,7 @@ class SplashContainer extends Component {
 }
 
 SplashContainer.propTypes = {
-  userAccessActions: PropTypes.object.isRequired,
+  userAccessActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   getCurrentUserStatus: PropTypes.number.isRequired,
 };
 

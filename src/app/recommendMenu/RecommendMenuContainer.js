@@ -53,7 +53,7 @@ class RecommendMenuContainer extends Component {
 }
 
 RecommendMenuContainer.propTypes = {
-  menuItems: MenuItemsProp,
+  menuItems: MenuItemsProp.isRequired,
 };
 
 function mapStateToProps() {

@@ -7,12 +7,16 @@ import { MenuItemsProp } from '../menu/PropTypes';
 import RecommendMenuItem from './RecommendMenuItem';
 
 class RecommendMenuView extends Component {
+  keyExtractor = item => item.id;
+
+  renderItem = info => <RecommendMenuItem menuItem={info.item} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />;
+
   render = () => {
     return (
       <View>
         <Text>Recommend menus</Text>
         <FlatList
-          horizontal={true}
+          horizontal
           data={this.props.recommendMenuItems}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
@@ -23,14 +27,10 @@ class RecommendMenuView extends Component {
       </View>
     );
   };
-
-  keyExtractor = item => item.id;
-
-  renderItem = info => <RecommendMenuItem menuItem={info.item} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />;
 }
 
 RecommendMenuView.propTypes = {
-  recommendMenuItems: MenuItemsProp,
+  recommendMenuItems: MenuItemsProp.isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   isFetchingTop: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,

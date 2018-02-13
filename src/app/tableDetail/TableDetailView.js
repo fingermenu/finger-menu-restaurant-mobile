@@ -4,13 +4,26 @@ import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import PropTypes from 'prop-types';
+import { Badge, Button, Icon } from 'react-native-elements';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
-import { Badge, Button, Icon } from 'react-native-elements';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { TableProp } from '../tables/PropTypes';
 
 class TableDetailView extends Component {
+  keyExtractor = item => item.id;
+
+  renderItem = info => (
+    <OrderItemRow
+      orderItem={info.item}
+      orderItemId={this.props.order.id}
+      menuItem={info.item.menuItemPrice.menuItem}
+      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+    />
+  );
+
   render = () => {
     return (
       <View style={Styles.container}>
@@ -58,23 +71,10 @@ class TableDetailView extends Component {
       </View>
     );
   };
-
-  keyExtractor = item => item.id;
-
-  renderItem = info => (
-    <OrderItemRow
-      orderItem={info.item}
-      orderItemId={this.props.order.id}
-      menuItem={info.item.menuItemPrice.menuItem}
-      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-    />
-  );
 }
 
 TableDetailView.propTypes = {
-  table: TableProp,
+  table: TableProp.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,

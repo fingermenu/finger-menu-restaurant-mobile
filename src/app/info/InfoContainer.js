@@ -1,12 +1,8 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import InfoView from './InfoView';
 
-class InfoContainer extends Component {
-  render = () => {
-    return <InfoView />;
-  };
-}
+const InfoContainer = () => <InfoView />;
 
 export default InfoContainer;

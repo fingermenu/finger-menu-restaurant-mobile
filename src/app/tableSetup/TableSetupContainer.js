@@ -1,13 +1,13 @@
 // @flow
 
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
-import TableSetupView from './TableSetupView';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import TableSetupView from './TableSetupView';
 import * as OrdersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
@@ -21,19 +21,6 @@ class TableSetupContainer extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
-  };
-
-  updateTable = (value, tableStateKey) => {
-    UpdateTable.commit(
-      Environment,
-      this.props.userId,
-      this.props.table.id,
-      tableStateKey,
-      value.numberOfAdults,
-      value.numberOfChildren,
-      value.name,
-      value.notes,
-    );
   };
 
   onSetupTablePressed = value => {
@@ -60,6 +47,19 @@ class TableSetupContainer extends Component {
   onReserveTablePressed = value => {
     this.updateTable(value, 'reserved');
     this.props.goBack();
+  };
+
+  updateTable = (value, tableStateKey) => {
+    UpdateTable.commit(
+      Environment,
+      this.props.userId,
+      this.props.table.id,
+      tableStateKey,
+      value.numberOfAdults,
+      value.numberOfChildren,
+      value.name,
+      value.notes,
+    );
   };
 
   render = () => (

@@ -3,13 +3,28 @@
 import React, { Component } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import OrderItemRow from './OrderItemRow';
 import { Button } from 'react-native-elements';
+import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor } from '../../style';
 
 class OrdersView extends Component {
+  keyExtractor = item => item.orderItemId;
+
+  renderItem = info => (
+    <OrderItemRow
+      orderItem={info.item.data}
+      orderItemId={info.item.orderItemId}
+      menuItem={info.item.data.menuItem}
+      menuItemCurrentPrice={info.item.data.currentPrice}
+      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+    />
+  );
+
+  renderSeparator = () => <ListItemSeparator />;
+
   render = () => {
     return (
       <View style={Styles.container}>
@@ -36,21 +51,6 @@ class OrdersView extends Component {
       </View>
     );
   };
-
-  keyExtractor = item => item.orderItemId;
-
-  renderItem = info => (
-    <OrderItemRow
-      orderItem={info.item.data}
-      orderItemId={info.item.orderItemId}
-      menuItem={info.item.data.menuItem}
-      menuItemCurrentPrice={info.item.data.currentPrice}
-      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-    />
-  );
-
-  renderSeparator = () => <ListItemSeparator />;
 }
 
 OrdersView.propTypes = {

@@ -1,13 +1,12 @@
 // @flow
 
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { environment } from '../../framework/relay';
 import { graphql, QueryRenderer } from 'react-relay';
-import { LoadingInProgress } from '@microbusiness/common-react-native';
-import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import MenuItemRelayContainer from './MenuItemRelayContainer';
+import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 
 class MenuItem extends Component {
@@ -17,25 +16,6 @@ class MenuItem extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
-  };
-
-  render = () => {
-    return (
-      <QueryRenderer
-        environment={environment}
-        query={graphql`
-          query MenuItemQuery($menuItemPriceId: ID!) {
-            user {
-              ...MenuItemRelayContainer_user
-            }
-          }
-        `}
-        variables={{
-          menuItemPriceId: this.props.menuItemPriceId,
-        }}
-        render={this.renderRelayComponent}
-      />
-    );
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -56,11 +36,34 @@ class MenuItem extends Component {
 
     return <LoadingInProgress />;
   };
+
+  render = () => {
+    return (
+      <QueryRenderer
+        environment={environment}
+        query={graphql`
+          query MenuItemQuery($menuItemPriceId: ID!) {
+            user {
+              ...MenuItemRelayContainer_user
+            }
+          }
+        `}
+        variables={{
+          menuItemPriceId: this.props.menuItemPriceId,
+        }}
+        render={this.renderRelayComponent}
+      />
+    );
+  };
 }
 
 MenuItem.propTypes = {
   menuItemPriceId: PropTypes.string.isRequired,
   orderItemId: PropTypes.string,
+};
+
+MenuItem.defaultProps = {
+  orderItemId: null,
 };
 
 function mapStateToProps(state, props) {

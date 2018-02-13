@@ -1,14 +1,14 @@
 // @flow
 
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import PropTypes from 'prop-types';
 import MenuView from './MenuView';
 import * as OrdersActions from '../orders/Actions';
-import { Map } from 'immutable';
 
 class MenuContainer extends Component {
   state = {
@@ -85,24 +85,24 @@ class MenuContainer extends Component {
 
 MenuContainer.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.object).isRequired,
-  ordersActions: PropTypes.object.isRequired,
+  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 function mapStateToProps(state) {
   const orders = state.order.getIn(['tableOrder', 'details']).isEmpty()
     ? []
     : state.order
-        .getIn(['tableOrder', 'details'])
-        .toSeq()
-        .mapEntries(([key, value]) => [
-          key,
-          {
-            data: value.toJS(),
-            orderItemId: key,
-          },
-        ])
-        .toList()
-        .toJS();
+      .getIn(['tableOrder', 'details'])
+      .toSeq()
+      .mapEntries(([key, value]) => [
+        key,
+        {
+          data: value.toJS(),
+          orderItemId: key,
+        },
+      ])
+      .toList()
+      .toJS();
 
   return {
     table: state.asyncStorage.getIn(['keyValues', 'servingTable']),

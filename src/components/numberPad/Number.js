@@ -7,6 +7,12 @@ import { Avatar } from 'react-native-elements';
 import Styles from './Styles';
 
 class Number extends Component {
+  onNumberPressed = () => {
+    const { item: { id }, onNumberPressed } = this.props;
+
+    onNumberPressed(id);
+  };
+
   render = () => {
     const { item: { name, isSelected }, numberHeight, supportHighlight } = this.props;
 
@@ -25,12 +31,6 @@ class Number extends Component {
       </View>
     );
   };
-
-  onNumberPressed = () => {
-    const { item: { id }, onNumberPressed } = this.props;
-
-    onNumberPressed(id);
-  };
 }
 
 Number.propTypes = {
@@ -38,7 +38,7 @@ Number.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     isSelected: PropTypes.bool.isRequired,
-  }),
+  }).isRequired,
   numberHeight: PropTypes.number.isRequired,
   supportHighlight: PropTypes.bool.isRequired,
   onNumberPressed: PropTypes.func.isRequired,

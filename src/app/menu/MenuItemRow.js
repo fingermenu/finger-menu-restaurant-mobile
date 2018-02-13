@@ -21,10 +21,6 @@ class MenuItemRow extends Component {
     this.state = { menuItemPrice: Immutable.fromJS(props.menuItemPrice) };
   }
 
-  shouldComponentUpdate = nextProps => {
-    return this.state.menuItemPrice.equals(Immutable.fromJS(nextProps.menuItemPrice));
-  };
-
   componentWillReceiveProps = nextProps => {
     const menuItemPrice = Immutable.fromJS(nextProps.menuItemPrice);
 
@@ -32,6 +28,12 @@ class MenuItemRow extends Component {
       this.setState({ menuItemPrice });
     }
   };
+
+  shouldComponentUpdate = nextProps => {
+    return this.state.menuItemPrice.equals(Immutable.fromJS(nextProps.menuItemPrice));
+  };
+
+  onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 
   render = () => {
     return (
@@ -66,8 +68,6 @@ class MenuItemRow extends Component {
       </TouchableItem>
     );
   };
-
-  onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 }
 
 MenuItemRow.propTypes = {

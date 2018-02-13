@@ -1,12 +1,11 @@
 // @flow
 
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
+import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { environment } from '../../framework/relay';
-import { graphql, QueryRenderer } from 'react-relay';
-import { LoadingInProgress } from '@microbusiness/common-react-native';
-import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
 import { DefaultColor } from '../../style';
 import TablesRelayContainer from './TablesRelayContainer';
 import { HeaderContainer } from '../../components/header/';
@@ -20,6 +19,18 @@ class Tables extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
   });
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <TablesRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
+  };
 
   render() {
     return (
@@ -41,18 +52,6 @@ class Tables extends Component {
       />
     );
   }
-
-  renderRelayComponent = ({ error, props, retry }) => {
-    if (error) {
-      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-    }
-
-    if (props) {
-      return <TablesRelayContainer user={props.user} />;
-    }
-
-    return <LoadingInProgress />;
-  };
 }
 
 Tables.propTypes = {

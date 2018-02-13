@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { TextInput as ExistingTextInput, View } from 'react-native';
 
 export default class TextInput extends Component {
+  onBlur = event => this.props.input.onBlur(event.nativeEvent.text);
+
   render = () => {
     const { input, ...rest } = this.props;
 
@@ -13,6 +15,4 @@ export default class TextInput extends Component {
       </View>
     );
   };
-
-  onBlur = event => this.props.input.onBlur(event.nativeEvent.text);
 }

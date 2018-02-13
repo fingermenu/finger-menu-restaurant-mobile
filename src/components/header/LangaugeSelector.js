@@ -1,15 +1,19 @@
 // @flow
 
+import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { TouchableItem } from '@microbusiness/common-react-native';
-import { DefaultColor } from '../../style';
 import { Avatar } from 'react-native-elements';
+import { DefaultColor } from '../../style';
 import { ImageUtility } from '../image';
 import Styles from './Styles';
 
 class LanguageSelector extends Component {
+  changeLanguage = () => {
+    this.props.changeLanguage(this.props.language);
+  };
+
   render = () => {
     const { isSelected, language } = this.props;
 
@@ -32,10 +36,6 @@ class LanguageSelector extends Component {
         </View>
       </TouchableItem>
     );
-  };
-
-  changeLanguage = () => {
-    this.props.changeLanguage(this.props.language);
   };
 }
 

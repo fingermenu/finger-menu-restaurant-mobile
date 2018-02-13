@@ -11,6 +11,24 @@ import Styles from './Styles';
 import Common from './Common';
 
 class TablesView extends Component {
+  keyExtractor = item => item.id;
+
+  renderItem = item => <TableView table={item.item} onTablePressed={this.props.onTablePressed} />;
+
+  renderBadgeSummaryItem = item => {
+    const style = Common.getTableStyle(item.key);
+
+    return (
+      <Badge
+        value={item.key + ' ' + item.count}
+        textStyle={Styles.tableText}
+        component={TouchableNative}
+        containerStyle={[Styles.tableBadgeContainer, style]}
+        wrapperStyle={Styles.tableBadgeWrapper}
+      />
+    );
+  };
+
   render = () => {
     const { t } = this.props;
     const groupedTables = Immutable.fromJS(this.props.tables)
@@ -51,24 +69,6 @@ class TablesView extends Component {
           })}
         </View>
       </View>
-    );
-  };
-
-  keyExtractor = item => item.id;
-
-  renderItem = item => <TableView table={item.item} onTablePressed={this.props.onTablePressed} />;
-
-  renderBadgeSummaryItem = item => {
-    const style = Common.getTableStyle(item.key);
-
-    return (
-      <Badge
-        value={item.key + ' ' + item.count}
-        textStyle={Styles.tableText}
-        component={TouchableNative}
-        containerStyle={[Styles.tableBadgeContainer, style]}
-        wrapperStyle={Styles.tableBadgeWrapper}
-      />
     );
   };
 }

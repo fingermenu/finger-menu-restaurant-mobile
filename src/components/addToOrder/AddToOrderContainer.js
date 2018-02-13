@@ -2,34 +2,16 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import OrderFooterView from './AddToOrderView';
 import { Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as OrdersActions from '../../app/orders/Actions';
 import { NavigationActions } from 'react-navigation';
+import OrderFooterView from './AddToOrderView';
+import * as OrdersActions from '../../app/orders/Actions';
 import { MenuItemPriceProp } from '../../app/menuItem/PropTypes';
 import { OrderItemProp } from '../../app/orders/PropTypes';
 
 class AddToOrderContainer extends Component {
-  getSelectedChoiceItemPrices = choiceItems => {
-    let choiceItemPriceList = List();
-
-    for (let itemId in choiceItems) {
-      if (choiceItems[itemId]) {
-        choiceItemPriceList = choiceItemPriceList.push(
-          Map({
-            choiceItemPriceId: itemId,
-            choiceItemPrice: this.props.menuItemPrice.choiceItemPrices.filter(c => c.id === itemId)[0],
-            quantity: 1,
-          }),
-        );
-      }
-    }
-
-    return choiceItemPriceList;
-  };
-
   onAddMenuItemToOrder = choiceItems => {
     this.props.OrdersActions.addOrderItem(
       Map({
@@ -60,6 +42,24 @@ class AddToOrderContainer extends Component {
     this.props.goBack();
   };
 
+  getSelectedChoiceItemPrices = choiceItems => {
+    let choiceItemPriceList = List();
+
+    for (let itemId in choiceItems) {
+      if (choiceItems[itemId]) {
+        choiceItemPriceList = choiceItemPriceList.push(
+          Map({
+            choiceItemPriceId: itemId,
+            choiceItemPrice: this.props.menuItemPrice.choiceItemPrices.filter(c => c.id === itemId)[0],
+            quantity: 1,
+          }),
+        );
+      }
+    }
+
+    return choiceItemPriceList;
+  };
+
   render = () => {
     return (
       <OrderFooterView
@@ -75,13 +75,13 @@ class AddToOrderContainer extends Component {
 
 AddToOrderContainer.propTypes = {
   orderQuantity: PropTypes.number.isRequired,
-  menuItemPrice: MenuItemPriceProp,
+  menuItemPrice: MenuItemPriceProp.isRequired,
   restaurantId: PropTypes.string.isRequired,
   tableId: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
   customerNotes: PropTypes.string.isRequired,
-  order: OrderItemProp,
-  OrdersActions: PropTypes.object.isRequired,
+  order: OrderItemProp.isRequired,
+  OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
 };
 

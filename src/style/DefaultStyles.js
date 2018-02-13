@@ -1,7 +1,6 @@
 // @flow
 
-import { Platform } from 'react-native';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;

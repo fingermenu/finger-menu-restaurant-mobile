@@ -9,6 +9,8 @@ import { TableProp } from './PropTypes';
 import Common from './Common';
 
 class TableView extends Component {
+  onTablePressed = () => this.props.onTablePressed(this.props.table);
+
   render = () => {
     const { table: { name, numberOfAdults, numberOfChildren, customerName, tableState } } = this.props;
     const style = Common.getTableStyle(tableState ? tableState.key : 'empty');
@@ -36,8 +38,6 @@ class TableView extends Component {
       </View>
     );
   };
-
-  onTablePressed = () => this.props.onTablePressed(this.props.table);
 }
 
 TableView.propTypes = {

@@ -1,21 +1,30 @@
 // @flow
 
+import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { TouchableItem } from '@microbusiness/common-react-native';
 import Styles from './Styles';
 
 class AddToOrderView extends Component {
+  onUpdateOrder = () => {
+    this.props.handleSubmit(this.props.updateOrderPressed);
+  };
+
+  onAddOrder = () => {
+    this.props.handleSubmit(this.props.addToOrderPressed);
+  };
+
   render = () => {
-    return this.props.isUpdatingOrder ? (
-      <TouchableItem onPress={this.props.handleSubmit(this.props.updateOrderPressed)} style={Styles.container}>
+    const { isUpdatingOrder, orderQuantity } = this.props;
+
+    return isUpdatingOrder ? (
+      <TouchableItem onPress={this.onUpdateOrder} style={Styles.container}>
         <Text style={Styles.text}>Update Order</Text>
       </TouchableItem>
     ) : (
-      <TouchableItem onPress={this.props.handleSubmit(this.props.addToOrderPressed)} style={Styles.container}>
-        <Text style={Styles.text}>ADD {this.props.orderQuantity} TO ORDER</Text>
+      <TouchableItem onPress={this.onAddOrder} style={Styles.container}>
+        <Text style={Styles.text}>ADD {orderQuantity} TO ORDER</Text>
       </TouchableItem>
     );
   };

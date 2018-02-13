@@ -2,14 +2,14 @@
 
 import React, { Component } from 'react';
 import { Text, View, Image, ScrollView } from 'react-native';
+import PropTypes from 'prop-types';
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
 import { ChoiceItemsContainer } from '../../components/choiceItems';
 import { AddToOrderContainer } from '../../components/addToOrder';
 import QuantityControl from '../../components/quantityControl/QuantityControl';
-import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
 import { DefaultStyles } from '../../style';
 
 class MenuItemView extends Component {
@@ -20,6 +20,16 @@ class MenuItemView extends Component {
   componentWillMount = () => {
     if (this.props.order) {
       this.setState({ quantity: this.props.order.quantity });
+    }
+  };
+
+  onQuantityIncrease = () => {
+    this.setState({ quantity: this.state.quantity + 1 });
+  };
+
+  onQuantityDecrease = () => {
+    if (this.state.quantity > 1) {
+      this.setState({ quantity: this.state.quantity - 1 });
     }
   };
 
@@ -52,22 +62,17 @@ class MenuItemView extends Component {
       </View>
     );
   };
-
-  onQuantityIncrease = () => {
-    this.setState({ quantity: this.state.quantity + 1 });
-  };
-
-  onQuantityDecrease = () => {
-    if (this.state.quantity > 1) {
-      this.setState({ quantity: this.state.quantity - 1 });
-    }
-  };
 }
 
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
-  order: PropTypes.object,
+  order: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   orderItemId: PropTypes.string,
+};
+
+MenuItemView.defaultProps = {
+  order: null,
+  orderItemId: null,
 };
 
 function mapStateToProps(state, props) {

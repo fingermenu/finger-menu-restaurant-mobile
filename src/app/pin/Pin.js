@@ -1,26 +1,38 @@
 // @flow
 
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import { bindActionCreators } from 'redux';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
-import { environment } from '../../framework/relay';
 import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
-import { LoadingInProgress } from '@microbusiness/common-react-native';
-import { ErrorMessageWithRetry } from '@microbusiness/common-react-native';
+import { environment } from '../../framework/relay';
 import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
-import { Map } from 'immutable';
-import { bindActionCreators } from 'redux';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 
 class Pin extends Component {
   static navigationOptions = () => ({
     header: null,
   });
+
   componentWillMount = () => {
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantName' }));
     this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+  };
+
+  renderRelayComponent = ({ error, props, retry }) => {
+    if (error) {
+      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+    }
+
+    if (props) {
+      return <PinRelayContainer user={props.user} />;
+    }
+
+    return <LoadingInProgress />;
   };
 
   render() {
@@ -51,18 +63,6 @@ class Pin extends Component {
       />
     );
   }
-
-  renderRelayComponent = ({ error, props, retry }) => {
-    if (error) {
-      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
-    }
-
-    if (props) {
-      return <PinRelayContainer user={props.user} />;
-    }
-
-    return <LoadingInProgress />;
-  };
 }
 
 function mapStateToProps(state) {

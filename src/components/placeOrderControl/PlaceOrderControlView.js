@@ -1,24 +1,19 @@
 // @flow
 
-import React, { Component } from 'react';
+import { TouchableItem } from '@microbusiness/common-react-native';
+import React from 'react';
 import { Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { TouchableItem } from '@microbusiness/common-react-native';
 import Styles from './Styles';
 
-class PlaceOrderControlView extends Component {
-  render = () => {
-    return (
-      <TouchableItem onPress={this.props.placeOrderPressed} style={Styles.container}>
-        <View style={Styles.textContainer}>
-          <Text style={Styles.text}>View Order</Text>
-          <Text style={Styles.text}> {this.props.totalOrderQuantity} Items</Text>
-        </View>
-      </TouchableItem>
-    );
-  };
-}
+const PlaceOrderControlView = ({ placeOrderPressed, totalOrderQuantity }) => (
+  <TouchableItem onPress={placeOrderPressed} style={Styles.container}>
+    <View style={Styles.textContainer}>
+      <Text style={Styles.text}>View Order</Text>
+      <Text style={Styles.text}> {totalOrderQuantity} Items</Text>
+    </View>
+  </TouchableItem>
+);
 
 PlaceOrderControlView.propTypes = {
   placeOrderPressed: PropTypes.func.isRequired,

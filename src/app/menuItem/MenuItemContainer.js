@@ -1,21 +1,10 @@
 // @flow
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import MenuItemView from './MenuItemView';
 
-class MenuItemContainer extends Component<any, Props, State> {
-  render = () => {
-    return <MenuItemView menuItemPrice={this.props.user.menuItemPrice} order={this.props.order} orderItemId={this.props.orderItemId} />;
-  };
-}
+const MenuItemContainer = ({ user: { menuItemPrice }, order, orderItemId }) => (
+  <MenuItemView menuItemPrice={menuItemPrice} order={order} orderItemId={orderItemId} />
+);
 
-MenuItemContainer.propTypes = {
-  // menuItem: MenuItemProp,
-};
-
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps)(MenuItemContainer);
+export default MenuItemContainer;

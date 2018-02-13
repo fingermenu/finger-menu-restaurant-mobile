@@ -1,4 +1,6 @@
 // @flow
+
+/* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';

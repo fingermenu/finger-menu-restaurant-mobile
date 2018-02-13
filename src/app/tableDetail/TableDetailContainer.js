@@ -1,9 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import TableDetailView from './TableDetailView';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import TableDetailView from './TableDetailView';
 import { TableProp } from '../tables/PropTypes';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
@@ -36,7 +36,7 @@ class TableDetailContainer extends Component {
 }
 
 TableDetailContainer.propTypes = {
-  table: TableProp,
+  table: TableProp.isRequired,
 };
 
 function mapStateToProps(state, props) {
