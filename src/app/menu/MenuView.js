@@ -11,27 +11,6 @@ import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
-  getTotalOrderQuantity = () => {
-    return Immutable.fromJS(this.props.orders).reduce((total, value) => {
-      return total + value.getIn(['data', 'quantity']);
-    }, 0);
-  };
-
-  renderItemSeparator = () => {
-    return <ListItemSeparator />;
-  };
-  renderRow = info => {
-    return <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />;
-  };
-
-  hasOrdered = item => {
-    return Immutable.fromJS(this.props.orders).findIndex(order => order.getIn(['data', 'menuItemPriceId']) === item.id) >= 0;
-  };
-
-  keyExtractor = item => {
-    return item.id;
-  };
-
   render = () => {
     return (
       <View style={Styles.container}>
@@ -48,6 +27,22 @@ class MenuView extends Component {
       </View>
     );
   };
+
+  getTotalOrderQuantity = () => {
+    return Immutable.fromJS(this.props.orders).reduce((total, value) => {
+      return total + value.getIn(['data', 'quantity']);
+    }, 0);
+  };
+
+  renderItemSeparator = () => <ListItemSeparator />;
+
+  renderRow = info => (
+    <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />
+  );
+
+  hasOrdered = item => Immutable.fromJS(this.props.orders).findIndex(order => order.getIn(['data', 'menuItemPriceId']) === item.id) >= 0;
+
+  keyExtractor = item => item.id;
 }
 
 MenuView.propTypes = {

@@ -15,7 +15,7 @@ class OrderItemRow extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onViewOrderItemPressed = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
+    this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
 
     this.state = { orderItem: Immutable.fromJS(props.orderItem) };
   }
@@ -69,7 +69,7 @@ class OrderItemRow extends Component {
     ));
 
   onViewOrderItemPressed = () =>
-    this.props.onViewOrderItemPressed(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
+    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
 
   onRemoveOrderPressed = () => this.props.onRemoveOrderPressed(this.props.orderItemId);
 }

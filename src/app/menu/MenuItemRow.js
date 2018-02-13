@@ -16,7 +16,7 @@ class MenuItemRow extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onViewMenuItemPressed = debounce(this.props.onViewMenuItemPressed, config.navigationDelay);
+    this.onViewMenuItemPressedDebounced = debounce(this.props.onViewMenuItemPressed, config.navigationDelay);
 
     this.state = { menuItemPrice: Immutable.fromJS(props.menuItemPrice) };
   }
@@ -67,7 +67,7 @@ class MenuItemRow extends Component {
     );
   };
 
-  onViewMenuItemPressed = () => this.props.onViewMenuItemPressed(this.props.menuItemPrice.id);
+  onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 }
 
 MenuItemRow.propTypes = {
