@@ -479,6 +479,7 @@ type Table implements Node {
   numberOfChildren: Int
   customerName: String
   notes: String
+  sortOrderIndex: Int
   tableState: TableState
 }
 
