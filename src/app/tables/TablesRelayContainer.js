@@ -27,6 +27,7 @@ export default createPaginationContainer(
               numberOfChildren
               customerName
               notes
+              sortOrderIndex
             }
           }
         }

@@ -15,8 +15,23 @@ class TablesContainer extends Component {
     }
   };
 
+  compareNumbers = (num1, num2) => {
+    if (num1 === num2) {
+      return 0;
+    } else if (num1 > num2) {
+      return 1;
+    }
+
+    return -1;
+  };
+
   render = () => {
-    return <TablesView tables={this.props.user.tables.edges.map(_ => _.node)} onTablePressed={this.onTablePressed} />;
+    return (
+      <TablesView
+        tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => this.compareNumbers(node1.sortOrderIndex, node2.sortOrderIndex))}
+        onTablePressed={this.onTablePressed}
+      />
+    );
   };
 }
 
