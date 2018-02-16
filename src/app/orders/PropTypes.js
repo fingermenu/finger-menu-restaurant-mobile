@@ -11,7 +11,7 @@ export const OrderItemDetailProp = PropTypes.shape({
   menuItemPriceId: PropTypes.string,
   orderChoiceItemPrices: PropTypes.arrayOf(ExtraOption),
   quantity: PropTypes.number,
-}).isRequired;
+});
 
 export const OrderItemProp = PropTypes.shape({
   orderItemId: PropTypes.string.isRequired,
