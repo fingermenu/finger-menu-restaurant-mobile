@@ -11,7 +11,7 @@ import { DefaultColor, DefaultStyles } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
-  keyExtractor = item => item.id;
+  keyExtractor = item => this.props.order.details.findIndex(_ => _ == item).toString();
 
   renderItem = info => {
     const { order, onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
