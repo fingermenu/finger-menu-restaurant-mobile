@@ -12,14 +12,8 @@ export default createPaginationContainer(
           id
           name
           tableState {
-            id
-            key
             name
           }
-          numberOfAdults
-          numberOfChildren
-          customerName
-          notes
         }
         orders(
           first: $count

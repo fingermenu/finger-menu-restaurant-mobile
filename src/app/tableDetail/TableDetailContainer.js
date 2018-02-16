@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import TableDetailView from './TableDetailView';
-import { TableProp } from '../tables/PropTypes';
+import { TableProp } from './PropTypes';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
@@ -23,10 +23,12 @@ class TableDetailContainer extends Component {
   };
 
   render = () => {
+    const { table, order } = this.props;
+
     return (
       <TableDetailView
-        table={this.props.table}
-        order={this.props.order}
+        table={table}
+        order={order}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         onResetTablePressed={this.onResetTablePressed}

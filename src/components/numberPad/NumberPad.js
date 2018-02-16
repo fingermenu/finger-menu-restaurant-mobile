@@ -49,7 +49,7 @@ class NumberPad extends Component {
     return -1;
   };
 
-  keyExtractor = item => item.get('id');
+  keyExtractor = item => item.get('id').toString();
 
   renderNumber = item => (
     <Number

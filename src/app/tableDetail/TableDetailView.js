@@ -8,44 +8,50 @@ import { Badge, Button, Icon } from 'react-native-elements';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { TableProp } from '../tables/PropTypes';
+import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
   keyExtractor = item => item.id;
 
-  renderItem = info => (
-    <OrderItemRow
-      orderItem={info.item}
-      orderItemId={this.props.order.id}
-      menuItem={info.item.menuItemPrice.menuItem}
-      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-    />
-  );
+  renderItem = info => {
+    const { order, onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
+
+    return (
+      <OrderItemRow
+        orderItem={info.item}
+        orderItemId={order.id}
+        menuItem={info.item.menuItemPrice.menuItem}
+        menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+        onViewOrderItemPressed={onViewOrderItemPressed}
+        onRemoveOrderPressed={onRemoveOrderPressed}
+      />
+    );
+  };
 
   render = () => {
+    const { table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop, onResetTablePressed } = this.props;
+
     return (
       <View style={Styles.container}>
         <View style={Styles.headerContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>Table : {this.props.table.name}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>Table : {name}</Text>
           <Badge
-            value="Taken"
+            value={tableState.name}
             textStyle={Styles.tableText}
             component={TouchableNative}
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={DefaultStyles.primaryTitleFont}>${this.props.order ? this.props.order.totalPrice : 0}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>${order ? order.totalPrice : 0}</Text>
         </View>
-        {this.props.order && this.props.order.details ? (
+        {order && order.details ? (
           <FlatList
-            data={this.props.order.details}
+            data={order.details}
             renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
-            onEndReached={this.props.onEndReached}
-            onRefresh={this.props.onRefresh}
-            refreshing={this.props.isFetchingTop}
+            onEndReached={onEndReached}
+            onRefresh={onRefresh}
+            refreshing={isFetchingTop}
           />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
@@ -55,7 +61,7 @@ class TableDetailView extends Component {
 
         <View style={Styles.buttonsContainer}>
           <Button title="Set paid" backgroundColor={DefaultColor.defaultButtonColor} />
-          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.props.onResetTablePressed} />
+          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={onResetTablePressed} />
         </View>
         <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50}>
           <ActionButton.Item buttonColor="#9b59b6" title="Drink">
