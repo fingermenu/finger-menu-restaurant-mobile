@@ -3,9 +3,11 @@
 import React, { Component } from 'react';
 import Immutable from 'immutable';
 import PropTypes from 'prop-types';
-import { FlatList, Text, View, TouchableNative } from 'react-native';
-import { Badge } from 'react-native-elements';
+import { FlatList, Text, View } from 'react-native';
+import { TouchableItem } from '@microbusiness/common-react-native';
+import { Avatar } from 'react-native-elements';
 import { translate } from 'react-i18next';
+import { ImageUtility } from '../../components/image';
 import TableView from './TableView';
 import Styles from './Styles';
 import Common from './Common';
@@ -19,13 +21,18 @@ class TablesView extends Component {
     const style = Common.getTableStyle(item.key);
 
     return (
-      <Badge
-        value={item.key + ' ' + item.count}
-        textStyle={Styles.tableText}
-        component={TouchableNative}
-        containerStyle={[Styles.tableBadgeContainer, style]}
-        wrapperStyle={Styles.tableBadgeWrapper}
-      />
+      <TouchableItem
+        accessibilityComponentType="button"
+        accessibilityTraits="button"
+        delayPressIn={0}
+        // pressColor={Color.touchableIconPressColor}
+        borderless
+      >
+        <View style={Styles.tableSummaryContainer}>
+          <Avatar rounded large overlayContainerStyle={style} source={ImageUtility.getImageSource(item.key)} activeOpacity={0.7} />
+          <Text>{item.count}</Text>
+        </View>
+      </TouchableItem>
     );
   };
 

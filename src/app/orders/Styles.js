@@ -11,12 +11,21 @@ export default StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
   },
+  orderRowContainer: {
+    padding: 15,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+  },
   rowTextContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: 10,
+  },
+  emptyOrdersContainer: {
+    paddingTop: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   quantity: {
     fontSize: 18,

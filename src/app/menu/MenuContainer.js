@@ -1,7 +1,6 @@
 // @flow
 
 import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
-import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
@@ -13,12 +12,6 @@ import * as OrdersActions from '../orders/Actions';
 class MenuContainer extends Component {
   state = {
     isFetchingTop: false,
-  };
-
-  componentWillMount = () => {
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableId' }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerName' }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes' }));
   };
 
   onViewMenuItemPressed = menuItemPriceId => {

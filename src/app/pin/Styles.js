@@ -3,11 +3,12 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
+  container: {
+    backgroundColor: '#24232D',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   pinViewContainer: {
     flex: 1,
     justifyContent: 'center',

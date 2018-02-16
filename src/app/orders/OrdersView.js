@@ -1,13 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
+import ActionButton from 'react-native-action-button';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
-import { DefaultColor } from '../../style';
+import { DefaultColor, DefaultStyles } from '../../style';
 
 class OrdersView extends Component {
   keyExtractor = item => item.orderItemId;
@@ -29,19 +30,39 @@ class OrdersView extends Component {
     return (
       <View style={Styles.container}>
         <View style={Styles.headerContainer}>
-          <Text>Table # 3</Text>
-          <Text>Your Orders</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>
+            Table {this.props.tableName} {this.props.customerName}
+          </Text>
+          <Text style={DefaultStyles.primaryLabelFont}>Your Orders</Text>
         </View>
 
-        <FlatList
-          data={this.props.orders}
-          renderItem={this.renderItem}
-          keyExtractor={this.keyExtractor}
-          onEndReached={this.props.onEndReached}
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.isFetchingTop}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
+        {this.props.orders.length > 0 ? (
+          <FlatList
+            data={this.props.orders}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
+            onEndReached={this.props.onEndReached}
+            onRefresh={this.props.onRefresh}
+            refreshing={this.props.isFetchingTop}
+            ItemSeparatorComponent={this.renderSeparator}
+          />
+        ) : (
+          <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
+            <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
+          </ScrollView>
+        )}
+
+        <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} offsetY={60}>
+          <ActionButton.Item buttonColor="#9b59b6" title="Drink">
+            <Icon name="md-create" type="ionicon" style={Styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor="#3498db" title="Desert">
+            <Icon name="md-notifications-off" type="ionicon" style={Styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor="#1abc9c" title="Kids">
+            <Icon name="md-done-all" type="ionicon" style={Styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
         <Button
           title="Confirm Order"
           icon={{ name: 'md-checkmark', type: 'ionicon' }}
@@ -58,6 +79,8 @@ OrdersView.propTypes = {
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,
+  tableName: PropTypes.string.isRequired,
+  customerName: PropTypes.string.isRequired,
 };
 
 export default OrdersView;

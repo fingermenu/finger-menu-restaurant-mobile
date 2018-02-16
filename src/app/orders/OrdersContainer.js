@@ -79,6 +79,8 @@ class OrdersContainer extends Component {
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
+        tableName={this.props.tableName}
+        customerName={this.props.customerName}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.OnRefresh}
         onEndReached={this.OnEndReached}
@@ -92,6 +94,8 @@ OrdersContainer.propTypes = {
   OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
+  tableName: PropTypes.string.isRequired,
+  customerName: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -114,6 +118,8 @@ function mapStateToProps(state) {
     orders: orders,
     tableOrder: state.order.get('tableOrder'),
     userId: state.userAccess.get('userInfo').get('id'),
+    tableName: state.asyncStorage.getIn(['keyValues', 'servingTableName']),
+    customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
   };
 }
 

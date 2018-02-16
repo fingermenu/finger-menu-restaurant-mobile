@@ -48,7 +48,7 @@ class OrderItemRow extends Component {
   render = () => {
     return (
       <TouchableItem onPress={this.onViewOrderItemPressed}>
-        <View style={[DefaultStyles.rowContainer, { padding: 15 }]}>
+        <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
           <View style={Styles.quantityContainer}>
             <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
           </View>

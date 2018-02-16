@@ -14,6 +14,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tableSummaryContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+  },
   tableOuterContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -50,7 +55,7 @@ export default StyleSheet.create({
     backgroundColor: 'orange',
   },
   tableBadgePaid: {
-    backgroundColor: 'blue',
+    backgroundColor: '#8AC8F5',
   },
   tableBadgeWrapper: {
     paddingLeft: 20,

@@ -29,6 +29,7 @@ class TableSetupContainer extends Component {
 
     // Save the table into storage
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
+    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableName', value: this.props.table.name }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
     this.props.OrdersActions.setOrder(

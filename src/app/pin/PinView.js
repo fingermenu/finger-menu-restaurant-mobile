@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList, ImageBackground, Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import Immutable, { Range } from 'immutable';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
@@ -92,14 +92,7 @@ class PinView extends Component {
 
   render = () => {
     return (
-      <ImageBackground
-        blurRadius={0.4}
-        style={Styles.pinViewContainer}
-        source={{
-          uri:
-            'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
-        }}
-      >
+      <View style={Styles.container}>
         <Text style={Styles.text}>Version {packageInfo.version}</Text>
         <Text style={Styles.text}>Enter Your Pin</Text>
         <View style={Styles.pinContainer}>
@@ -109,7 +102,7 @@ class PinView extends Component {
         <View style={Styles.pinPadContainer}>
           <NumberPad numColumns={3} supportHighlight={false} supportReset onNumberPressed={this.onPinNumberPressed} numberHeight={100} />
         </View>
-      </ImageBackground>
+      </View>
     );
   };
 }

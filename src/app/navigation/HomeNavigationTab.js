@@ -53,6 +53,7 @@ const tabConfig = {
   lazy: true,
   tabBarOptions: {
     showIcon: true,
+    showLabel: false,
     tabStyle: {
       height: 49,
     },
