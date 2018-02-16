@@ -2,12 +2,12 @@
 
 import React from 'react';
 import ChoiceItemsListView from './ChoiceItemsListView';
-import { ChoiceItemPriceProp } from './PropTypes';
+import { ChoiceItemPricesProp } from './PropTypes';
 
 const ChoiceItemsContainer = ({ choiceItemPrices }) => <ChoiceItemsListView choiceItemPrices={choiceItemPrices} />;
 
 ChoiceItemsContainer.propTypes = {
-  choiceItemPrices: ChoiceItemPriceProp.isRequired,
+  choiceItemPrices: ChoiceItemPricesProp.isRequired,
 };
 
 export default ChoiceItemsContainer;

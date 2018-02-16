@@ -9,7 +9,6 @@ import { NavigationActions } from 'react-navigation';
 import OrderFooterView from './AddToOrderView';
 import * as OrdersActions from '../../app/orders/Actions';
 import { MenuItemPriceProp } from '../../app/menuItem/PropTypes';
-import { OrderItemProp } from '../../app/orders/PropTypes';
 
 class AddToOrderContainer extends Component {
   onAddMenuItemToOrder = choiceItems => {
@@ -80,7 +79,6 @@ AddToOrderContainer.propTypes = {
   tableId: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
   customerNotes: PropTypes.string.isRequired,
-  order: OrderItemProp.isRequired,
   OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
 };

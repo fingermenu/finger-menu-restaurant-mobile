@@ -1,12 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { View, Text, FlatList } from 'react-native';
 import { Field } from 'redux-form';
 import Styles from './Styles';
 import { CheckBox } from '../../components/redux-form-components';
 import { ListItemSeparator } from '../list';
+import { ChoiceItemPricesProp } from './PropTypes';
 
 class ChoiceItemsListView extends Component {
   keyExtractor = item => item.id;
@@ -39,7 +39,7 @@ class ChoiceItemsListView extends Component {
 }
 
 ChoiceItemsListView.propTypes = {
-  choiceItemPrices: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  choiceItemPrices: ChoiceItemPricesProp.isRequired,
 };
 
 export default ChoiceItemsListView;
