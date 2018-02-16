@@ -80,7 +80,7 @@ class PinView extends Component {
     this.setState({ pins: newPins, error: false });
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => item.id.toString();
 
   renderPinItem = item => {
     return (
