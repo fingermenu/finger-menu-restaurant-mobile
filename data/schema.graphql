@@ -83,6 +83,7 @@ type ChoiceItemPrice implements Node {
   validUntil: String
   choiceItem: ChoiceItem
   size: Size
+  sortOrderIndex: Int
 }
 
 # A connection to a list of items.
@@ -167,6 +168,7 @@ type Menu implements Node {
   description: String
   menuPageUrl: String
   imageUrl: String
+  sortOrderIndex: Int
   menuItemPrices: [MenuItemPrice!]
   tags: [Tag!]
 }
@@ -188,6 +190,7 @@ type MenuItemPrice implements Node {
   validUntil: String
   menuItem: MenuItem
   size: Size
+  sortOrderIndex: Int
   toBeServedWithMenuItemPrices: [BeServedWithMenuItemPrice!]
   choiceItemPrices: [ChoiceItemPrice!]
 }
