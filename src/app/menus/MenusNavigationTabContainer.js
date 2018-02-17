@@ -1,8 +1,10 @@
 // @flow
 
+import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
+import int from 'int';
 import { DefaultColor } from '../../style';
 import { Menu } from '../menu';
 
@@ -11,24 +13,24 @@ class MenusNavigationTabContainer extends Component {
     tabBarLabel: screenProps.t('home.label'),
   });
 
-  getMenusScreens = () => {
-    let MenusScreens = {};
+  getMenusScreens = () =>
+    Immutable.fromJS(this.props.menus)
+      .sort((menu1, menu2) => int(menu1.get('sortOrderIndex')).cmp(menu2.get('sortOrderIndex')))
+      .reduce(
+        (reduction, menu) =>
+          reduction.set(menu.get('id'), {
+            screen: props => <Menu {...props} menuId={menu.get('id')} />,
+            navigationOptions: {
+              tabBarLabel: menu.get('name'),
+              headerStyle: {
+                backgroundColor: DefaultColor.defaultBannerColor,
+              },
+            },
+          }),
 
-    for (let i = 0; i < this.props.menus.length; i++) {
-      const menu = this.props.menus[i];
-      MenusScreens[menu.id] = {
-        screen: props => <Menu {...props} menuId={menu.id} />,
-        navigationOptions: {
-          tabBarLabel: menu.name,
-          headerStyle: {
-            backgroundColor: DefaultColor.defaultBannerColor,
-          },
-        },
-      };
-    }
-
-    return MenusScreens;
-  };
+        Map(),
+      )
+      .toJS();
 
   getMenusTabConfig = () => {
     const MenusTabConfig = {
@@ -60,6 +62,7 @@ class MenusNavigationTabContainer extends Component {
 
   render = () => {
     const MenuNavigationTab = TabNavigator(this.getMenusScreens(), this.getMenusTabConfig());
+
     return <MenuNavigationTab />;
   };
 }

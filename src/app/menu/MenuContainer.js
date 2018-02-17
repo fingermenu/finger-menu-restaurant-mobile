@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import int from 'int';
 import MenuView from './MenuView';
 import * as OrdersActions from '../orders/Actions';
 
@@ -62,8 +63,9 @@ class MenuContainer extends Component {
   render = () => {
     return (
       <MenuView
-        // menuItems={this.props.menuItems}
-        menuItemPrices={this.props.user.menuItemPrices.edges.map(_ => _.node)}
+        menuItemPrices={this.props.user.menuItemPrices.edges
+          .map(_ => _.node)
+          .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
         orders={this.props.orders}
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}

@@ -17,6 +17,7 @@ export default createPaginationContainer(
             node {
               id
               currentPrice
+              sortOrderIndex
               menuItem {
                 id
                 name

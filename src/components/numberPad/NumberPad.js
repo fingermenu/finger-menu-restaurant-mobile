@@ -4,6 +4,7 @@ import { Map, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
+import int from 'int';
 import Styles from './Styles';
 import Number from './Number';
 
@@ -39,16 +40,6 @@ class NumberPad extends Component {
     this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
   };
 
-  compareNumbers = (num1, num2) => {
-    if (num1 === num2) {
-      return 0;
-    } else if (num1 > num2) {
-      return 1;
-    }
-
-    return -1;
-  };
-
   keyExtractor = item => item.get('id').toString();
 
   renderNumber = item => (
@@ -71,7 +62,7 @@ class NumberPad extends Component {
 
       numbers = this.state.numbers
         .filterNot(val => val.get('id') === number0.get('id') || val.get('id') === button0.get('id') || val.get('id') === button1.get('id'))
-        .sort((val1, val2) => this.compareNumbers(val1.get('id'), val2.get('id')))
+        .sort((val1, val2) => int(val1.get('id')).cmp(val2.get('id')))
         .toList()
         .push(button0)
         .push(number0)
@@ -79,7 +70,7 @@ class NumberPad extends Component {
         .toArray();
     } else {
       numbers = this.state.numbers
-        .sort((val1, val2) => this.compareNumbers(val1.get('id'), val2.get('id')))
+        .sort((val1, val2) => int(val1.get('id')).cmp(val2.get('id')))
         .valueSeq()
         .toArray();
     }

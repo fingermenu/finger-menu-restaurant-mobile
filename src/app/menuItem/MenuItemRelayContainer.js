@@ -21,6 +21,7 @@ export default createFragmentContainer(
           choiceItemPrices {
             id
             currentPrice
+            sortOrderIndex
             choiceItem {
               description
               id

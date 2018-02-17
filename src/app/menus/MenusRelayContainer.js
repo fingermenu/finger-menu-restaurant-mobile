@@ -12,6 +12,7 @@ export default createFragmentContainer(
           menus {
             id
             name
+            sortOrderIndex
           }
         }
       }
