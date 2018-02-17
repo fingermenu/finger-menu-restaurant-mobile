@@ -1,6 +1,6 @@
 // @flow
 
-import Immutable, { Map } from 'immutable';
+import Immutable, { OrderedMap } from 'immutable';
 import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ class MenusNavigationTabContainer extends Component {
             },
           }),
 
-        Map(),
+        OrderedMap(),
       )
       .toJS();
 
