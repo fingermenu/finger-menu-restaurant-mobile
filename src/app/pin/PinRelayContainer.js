@@ -32,6 +32,10 @@ export default createPaginationContainer(
                   primaryTopBannerImageUrl
                   secondaryTopBannerImageUrl
                 }
+                documentTemplates {
+                  name
+                  template
+                }
               }
             }
           }
