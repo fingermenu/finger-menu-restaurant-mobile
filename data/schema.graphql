@@ -127,6 +127,11 @@ input DateRange {
   to: String!
 }
 
+type DocumentTemplate {
+  name: String
+  template: String!
+}
+
 type GeoLocation {
   latitude: Float
   longitude: Float
@@ -420,6 +425,7 @@ type Restaurant implements Node {
 type RestaurantConfigurations {
   images: RestaurantImages
   printers: [Printer!]
+  documentTemplates: [DocumentTemplate!]
 }
 
 type RestaurantImages {
