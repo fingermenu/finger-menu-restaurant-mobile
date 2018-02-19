@@ -39,9 +39,9 @@ class OrdersContainer extends Component {
       .update('details', detail => detail.map(_ => _.update('orderChoiceItemPrices', choice => choice.map(oc => oc.delete('choiceItemPrice')))))
       .toJS();
 
-    PlaceOrder.commit(Environment, this.props.userId, orders);
-
-    this.props.navigateToOrderConfirmed();
+    PlaceOrder.commit(Environment, this.props.userId, orders, () => {
+      this.props.navigateToOrderConfirmed();
+    });
   };
 
   onRemoveOrderPressed = orderItemId => {
@@ -116,6 +116,12 @@ function mapStateToProps(state) {
       .toList()
       .toJS();
 
+  const restaurantConfigurations = JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']));
+  const printerConfig = restaurantConfigurations.printers[0];
+  const kitchenOrderTemplate = restaurantConfigurations.documentTemplates.filter(
+    documentTemplate => documentTemplate.name.localeCompare('KitchenOrder') === 0,
+  );
+
   return {
     orders: orders,
     tableOrder: state.order.get('tableOrder'),
@@ -123,6 +129,8 @@ function mapStateToProps(state) {
     tableName: state.asyncStorage.getIn(['keyValues', 'servingTableName']),
     customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    printerConfig,
+    kitchenOrderTemplate,
   };
 }
 
