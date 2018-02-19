@@ -39,6 +39,6 @@ export default StyleSheet.create({
   },
   price: {
     fontSize: 20,
-    color: '#4CC0B6',
+    color: DefaultColor.secondaryFontColor,
   },
 });

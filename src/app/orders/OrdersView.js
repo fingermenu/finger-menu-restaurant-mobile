@@ -3,12 +3,12 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'react-native-elements';
-import ActionButton from 'react-native-action-button';
+import { Button } from 'react-native-elements';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles } from '../../style';
+import { MenuActionButton } from '../../components/menuActionButton';
 
 class OrdersView extends Component {
   keyExtractor = item => item.orderItemId;
@@ -51,18 +51,7 @@ class OrdersView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
           </ScrollView>
         )}
-
-        <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} offsetY={60}>
-          <ActionButton.Item buttonColor="#9b59b6" title="Drink">
-            <Icon name="md-create" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor="#3498db" title="Desert">
-            <Icon name="md-notifications-off" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor="#1abc9c" title="Kids">
-            <Icon name="md-done-all" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-        </ActionButton>
+        <MenuActionButton restaurantId={this.props.restaurantId} />
         <Button
           title="Confirm Order"
           icon={{ name: 'md-checkmark', type: 'ionicon' }}
@@ -81,6 +70,7 @@ OrdersView.propTypes = {
   onConfirmOrderPressed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
+  restaurantId: PropTypes.string.isRequired,
 };
 
 export default OrdersView;

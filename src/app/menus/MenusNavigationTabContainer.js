@@ -37,6 +37,7 @@ class MenusNavigationTabContainer extends Component {
       lazy: true,
       tabBarPosition: 'top',
       ...TabNavigator.Presets.AndroidTopTabs,
+      initialRouteName: this.props.menuId,
       tabBarOptions: {
         scrollEnabled: true,
         showIcon: false,
@@ -74,6 +75,7 @@ MenusNavigationTabContainer.propTypes = {
 function mapStateToProps(state, props) {
   return {
     menus: props.user.restaurant.menus,
+    menuId: state.navigation.routes[0].routes[0].params ? state.navigation.routes[0].routes[0].params.menuId : undefined,
   };
 }
 

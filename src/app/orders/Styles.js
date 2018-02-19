@@ -30,7 +30,7 @@ export default StyleSheet.create({
   quantity: {
     fontSize: 18,
     fontWeight: '600',
-    color: DefaultColor.defaultThemeColor,
+    color: DefaultColor.secondaryFontColor,
   },
   quantityContainer: {
     flex: 10,
@@ -50,6 +50,7 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   price: {
-    fontSize: 14,
+    fontSize: 20,
+    color: DefaultColor.secondaryFontColor,
   },
 });

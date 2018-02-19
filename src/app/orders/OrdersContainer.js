@@ -81,6 +81,7 @@ class OrdersContainer extends Component {
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         tableName={this.props.tableName}
         customerName={this.props.customerName}
+        restaurantId={this.props.restaurantId}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.OnRefresh}
         onEndReached={this.OnEndReached}
@@ -96,6 +97,7 @@ OrdersContainer.propTypes = {
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
+  restaurantId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -120,6 +122,7 @@ function mapStateToProps(state) {
     userId: state.userAccess.get('userInfo').get('id'),
     tableName: state.asyncStorage.getIn(['keyValues', 'servingTableName']),
     customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
+    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }
 
