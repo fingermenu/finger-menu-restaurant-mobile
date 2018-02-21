@@ -7,12 +7,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import OrderFooterView from './AddToOrderView';
-import * as OrdersActions from '../../app/orders/Actions';
+import * as ordersActions from '../../app/orders/Actions';
 import { MenuItemPriceProp } from '../../app/menuItem/PropTypes';
 
 class AddToOrderContainer extends Component {
   onAddMenuItemToOrder = choiceItems => {
-    this.props.OrdersActions.addOrderItem(
+    this.props.ordersActions.addOrderItem(
       Map({
         menuItemPriceId: this.props.menuItemPrice.id,
         currentPrice: this.props.menuItemPrice.currentPrice,
@@ -26,7 +26,7 @@ class AddToOrderContainer extends Component {
 
   onUpdateOrder = choiceItems => {
     if (this.props.orderItemId) {
-      this.props.OrdersActions.updateOrderItem(
+      this.props.ordersActions.updateOrderItem(
         Map({
           orderItemId: this.props.orderItemId,
           currentPrice: this.props.menuItemPrice.currentPrice,
@@ -79,7 +79,7 @@ AddToOrderContainer.propTypes = {
   tableId: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
   customerNotes: PropTypes.string.isRequired,
-  OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
 };
 
@@ -97,7 +97,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     goBack: () => dispatch(NavigationActions.back()),
-    OrdersActions: bindActionCreators(OrdersActions, dispatch),
+    ordersActions: bindActionCreators(ordersActions, dispatch),
   };
 }
 

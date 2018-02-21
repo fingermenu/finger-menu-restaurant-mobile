@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
 import MenuView from './MenuView';
-import * as OrdersActions from '../orders/Actions';
+import * as ordersActions from '../orders/Actions';
 
 class MenuContainer extends Component {
   state = {
@@ -108,7 +108,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
-    ordersActions: bindActionCreators(OrdersActions, dispatch),
+    ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToMenuItem: menuItemPriceId =>
       dispatch(
         NavigationActions.navigate({

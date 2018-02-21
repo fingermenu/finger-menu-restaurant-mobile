@@ -1,5 +1,6 @@
 // @flow
 
+import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -7,7 +8,7 @@ import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import OrdersView from './OrdersView';
-import * as OrdersActions from './Actions';
+import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
@@ -47,7 +48,7 @@ class OrdersContainer extends Component {
   };
 
   onRemoveOrderPressed = orderItemId => {
-    this.props.OrdersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
+    this.props.ordersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
   };
 
   onRefresh = () => {
@@ -94,7 +95,8 @@ class OrdersContainer extends Component {
 
 OrdersContainer.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.object).isRequired,
-  OrdersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
@@ -138,7 +140,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    OrdersActions: bindActionCreators(OrdersActions, dispatch),
+    ordersActions: bindActionCreators(ordersActions, dispatch),
+    escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
     navigateToMenuItem: (menuItemPriceId, order, orderItemId) =>
       dispatch(
         NavigationActions.navigate({

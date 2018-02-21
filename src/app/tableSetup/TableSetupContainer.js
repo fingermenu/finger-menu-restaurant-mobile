@@ -8,7 +8,7 @@ import { translate } from 'react-i18next';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import TableSetupView from './TableSetupView';
-import * as OrdersActions from '../../app/orders/Actions';
+import * as ordersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
@@ -32,7 +32,7 @@ class TableSetupContainer extends Component {
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableName', value: this.props.table.name }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
     this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
-    this.props.OrdersActions.setOrder(
+    this.props.ordersActions.setOrder(
       Map({
         restaurantId: this.props.restaurantId,
         tableId: this.props.table.id,
@@ -84,7 +84,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
-    OrdersActions: bindActionCreators(OrdersActions, dispatch),
+    ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToAppHome: () =>
       dispatch(
         NavigationActions.reset({
