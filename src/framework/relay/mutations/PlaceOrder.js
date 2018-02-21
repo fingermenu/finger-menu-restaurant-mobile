@@ -15,6 +15,22 @@ const mutation = graphql`
         cursor
         node {
           placedAt
+          details {
+            menuItemPrice {
+              menuItem {
+                name
+              }
+            }
+            quantity
+            orderChoiceItemPrices {
+              choiceItemPrice {
+                choiceItem {
+                  name
+                }
+              }
+              quantity
+            }
+          }
         }
       }
     }

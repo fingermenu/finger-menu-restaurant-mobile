@@ -3,6 +3,7 @@
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import React, { Component } from 'react';
 import { Map } from 'immutable';
+import { DateTimeFormatter } from 'js-joda';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
@@ -42,7 +43,29 @@ class OrdersContainer extends Component {
       )
       .toJS();
 
-    PlaceOrder.commit(Environment, this.props.userId, orders, () => {
+    const { tableName } = this.props;
+
+    PlaceOrder.commit(Environment, this.props.userId, orders, placedAt => {
+      const { kitchenOrderTemplate } = this.props;
+
+      if (kitchenOrderTemplate) {
+        const { printerConfig: { hostname, port } } = this.props;
+
+        this.props.escPosPrinterActions.printDocument(
+          Map({
+            hostname,
+            port,
+            documentContent: kitchenOrderTemplate
+              .replace('\r', '')
+              .replace('\n', '')
+              .replace(/{CR}/g, '\r')
+              .replace(/{LF}/g, '\n')
+              .replace(/{OrderDateTime}/g, placedAt.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
+              .replace('{TableName}', tableName),
+          }),
+        );
+      }
+
       this.props.navigateToOrderConfirmed();
     });
   };
@@ -102,6 +125,11 @@ OrdersContainer.propTypes = {
   tableName: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
+  kitchenOrderTemplate: PropTypes.string,
+};
+
+OrdersContainer.defaultProps = {
+  kitchenOrderTemplate: null,
 };
 
 function mapStateToProps(state) {
@@ -122,7 +150,7 @@ function mapStateToProps(state) {
 
   const restaurantConfigurations = JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']));
   const printerConfig = restaurantConfigurations.printers[0];
-  const kitchenOrderTemplate = restaurantConfigurations.documentTemplates.filter(
+  const kitchenOrderTemplate = restaurantConfigurations.documentTemplates.find(
     documentTemplate => documentTemplate.name.localeCompare('KitchenOrder') === 0,
   );
 
@@ -134,7 +162,7 @@ function mapStateToProps(state) {
     customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
     printerConfig,
-    kitchenOrderTemplate,
+    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.template : null,
   };
 }
 
