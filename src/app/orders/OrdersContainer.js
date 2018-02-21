@@ -35,8 +35,10 @@ class OrdersContainer extends Component {
     const orders = this.props.tableOrder
       .set('totalPrice', totalPrice)
       .set('details', this.props.tableOrder.get('details').valueSeq())
-      .update('details', detail => detail.map(_ => _.delete('menuItem').delete('currentPrice')))
-      .update('details', detail => detail.map(_ => _.update('orderChoiceItemPrices', choice => choice.map(oc => oc.delete('choiceItemPrice')))))
+      .update('details', details => details.map(_ => _.delete('menuItem').delete('currentPrice')))
+      .update('details', details =>
+        details.map(_ => _.update('orderChoiceItemPrices', orderChoiceItemPrices => orderChoiceItemPrices.map(oc => oc.delete('choiceItemPrice')))),
+      )
       .toJS();
 
     PlaceOrder.commit(Environment, this.props.userId, orders, () => {
