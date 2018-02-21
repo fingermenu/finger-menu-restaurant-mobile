@@ -1,7 +1,7 @@
 // @flow
 
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
@@ -17,10 +17,10 @@ class Pin extends Component {
   });
 
   componentWillMount = () => {
-    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantId' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'pin' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantName' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -77,7 +77,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
   };
 }
 

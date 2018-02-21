@@ -1,6 +1,6 @@
 // @flow
 
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -28,10 +28,10 @@ class TableSetupContainer extends Component {
     this.props.navigateToAppHome();
 
     // Save the table into storage
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingTableName', value: this.props.table.name }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'servingTableName', value: this.props.table.name }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
     this.props.ordersActions.setOrder(
       Map({
         restaurantId: this.props.restaurantId,
@@ -83,7 +83,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToAppHome: () =>
       dispatch(

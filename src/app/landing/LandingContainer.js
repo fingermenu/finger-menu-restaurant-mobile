@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import LandingView from './LandingView';
 
 class LandingContainer extends Component {
@@ -15,10 +15,10 @@ class LandingContainer extends Component {
   };
 
   componentWillMount = () => {
-    this.props.AsyncStorageActions.readValue(Map({ key: 'servingTableId' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'servingTableName' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'servingCustomerName' }));
-    this.props.AsyncStorageActions.readValue(Map({ key: 'servingCustomerNotes' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'servingTableId' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'servingTableName' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'servingCustomerName' }));
+    this.props.asyncStorageActions.readValue(Map({ key: 'servingCustomerNotes' }));
   };
 
   render = () => {
@@ -57,7 +57,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     navigateToMenu: () =>
       dispatch(
         NavigationActions.reset({

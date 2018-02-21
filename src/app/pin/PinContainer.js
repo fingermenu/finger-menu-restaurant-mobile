@@ -1,6 +1,6 @@
 // @flow
 
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
@@ -10,10 +10,10 @@ import PinView from './PinView';
 
 class PinContainer extends Component {
   componentWillMount = () => {
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
-    this.props.AsyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(this.props.restaurant.configurations) }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(this.props.restaurant.configurations) }));
   };
 
   onPinMatched = () => {
@@ -33,7 +33,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     navigateToTables: () =>
       dispatch(
         NavigationActions.reset({

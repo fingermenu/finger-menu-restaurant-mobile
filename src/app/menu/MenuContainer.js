@@ -1,6 +1,5 @@
 // @flow
 
-import * as AsyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
@@ -107,7 +106,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    AsyncStorageActions: bindActionCreators(AsyncStorageActions, dispatch),
     ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToMenuItem: menuItemPriceId =>
       dispatch(
