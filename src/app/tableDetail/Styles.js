@@ -1,6 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -43,5 +44,20 @@ export default StyleSheet.create({
     paddingTop: 200,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  resetTableDialogContainer: {
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  resetTableDialogButtonContainer: {
+    paddingTop: 20,
+  },
+  resetTableDialogText: {
+    justifyContent: 'center',
+  },
+  resetTableDialogButton: {
+    width: 70,
+    backgroundColor: DefaultColor.actionButtonColor,
   },
 });

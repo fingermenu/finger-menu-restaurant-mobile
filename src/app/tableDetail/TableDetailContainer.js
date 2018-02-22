@@ -22,6 +22,11 @@ class TableDetailContainer extends Component {
     this.props.goBack();
   };
 
+  onSetPaidPressed = () => {
+    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'paid', 0, 0, '', '');
+    this.props.goBack();
+  };
+
   render = () => {
     const { table, order } = this.props;
 
@@ -32,6 +37,7 @@ class TableDetailContainer extends Component {
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         onResetTablePressed={this.onResetTablePressed}
+        onSetPaidPressed={this.onSetPaidPressed}
       />
     );
   };

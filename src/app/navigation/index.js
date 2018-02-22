@@ -37,9 +37,10 @@ const AppNavigator = StackNavigator(
           enableCreateAccount={false}
           termAndConditionUrl="http://www.fingermenu.co.nz/terms"
           companyName="FingerMenu Ltd"
-          backgroundImageUrl="https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Fbackground_black.jpg?alt=media&token=3d708597-4084-4a64-9fa7-ced59cf9f245"
           labelTextColor="white"
           inputPlaceholderTextColor="white"
+          logoImageUrl="https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Ffingermenu-logo-3.png?alt=media&token=f86549d0-54ce-490e-a077-9800cc6b6a79"
+          backgroundColor="#24232D"
         />
       ),
       path: '/SignUpSignIn',
