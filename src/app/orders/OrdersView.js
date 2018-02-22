@@ -9,6 +9,7 @@ import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { MenuActionButton } from '../../components/menuActionButton';
+// import RemoveOrderPopupContainer from '../../components/removeOrderPopup/RemoveOrderPopupContainer';
 
 class OrdersView extends Component {
   keyExtractor = item => item.orderItemId;
@@ -20,7 +21,8 @@ class OrdersView extends Component {
       menuItem={info.item.data.menuItem}
       menuItemCurrentPrice={info.item.data.currentPrice}
       onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+      onRemoveOrderPressed={this.onRemoveOrderPressed}
+      popupDialog={this.popupDialog}
     />
   );
 
@@ -29,6 +31,9 @@ class OrdersView extends Component {
   render = () => {
     return (
       <View style={Styles.container}>
+        {/*{*/}
+        {/*this.props.orders.map(order => <RemoveOrderPopupContainer key={order.orderItemId} orderItemIdToRemove={order.orderItemId} onRemoveOrderPressed={this.props.onRemoveOrderPressed} />)*/}
+        {/*}*/}
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>
             Table {this.props.tableName} {this.props.customerName}
