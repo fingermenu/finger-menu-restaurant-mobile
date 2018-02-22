@@ -50,13 +50,14 @@ class OrdersContainer extends Component {
       const orderList = details.reduce((menuItemsDetail, detail) => {
         return (
           menuItemsDetail +
-          detail.get('name') +
-          '  x' +
+          'x' +
           detail.get('quantity') +
+          '  ' +
+          detail.get('name') +
           '\r\n' +
           detail
             .get('choiceItems')
-            .reduce((reduction, choiceItem) => reduction + '  ' + choiceItem.get('name') + '  x' + choiceItem.get('quantity') + '\r\n', '')
+            .reduce((reduction, choiceItem) => reduction + '  x' + choiceItem.get('quantity') + '  ' + choiceItem.get('name') + '\r\n', '')
         );
       }, '');
 
