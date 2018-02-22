@@ -1,5 +1,6 @@
 // @flow
 
+import Immutable, { Map } from 'immutable';
 import { commitMutation, graphql } from 'react-relay';
 import { ZonedDateTime, ZoneId } from 'js-joda';
 import { NotificationType } from '@microbusiness/common-react';
@@ -72,7 +73,35 @@ const commit = (
               .getValue('placedAt'),
           ).withZoneSameInstant(ZoneId.SYSTEM);
 
-          onSuccess(placedAt);
+          const details = Immutable.fromJS(
+            payload
+              .getLinkedRecord('order')
+              .getLinkedRecord('node')
+              .getLinkedRecords('details'),
+          ).map(detail => {
+            const menuItemName = detail
+              .getLinkedRecord('menuItemPrice')
+              .getLinkedRecord('menuItem')
+              .getValue('name');
+            const quantity = detail.getValue('quantity');
+            const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
+
+            return Map({
+              name: menuItemName,
+              quantity,
+              choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
+                const choiceItemName = orderChoiceItemPrice
+                  .getLinkedRecord('choiceItemPrice')
+                  .getLinkedRecord('choiceItem')
+                  .getValue('name');
+                const choiceItemQuantity = orderChoiceItemPrice.getValue('quantity');
+
+                return Map({ name: choiceItemName, quantity: choiceItemQuantity });
+              }),
+            });
+          });
+
+          onSuccess(placedAt, details);
         }
       }
     },

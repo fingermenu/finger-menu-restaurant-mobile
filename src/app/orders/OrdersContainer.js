@@ -45,8 +45,20 @@ class OrdersContainer extends Component {
 
     const { tableName } = this.props;
 
-    PlaceOrder.commit(Environment, this.props.userId, orders, placedAt => {
+    PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
       const { kitchenOrderTemplate } = this.props;
+      const orderList = details.reduce((menuItemsDetail, detail) => {
+        return (
+          menuItemsDetail +
+          detail.get('name') +
+          '  x' +
+          detail.get('quantity') +
+          '\r\n' +
+          detail
+            .get('choiceItems')
+            .reduce((reduction, choiceItem) => reduction + '  ' + choiceItem.get('name') + '  x' + choiceItem.get('quantity') + '\r\n', '')
+        );
+      }, '');
 
       if (kitchenOrderTemplate) {
         const { printerConfig: { hostname, port } } = this.props;
@@ -61,7 +73,8 @@ class OrdersContainer extends Component {
               .replace(/{CR}/g, '\r')
               .replace(/{LF}/g, '\n')
               .replace(/{OrderDateTime}/g, placedAt.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
-              .replace('{TableName}', tableName),
+              .replace(/{TableName}/g, tableName)
+              .replace(/{OrderList}/g, orderList),
           }),
         );
       }
