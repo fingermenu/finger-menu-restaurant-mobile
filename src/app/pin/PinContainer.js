@@ -10,10 +10,12 @@ import PinView from './PinView';
 
 class PinContainer extends Component {
   componentWillMount = () => {
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: this.props.restaurant.id }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: this.props.restaurant.pin }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: this.props.restaurant.name }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(this.props.restaurant.configurations) }));
+    const { restaurant: { id, name, pin, configurations } } = this.props;
+
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: name }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
   };
 
   onPinMatched = () => {

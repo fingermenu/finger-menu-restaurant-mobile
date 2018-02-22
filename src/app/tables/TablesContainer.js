@@ -1,13 +1,25 @@
 // @flow
 
+import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
 import TablesView from './TablesView';
 
 class TablesContainer extends Component {
+  componentWillMount = () => {
+    const { user: { restaurant: { id, name, pin, configurations } } } = this.props;
+
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: name }));
+    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
+  };
+
   onTablePressed = table => {
     if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
       this.props.navigateToTableSetup(table);
@@ -37,6 +49,7 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
+    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     navigateToTableSetup: table =>
       dispatch(
         NavigationActions.navigate({

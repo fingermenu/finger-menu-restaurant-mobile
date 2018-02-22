@@ -8,7 +8,29 @@ export default createPaginationContainer(
   {
     user: graphql`
       fragment TablesRelayContainer_user on User {
-        id
+        restaurant(restaurantId: $restaurantId) {
+          id
+          name
+          pin
+          configurations {
+            printers {
+              type
+              name
+              hostname
+              port
+            }
+            images {
+              primaryLandingPageBackgroundImageUrl
+              secondaryLandingPageBackgroundImageUrl
+              primaryTopBannerImageUrl
+              secondaryTopBannerImageUrl
+            }
+            documentTemplates {
+              name
+              template
+            }
+          }
+        }
         tables(first: $count, after: $cursor, restaurantId: $restaurantId) @connection(key: "User_tables") {
           pageInfo {
             hasNextPage
