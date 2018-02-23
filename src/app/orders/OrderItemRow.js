@@ -37,8 +37,7 @@ class OrderItemRow extends Component {
     this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
 
   onRemoveOrderPressed = () => {
-    // this.props.popupDialog.show();
-    //this.props.onRemoveOrderPressed(this.props.orderItemId);
+    this.props.onRemoveOrderPressed(this.props.orderItemId);
   };
 
   renderChoiceItems = choiceItems =>

@@ -1,25 +1,34 @@
 // @flow
 
 import React from 'react';
-import { ImageBackground, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Text, Image, View } from 'react-native';
+import { TouchableItem } from '@microbusiness/common-react-native';
 import Styles from './Styles';
 
 const OrderConfirmedView = ({ onAddMoreOrdersPressed }) => {
   return (
-    <ImageBackground
-      style={Styles.container}
-      source={{
-        uri:
-          'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
-      }}
-    >
+    <View style={Styles.container}>
+      <Image
+        style={Styles.topLogo}
+        source={{
+          uri:
+            'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Flogo.png?alt=media&token=8276c172-5f83-43b1-9a3f-f734138325f9',
+        }}
+      />
       <Text style={Styles.text}>
         Thank you! The kitchen staff have received your order and are now busy crafting your culinary delights. The waiting staff will collect your
         tablet shortly.
       </Text>
-      <Button title="A hidden button is coming..." onPress={onAddMoreOrdersPressed} />
-    </ImageBackground>
+      <TouchableItem onPress={onAddMoreOrdersPressed}>
+        <Image
+          style={Styles.image}
+          source={{
+            uri:
+              'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Ffingermenu-logo-3.png?alt=media&token=f86549d0-54ce-490e-a077-9800cc6b6a79',
+          }}
+        />
+      </TouchableItem>
+    </View>
   );
 };
 
