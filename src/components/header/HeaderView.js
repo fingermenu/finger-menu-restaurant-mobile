@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { View, ImageBackground } from 'react-native';
 import { DefaultStyles } from '../../style';
 import Styles from './Styles';
-import LangaugeSelector from './LangaugeSelector';
+import { LangaugeSelector } from '../languageSelector';
 import i18n from '../../i18n';
 
 const HeaderView = ({ changeLanguage }) => (
