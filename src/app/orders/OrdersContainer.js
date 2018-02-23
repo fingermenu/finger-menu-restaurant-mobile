@@ -13,7 +13,25 @@ import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
+const endingDots = '.';
+
 class OrdersContainer extends Component {
+  static alignTextsOnEachEdge = (leftStr, rightStr, width, padding = ' ') => {
+    if (leftStr.length + rightStr.length <= width - 1) {
+      return leftStr + Array(width - (leftStr.length + rightStr.length)).join(padding) + rightStr;
+    }
+
+    if (rightStr.length > width - 1) {
+      throw new Error('Can\'t fit the right text.');
+    }
+
+    if (leftStr.length + rightStr.length > width - 1 && rightStr.length > width - endingDots.length) {
+      throw new Error('Can\'t fit the right text.');
+    }
+
+    return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
+  };
+
   state = {
     isFetchingTop: false,
   };
@@ -50,14 +68,15 @@ class OrdersContainer extends Component {
       const orderList = details.reduce((menuItemsDetail, detail) => {
         return (
           menuItemsDetail +
-          'x' +
-          detail.get('quantity') +
-          '  ' +
-          detail.get('name') +
+          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString(), 48) +
           '\r\n' +
           detail
             .get('choiceItems')
-            .reduce((reduction, choiceItem) => reduction + '  x' + choiceItem.get('quantity') + '  ' + choiceItem.get('name') + '\r\n', '')
+            .reduce(
+              (reduction, choiceItem) =>
+                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString(), 48) + '\r\n',
+              '',
+            )
         );
       }, '');
 
