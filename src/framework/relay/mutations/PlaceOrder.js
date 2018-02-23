@@ -19,14 +19,14 @@ const mutation = graphql`
           details {
             menuItemPrice {
               menuItem {
-                name
+                nameToPrint
               }
             }
             quantity
             orderChoiceItemPrices {
               choiceItemPrice {
                 choiceItem {
-                  name
+                  nameToPrint
                 }
               }
               quantity
@@ -82,7 +82,7 @@ const commit = (
             const menuItemName = detail
               .getLinkedRecord('menuItemPrice')
               .getLinkedRecord('menuItem')
-              .getValue('name');
+              .getValue('nameToPrint');
             const quantity = detail.getValue('quantity');
             const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
 
@@ -93,7 +93,7 @@ const commit = (
                 const choiceItemName = orderChoiceItemPrice
                   .getLinkedRecord('choiceItemPrice')
                   .getLinkedRecord('choiceItem')
-                  .getValue('name');
+                  .getValue('nameToPrint');
                 const choiceItemQuantity = orderChoiceItemPrice.getValue('quantity');
 
                 return Map({ name: choiceItemName, quantity: choiceItemQuantity });

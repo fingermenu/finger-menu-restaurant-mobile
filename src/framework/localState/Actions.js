@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint-disable import/prefer-default-export */
+
 import ActionTypes from './ActionTypes';
 
 export function selectedLanguageChanged(selectedLanguage) {
