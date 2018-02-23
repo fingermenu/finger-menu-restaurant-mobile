@@ -2,12 +2,12 @@
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { DateTimeFormatter } from 'js-joda';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
+import { NavigationActions } from 'react-navigation';
 import OrdersView from './OrdersView';
 import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
