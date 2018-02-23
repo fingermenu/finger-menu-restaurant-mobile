@@ -62,7 +62,6 @@ class OrdersContainer extends Component {
       .toJS();
 
     const { tableName } = this.props;
-
     PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
       const { kitchenOrderTemplate } = this.props;
       const orderList = details.reduce((menuItemsDetail, detail) => {

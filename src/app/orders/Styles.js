@@ -53,4 +53,19 @@ export default StyleSheet.create({
     fontSize: 20,
     color: DefaultColor.secondaryFontColor,
   },
+  popupDialogContainer: {
+    padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popupDialogButtonContainer: {
+    paddingTop: 20,
+  },
+  popupDialogText: {
+    justifyContent: 'center',
+  },
+  popupDialogButton: {
+    width: 70,
+    backgroundColor: DefaultColor.actionButtonColor,
+  },
 });

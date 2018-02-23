@@ -1,10 +1,11 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: '#24232D',
+    backgroundColor: DefaultColor.primaryBackgroundColor,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

@@ -6,6 +6,10 @@ import { NavigationActions } from 'react-navigation';
 import OrderConfirmedView from './OrderConfirmedView';
 
 class OrderConfirmedContainer extends Component {
+  static navigationOptions = () => ({
+    header: null,
+  });
+
   onAddMoreOrdersPressed = () => {
     this.props.navigateToPn();
   };

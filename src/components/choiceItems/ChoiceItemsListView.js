@@ -32,7 +32,7 @@ class ChoiceItemsListView extends Component {
 
   render = () => (
     <View>
-      {this.renderSectionHeader('Would you like some sides?')}
+      {this.props.choiceItemPrices.length > 0 ? this.renderSectionHeader('Would you like some sides?') : <View />}
       <FlatList data={this.props.choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
     </View>
   );
