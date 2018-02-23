@@ -48,7 +48,6 @@ Menus.propTypes = {
 function mapStateToProps(state) {
   return {
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
-    selectedLanguage: state.localState.get('selectedLanguage'),
   };
 }
 
