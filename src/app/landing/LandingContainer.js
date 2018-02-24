@@ -28,7 +28,7 @@ class LandingContainer extends Component {
         restaurantSubTitle={this.props.restaurantSubTitle}
         welcomeText={this.props.welcomeText}
         openingHourText={this.props.openingHourText}
-        backgroundImageUrl={this.props.backgroundImageUrl}
+        backgroundImageUrl={this.props.restaurantConfigurations.images.primaryLandingPageBackgroundImageUrl}
         navigateToMenu={this.props.navigateToMenu}
       />
     );
@@ -50,8 +50,7 @@ function mapStateToProps(state) {
     restaurantSubTitle: 'Japanese Food & Bar',
     welcomeText: 'Traditional Japanese Food',
     openingHourText: 'Monday - Sunday\n11am - 2pm | 5pm - 10pm\n',
-    backgroundImageUrl:
-      'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Fcover.jpg?alt=media&token=0a3f9bc2-1d2d-48c4-9f32-8b2207c1c76b',
+    restaurantConfigurations: JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations'])),
   };
 }
 

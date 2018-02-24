@@ -15,7 +15,9 @@ class HeaderContainer extends Component {
   };
 
   render = () => {
-    return <HeaderView changeLanguage={this.changeLanguage} />;
+    return (
+      <HeaderView changeLanguage={this.changeLanguage} backgroundImageUrl={this.props.restaurantConfigurations.images.primaryTopBannerImageUrl} />
+    );
   };
 }
 
@@ -23,8 +25,10 @@ HeaderContainer.propTypes = {
   localStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    restaurantConfigurations: JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations'])),
+  };
 }
 
 function mapDispatchToProps(dispatch) {

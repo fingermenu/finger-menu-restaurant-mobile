@@ -9,14 +9,8 @@ import { LangaugeSelectorMenuOption } from '../languageSelector';
 import i18n from '../../i18n';
 import { ImageUtility } from '../image';
 
-const HeaderView = ({ changeLanguage }) => (
-  <ImageBackground
-    style={Styles.container}
-    source={{
-      uri:
-        'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Ftop.jpg?alt=media&token=1df03e7d-16f0-44a7-998a-9be610d2fd0d',
-    }}
-  >
+const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
+  <ImageBackground style={Styles.container} source={backgroundImageUrl}>
     <View style={Styles.bannerContainer}>{/*<Text>43 Degrees</Text>*/}</View>
     <Menu>
       <MenuTrigger>
