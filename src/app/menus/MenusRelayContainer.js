@@ -18,27 +18,11 @@ export default createRefetchContainer(
       }
     `,
   },
-  {
-    getConnectionFromProps(props) {
-      return props.user && props.user.restaurant;
-    },
-    getFragmentVariables(prevVars) {
-      return {
-        ...prevVars,
-      };
-    },
-    getVariables(props, fragmentVariables) {
-      return {
-        restaurantId: fragmentVariables.restaurantId,
-      };
-    },
-    variables: {},
-    query: graphql`
-      query MenusRelayContainer_user_FragmentQuery($restaurantId: ID!) {
-        user {
-          ...MenusRelayContainer_user
-        }
+  graphql`
+    query MenusRelayContainer_user_FragmentQuery($restaurantId: ID!) {
+      user {
+        ...MenusRelayContainer_user
       }
-    `,
-  },
+    }
+  `,
 );

@@ -13,6 +13,14 @@ class MenusNavigationTabContainer extends Component {
     tabBarLabel: screenProps.t('home.label'),
   });
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
+      this.props.relay.refetch(_ => ({
+        restaurant: _.restaurantId,
+      }));
+    }
+  };
+
   getMenusScreens = () =>
     Immutable.fromJS(this.props.menus)
       .sort((menu1, menu2) => int(menu1.get('sortOrderIndex')).cmp(menu2.get('sortOrderIndex')))
@@ -77,6 +85,7 @@ function mapStateToProps(state, props) {
     menus: props.user.restaurant.menus,
     menuId: state.navigation.routes[0].routes[0].params ? state.navigation.routes[0].routes[0].params.menuId : undefined,
     selectedLanguage: state.localState.get('selectedLanguage'),
+    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }
 
