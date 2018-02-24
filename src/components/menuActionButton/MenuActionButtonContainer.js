@@ -7,6 +7,14 @@ import PropTypes from 'prop-types';
 import MenuActionButtonView from './MenuActionButtonView';
 
 class MenuActionButtonContainer extends Component {
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
+      this.props.relay.refetch(_ => ({
+        restaurant: _.restaurantId,
+      }));
+    }
+  };
+
   onMenuActionButtonPressed = menuId => {
     this.props.navigateToMenu(menuId);
   };
@@ -23,6 +31,7 @@ MenuActionButtonContainer.propTypes = {
 function mapStateToProps(state, props) {
   return {
     menus: props.user.restaurant.menus,
+    selectedLanguage: state.localState.get('selectedLanguage'),
   };
 }
 
