@@ -109,8 +109,12 @@ OrdersView.propTypes = {
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
-  customerName: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
+  customerName: PropTypes.string,
+};
+
+OrdersView.defaultProps = {
+  customerName: null,
 };
 
 export default OrdersView;

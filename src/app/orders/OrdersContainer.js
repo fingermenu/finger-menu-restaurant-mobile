@@ -155,13 +155,14 @@ OrdersContainer.propTypes = {
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
-  customerName: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
+  customerName: PropTypes.string,
 };
 
 OrdersContainer.defaultProps = {
   kitchenOrderTemplate: null,
+  customerName: null,
 };
 
 function mapStateToProps(state) {
