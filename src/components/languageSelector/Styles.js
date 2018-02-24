@@ -5,11 +5,24 @@ import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   iconContainer: {
-    backgroundColor: '#EFF0F1',
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
   selectedIconContainer: {
-    backgroundColor: DefaultColor.defaultThemeColor,
-    borderColor: DefaultColor.defaultBackgroundColor,
-    borderWidth: 2,
+    backgroundColor: DefaultColor.primaryBackgroundColor,
+    borderWidth: 1,
+  },
+  menuOptionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  iconTextContainer: {
+    paddingLeft: 35,
+  },
+  selectedIconText: {
+    color: 'white',
+  },
+  iconText: {
+    color: DefaultColor.defaultFontColor,
   },
 });

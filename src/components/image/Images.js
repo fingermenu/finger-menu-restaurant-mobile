@@ -11,6 +11,7 @@ const images = Map()
   .set('empty', require('../../../assets/images/empty.png'))
   .set('taken', require('../../../assets/images/taken.png'))
   .set('reserved', require('../../../assets/images/reserved.png'))
-  .set('paid', require('../../../assets/images/paid.png'));
+  .set('paid', require('../../../assets/images/paid.png'))
+  .set('translation', require('../../../assets/images/translation.png'));
 
 export default images;

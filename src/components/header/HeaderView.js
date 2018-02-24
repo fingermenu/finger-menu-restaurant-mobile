@@ -2,11 +2,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, ImageBackground } from 'react-native';
-import { DefaultStyles } from '../../style';
+import { View, ImageBackground, Image } from 'react-native';
+import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import Styles from './Styles';
-import { LangaugeSelector } from '../languageSelector';
+import { LangaugeSelectorMenuOption } from '../languageSelector';
 import i18n from '../../i18n';
+import { ImageUtility } from '../image';
 
 const HeaderView = ({ changeLanguage }) => (
   <ImageBackground
@@ -17,12 +18,17 @@ const HeaderView = ({ changeLanguage }) => (
     }}
   >
     <View style={Styles.bannerContainer}>{/*<Text>43 Degrees</Text>*/}</View>
-    <View style={[DefaultStyles.rowContainer, Styles.languageContainer]}>
-      <LangaugeSelector isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
-      <LangaugeSelector isSelected={i18n.language.localeCompare('jp') === 0} language="zh" changeLanguage={changeLanguage} />
-      <LangaugeSelector isSelected={i18n.language.localeCompare('jp') === 0} language="jp" changeLanguage={changeLanguage} />
-      <LangaugeSelector isSelected={i18n.language.localeCompare('ko') === 0} language="ko" changeLanguage={changeLanguage} />
-    </View>
+    <Menu>
+      <MenuTrigger>
+        <Image style={Styles.image} source={ImageUtility.getImageSource('translation')} />
+      </MenuTrigger>
+      <MenuOptions>
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" changeLanguage={changeLanguage} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" changeLanguage={changeLanguage} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('ko') === 0} language="ko" changeLanguage={changeLanguage} />
+      </MenuOptions>
+    </Menu>
   </ImageBackground>
 );
 
