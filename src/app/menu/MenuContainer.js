@@ -14,51 +14,40 @@ class MenuContainer extends Component {
     isFetchingTop: false,
   };
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
+      this.handleRefresh();
+    }
+  };
+
   onViewMenuItemPressed = menuItemPriceId => {
     this.props.navigateToMenuItem(menuItemPriceId);
   };
 
-  // onAddMenuItemToOrder = menuItem => {
-  //   const newOrders = Immutable.fromJS(this.props.orders).concat({
-  //     id: this.props.orders.length + 1,
-  //     menuItemId: menuItem.Id,
-  //     menuItem,
-  //   });
-  //
-  //   this.props.ordersActions.menuOrderChanged(Map({ orders: newOrders }));
-  // };
-  //
-  // onRemoveMenuItemFromOrder = menuItemId => {
-  //   const orders = Immutable.fromJS(this.props.orders);
-  //   const orderToRemoveIndex = orders.findIndex(order => order.get('menuItemId') === menuItemId);
-  //   if (orderToRemoveIndex >= 0) {
-  //     this.props.ordersActions.menuOrderChanged(Map({ orders: orders.delete(orderToRemoveIndex) }));
-  //   }
-  // };
+  handleRefresh = () => {
+    if (this.props.relay.isLoading()) {
+      return;
+    }
 
-  onRefresh = () => {
-    // if (this.props.relay.isLoading()) {
-    //   return;
-    // }
-    //
-    // this.setState({
-    //   isFetchingTop: true,
-    // });
-    //
-    // this.props.relay.refetchConnection(this.props.user.products.edges.length, () => {
-    //   this.setState({
-    //     isFetchingTop: false,
-    //   });
-    // });
+    this.setState({
+      isFetchingTop: true,
+    });
+
+    this.props.relay.refetchConnection(this.props.user.menuItemPrices.edges.length, () => {
+      this.setState({
+        isFetchingTop: false,
+      });
+    });
   };
 
-  onEndReached = () => {
-    // if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-    //   return;
-    // }
-    //
-    // this.props.relay.loadMore(30, () => {});
+  handleEndReached = () => {
+    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
+      return;
+    }
+
+    this.props.relay.loadMore(30, () => {});
   };
+
   render = () => {
     return (
       <MenuView
@@ -70,8 +59,8 @@ class MenuContainer extends Component {
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
         isFetchingTop={this.state.isFetchingTop}
-        onRefresh={this.OnRefresh}
-        onEndReached={this.OnEndReached}
+        onRefresh={this.handleRefresh}
+        onEndReached={this.handleEndReached}
       />
     );
   };
@@ -101,6 +90,7 @@ function mapStateToProps(state) {
   return {
     table: state.asyncStorage.getIn(['keyValues', 'servingTable']),
     orders: orders,
+    selectedLanguage: state.localState.get('selectedLanguage'),
   };
 }
 
