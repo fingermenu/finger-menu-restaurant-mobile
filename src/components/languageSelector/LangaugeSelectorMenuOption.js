@@ -8,7 +8,7 @@ import { MenuOption } from 'react-native-popup-menu';
 import { ImageUtility } from '../image';
 import Styles from './Styles';
 
-class LanguageSelector extends Component {
+class LanguageSelectorMenuOption extends Component {
   changeLanguage = () => {
     this.props.changeLanguage(this.props.language);
   };
@@ -34,10 +34,10 @@ class LanguageSelector extends Component {
   };
 }
 
-LanguageSelector.propTypes = {
+LanguageSelectorMenuOption.propTypes = {
   language: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
   changeLanguage: PropTypes.func.isRequired,
 };
 
-export default LanguageSelector;
+export default LanguageSelectorMenuOption;
