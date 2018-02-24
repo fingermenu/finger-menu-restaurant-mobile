@@ -40,8 +40,12 @@ LandingView.propTypes = {
   restaurantSubTitle: PropTypes.string.isRequired,
   welcomeText: PropTypes.string.isRequired,
   openingHourText: PropTypes.string.isRequired,
-  backgroundImageUrl: PropTypes.string.isRequired,
+  backgroundImageUrl: PropTypes.string,
   navigateToMenu: PropTypes.func.isRequired,
+};
+
+LandingView.defaultProps = {
+  backgroundImageUrl: null,
 };
 
 export default LandingView;

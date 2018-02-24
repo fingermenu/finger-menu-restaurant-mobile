@@ -40,8 +40,12 @@ LandingContainer.propTypes = {
   restaurantSubTitle: PropTypes.string.isRequired,
   welcomeText: PropTypes.string.isRequired,
   openingHourText: PropTypes.string.isRequired,
-  backgroundImageUrl: PropTypes.string.isRequired,
   navigateToMenu: PropTypes.func.isRequired,
+  backgroundImageUrl: PropTypes.string,
+};
+
+LandingContainer.defaultProps = {
+  backgroundImageUrl: null,
 };
 
 function mapStateToProps(state) {
