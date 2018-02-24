@@ -21,13 +21,7 @@ class TablesView extends Component {
     const style = Common.getTableStyle(item.key);
 
     return (
-      <TouchableItem
-        accessibilityComponentType="button"
-        accessibilityTraits="button"
-        delayPressIn={0}
-        // pressColor={Color.touchableIconPressColor}
-        borderless
-      >
+      <TouchableItem accessibilityComponentType="button" accessibilityTraits="button" delayPressIn={0} borderless>
         <View style={Styles.tableSummaryContainer}>
           <Avatar rounded large overlayContainerStyle={style} source={ImageUtility.getImageSource(item.key)} activeOpacity={0.7} />
           <Text>{item.count}</Text>
@@ -37,7 +31,7 @@ class TablesView extends Component {
   };
 
   render = () => {
-    const { t } = this.props;
+    const { t, onEndReached, onRefresh, isFetchingTop } = this.props;
     const groupedTables = Immutable.fromJS(this.props.tables)
       .groupBy(t => (t.has('tableState') ? t.getIn(['tableState', 'key']) : 'empty'))
       .mapEntries(([key, value]) => [
@@ -56,7 +50,15 @@ class TablesView extends Component {
         <View>
           <Text>{t('table.manageTable')}</Text>
         </View>
-        <FlatList data={this.props.tables} keyExtractor={this.keyExtractor} numColumns={3} renderItem={this.renderItem} />
+        <FlatList
+          data={this.props.tables}
+          keyExtractor={this.keyExtractor}
+          numColumns={3}
+          renderItem={this.renderItem}
+          onEndReached={onEndReached}
+          onRefresh={onRefresh}
+          refreshing={isFetchingTop}
+        />
         <View style={Styles.tableLegendsContainer}>
           {this.renderBadgeSummaryItem({
             key: 'empty',

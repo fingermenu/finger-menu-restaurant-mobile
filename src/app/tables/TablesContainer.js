@@ -11,6 +11,10 @@ import int from 'int';
 import TablesView from './TablesView';
 
 class TablesContainer extends Component {
+  state = {
+    isFetchingTop: false,
+  };
+
   componentWillMount = () => {
     const { user: { restaurant: { id, name, pin, configurations } } } = this.props;
 
@@ -18,6 +22,12 @@ class TablesContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: name }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
+      this.handleRefresh();
+    }
   };
 
   onTablePressed = table => {
@@ -28,11 +38,38 @@ class TablesContainer extends Component {
     }
   };
 
+  handleRefresh = () => {
+    if (this.props.relay.isLoading()) {
+      return;
+    }
+
+    this.setState({
+      isFetchingTop: true,
+    });
+
+    this.props.relay.refetchConnection(this.props.user.tables.edges.length, () => {
+      this.setState({
+        isFetchingTop: false,
+      });
+    });
+  };
+
+  handleEndReached = () => {
+    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
+      return;
+    }
+
+    this.props.relay.loadMore(30, () => {});
+  };
+
   render = () => {
     return (
       <TablesView
         tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
         onTablePressed={this.onTablePressed}
+        isFetchingTop={this.state.isFetchingTop}
+        onRefresh={this.handleRefresh}
+        onEndReached={this.handleEndReached}
       />
     );
   };
@@ -43,8 +80,10 @@ TablesContainer.propTypes = {
   navigateToTableDetail: PropTypes.func.isRequired,
 };
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    selectedLanguage: state.localState.get('selectedLanguage'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
