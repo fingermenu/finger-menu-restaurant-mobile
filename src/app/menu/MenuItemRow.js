@@ -4,7 +4,8 @@ import { TouchableItem } from '@microbusiness/common-react-native';
 import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
-import { View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { MenuItemPriceProp } from './PropTypes';
@@ -41,7 +42,7 @@ class MenuItemRow extends Component {
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
             {this.props.menuItemPrice.menuItem.imageUrl ? (
-              <Image
+              <FastImage
                 style={Styles.image}
                 source={{
                   uri: this.props.menuItemPrice.menuItem.imageUrl,

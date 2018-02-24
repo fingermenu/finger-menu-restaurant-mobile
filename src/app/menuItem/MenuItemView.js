@@ -1,10 +1,11 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import FastImage from 'react-native-fast-image';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
 import { ChoiceItemsContainer } from '../../components/choiceItems';
@@ -40,7 +41,7 @@ class MenuItemView extends Component {
     return (
       <View style={Styles.container}>
         <ScrollView>
-          <View style={Styles.imageContainer}>{imageUrl ? <Image style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
+          <View style={Styles.imageContainer}>{imageUrl ? <FastImage style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
           <View style={Styles.descriptionContainer}>
             <View style={Styles.nameContainer}>
               <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>

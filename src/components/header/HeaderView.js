@@ -2,7 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, ImageBackground, Image } from 'react-native';
+import { View, ImageBackground } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import Styles from './Styles';
 import { LangaugeSelectorMenuOption } from '../languageSelector';
@@ -14,7 +15,7 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
     <View style={Styles.bannerContainer} />
     <Menu>
       <MenuTrigger>
-        <Image style={Styles.image} source={ImageUtility.getImageSource('translation')} />
+        <FastImage style={Styles.image} source={ImageUtility.getImageSource('translation')} />
       </MenuTrigger>
       <MenuOptions>
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
