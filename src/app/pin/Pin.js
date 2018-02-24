@@ -5,11 +5,14 @@ import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStora
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
 import { environment } from '../../framework/relay';
 import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
+import * as localStateActions from '../../framework/localState/Actions';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -21,6 +24,9 @@ class Pin extends Component {
     this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+
+    this.props.i18n.changeLanguage('en_NZ');
+    this.props.localStateActions.selectedLanguageChanged('en_NZ');
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -65,6 +71,10 @@ class Pin extends Component {
   }
 }
 
+Pin.propTypes = {
+  localStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
 function mapStateToProps(state) {
   return {
     offlineMode: !!state.asyncStorage.getIn(['keyValues', 'restaurantId']),
@@ -78,7 +88,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
+    localStateActions: bindActionCreators(localStateActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Pin);
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Pin));

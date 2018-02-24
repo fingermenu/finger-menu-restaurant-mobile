@@ -18,6 +18,7 @@ class HeaderContainer extends Component {
     return <HeaderView changeLanguage={this.changeLanguage} />;
   };
 }
+
 HeaderContainer.propTypes = {
   localStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
