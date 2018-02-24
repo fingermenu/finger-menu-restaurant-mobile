@@ -1,9 +1,9 @@
 // @flow
 
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createRefetchContainer, graphql } from 'react-relay';
 import MenuItemContainer from './MenuItemContainer';
 
-export default createFragmentContainer(
+export default createRefetchContainer(
   MenuItemContainer,
   {
     user: graphql`
@@ -32,27 +32,11 @@ export default createFragmentContainer(
       }
     `,
   },
-  {
-    getConnectionFromProps(props) {
-      return props.user && props.user.menuItemPrice;
-    },
-    getFragmentVariables(prevVars) {
-      return {
-        ...prevVars,
-      };
-    },
-    getVariables(props, fragmentVariables) {
-      return {
-        menuItemPriceId: fragmentVariables.menuItemPriceId,
-      };
-    },
-    variables: {},
-    query: graphql`
-      query MenuItemRelayContainer_user_FragmentQuery($menuItemPriceId: ID!) {
-        user {
-          ...MenuItemRelayContainer_user
-        }
+  graphql`
+    query MenuItemRelayContainer_user_FragmentQuery($menuItemPriceId: ID!) {
+      user {
+        ...MenuItemRelayContainer_user
       }
-    `,
-  },
+    }
+  `,
 );
