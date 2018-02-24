@@ -10,8 +10,8 @@ import i18n from '../../i18n';
 import { ImageUtility } from '../image';
 
 const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
-  <ImageBackground style={Styles.container} source={backgroundImageUrl}>
-    <View style={Styles.bannerContainer}>{/*<Text>43 Degrees</Text>*/}</View>
+  <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }}>
+    <View style={Styles.bannerContainer} />
     <Menu>
       <MenuTrigger>
         <Image style={Styles.image} source={ImageUtility.getImageSource('translation')} />
