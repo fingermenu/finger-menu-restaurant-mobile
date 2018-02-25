@@ -208,18 +208,22 @@ class AppWithNavigationState extends Component {
   };
 
   componentWillReceiveProps = nextProps => {
-    nextProps.notifications.forEach(notification => {
-      if (notification.get('type') === NotificationType.ERROR) {
-        Alert.alert('Error', notification.get('message'));
-      } else if (notification.get('type') === NotificationType.WARNING) {
-        Alert.alert('Warning', notification.get('message'));
-      } else if (notification.get('type') === NotificationType.INFO) {
-        Alert.alert('Info', notification.get('message'));
-      } else if (notification.get('type') === NotificationType.SUCCESS) {
-        Alert.alert('Success', notification.get('message'));
+    nextProps.notifications.keySeq().forEach(notificationId => {
+      const notification = nextProps.notifications.get(notificationId);
+      const notificationType = notification.get('type');
+      const notificationMessage = notification.get('message');
+
+      if (notificationType === NotificationType.ERROR) {
+        Alert.alert('Error', notificationMessage);
+      } else if (notificationType === NotificationType.WARNING) {
+        Alert.alert('Warning', notificationMessage);
+      } else if (notificationType === NotificationType.INFO) {
+        Alert.alert('Info', notificationMessage);
+      } else if (notificationType === NotificationType.SUCCESS) {
+        Alert.alert('Success', notificationMessage);
       }
 
-      this.props.notificationActions.remove(notification.get('id'));
+      this.props.notificationActions.remove(notificationId);
     });
 
     nextProps.userAccessFailedOperations.keySeq().forEach(operationId => {
