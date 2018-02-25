@@ -202,7 +202,7 @@ class AppWithNavigationState extends Component {
           return true;
         }
 
-        return false;
+        return true;
       });
     }
   };
