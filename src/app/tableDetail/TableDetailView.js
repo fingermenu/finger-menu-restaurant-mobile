@@ -38,6 +38,8 @@ class TableDetailView extends Component {
     }
   };
 
+  onViewMenuPressed = () => {};
+
   setResetPopupDialogRef = popupDialog => {
     this.resetPopupDialog = popupDialog;
   };
@@ -136,13 +138,13 @@ class TableDetailView extends Component {
           <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
         </View>
         <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50}>
-          <ActionButton.Item buttonColor="#9b59b6" title="Drink">
+          <ActionButton.Item buttonColor="#9b59b6" title="Drink" onPress={this.onViewMenuPressed}>
             <Icon name="md-create" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor="#3498db" title="Desert">
+          <ActionButton.Item buttonColor="#3498db" title="Desert" onPress={this.onViewMenuPressed}>
             <Icon name="md-notifications-off" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor="#1abc9c" title="Kids">
+          <ActionButton.Item buttonColor="#1abc9c" title="Kids Menu" onPress={this.onViewMenuPressed}>
             <Icon name="md-done-all" type="ionicon" style={Styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>

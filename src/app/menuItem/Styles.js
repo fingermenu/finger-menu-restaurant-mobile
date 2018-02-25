@@ -35,7 +35,7 @@ export default StyleSheet.create({
   },
   description: {
     fontSize: 20,
-    color: DefaultColor.defaultFontColorDisabled,
+    color: DefaultColor.defaultFontColor,
   },
   price: {
     fontSize: 20,
