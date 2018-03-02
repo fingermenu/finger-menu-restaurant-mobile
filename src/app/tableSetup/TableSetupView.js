@@ -11,7 +11,7 @@ import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { NumberPad, TextInput } from '../../components/redux-form-components';
 
-const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePressed, table: { name } }) => (
+const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePressed, onResetTablePressed, table: { name, tableState } }) => (
   <View style={Styles.container}>
     <View style={DefaultStyles.rowContainer}>
       <Text style={Styles.headerText}>Table {name}</Text>
@@ -59,12 +59,23 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
         onPress={handleSubmit(onSetupTablePressed)}
       />
       <Button
-        title="Reserve"
+        title={tableState.key === 'reserved' ? 'Update Reserve' : 'Reserve'}
         backgroundColor="orange"
         icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
         buttonStyle={Styles.button}
         onPress={handleSubmit(onReserveTablePressed)}
       />
+      {tableState.key === 'reserved' ? (
+        <Button
+          title="Reset Table"
+          backgroundColor="red"
+          icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
+          buttonStyle={Styles.button}
+          onPress={onResetTablePressed}
+        />
+      ) : (
+        <View />
+      )}
     </View>
   </View>
 );
@@ -72,6 +83,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
 TableSetupView.propTypes = {
   onSetupTablePressed: PropTypes.func.isRequired,
   onReserveTablePressed: PropTypes.func.isRequired,
+  onResetTablePressed: PropTypes.func.isRequired,
   table: TableProp.isRequired,
 };
 
