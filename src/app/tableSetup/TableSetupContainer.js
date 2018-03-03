@@ -23,6 +23,11 @@ class TableSetupContainer extends Component {
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
   };
 
+  onResetTablePressed = () => {
+    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'empty', 0, 0, '', '');
+    this.props.goBack();
+  };
+
   onSetupTablePressed = value => {
     this.updateTable(value, 'taken');
     this.props.navigateToAppHome();
@@ -64,7 +69,12 @@ class TableSetupContainer extends Component {
   };
 
   render = () => (
-    <TableSetupView table={this.props.table} onSetupTablePressed={this.onSetupTablePressed} onReserveTablePressed={this.onReserveTablePressed} />
+    <TableSetupView
+      table={this.props.table}
+      onSetupTablePressed={this.onSetupTablePressed}
+      onReserveTablePressed={this.onReserveTablePressed}
+      onResetTablePressed={this.onResetTablePressed}
+    />
   );
 }
 

@@ -40,6 +40,6 @@ export default StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    width: 250,
+    width: 200,
   },
 });
