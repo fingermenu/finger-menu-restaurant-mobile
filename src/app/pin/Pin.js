@@ -19,7 +19,7 @@ class Pin extends Component {
     header: null,
   });
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));

@@ -130,7 +130,21 @@ const navigationReducer = (state, action) => {
 export const reduxStore = configureStore(navigationReducer);
 
 class AppWithNavigationState extends Component {
-  componentWillMount() {
+  componentDidMount = () => {
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), this.props.navigation);
+
+        if (newState !== this.props.navigation) {
+          this.props.goBack();
+
+          return true;
+        }
+
+        return true;
+      });
+    }
+
     this.props.netInfoActions.refreshState(Map());
 
     CodePush.sync(
@@ -189,22 +203,6 @@ class AppWithNavigationState extends Component {
       },
       ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate(receivedBytes / totalBytes * 100),
     );
-  }
-
-  componentDidMount = () => {
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', () => {
-        const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), this.props.navigation);
-
-        if (newState !== this.props.navigation) {
-          this.props.goBack();
-
-          return true;
-        }
-
-        return true;
-      });
-    }
   };
 
   componentWillReceiveProps = nextProps => {

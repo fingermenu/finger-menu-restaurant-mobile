@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 class SplashContainer extends Component {
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.props.userAccessActions.getCurrentUser();
   };
 

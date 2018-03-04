@@ -15,7 +15,7 @@ class TablesContainer extends Component {
     isFetchingTop: false,
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     const { user: { restaurant: { id, name, pin, configurations } } } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));

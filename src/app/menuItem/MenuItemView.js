@@ -18,7 +18,7 @@ class MenuItemView extends Component {
     quantity: 1,
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (this.props.order) {
       this.setState({ quantity: this.props.order.quantity });
     }
@@ -78,6 +78,7 @@ MenuItemView.defaultProps = {
 
 function mapStateToProps(state, props) {
   const initialValues = {};
+
   if (props.order) {
     props.order.orderChoiceItemPrices.forEach(ocp => {
       initialValues[ocp.choiceItemPriceId] = true;

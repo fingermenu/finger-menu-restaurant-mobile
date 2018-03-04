@@ -14,7 +14,7 @@ class LandingContainer extends Component {
     header: null,
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.props.asyncStorageActions.readValue(Map({ key: 'servingTableId' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'servingTableName' }));
     this.props.asyncStorageActions.readValue(Map({ key: 'servingCustomerName' }));
