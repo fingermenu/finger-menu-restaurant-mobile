@@ -80,7 +80,7 @@ class OrdersContainer extends Component {
       }, '');
 
       if (kitchenOrderTemplate) {
-        const { printerConfig: { hostname, port } } = this.props;
+        const { printerConfig: { hostname, port }, numberOfPrintCopiesForKitchen } = this.props;
 
         this.props.escPosPrinterActions.printDocument(
           Map({
@@ -94,6 +94,7 @@ class OrdersContainer extends Component {
               .replace(/{OrderDateTime}/g, placedAt.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
               .replace(/{TableName}/g, tableName)
               .replace(/{OrderList}/g, orderList),
+            numberOfCopies: numberOfPrintCopiesForKitchen,
           }),
         );
       }
@@ -158,11 +159,13 @@ OrdersContainer.propTypes = {
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
   customerName: PropTypes.string,
+  numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 
 OrdersContainer.defaultProps = {
   kitchenOrderTemplate: null,
   customerName: null,
+  numberOfPrintCopiesForKitchen: 1,
 };
 
 function mapStateToProps(state) {
@@ -196,6 +199,7 @@ function mapStateToProps(state) {
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.template : null,
+    numberOfPrintCopiesForKitchen: restaurantConfigurations.numberOfPrintCopiesForKitchen,
   };
 }
 

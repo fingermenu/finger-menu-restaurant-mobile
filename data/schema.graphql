@@ -293,22 +293,26 @@ type Order implements Node {
 type OrderChoiceItemPrice {
   choiceItemPrice: ChoiceItemPrice!
   quantity: Int!
+  notes: String
 }
 
 input OrderChoiceItemPriceInput {
   choiceItemPriceId: ID!
   quantity: Int!
+  notes: String
 }
 
 type OrderMenuItemPrice {
   menuItemPrice: MenuItemPrice!
   quantity: Int!
+  notes: String
   orderChoiceItemPrices: [OrderChoiceItemPrice!]
 }
 
 input OrderMenuItemPriceInput {
   menuItemPriceId: ID!
   quantity: Int!
+  notes: String
   orderChoiceItemPrices: [OrderChoiceItemPriceInput!]
 }
 
@@ -436,6 +440,7 @@ type RestaurantConfigurations {
   images: RestaurantImages
   printers: [Printer!]
   documentTemplates: [DocumentTemplate!]
+  numberOfPrintCopiesForKitchen: Int
 }
 
 type RestaurantImages {

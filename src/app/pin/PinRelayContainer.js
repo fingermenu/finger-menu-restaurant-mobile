@@ -36,6 +36,7 @@ export default createPaginationContainer(
                   name
                   template
                 }
+                numberOfPrintCopiesForKitchen
               }
             }
           }

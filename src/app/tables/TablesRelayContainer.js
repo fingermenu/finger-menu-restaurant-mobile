@@ -29,6 +29,7 @@ export default createPaginationContainer(
               name
               template
             }
+            numberOfPrintCopiesForKitchen
           }
         }
         tables(first: $count, after: $cursor, restaurantId: $restaurantId) @connection(key: "User_tables") {
