@@ -1378,6 +1378,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "corelationId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "restaurantId",
                   "description": null,
                   "type": {
@@ -4615,6 +4625,18 @@
               "deprecationReason": null
             },
             {
+              "name": "corelationId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "numberOfAdults",
               "description": null,
               "args": [],
@@ -6332,6 +6354,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "corelationId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "restaurantId",
               "description": null,
