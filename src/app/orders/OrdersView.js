@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
@@ -64,8 +64,13 @@ class OrdersView extends Component {
           <View style={Styles.popupDialogContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>Are you sure to place your order now?</Text>
             <View style={[DefaultStyles.rowContainer, Styles.popupDialogButtonContainer]}>
-              <Button title="No" buttonStyle={Styles.popupDialogButton} onPress={this.onOrderConfirmedCancelled} />
-              <Button title="Yes" buttonStyle={Styles.popupDialogButton} onPress={this.onOrderConfirmed} />
+              <Button
+                title="No"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.popupDialogButton}
+                onPress={this.onOrderConfirmedCancelled}
+              />
+              <Button title="Yes" containerStyle={Styles.buttonContainer} buttonStyle={Styles.popupDialogButton} onPress={this.onOrderConfirmed} />
             </View>
           </View>
         </PopupDialog>
@@ -94,7 +99,7 @@ class OrdersView extends Component {
         <MenuActionButton restaurantId={this.props.restaurantId} />
         <Button
           title="Place Order"
-          icon={{ name: 'md-checkmark', type: 'ionicon' }}
+          icon={<Icon name="md-checkmark" type="ionicon" />}
           backgroundColor={this.props.orders.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
           onPress={this.onConfirmOrderPressed}
         />

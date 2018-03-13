@@ -16,7 +16,8 @@ export default StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
     alignItems: 'center',
     padding: 10,
     marginBottom: 100,
@@ -40,18 +41,30 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
   },
+  paymentSummaryContainer: {
+    flexDirection: 'column',
+    backgroundColor: '#f6ddab',
+  },
+  paymentSummaryTotalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+  },
+  paymentSummaryBalanceRow: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   emptyOrdersContainer: {
     paddingTop: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },
   resetTableDialogContainer: {
-    padding: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 10,
   },
   resetTableDialogButtonContainer: {
-    paddingTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   resetTableDialogText: {
     justifyContent: 'center',
@@ -59,5 +72,8 @@ export default StyleSheet.create({
   resetTableDialogButton: {
     width: 70,
     backgroundColor: DefaultColor.actionButtonColor,
+  },
+  buttonContainer: {
+    padding: 30,
   },
 });

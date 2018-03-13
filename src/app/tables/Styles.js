@@ -59,7 +59,6 @@ export default StyleSheet.create({
   },
   tableBadgeWrapper: {
     paddingLeft: 20,
-    // paddingTop: 20,
     paddingBottom: 20,
   },
   tableText: {
@@ -68,6 +67,7 @@ export default StyleSheet.create({
   },
   tableButton: {
     width: 100,
+    height: 50,
     margin: 5,
   },
   tableLegendsContainer: {

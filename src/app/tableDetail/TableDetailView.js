@@ -2,9 +2,8 @@
 
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
-import ActionButton from 'react-native-action-button';
 import PropTypes from 'prop-types';
-import { Badge, Button, Icon } from 'react-native-elements';
+import { Badge, Button, ButtonGroup, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
@@ -12,6 +11,15 @@ import { DefaultColor, DefaultStyles } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedDiscountButtonIndex: 0,
+      discount: 0,
+      discountType: '$',
+    };
+  }
+
   onResetTableConfirmed = () => {
     this.resetPopupDialog.dismiss();
     this.props.onResetTablePressed();
@@ -38,7 +46,7 @@ class TableDetailView extends Component {
     }
   };
 
-  onViewMenuPressed = () => {};
+  // onViewMenuPressed = () => {};
 
   setResetPopupDialogRef = popupDialog => {
     this.resetPopupDialog = popupDialog;
@@ -46,6 +54,42 @@ class TableDetailView extends Component {
 
   setPaidPopupDialogRef = popupDialog => {
     this.paidPopupDialog = popupDialog;
+  };
+
+  getOrderTotal = () => {
+    return this.props.order ? this.props.order.totalPrice : 0;
+  };
+
+  getBalanceToPay = () => {
+    if (this.state.discount > 0) {
+      if (this.state.discountType === '$' && this.state.discount < this.getOrderTotal()) {
+        return this.getOrderTotal() - this.state.discount;
+      } else if (this.state.discountType === '%' && this.state.discount < 100) {
+        return (this.getOrderTotal() * (100 - this.state.discount) / 100).toFixed(2);
+      }
+    }
+
+    return this.getOrderTotal();
+  };
+
+  getDiscountTypes = () => {
+    return ['$', '%'];
+  };
+
+  getSelectedDiscountType = discountTypeIndex => {
+    return this.getDiscountTypes()[discountTypeIndex];
+  };
+
+  getDiscountDisplayValue = () => {
+    return this.state.discountType === '%' ? this.state.discount + this.state.discountType : this.state.discountType + this.state.discount;
+  };
+
+  updateDiscount = discount => {
+    this.setState({ discount });
+  };
+
+  updateIndex = selectedDiscountButtonIndex => {
+    this.setState({ selectedDiscountButtonIndex, discountType: this.getSelectedDiscountType(selectedDiscountButtonIndex) });
   };
 
   keyExtractor = item => this.props.order.details.indexOf(item).toString();
@@ -70,6 +114,7 @@ class TableDetailView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
+    const { selectedDiscountButtonIndex } = this.state;
 
     return (
       <View style={Styles.container}>
@@ -83,23 +128,52 @@ class TableDetailView extends Component {
           <View style={Styles.resetTableDialogContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to reset table {name}?</Text>
             <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
-              <Button title="No" buttonStyle={Styles.resetTableDialogButton} onPress={this.onResetTableCancelled} />
-              <Button title="Yes" buttonStyle={Styles.resetTableDialogButton} onPress={this.onResetTableConfirmed} />
+              <Button
+                title="No"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onResetTableCancelled}
+              />
+              <Button
+                title="Yes"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onResetTableConfirmed}
+              />
             </View>
           </View>
         </PopupDialog>
         <PopupDialog
           width={400}
-          height={200}
-          dialogTitle={<DialogTitle title="Set Table Payment" />}
+          height={300}
+          dialogTitle={<DialogTitle title="Full Payment" />}
           dialogAnimation={slideAnimation}
           ref={this.setPaidPopupDialogRef}
         >
           <View style={Styles.resetTableDialogContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to set table {name} paid?</Text>
-            <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
-              <Button title="No" buttonStyle={Styles.resetTableDialogButton} onPress={this.onSetTablePaidCancelled} />
-              <Button title="Yes" buttonStyle={Styles.resetTableDialogButton} onPress={this.onSetTablePaidConfirmed} />
+            <View style={Styles.paymentSummaryTotalRow}>
+              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
+            </View>
+            <View style={Styles.paymentSummaryBalanceRow}>
+              <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
+            </View>
+            <View style={Styles.resetTableDialogButtonContainer}>
+              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to pay table {name} in full?</Text>
+            </View>
+            <View style={Styles.resetTableDialogButtonContainer}>
+              <Button
+                title="No"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onSetTablePaidCancelled}
+              />
+              <Button
+                title="Yes"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onSetTablePaidConfirmed}
+              />
             </View>
           </View>
         </PopupDialog>
@@ -112,7 +186,7 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={DefaultStyles.primaryTitleFont}>${order ? order.totalPrice : 0}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal()}</Text>
         </View>
         {order && order.details ? (
           <FlatList
@@ -128,26 +202,49 @@ class TableDetailView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
           </ScrollView>
         )}
-
+        <View style={Styles.paymentSummaryContainer}>
+          <View style={Styles.paymentSummaryTotalRow}>
+            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
+            <View style={DefaultStyles.rowContainer}>
+              <Input
+                placeholder="Discount"
+                onChangeText={this.updateDiscount}
+                value={this.state.discount}
+                containerStyle={{ width: 100 }}
+                maxLength={3}
+              />
+              <ButtonGroup
+                onPress={this.updateIndex}
+                selectedIndex={selectedDiscountButtonIndex}
+                buttons={this.getDiscountTypes()}
+                containerStyle={{ height: 30, width: 100 }}
+              />
+            </View>
+          </View>
+          <View style={Styles.paymentSummaryBalanceRow}>
+            <Text style={DefaultStyles.primaryLabelFont}>Balance To Pay ${this.getBalanceToPay()}</Text>
+          </View>
+        </View>
         <View style={Styles.buttonsContainer}>
           <Button
-            title="Set paid"
-            backgroundColor={tableState.name === 'Paid' ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
+            title="Full Payment"
+            backgroundColor={
+              tableState.name === 'Paid' || this.getOrderTotal() === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor
+            }
+            onPress={this.onSetTablePaidPressed}
+          />
+          <Button
+            title="Split Payment"
+            backgroundColor={tableState.name === 'Paid' || order === null ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
+            onPress={this.onSetTablePaidPressed}
+          />
+          <Button
+            title="Custom Payment"
+            backgroundColor={tableState.name === 'Paid' || order === null ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
             onPress={this.onSetTablePaidPressed}
           />
           <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
         </View>
-        <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50}>
-          <ActionButton.Item buttonColor="#9b59b6" title="Drink" onPress={this.onViewMenuPressed}>
-            <Icon name="md-create" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor="#3498db" title="Desert" onPress={this.onViewMenuPressed}>
-            <Icon name="md-notifications-off" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor="#1abc9c" title="Kids Menu" onPress={this.onViewMenuPressed}>
-            <Icon name="md-done-all" type="ionicon" style={Styles.actionButtonIcon} />
-          </ActionButton.Item>
-        </ActionButton>
       </View>
     );
   };

@@ -34,42 +34,44 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
         </View>
       </View>
       <View style={Styles.tableTextContainer}>
-        <View style={Styles.labelContainer}>
-          <Text style={Styles.numberText}>Name</Text>
-        </View>
-        <View style={Styles.valueContainer}>
-          <Field name="name" component={TextInput} />
+        <View style={Styles.textFieldContainer}>
+          <Field name="name" placeholder="Customer name" component={TextInput} leftIcon={<Icon name="user" type="simple-line-icon" size={24} />} />
         </View>
       </View>
       <View style={Styles.tableTextContainer}>
-        <View style={Styles.labelContainer}>
-          <Text style={Styles.numberText}>Reservation</Text>
-        </View>
-        <View style={Styles.valueContainer}>
-          <Field name="notes" component={TextInput} />
+        <View style={Styles.textFieldContainer}>
+          <Field
+            name="notes"
+            placeholder="Reservation notes"
+            component={TextInput}
+            leftIcon={<Icon name="note" type="simple-line-icon" size={24} />}
+          />
         </View>
       </View>
     </View>
-    <View style={DefaultStyles.rowContainer}>
+    <View style={Styles.buttonRowContainer}>
       <Button
+        containerStyle={Styles.buttonContainer}
         title="Give to Guest"
         backgroundColor={DefaultColor.defaultButtonColor}
-        icon={{ name: 'ios-body-outline', type: 'ionicon' }}
+        icon={<Icon name="food" type="material-community" />}
         buttonStyle={Styles.button}
         onPress={handleSubmit(onSetupTablePressed)}
       />
       <Button
+        containerStyle={{ padding: 20 }}
         title={tableState.key === 'reserved' ? 'Update Reserve' : 'Reserve'}
         backgroundColor="orange"
-        icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
+        icon={<Icon name="ios-clock-outline" type="ionicon" />}
         buttonStyle={Styles.button}
         onPress={handleSubmit(onReserveTablePressed)}
       />
       {tableState.key === 'reserved' ? (
         <Button
+          containerStyle={Styles.buttonContainer}
           title="Reset Table"
           backgroundColor="red"
-          icon={{ name: 'ios-clock-outline', type: 'ionicon' }}
+          icon={<Icon name="ios-clock-outline" type="ionicon" />}
           buttonStyle={Styles.button}
           onPress={onResetTablePressed}
         />

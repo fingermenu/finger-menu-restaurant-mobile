@@ -68,4 +68,7 @@ export default StyleSheet.create({
     width: 70,
     backgroundColor: DefaultColor.actionButtonColor,
   },
+  buttonContainer: {
+    padding: 30,
+  },
 });

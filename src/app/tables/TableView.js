@@ -20,10 +20,9 @@ class TableView extends Component {
         <View style={Styles.tableContainer}>
           <Button
             raised
-            large
             borderRadius={3}
             title={name}
-            containerViewStyle={Styles.tableItemContainer}
+            containerStyle={Styles.tableItemContainer}
             buttonStyle={[style, Styles.tableButton]}
             onPress={this.onTablePressed}
           />

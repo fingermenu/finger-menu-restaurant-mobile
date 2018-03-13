@@ -6,6 +6,11 @@ export default StyleSheet.create({
   container: {
     flex: 1,
   },
+  buttonRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   tableTextContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -15,6 +20,10 @@ export default StyleSheet.create({
     flex: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textFieldContainer: {
+    paddingLeft: 50,
+    paddingRight: 50,
   },
   valueContainer: {
     flex: 50,
@@ -38,6 +47,9 @@ export default StyleSheet.create({
   tableText: {
     color: 'orange',
     fontSize: 20,
+  },
+  buttonContainer: {
+    padding: 20,
   },
   button: {
     width: 200,

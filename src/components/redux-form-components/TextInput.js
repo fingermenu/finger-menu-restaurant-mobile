@@ -1,7 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import { TextInput as ExistingTextInput, View } from 'react-native';
+import { View } from 'react-native';
+import { Input as ExistingTextInput } from 'react-native-elements';
 
 export default class TextInput extends Component {
   onBlur = event => this.props.input.onBlur(event.nativeEvent.text);
