@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@microbusiness/common-react": "^1.1.15",
-    "@microbusiness/common-react-native": "^1.1.52",
-    "@microbusiness/parse-server-common-react-native": "^1.1.37",
+    "@microbusiness/common-react-native": "^1.1.54",
+    "@microbusiness/parse-server-common-react-native": "^1.1.38",
     "@microbusiness/printer-react-native": "0.1.3",
     "email-validator": "1.1.1",
     "i18next": "^10.5.0",
