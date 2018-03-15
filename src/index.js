@@ -1,8 +1,10 @@
 // @flow
 
+import { LoadingInProgress } from '@microbusiness/common-react-native';
 import { configParseServerSdk, ConfigReader } from '@microbusiness/parse-server-common-react-native';
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
+import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import { Provider } from 'react-redux';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
@@ -36,16 +38,41 @@ export default class FingerMenuRestaurant extends Component {
   constructor(props, context) {
     super(props, context);
 
-    const configReader = new ConfigReader();
+    AsyncStorage.getItem('@global:environment')
+      .then(environment => {
+        const configReader = new ConfigReader(environment);
 
-    configParseServerSdk(configReader.getParseServerUrl(), configReader.getParseServerApplicationId(), configReader.getParseServerJavascriptKey());
+        configParseServerSdk(
+          configReader.getParseServerUrl(),
+          configReader.getParseServerApplicationId(),
+          configReader.getParseServerJavascriptKey(),
+        );
+        this.setState({ isLoading: false });
+      })
+      .catch(error => {
+        Alert.alert(error.message);
+
+        const configReader = new ConfigReader();
+
+        configParseServerSdk(
+          configReader.getParseServerUrl(),
+          configReader.getParseServerApplicationId(),
+          configReader.getParseServerJavascriptKey(),
+        );
+        this.setState({ isLoading: false });
+      });
 
     this.state = {
       store: reduxStore,
+      isLoading: true,
     };
   }
 
   render() {
+    if (this.state.isLoading) {
+      return <LoadingInProgress />;
+    }
+
     return (
       <I18nextProvider i18n={i18n}>
         <Provider store={this.state.store}>
