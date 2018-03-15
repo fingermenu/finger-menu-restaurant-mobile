@@ -1,10 +1,9 @@
 // @flow
 
-import { configParseServerSdk } from '@microbusiness/parse-server-common-react-native';
+import { configParseServerSdk, ConfigReader } from '@microbusiness/parse-server-common-react-native';
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import { Provider } from 'react-redux';
-import Config from 'react-native-config';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import { I18nextProvider } from 'react-i18next';
@@ -37,7 +36,9 @@ export default class FingerMenuRestaurant extends Component {
   constructor(props, context) {
     super(props, context);
 
-    configParseServerSdk(Config.PARSE_SERVER_URL, Config.PARSE_SERVER_APPLICATION_ID, Config.PARSE_SERVER_JAVASCRIPT_KEY);
+    const configReader = new ConfigReader();
+
+    configParseServerSdk(configReader.getParseServerUrl(), configReader.getParseServerApplicationId(), configReader.getParseServerJavascriptKey());
 
     this.state = {
       store: reduxStore,

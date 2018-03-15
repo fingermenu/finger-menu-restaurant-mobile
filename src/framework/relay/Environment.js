@@ -1,14 +1,16 @@
 // @flow
 
+import { ConfigReader } from '@microbusiness/common-react-native';
 import { UserService } from '@microbusiness/parse-server-common-react-native';
 import Immutable from 'immutable';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
-import Config from 'react-native-config';
 import i18n from '../../i18n';
+
+const configReader = new ConfigReader();
 
 const fetchQuery = async (operation, variables) => {
   const sessionToken = await UserService.getCurrentUserSession();
-  const response = await fetch(Config.GRAPHQL_ENDPOINT, {
+  const response = await fetch(configReader.getGraphQLEndpointUrl(), {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -23,9 +25,7 @@ const fetchQuery = async (operation, variables) => {
   });
 
   const result = await response.json();
-  // console.log(operation.text);
-  // console.log(variables);
-  // console.log(result);
+
   if (result.errors && result.errors.length > 0) {
     const errorMessage = Immutable.fromJS(result.errors)
       .map(error => error.get('message'))

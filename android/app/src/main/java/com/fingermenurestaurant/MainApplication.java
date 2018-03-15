@@ -79,14 +79,14 @@ public class MainApplication extends Application implements ReactApplication {
     AppEventsLogger.activateApp(this);
 
     Parse.initialize(new Parse.Configuration.Builder(this)
-                     .applicationId(BuildConfig.PARSE_SERVER_APPLICATION_ID)
-                     .clientKey(BuildConfig.PARSE_SERVER_CLIENT_KEY)
-                     .server(BuildConfig.PARSE_SERVER_URL).build()
+                     .applicationId(BuildConfig.PROD_PARSE_SERVER_APPLICATION_ID)
+                     .clientKey(BuildConfig.PROD_PARSE_SERVER_CLIENT_KEY)
+                     .server(BuildConfig.PROD_PARSE_SERVER_URL).build()
                      );
 
     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 
-    installation.put("GCMSenderId", BuildConfig.GCM_SENDER_ID);
+    installation.put("GCMSenderId", BuildConfig.PROD_GCM_SENDER_ID);
     installation.saveInBackground();
   }
 }
