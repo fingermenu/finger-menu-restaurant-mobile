@@ -40,7 +40,7 @@ export default class FingerMenuRestaurant extends Component {
 
     AsyncStorage.getItem('@global:environment')
       .then(environment => {
-        const configReader = new ConfigReader(environment);
+        const configReader = new ConfigReader(environment ? environment : 'PROD');
 
         configParseServerSdk(
           configReader.getParseServerUrl(),
