@@ -41,6 +41,7 @@ const AppNavigator = StackNavigator(
           inputPlaceholderTextColor="white"
           logoImageUrl="https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Ffingermenu-logo-3.png?alt=media&token=f86549d0-54ce-490e-a077-9800cc6b6a79"
           backgroundColor="#24232D"
+          displayEnvironmentSelector
         />
       ),
       path: '/SignUpSignIn',
