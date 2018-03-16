@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@microbusiness/common-react": "^1.2.0",
-    "@microbusiness/common-react-native": "^1.4.2",
+    "@microbusiness/common-react-native": "^1.4.4",
     "@microbusiness/parse-server-common-react-native": "^1.3.0",
     "@microbusiness/printer-react-native": "0.2.1",
     "@microbusiness/redux-form-react-native-elements": "^0.1.2",
