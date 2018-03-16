@@ -1,5 +1,6 @@
 // @flow
 
+import { TextInput } from '@microbusiness/redux-form-react-native-elements';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
@@ -9,7 +10,7 @@ import { connect } from 'react-redux';
 import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { NumberPad, TextInput } from '../../components/redux-form-components';
+import { NumberPad } from '../../components/redux-form-components';
 
 const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePressed, onResetTablePressed, table: { name, tableState } }) => (
   <View style={Styles.container}>

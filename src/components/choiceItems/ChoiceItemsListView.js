@@ -1,10 +1,10 @@
 // @flow
 
+import { CheckBox } from '@microbusiness/redux-form-react-native-elements';
 import React, { Component } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { Field } from 'redux-form';
 import Styles from './Styles';
-import { CheckBox } from '../../components/redux-form-components';
 import { ListItemSeparator } from '../list';
 import { ChoiceItemPricesProp } from './PropTypes';
 
