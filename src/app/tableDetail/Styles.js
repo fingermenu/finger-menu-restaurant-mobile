@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     alignItems: 'center',
     padding: 10,

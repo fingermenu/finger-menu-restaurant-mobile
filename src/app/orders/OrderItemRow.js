@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Text } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { OrderItemDetailProp } from './PropTypes';
 import config from '../../framework/config';
@@ -40,6 +41,12 @@ class OrderItemRow extends Component {
     this.props.onRemoveOrderPressed(this.props.orderItemId);
   };
 
+  handleOrderItemSelected = () => {
+    if (this.props.onOrderSelected) {
+      this.props.onOrderSelected(this.props.orderItem, !this.props.isSelected);
+    }
+  };
+
   renderChoiceItems = choiceItems =>
     choiceItems.map(choiceItem => (
       <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
@@ -51,6 +58,22 @@ class OrderItemRow extends Component {
     return (
       <TouchableItem onPress={this.onViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
+          {this.props.enableMultiSelection ? (
+            this.props.isPaid ? (
+              <Text>Paid</Text>
+            ) : (
+              <CheckBox
+                center
+                size={28}
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={this.props.isSelected}
+                onPress={this.handleOrderItemSelected}
+              />
+            )
+          ) : (
+            <View />
+          )}
           <View style={Styles.quantityContainer}>
             <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
           </View>
@@ -83,6 +106,15 @@ OrderItemRow.propTypes = {
   menuItemCurrentPrice: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
+  enableMultiSelection: PropTypes.bool,
+  isSelected: PropTypes.bool,
+  onOrderSelected: PropTypes.func,
+};
+
+OrderItemRow.defaultProps = {
+  enableMultiSelection: false,
+  isSelected: false,
+  onOrderSelected: null,
 };
 
 export default OrderItemRow;
