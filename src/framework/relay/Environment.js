@@ -3,12 +3,13 @@
 import { ConfigReader } from '@microbusiness/common-react-native';
 import { UserService } from '@microbusiness/parse-server-common-react-native';
 import Immutable from 'immutable';
+import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import i18n from '../../i18n';
 
-const configReader = new ConfigReader();
-
 const fetchQuery = async (operation, variables) => {
+  const environment = await AsyncStorage.getItem('@global:environment');
+  const configReader = new ConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
   const sessionToken = await UserService.getCurrentUserSession();
   const response = await fetch(configReader.getGraphQLEndpointUrl(), {
     method: 'POST',
