@@ -1,5 +1,6 @@
 // @flow
 
+import Immutable from 'immutable';
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -17,6 +18,8 @@ class TableDetailView extends Component {
       selectedDiscountButtonIndex: 0,
       discount: 0,
       discountType: '$',
+      selectedOrders: Immutable.fromJS([]),
+      isCustomPaymentMode: false,
     };
   }
 
@@ -46,7 +49,60 @@ class TableDetailView extends Component {
     }
   };
 
+  onCustomPayPressed = () => {
+    this.setState({ isCustomPaymentMode: true });
+  };
+
+  onCancelCustomPayPressed = () => {
+    this.setState({ isCustomPaymentMode: false, selectedOrders: Immutable.fromJS([]) });
+  };
+
+  onOrderSelected = (order, isSelected) => {
+    if (isSelected) {
+      const selectedOrder = Immutable.fromJS(order);
+      this.setState({ selectedOrders: this.state.selectedOrders.push(selectedOrder) });
+    } else {
+      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.getIn(['menuItemPrice', 'id']) === order.menuItemPrice.id) });
+    }
+  };
+
   // onViewMenuPressed = () => {};
+
+  getBalanceToPay = () => {
+    const total = this.state.isCustomPaymentMode ? this.getSelectedOrderItemsTotal() : this.getOrderTotal();
+
+    if (this.state.discount > 0) {
+      if (this.state.discountType === '$' && this.state.discount < total) {
+        return total - this.state.discount;
+      } else if (this.state.discountType === '%' && this.state.discount < 100) {
+        return (total * (100 - this.state.discount) / 100).toFixed(2);
+      }
+    }
+
+    return total;
+  };
+
+  getSelectedOrderItemsTotal = () => {
+    const selectedItemsTotal = this.state.selectedOrders.reduce((v, s) => {
+      return (
+        v +
+        s.get('quantity') *
+          (s.getIn(['menuItemPrice', 'currentPrice']) +
+            s.get('orderChoiceItemPrices').reduce((ov, os) => {
+              return ov + os.getIn(['choiceItemPrice', 'currentPrice']);
+            }, 0))
+      );
+    }, 0);
+    return selectedItemsTotal;
+  };
+
+  getDiscountTypes = () => {
+    return ['$', '%'];
+  };
+
+  getSelectedDiscountType = discountTypeIndex => {
+    return this.getDiscountTypes()[discountTypeIndex];
+  };
 
   setResetPopupDialogRef = popupDialog => {
     this.resetPopupDialog = popupDialog;
@@ -58,26 +114,6 @@ class TableDetailView extends Component {
 
   getOrderTotal = () => {
     return this.props.order ? this.props.order.totalPrice : 0;
-  };
-
-  getBalanceToPay = () => {
-    if (this.state.discount > 0) {
-      if (this.state.discountType === '$' && this.state.discount < this.getOrderTotal()) {
-        return this.getOrderTotal() - this.state.discount;
-      } else if (this.state.discountType === '%' && this.state.discount < 100) {
-        return (this.getOrderTotal() * (100 - this.state.discount) / 100).toFixed(2);
-      }
-    }
-
-    return this.getOrderTotal();
-  };
-
-  getDiscountTypes = () => {
-    return ['$', '%'];
-  };
-
-  getSelectedDiscountType = discountTypeIndex => {
-    return this.getDiscountTypes()[discountTypeIndex];
   };
 
   getDiscountDisplayValue = () => {
@@ -94,6 +130,99 @@ class TableDetailView extends Component {
 
   keyExtractor = item => this.props.order.details.indexOf(item).toString();
 
+  renderResetTablePopupDialog = (slideAnimation, tableName) => {
+    return (
+      <PopupDialog
+        width={400}
+        height={200}
+        dialogTitle={<DialogTitle title="Reset Table" />}
+        dialogAnimation={slideAnimation}
+        ref={this.setResetPopupDialogRef}
+      >
+        <View style={Styles.resetTableDialogContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to reset table {tableName}?</Text>
+          <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
+            <Button
+              title="No"
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.resetTableDialogButton}
+              onPress={this.onResetTableCancelled}
+            />
+            <Button
+              title="Yes"
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.resetTableDialogButton}
+              onPress={this.onResetTableConfirmed}
+            />
+          </View>
+        </View>
+      </PopupDialog>
+    );
+  };
+
+  renderFullPaymentPopupDialog = (slideAnimation, tableName) => {
+    return (
+      <PopupDialog
+        width={400}
+        height={300}
+        dialogTitle={<DialogTitle title="Full Payment" />}
+        dialogAnimation={slideAnimation}
+        ref={this.setPaidPopupDialogRef}
+      >
+        <View style={Styles.resetTableDialogContainer}>
+          <View style={Styles.paymentSummaryTotalRow}>
+            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
+          </View>
+          <View style={Styles.paymentSummaryBalanceRow}>
+            <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
+          </View>
+          <View style={Styles.resetTableDialogButtonContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to pay table {tableName} in full?</Text>
+          </View>
+          <View style={Styles.resetTableDialogButtonContainer}>
+            <Button
+              title="No"
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.resetTableDialogButton}
+              onPress={this.onSetTablePaidCancelled}
+            />
+            <Button
+              title="Yes"
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.resetTableDialogButton}
+              onPress={this.onSetTablePaidConfirmed}
+            />
+          </View>
+        </View>
+      </PopupDialog>
+    );
+  };
+
+  renderCustomPaymentButtons = () => {
+    return (
+      <View style={Styles.buttonsContainer}>
+        <Button
+          title={'Pay ' + this.state.selectedOrders.count() + ' items'}
+          disabled={this.state.selectedOrders.count() === 0}
+          onPress={this.onCustomPaymentConfirmPressed}
+        />
+        <Button title="Cancel Payment" onPress={this.onCancelCustomPayPressed} />
+      </View>
+    );
+  };
+
+  renderDefaultPaymentButtons = (tableState, order) => {
+    return (
+      <View style={Styles.buttonsContainer}>
+        <Button title="Full Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onSetTablePaidPressed} />
+        <Button title="Split Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onSetTablePaidPressed} />
+        <Button title="Custom Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onCustomPayPressed} />
+        <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
+      </View>
+    );
+  };
+
   renderItem = info => {
     const { order, onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
 
@@ -105,6 +234,10 @@ class TableDetailView extends Component {
         menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
         onViewOrderItemPressed={onViewOrderItemPressed}
         onRemoveOrderPressed={onRemoveOrderPressed}
+        enableMultiSelection={this.state.isCustomPaymentMode}
+        onOrderSelected={this.onOrderSelected}
+        isSelected={this.state.selectedOrders.find(_ => _.getIn(['menuItemPrice', 'id']) === info.item.menuItemPrice.id)}
+        isPaid={false}
       />
     );
   };
@@ -118,65 +251,9 @@ class TableDetailView extends Component {
 
     return (
       <View style={Styles.container}>
-        <PopupDialog
-          width={400}
-          height={200}
-          dialogTitle={<DialogTitle title="Reset Table" />}
-          dialogAnimation={slideAnimation}
-          ref={this.setResetPopupDialogRef}
-        >
-          <View style={Styles.resetTableDialogContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to reset table {name}?</Text>
-            <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
-              <Button
-                title="No"
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
-                onPress={this.onResetTableCancelled}
-              />
-              <Button
-                title="Yes"
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
-                onPress={this.onResetTableConfirmed}
-              />
-            </View>
-          </View>
-        </PopupDialog>
-        <PopupDialog
-          width={400}
-          height={300}
-          dialogTitle={<DialogTitle title="Full Payment" />}
-          dialogAnimation={slideAnimation}
-          ref={this.setPaidPopupDialogRef}
-        >
-          <View style={Styles.resetTableDialogContainer}>
-            <View style={Styles.paymentSummaryTotalRow}>
-              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
-              <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
-            </View>
-            <View style={Styles.paymentSummaryBalanceRow}>
-              <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
-            </View>
-            <View style={Styles.resetTableDialogButtonContainer}>
-              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to pay table {name} in full?</Text>
-            </View>
-            <View style={Styles.resetTableDialogButtonContainer}>
-              <Button
-                title="No"
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
-                onPress={this.onSetTablePaidCancelled}
-              />
-              <Button
-                title="Yes"
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
-                onPress={this.onSetTablePaidConfirmed}
-              />
-            </View>
-          </View>
-        </PopupDialog>
+        {this.renderResetTablePopupDialog(slideAnimation, name)}
+        {this.renderFullPaymentPopupDialog(slideAnimation, name)}
+
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>Table : {name}</Text>
           <Badge
@@ -196,6 +273,7 @@ class TableDetailView extends Component {
             onEndReached={onEndReached}
             onRefresh={onRefresh}
             refreshing={isFetchingTop}
+            extraData={this.state}
           />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
@@ -225,26 +303,7 @@ class TableDetailView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>Balance To Pay ${this.getBalanceToPay()}</Text>
           </View>
         </View>
-        <View style={Styles.buttonsContainer}>
-          <Button
-            title="Full Payment"
-            backgroundColor={
-              tableState.name === 'Paid' || this.getOrderTotal() === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor
-            }
-            onPress={this.onSetTablePaidPressed}
-          />
-          <Button
-            title="Split Payment"
-            backgroundColor={tableState.name === 'Paid' || order === null ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
-            onPress={this.onSetTablePaidPressed}
-          />
-          <Button
-            title="Custom Payment"
-            backgroundColor={tableState.name === 'Paid' || order === null ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
-            onPress={this.onSetTablePaidPressed}
-          />
-          <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
-        </View>
+        {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState, order)}
       </View>
     );
   };
