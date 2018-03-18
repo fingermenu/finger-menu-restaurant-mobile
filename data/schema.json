@@ -1230,6 +1230,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "lastOrderCorelationId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "name",
                   "description": null,
                   "type": {
@@ -3886,6 +3896,18 @@
               "deprecationReason": null
             },
             {
+              "name": "lastOrderCorelationId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "tableState",
               "description": null,
               "args": [],
@@ -4834,6 +4856,18 @@
               "deprecationReason": null
             },
             {
+              "name": "paid",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "orderChoiceItemPrices",
               "description": null,
               "args": [],
@@ -4903,6 +4937,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paid",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -6287,6 +6333,16 @@
               "defaultValue": null
             },
             {
+              "name": "lastOrderCorelationId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "clientMutationId",
               "description": null,
               "type": {
@@ -6516,6 +6572,16 @@
               "defaultValue": null
             },
             {
+              "name": "paid",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "orderChoiceItemPrices",
               "description": null,
               "type": {
@@ -6578,6 +6644,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "paid",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null
