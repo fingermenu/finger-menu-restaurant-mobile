@@ -77,14 +77,15 @@ AddToOrderContainer.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
   restaurantId: PropTypes.string.isRequired,
   tableId: PropTypes.string.isRequired,
-  customerNotes: PropTypes.string.isRequired,
   ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
   customerName: PropTypes.string,
+  customerNotes: PropTypes.string,
 };
 
 AddToOrderContainer.defaultProps = {
   customerName: null,
+  customerNotes: null,
 };
 
 function mapStateToProps(state, props) {
