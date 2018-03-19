@@ -85,11 +85,13 @@ const commit = (
               .getLinkedRecord('menuItem')
               .getValue('nameToPrint');
             const quantity = detail.getValue('quantity');
+            const notes = detail.getValue('notes');
             const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
 
             return Map({
               name: menuItemName,
               quantity,
+              notes,
               choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
                 const choiceItemName = orderChoiceItemPrice
                   .getLinkedRecord('choiceItemPrice')

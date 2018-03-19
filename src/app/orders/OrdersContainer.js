@@ -3,7 +3,7 @@
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import { Map, Range } from 'immutable';
 import { DateTimeFormatter } from 'js-joda';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,6 +14,8 @@ import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
 const endingDots = '.';
+const maxLineLength = 48;
+const endOfLine = '\r\n';
 
 class OrdersContainer extends Component {
   static alignTextsOnEachEdge = (leftStr, rightStr, width, padding = ' ') => {
@@ -65,15 +67,25 @@ class OrdersContainer extends Component {
     PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
       const { kitchenOrderTemplate } = this.props;
       const orderList = details.reduce((menuItemsDetail, detail) => {
+        const notes = detail.get('notes').trim() ? 'Notes: ' + detail.get('notes').trim() : '';
+        const splittedNotes = notes
+          ? Range(0, notes.length / maxLineLength)
+            .map(idx => notes.substring(idx * maxLineLength, (idx + 1) * maxLineLength))
+            .reduce((reduction, value) => reduction + value + endOfLine, '')
+          : '';
+
         return (
           menuItemsDetail +
-          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString(), 48) +
-          '\r\n' +
+          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString(), maxLineLength) +
+          endOfLine +
+          splittedNotes +
           detail
             .get('choiceItems')
             .reduce(
               (reduction, choiceItem) =>
-                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString(), 48) + '\r\n',
+                reduction +
+                OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString(), maxLineLength) +
+                endOfLine,
               '',
             )
         );
