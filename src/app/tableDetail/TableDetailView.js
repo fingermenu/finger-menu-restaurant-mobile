@@ -53,8 +53,21 @@ class TableDetailView extends Component {
     this.setState({ isCustomPaymentMode: true });
   };
 
+  onPayCustomPayPressed = () => {
+    this.customPaidPopupDialog.show();
+  };
+
   onCancelCustomPayPressed = () => {
     this.setState({ isCustomPaymentMode: false, selectedOrders: Immutable.fromJS([]) });
+  };
+
+  onPayCustomConfirmed = () => {
+    this.customPaidPopupDialog.dismiss();
+    // this.props.onSetPaidPressed();
+  };
+
+  onPayCustomCancelled = () => {
+    this.customPaidPopupDialog.dismiss();
   };
 
   onOrderSelected = (order, isSelected) => {
@@ -112,6 +125,10 @@ class TableDetailView extends Component {
     this.paidPopupDialog = popupDialog;
   };
 
+  setCustomPaidPopupDialogRef = popupDialog => {
+    this.customPaidPopupDialog = popupDialog;
+  };
+
   getOrderTotal = () => {
     return this.props.order ? this.props.order.totalPrice : 0;
   };
@@ -129,6 +146,55 @@ class TableDetailView extends Component {
   };
 
   keyExtractor = item => this.props.order.details.indexOf(item).toString();
+
+  renderCustomPaymentPopupDialog = (slideAnimation, tableName) => {
+    return (
+      <PopupDialog
+        width={400}
+        height={500}
+        dialogTitle={<DialogTitle title={'Custom Payment' + tableName} />}
+        dialogAnimation={slideAnimation}
+        ref={this.setCustomPaidPopupDialogRef}
+      >
+        <View style={Styles.customPayDialogContainer}>
+          {/*<View>*/}
+          <FlatList
+            data={this.state.selectedOrders.toJS()}
+            renderItem={this.renderSelectedPayingItem}
+            keyExtractor={this.keyExtractor}
+            extraData={this.state}
+          />
+          {/*</View>*/}
+          <View>
+            <View style={Styles.paymentSummaryTotalRow}>
+              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getSelectedOrderItemsTotal()}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
+            </View>
+            <View style={Styles.paymentSummaryBalanceRow}>
+              <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
+            </View>
+            <View style={Styles.resetTableDialogButtonContainer}>
+              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Confirm payment?</Text>
+            </View>
+            <View style={Styles.resetTableDialogButtonContainer}>
+              <Button
+                title="No"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onPayCustomCancelled}
+              />
+              <Button
+                title="Yes"
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.resetTableDialogButton}
+                onPress={this.onPayCustomConfirmed}
+              />
+            </View>
+          </View>
+        </View>
+      </PopupDialog>
+    );
+  };
 
   renderResetTablePopupDialog = (slideAnimation, tableName) => {
     return (
@@ -205,7 +271,7 @@ class TableDetailView extends Component {
         <Button
           title={'Pay ' + this.state.selectedOrders.count() + ' items'}
           disabled={this.state.selectedOrders.count() === 0}
-          onPress={this.onCustomPaymentConfirmPressed}
+          onPress={this.onPayCustomPayPressed}
         />
         <Button title="Cancel Payment" onPress={this.onCancelCustomPayPressed} />
       </View>
@@ -242,6 +308,23 @@ class TableDetailView extends Component {
     );
   };
 
+  renderSelectedPayingItem = info => {
+    const { order } = this.props;
+
+    return (
+      <OrderItemRow
+        orderItem={info.item}
+        orderItemId={order.id}
+        menuItem={info.item.menuItemPrice.menuItem}
+        menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+        enableMultiSelection={false}
+        onViewOrderItemPressed={() => {}}
+        onRemoveOrderPressed={() => {}}
+        showRemove={false}
+      />
+    );
+  };
+
   render = () => {
     const { table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop } = this.props;
     const slideAnimation = new SlideAnimation({
@@ -253,6 +336,7 @@ class TableDetailView extends Component {
       <View style={Styles.container}>
         {this.renderResetTablePopupDialog(slideAnimation, name)}
         {this.renderFullPaymentPopupDialog(slideAnimation, name)}
+        {this.renderCustomPaymentPopupDialog(slideAnimation, name)}
 
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>Table : {name}</Text>

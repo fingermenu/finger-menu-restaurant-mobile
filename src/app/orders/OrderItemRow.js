@@ -65,8 +65,9 @@ class OrderItemRow extends Component {
               <CheckBox
                 center
                 size={28}
-                checkedIcon="dot-circle-o"
-                uncheckedIcon="circle-o"
+                iconType="material-community"
+                checkedIcon="check-circle-outline"
+                uncheckedIcon="checkbox-blank-circle-outline"
                 checked={this.props.isSelected}
                 onPress={this.handleOrderItemSelected}
               />
@@ -83,15 +84,19 @@ class OrderItemRow extends Component {
           </View>
           <View style={DefaultStyles.rowContainer}>
             <Text style={Styles.price}>${this.props.menuItemCurrentPrice}</Text>
-            <TouchableIcon
-              onPress={this.onRemoveOrderPressed}
-              iconName="ios-remove-circle-outline"
-              iconType="ionicon"
-              iconColor={DefaultColor.iconColor}
-              pressColor={DefaultColor.touchableIconPressColor}
-              iconDisabledColor={DefaultColor.defaultFontColorDisabled}
-              iconContainerStyle={DefaultStyles.iconContainerStyle}
-            />
+            {this.props.showRemove ? (
+              <TouchableIcon
+                onPress={this.onRemoveOrderPressed}
+                iconName="ios-remove-circle-outline"
+                iconType="ionicon"
+                iconColor={DefaultColor.iconColor}
+                pressColor={DefaultColor.touchableIconPressColor}
+                iconDisabledColor={DefaultColor.defaultFontColorDisabled}
+                iconContainerStyle={DefaultStyles.iconContainerStyle}
+              />
+            ) : (
+              <View />
+            )}
           </View>
         </View>
       </TouchableItem>
@@ -109,12 +114,14 @@ OrderItemRow.propTypes = {
   enableMultiSelection: PropTypes.bool,
   isSelected: PropTypes.bool,
   onOrderSelected: PropTypes.func,
+  showRemove: PropTypes.bool,
 };
 
 OrderItemRow.defaultProps = {
   enableMultiSelection: false,
   isSelected: false,
   onOrderSelected: null,
+  showRemove: true,
 };
 
 export default OrderItemRow;

@@ -24,6 +24,7 @@ class TableDetailContainer extends Component {
 
   onSetPaidPressed = () => {
     UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'paid', 0, 0, '', '');
+    //TODO: UpdateOrder:
     this.props.goBack();
   };
 

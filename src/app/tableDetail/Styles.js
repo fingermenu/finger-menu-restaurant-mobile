@@ -62,6 +62,10 @@ export default StyleSheet.create({
   resetTableDialogContainer: {
     padding: 10,
   },
+  customPayDialogContainer: {
+    padding: 10,
+    flex: 1,
+  },
   resetTableDialogButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
