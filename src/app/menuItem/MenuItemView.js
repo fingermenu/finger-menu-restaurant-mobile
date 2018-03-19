@@ -24,11 +24,11 @@ class MenuItemView extends Component {
     }
   };
 
-  onQuantityIncrease = () => {
+  handleQuantityIncrease = () => {
     this.setState({ quantity: this.state.quantity + 1 });
   };
 
-  onQuantityDecrease = () => {
+  handleQuantityDecrease = () => {
     if (this.state.quantity > 1) {
       this.setState({ quantity: this.state.quantity - 1 });
     }
@@ -56,7 +56,7 @@ class MenuItemView extends Component {
         <View>
           <View style={Styles.quantityContainer}>
             <Text style={DefaultStyles.primaryLabelFont}>Quantity</Text>
-            <QuantityControl quantity={quantity} onQuantityIncrease={this.onQuantityIncrease} onQuantityDecrease={this.onQuantityDecrease} />
+            <QuantityControl quantity={quantity} onQuantityIncrease={this.handleQuantityIncrease} onQuantityDecrease={this.handleQuantityDecrease} />
           </View>
           <AddToOrderContainer orderItemId={orderItemId} menuItemPrice={menuItemPrice} orderQuantity={quantity} handleSubmit={handleSubmit} />
         </View>
