@@ -2,7 +2,7 @@
 
 import { commitMutation, graphql } from 'react-relay';
 import { ConnectionHandler } from 'relay-runtime';
-import uuid from 'uuid/v4';
+import cuid from 'cuid';
 import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
@@ -73,7 +73,7 @@ const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChi
       }
     },
     optimisticUpdater: store => {
-      const id = uuid();
+      const id = cuid();
       const node = store.create(id, 'item');
 
       node.setValue(true, 'savingInProgress');
@@ -84,7 +84,7 @@ const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChi
       node.setValue(notes, 'notes');
       node.setValue(tableState, 'tableState');
 
-      const tablesEdge = store.create(uuid(), 'tablesEdge');
+      const tablesEdge = store.create(cuid(), 'tablesEdge');
 
       tablesEdge.setLinkedRecord(node, 'node');
       sharedUpdater(store, userId, tablesEdge);

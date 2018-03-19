@@ -31,6 +31,7 @@ class OrderItemRow extends Component {
 
   shouldComponentUpdate = nextProps => {
     const nextOrderItem = Immutable.fromJS(nextProps.orderItem);
+
     return this.state.orderItem.get('id') === nextOrderItem.get('id');
   };
 

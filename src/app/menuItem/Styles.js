@@ -41,4 +41,23 @@ export default StyleSheet.create({
     fontSize: 20,
     color: DefaultColor.secondaryFontColor,
   },
+  addOrUpdateButtoncontainer: {
+    backgroundColor: DefaultColor.defaultBannerColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  text: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 20,
+  },
+  choiceItemSectionHeader: {
+    padding: 5,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+  },
+  choiceItemSectionTitle: {
+    fontWeight: '700',
+    fontSize: 26,
+  },
 });

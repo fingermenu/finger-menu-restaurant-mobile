@@ -2,27 +2,20 @@
 
 import PropTypes from 'prop-types';
 
-export const ExtraOption = PropTypes.shape({
+export const ChoiceItemProp = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 });
 
+export const OrderChoiceItemPrice = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  choiceItem: ChoiceItemProp.isRequired,
+  quantity: PropTypes.number.isRequired,
+  currentPrice: PropTypes.number,
+});
+
 export const OrderItemDetailProp = PropTypes.shape({
   menuItemPriceId: PropTypes.string,
-  orderChoiceItemPrices: PropTypes.arrayOf(ExtraOption),
+  orderChoiceItemPrices: PropTypes.arrayOf(OrderChoiceItemPrice),
   quantity: PropTypes.number,
 });
-
-export const OrderItemProp = PropTypes.shape({
-  orderItemId: PropTypes.string.isRequired,
-  data: OrderItemDetailProp,
-});
-
-export const OrderItemPropOptional = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  menuItemId: PropTypes.string.isRequired,
-  quantity: PropTypes.number,
-  extraOptions: PropTypes.arrayOf(ExtraOption),
-});
-
-export const OrdersProp = PropTypes.arrayOf(OrderItemProp);

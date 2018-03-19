@@ -70,8 +70,7 @@
     "redux-saga": "0.16.0",
     "relay-runtime": "^1.5.0",
     "stream": "0.0.2",
-    "stream-browserify": "^2.0.1",
-    "uuid": "3.2.1"
+    "stream-browserify": "^2.0.1"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",

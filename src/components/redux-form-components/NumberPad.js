@@ -9,6 +9,6 @@ export default class NumberPad extends Component {
   render = () => {
     const { input, ...rest } = this.props;
 
-    return <ExistingNumberPad {...rest} initialValue={input.value} onNumberPressed={this.onNumberPressed} />;
+    return <ExistingNumberPad initialValue={input.value} onNumberPressed={this.onNumberPressed} {...rest} />;
   };
 }
