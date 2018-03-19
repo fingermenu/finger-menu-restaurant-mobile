@@ -1,5 +1,6 @@
 // @flow
 
+import { TextInput } from '@microbusiness/redux-form-react-native-elements';
 import { ListItemSeparator, TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
@@ -45,6 +46,7 @@ class MenuItemView extends Component {
             </View>
             <Text style={Styles.description}>{description}</Text>
           </View>
+          <Field name="notes" component={TextInput} placeholder="Notes" />
           <View style={Styles.optionsContainer}>
             {choiceItemPrices.length > 0 && (
               <View style={Styles.choiceItemSectionHeader}>
@@ -87,7 +89,7 @@ MenuItemView.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  const initialValues = { quantity: props.order ? props.order.quantity : 1 };
+  const initialValues = { quantity: props.order ? props.order.quantity : 1, notes: props.order ? props.order.notes : null };
 
   if (props.order) {
     props.order.orderChoiceItemPrices.forEach(ocp => {

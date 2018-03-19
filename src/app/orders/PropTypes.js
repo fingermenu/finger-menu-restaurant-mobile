@@ -12,6 +12,7 @@ export const OrderChoiceItemPrice = PropTypes.shape({
   choiceItem: ChoiceItemProp.isRequired,
   quantity: PropTypes.number.isRequired,
   currentPrice: PropTypes.number,
+  notes: PropTypes.number,
 });
 
 export const OrderItemDetailProp = PropTypes.shape({

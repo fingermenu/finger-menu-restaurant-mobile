@@ -23,6 +23,7 @@ const mutation = graphql`
               }
             }
             quantity
+            notes
             orderChoiceItemPrices {
               choiceItemPrice {
                 choiceItem {

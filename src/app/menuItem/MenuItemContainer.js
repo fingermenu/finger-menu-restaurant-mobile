@@ -37,6 +37,7 @@ class MenuItemContainer extends Component {
         currentPrice: this.props.user.menuItemPrice.currentPrice,
         menuItem: this.props.user.menuItemPrice.menuItem,
         quantity: values.quantity,
+        notes: values.notes,
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
       }),
     );
@@ -50,6 +51,7 @@ class MenuItemContainer extends Component {
         currentPrice: this.props.user.menuItemPrice.currentPrice,
         menuItem: this.props.user.menuItemPrice.menuItem,
         quantity: values.quantity,
+        notes: values.notes,
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
       }),
     );

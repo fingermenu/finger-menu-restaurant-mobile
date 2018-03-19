@@ -71,4 +71,8 @@ export default StyleSheet.create({
   buttonContainer: {
     padding: 30,
   },
+  menuItemNotes: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
 });

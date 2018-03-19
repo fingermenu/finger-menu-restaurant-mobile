@@ -81,6 +81,8 @@ class OrderItemRow extends Component {
           </View>
           <View style={Styles.titleContainer}>
             <Text style={Styles.title}>{this.props.menuItem.name}</Text>
+            {this.props.orderItem.notes &&
+              this.props.orderItem.notes.trim().length > 0 && <Text style={Styles.menuItemNotes}>Notes: {this.props.orderItem.notes}</Text>}
             {this.renderChoiceItems(this.props.orderItem.orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
