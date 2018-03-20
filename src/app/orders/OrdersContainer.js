@@ -34,6 +34,24 @@ class OrdersContainer extends Component {
     return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
   };
 
+  static splitTextIntoMultipleLines = (str, lineLength, prefixStr = '') => {
+    if (!str) {
+      return '';
+    }
+
+    const trimmedStr = str.trim();
+
+    if (trimmedStr.length === 0) {
+      return '';
+    }
+
+    const finalStr = prefixStr + trimmedStr;
+
+    return Range(0, finalStr.length / lineLength)
+      .map(idx => finalStr.substring(idx * lineLength, (idx + 1) * lineLength))
+      .reduce((reduction, value) => reduction + value + endOfLine, '');
+  };
+
   state = {
     isFetchingTop: false,
   };
@@ -67,18 +85,11 @@ class OrdersContainer extends Component {
     PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
       const { kitchenOrderTemplate } = this.props;
       const orderList = details.reduce((menuItemsDetail, detail) => {
-        const notes = detail.get('notes').trim() ? 'Notes: ' + detail.get('notes').trim() : '';
-        const splittedNotes = notes
-          ? Range(0, notes.length / maxLineLength)
-            .map(idx => notes.substring(idx * maxLineLength, (idx + 1) * maxLineLength))
-            .reduce((reduction, value) => reduction + value + endOfLine, '')
-          : '';
-
         return (
           menuItemsDetail +
           OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString(), maxLineLength) +
           endOfLine +
-          splittedNotes +
+          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), maxLineLength, 'Notes: ') +
           detail
             .get('choiceItems')
             .reduce(
