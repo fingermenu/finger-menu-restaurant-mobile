@@ -1,11 +1,12 @@
 // @flow
 
+import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import TableDetailView from './TableDetailView';
 import { TableProp } from './PropTypes';
-import { UpdateTable } from '../../framework/relay/mutations';
+import { UpdateTable, UpdateOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
 class TableDetailContainer extends Component {
@@ -28,6 +29,45 @@ class TableDetailContainer extends Component {
     this.props.goBack();
   };
 
+  onCustomPaidPressed = selectedOrders => {
+    const order = Immutable.fromJS(this.props.order);
+
+    const orderToUpdate = order
+      .update('details', details =>
+        details.map(_ =>
+          _.merge(
+            new Map({
+              paid: selectedOrders.find(od => od.getIn(['menuItemPrice', 'id']) === _.getIn(['menuItemPrice', 'id'])) !== undefined,
+              menuItemPriceId: _.getIn(['menuItemPrice', 'id']),
+            }),
+          )
+            .delete('menuItemPrice')
+            .update('orderChoiceItemPrices', orderChoiceItemPrices =>
+              orderChoiceItemPrices.map(orderChoiceItemPrice =>
+                orderChoiceItemPrice
+                  .set('choiceItemPriceId', orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']))
+                  .set('quantity', 1)
+                  .delete('choiceItemPrice'),
+              ),
+            ),
+        ),
+      )
+      .set('restaurantId', this.props.restaurantId)
+      .set('tableId', this.props.table.id);
+
+    // If all orders have been paid
+    if (
+      orderToUpdate
+        .get('details')
+        .filterNot(_ => _.get('paid'))
+        .count() === 0
+    ) {
+      //UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'paid', 0, 0, '', '');
+    }
+
+    UpdateOrder.commit(Environment, this.props.userId, orderToUpdate.toJS(), () => {});
+  };
+
   render = () => {
     const { table, order } = this.props;
 
@@ -39,6 +79,7 @@ class TableDetailContainer extends Component {
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         onResetTablePressed={this.onResetTablePressed}
         onSetPaidPressed={this.onSetPaidPressed}
+        onCustomPaidPressed={this.onCustomPaidPressed}
       />
     );
   };
@@ -53,6 +94,7 @@ function mapStateToProps(state, props) {
     userId: state.userAccess.get('userInfo').get('id'),
     order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
     table: props.user.table,
+    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }
 

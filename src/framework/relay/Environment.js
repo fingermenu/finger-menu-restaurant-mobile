@@ -27,6 +27,9 @@ const fetchQuery = async (operation, variables) => {
 
   const result = await response.json();
 
+  console.log(operation);
+  console.log(variables);
+
   if (result.errors && result.errors.length > 0) {
     const errorMessage = Immutable.fromJS(result.errors)
       .map(error => error.get('message'))

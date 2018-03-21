@@ -63,7 +63,7 @@ class TableDetailView extends Component {
 
   onPayCustomConfirmed = () => {
     this.customPaidPopupDialog.dismiss();
-    // this.props.onSetPaidPressed();
+    this.props.onCustomPaidPressed(this.state.selectedOrders);
   };
 
   onPayCustomCancelled = () => {
@@ -82,7 +82,7 @@ class TableDetailView extends Component {
   // onViewMenuPressed = () => {};
 
   getBalanceToPay = () => {
-    const total = this.state.isCustomPaymentMode ? this.getSelectedOrderItemsTotal() : this.getOrderTotal();
+    const total = this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal();
 
     if (this.state.discount > 0) {
       if (this.state.discountType === '$' && this.state.discount < total) {
@@ -95,8 +95,8 @@ class TableDetailView extends Component {
     return total;
   };
 
-  getSelectedOrderItemsTotal = () => {
-    const selectedItemsTotal = this.state.selectedOrders.reduce((v, s) => {
+  getCalculatedOrderItemsTotal = orderItems => {
+    return orderItems.reduce((v, s) => {
       return (
         v +
         s.get('quantity') *
@@ -106,7 +106,6 @@ class TableDetailView extends Component {
             }, 0))
       );
     }, 0);
-    return selectedItemsTotal;
   };
 
   getDiscountTypes = () => {
@@ -131,6 +130,18 @@ class TableDetailView extends Component {
 
   getOrderTotal = () => {
     return this.props.order ? this.props.order.totalPrice : 0;
+  };
+
+  getRemainingTotal = () => {
+    if (this.props.order) {
+      return this.getCalculatedOrderItemsTotal(
+        Immutable.fromJS(this.props.order)
+          .get('details')
+          .filterNot(_ => _.get('paid')),
+      );
+    }
+
+    return 0;
   };
 
   getDiscountDisplayValue = () => {
@@ -167,7 +178,7 @@ class TableDetailView extends Component {
           {/*</View>*/}
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
-              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getSelectedOrderItemsTotal()}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getCalculatedOrderItemsTotal(this.state.selectedOrders)}</Text>
               <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
             </View>
             <View style={Styles.paymentSummaryBalanceRow}>
@@ -237,7 +248,7 @@ class TableDetailView extends Component {
       >
         <View style={Styles.resetTableDialogContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getRemainingTotal()}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
@@ -303,7 +314,7 @@ class TableDetailView extends Component {
         enableMultiSelection={this.state.isCustomPaymentMode}
         onOrderSelected={this.onOrderSelected}
         isSelected={this.state.selectedOrders.find(_ => _.getIn(['menuItemPrice', 'id']) === info.item.menuItemPrice.id)}
-        isPaid={false}
+        isPaid={info.item.paid}
       />
     );
   };
@@ -397,6 +408,7 @@ TableDetailView.propTypes = {
   table: TableProp.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
+  onCustomPaidPressed: PropTypes.func.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
 };

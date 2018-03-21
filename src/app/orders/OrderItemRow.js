@@ -60,9 +60,7 @@ class OrderItemRow extends Component {
       <TouchableItem onPress={this.onViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
           {this.props.enableMultiSelection ? (
-            this.props.isPaid ? (
-              <Text>Paid</Text>
-            ) : (
+            !this.props.isPaid ? (
               <CheckBox
                 center
                 size={28}
@@ -72,6 +70,8 @@ class OrderItemRow extends Component {
                 checked={this.props.isSelected}
                 onPress={this.handleOrderItemSelected}
               />
+            ) : (
+              <View />
             )
           ) : (
             <View />
@@ -86,6 +86,7 @@ class OrderItemRow extends Component {
             {this.renderChoiceItems(this.props.orderItem.orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
+            {this.props.isPaid ? <Text style={Styles.paid}>Paid</Text> : <View />}
             <Text style={Styles.price}>${this.props.menuItemCurrentPrice}</Text>
             {this.props.showRemove ? (
               <TouchableIcon
