@@ -29,6 +29,9 @@ export default (state = initialState, action) => {
   case ActionTypes.ORDERS_MENU_UPDATE_MENU_ITEM_PRICE:
     return state.setIn(['tableOrder', 'details', action.payload.get('orderItemId')], action.payload.delete('orderItemId'));
 
+  case ActionTypes.ORDERS_MENU_CHANGE_NOTES:
+    return state.setIn(['tableOrder', 'notes'], action.notes);
+
   default:
     return state;
   }

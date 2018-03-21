@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'react-native-elements';
+import { Button, Icon, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
@@ -51,6 +51,7 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
+    const { notes, orders, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -76,19 +77,19 @@ class OrdersView extends Component {
         </PopupDialog>
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>
-            Table {this.props.tableName} {this.props.customerName}
+            Table {tableName} {customerName}
           </Text>
           <Text style={DefaultStyles.primaryLabelFont}>Your Orders</Text>
         </View>
 
-        {this.props.orders.length > 0 ? (
+        {orders.length > 0 ? (
           <FlatList
-            data={this.props.orders}
+            data={orders}
             renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
-            onEndReached={this.props.onEndReached}
-            onRefresh={this.props.onRefresh}
-            refreshing={this.props.isFetchingTop}
+            onEndReached={onEndReached}
+            onRefresh={onRefresh}
+            refreshing={isFetchingTop}
             ItemSeparatorComponent={this.renderSeparator}
           />
         ) : (
@@ -96,11 +97,12 @@ class OrdersView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
           </ScrollView>
         )}
-        <MenuActionButton restaurantId={this.props.restaurantId} />
+        <Input placeholder="Notes" value={notes} onChangeText={onNotesChanged} />
+        <MenuActionButton restaurantId={restaurantId} />
         <Button
           title="Place Order"
           icon={<Icon name="md-checkmark" type="ionicon" />}
-          backgroundColor={this.props.orders.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
+          backgroundColor={orders.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
           onPress={this.onConfirmOrderPressed}
         />
       </View>
@@ -115,11 +117,14 @@ OrdersView.propTypes = {
   onConfirmOrderPressed: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
+  onNotesChanged: PropTypes.func.isRequired,
   customerName: PropTypes.string,
+  notes: PropTypes.string,
 };
 
 OrdersView.defaultProps = {
   customerName: null,
+  notes: null,
 };
 
 export default OrdersView;

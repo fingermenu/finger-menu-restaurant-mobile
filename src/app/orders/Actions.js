@@ -30,3 +30,10 @@ export function updateOrderItem(payload) {
     payload,
   };
 }
+
+export function changeNotes(notes) {
+  return {
+    type: ActionTypes.ORDERS_MENU_CHANGE_NOTES,
+    notes,
+  };
+}

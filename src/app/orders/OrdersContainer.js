@@ -82,6 +82,7 @@ class OrdersContainer extends Component {
       .toJS();
 
     const { tableName } = this.props;
+
     PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
       const { kitchenOrderTemplate } = this.props;
       const orderList = details.reduce((menuItemsDetail, detail) => {
@@ -127,46 +128,34 @@ class OrdersContainer extends Component {
   };
 
   onRemoveOrderPressed = orderItemId => {
-    this.props.ordersActions.removeOrderItem(Map({ orderItemId: orderItemId }));
+    this.props.ordersActions.removeOrderItem(Map({ orderItemId }));
   };
 
-  onRefresh = () => {
-    // if (this.props.relay.isLoading()) {
-    //   return;
-    // }
-    //
-    // this.setState({
-    //   isFetchingTop: true,
-    // });
-    //
-    // this.props.relay.refetchConnection(this.props.user.products.edges.length, () => {
-    //   this.setState({
-    //     isFetchingTop: false,
-    //   });
-    // });
-  };
+  onRefresh = () => {};
 
-  onEndReached = () => {
-    // if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-    //   return;
-    // }
-    //
-    // this.props.relay.loadMore(30, () => {});
+  onEndReached = () => {};
+
+  handleNotesChanged = notes => {
+    this.props.ordersActions.changeNotes(notes);
   };
 
   render = () => {
+    const { tableOrder, orders, tableName, customerName, restaurantId } = this.props;
+
     return (
       <OrdersView
-        orders={this.props.orders}
+        orders={orders}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
-        tableName={this.props.tableName}
-        customerName={this.props.customerName}
-        restaurantId={this.props.restaurantId}
+        tableName={tableName}
+        customerName={customerName}
+        restaurantId={restaurantId}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.OnRefresh}
         onEndReached={this.OnEndReached}
+        notes={tableOrder.get('notes')}
+        onNotesChanged={this.handleNotesChanged}
       />
     );
   };
