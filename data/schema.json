@@ -1230,7 +1230,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "lastOrderCorelationId",
+                  "name": "lastOrderCorrelationId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -1388,7 +1388,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "corelationId",
+                  "name": "correlationId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -3896,7 +3896,7 @@
               "deprecationReason": null
             },
             {
-              "name": "lastOrderCorelationId",
+              "name": "lastOrderCorrelationId",
               "description": null,
               "args": [],
               "type": {
@@ -4647,7 +4647,7 @@
               "deprecationReason": null
             },
             {
-              "name": "corelationId",
+              "name": "correlationId",
               "description": null,
               "args": [],
               "type": {
@@ -6333,7 +6333,7 @@
               "defaultValue": null
             },
             {
-              "name": "lastOrderCorelationId",
+              "name": "lastOrderCorrelationId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -6411,7 +6411,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "corelationId",
+              "name": "correlationId",
               "description": null,
               "type": {
                 "kind": "SCALAR",

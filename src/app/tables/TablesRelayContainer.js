@@ -40,6 +40,7 @@ export default createPaginationContainer(
           edges {
             node {
               id
+              lastOrderCorrelationId
               name
               tableState {
                 id

@@ -21,6 +21,7 @@ const mutation = graphql`
           numberOfChildren
           customerName
           notes
+          lastOrderCorrelationId
           tableState {
             id
             key
@@ -47,7 +48,7 @@ const sharedUpdater = (store, userId, tableEdge) => {
   ConnectionHandler.insertEdgeAfter(connection, tableEdge);
 };
 
-const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChildren, customerName, notes) => {
+const commit = (environment, userId, { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId }) => {
   return commitMutation(environment, {
     mutation,
     variables: {
@@ -58,6 +59,7 @@ const commit = (environment, userId, id, tableState, numberOfAdults, numberOfChi
         numberOfChildren,
         customerName,
         notes,
+        lastOrderCorrelationId,
       },
     },
     updater: store => {

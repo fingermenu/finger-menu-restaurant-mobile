@@ -55,6 +55,7 @@ class TableDetail extends Component {
             $cursor: String
             $restaurantId: ID!
             $tableId: ID
+            $lastOrderCorrelationId: ID
             $tableIdForTableQuery: ID!
             $dateRange: DateRange!
           ) {
@@ -65,8 +66,9 @@ class TableDetail extends Component {
         `}
         variables={{
           cursor: null,
-          count: 1,
+          count: 1000,
           tableId: this.props.tableId,
+          lastOrderCorrelationId: this.props.lastOrderCorrelationId,
           tableIdForTableQuery: this.props.tableId,
           restaurantId: this.props.restaurantId,
           dateRange: this.state.dateRange,
@@ -79,12 +81,14 @@ class TableDetail extends Component {
 
 TableDetail.propTypes = {
   tableId: PropTypes.string.isRequired,
+  lastOrderCorrelationId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, props) {
   return {
     tableId: props.navigation.state.params.table.id,
+    lastOrderCorrelationId: props.navigation.state.params.table.lastOrderCorrelationId,
     restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }

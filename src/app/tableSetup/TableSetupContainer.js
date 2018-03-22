@@ -24,7 +24,16 @@ class TableSetupContainer extends Component {
   };
 
   onResetTablePressed = () => {
-    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'empty', 0, 0, '', '');
+    UpdateTable.commit(Environment, this.props.userId, {
+      id: this.props.table.id,
+      tableState: 'empty',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+      customerName: '',
+      notes: '',
+      lastOrderCorrelationId: '',
+    });
+
     this.props.goBack();
   };
 
@@ -55,16 +64,14 @@ class TableSetupContainer extends Component {
   };
 
   updateTable = (value, tableStateKey) => {
-    UpdateTable.commit(
-      Environment,
-      this.props.userId,
-      this.props.table.id,
-      tableStateKey,
-      value.numberOfAdults,
-      value.numberOfChildren,
-      value.name,
-      value.notes,
-    );
+    UpdateTable.commit(Environment, this.props.userId, {
+      id: this.props.table.id,
+      tableState: tableStateKey,
+      numberOfAdults: value.numberOfAdults,
+      numberOfChildren: value.numberOfChildren,
+      customerName: value.name,
+      notes: value.notes,
+    });
   };
 
   render = () => (

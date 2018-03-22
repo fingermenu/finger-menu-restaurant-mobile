@@ -278,7 +278,7 @@ interface Node {
 
 type Order implements Node {
   id: ID!
-  corelationId: ID
+  correlationId: ID
   numberOfAdults: Int
   numberOfChildren: Int
   customerName: String
@@ -388,7 +388,7 @@ type Phone {
 }
 
 input PlaceOrderInput {
-  corelationId: ID
+  correlationId: ID
   restaurantId: ID!
   numberOfAdults: Int
   numberOfChildren: Int
@@ -513,7 +513,7 @@ type Table implements Node {
   customerName: String
   notes: String
   sortOrderIndex: Int
-  lastOrderCorelationId: ID
+  lastOrderCorrelationId: ID
   tableState: TableState
 }
 
@@ -619,7 +619,7 @@ input UpdateTableInput {
   numberOfChildren: Int
   customerName: String
   notes: String
-  lastOrderCorelationId: ID
+  lastOrderCorrelationId: ID
   clientMutationId: String
 }
 
@@ -648,9 +648,9 @@ type User implements Node {
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   table(tableId: ID!): Table
-  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorelationId: ID, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
+  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], corelationId: ID, restaurantId: ID!, dateRange: DateRange!, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange!, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
 }
 
 type Viewer implements Node {

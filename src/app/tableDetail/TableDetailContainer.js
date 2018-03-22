@@ -19,12 +19,29 @@ class TableDetailContainer extends Component {
   };
 
   onResetTablePressed = () => {
-    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'empty', 0, 0, '', '');
+    UpdateTable.commit(Environment, this.props.userId, {
+      id: this.props.table.id,
+      tableState: 'empty',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+      customerName: '',
+      notes: '',
+      lastOrderCorrelationId: '',
+    });
+
     this.props.goBack();
   };
 
   onSetPaidPressed = () => {
-    UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'paid', 0, 0, '', '');
+    UpdateTable.commit(Environment, this.props.userId, {
+      id: this.props.table.id,
+      tableState: 'paid',
+      numberOfAdults: 0,
+      numberOfChildren: 0,
+      customerName: '',
+      notes: '',
+    });
+
     //TODO: UpdateOrder:
     this.props.goBack();
   };
@@ -62,7 +79,15 @@ class TableDetailContainer extends Component {
         .filterNot(_ => _.get('paid'))
         .count() === 0
     ) {
-      //UpdateTable.commit(Environment, this.props.userId, this.props.table.id, 'paid', 0, 0, '', '');
+      /* UpdateTable.commit(Environment, this.props.userId, {
+         *   id: this.props.table.id,
+         *   tableState: 'paid',
+         *   numberOfAdults: 0,
+         *   numberOfChildren: 0,
+         *   customerName: '',
+         *   notes: '',
+         *   lastOrderCorrelationId: '',
+         * }); */
     }
 
     UpdateOrder.commit(Environment, this.props.userId, orderToUpdate.toJS(), () => {});

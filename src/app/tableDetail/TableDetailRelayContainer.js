@@ -19,6 +19,7 @@ export default createPaginationContainer(
           first: $count
           after: $cursor
           tableId: $tableId
+          correlationId: $lastOrderCorrelationId
           restaurantId: $restaurantId
           dateRange: $dateRange
           sortOption: "PlacedAtDescending"
@@ -97,6 +98,7 @@ export default createPaginationContainer(
         cursor,
         tableId: fragmentVariables.tableId,
         tableIdForTableQuery: fragmentVariables.tableIdForTableQuery,
+        lastOrderCorrelationId: fragmentVariables.lastOrderCorrelationId,
         restaurantId: fragmentVariables.restaurantId,
         dateRange: fragmentVariables.dateRange,
       };
@@ -108,6 +110,7 @@ export default createPaginationContainer(
         $cursor: String
         $restaurantId: ID!
         $tableId: ID
+        $lastOrderCorrelationId: ID
         $tableIdForTableQuery: ID!
         $dateRange: DateRange!
       ) {
