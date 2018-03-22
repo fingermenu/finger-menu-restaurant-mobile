@@ -5,7 +5,7 @@ import initialState from './InitialState';
 
 export default (state = initialState, action) => {
   switch (action.type) {
-  case ActionTypes.LOCAL_STATE_SELECTED_LANGUAGE_CHANGED:
+  case ActionTypes.APPLICATION_STATE_SELECTED_LANGUAGE_CHANGED:
     return state.set('selectedLanguage', action.selectedLanguage);
 
   default:

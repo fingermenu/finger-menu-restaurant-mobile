@@ -31,7 +31,7 @@ MenuActionButtonContainer.propTypes = {
 function mapStateToProps(state, props) {
   return {
     menus: props.user.restaurant.menus,
-    selectedLanguage: state.localState.get('selectedLanguage'),
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }
 

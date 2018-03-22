@@ -82,7 +82,7 @@ TablesContainer.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    selectedLanguage: state.localState.get('selectedLanguage'),
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }
 

@@ -81,7 +81,7 @@ MenuItemContainer.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    selectedLanguage: state.localState.get('selectedLanguage'),
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
     isAddingToOrder: ownProps.orderItemId === null,
   };
 }

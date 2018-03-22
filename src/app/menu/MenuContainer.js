@@ -90,7 +90,7 @@ function mapStateToProps(state) {
   return {
     table: state.asyncStorage.getIn(['keyValues', 'servingTable']),
     orders: orders,
-    selectedLanguage: state.localState.get('selectedLanguage'),
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }
 

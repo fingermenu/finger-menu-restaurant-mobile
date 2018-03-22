@@ -6,7 +6,7 @@ import { EscPosPrinterReducer } from '@microbusiness/printer-react-native';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { OrdersReducer } from '../../app/orders';
-import { LocalStateReducer } from '../../framework/localState';
+import { ApplicationStateReducer } from '../../framework/applicationState';
 
 export default function getReducers(navigationReducer) {
   return combineReducers({
@@ -19,6 +19,6 @@ export default function getReducers(navigationReducer) {
     notification: NotificationReducer,
     form: formReducer,
     order: OrdersReducer,
-    localState: LocalStateReducer,
+    applicationState: ApplicationStateReducer,
   });
 }

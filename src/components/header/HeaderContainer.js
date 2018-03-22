@@ -6,12 +6,12 @@ import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HeaderView from './HeaderView';
-import * as localStateActions from '../../framework/localState/Actions';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class HeaderContainer extends Component {
   changeLanguage = language => {
     this.props.i18n.changeLanguage(language);
-    this.props.localStateActions.selectedLanguageChanged(language);
+    this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
   render = () => {
@@ -22,7 +22,7 @@ class HeaderContainer extends Component {
 }
 
 HeaderContainer.propTypes = {
-  localStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 function mapStateToProps(state) {
@@ -33,7 +33,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    localStateActions: bindActionCreators(localStateActions, dispatch),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   };
 }
 

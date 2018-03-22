@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { environment } from '../../framework/relay';
 import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
-import * as localStateActions from '../../framework/localState/Actions';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -26,7 +26,7 @@ class Pin extends Component {
     this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
 
     this.props.i18n.changeLanguage('en_NZ');
-    this.props.localStateActions.selectedLanguageChanged('en_NZ');
+    this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -72,7 +72,7 @@ class Pin extends Component {
 }
 
 Pin.propTypes = {
-  localStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 function mapStateToProps(state) {
@@ -88,7 +88,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    localStateActions: bindActionCreators(localStateActions, dispatch),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   };
 }
 
