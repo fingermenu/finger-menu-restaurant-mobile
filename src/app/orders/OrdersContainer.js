@@ -18,7 +18,7 @@ const maxLineLength = 48;
 const endOfLine = '\r\n';
 
 class OrdersContainer extends Component {
-  static alignTextsOnEachEdge = (leftStr, rightStr, width, padding = ' ') => {
+  static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
     if (leftStr.length + rightStr.length <= width - 1) {
       return leftStr + Array(width - (leftStr.length + rightStr.length)).join(padding) + rightStr;
     }
@@ -34,7 +34,7 @@ class OrdersContainer extends Component {
     return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
   };
 
-  static splitTextIntoMultipleLines = (str, lineLength, prefixStr = '') => {
+  static splitTextIntoMultipleLines = (str, prefixStr = '', lineLength = maxLineLength) => {
     if (!str) {
       return '';
     }
@@ -83,21 +83,19 @@ class OrdersContainer extends Component {
 
     const { tableName } = this.props;
 
-    PlaceOrder.commit(Environment, this.props.userId, orders, (placedAt, details) => {
+    PlaceOrder.commit(Environment, this.props.userId, orders, response => {
       const { kitchenOrderTemplate } = this.props;
-      const orderList = details.reduce((menuItemsDetail, detail) => {
+      const orderList = response.get('details').reduce((menuItemsDetail, detail) => {
         return (
           menuItemsDetail +
-          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString(), maxLineLength) +
+          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
           endOfLine +
-          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), maxLineLength, 'Notes: ') +
+          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: ') +
           detail
             .get('choiceItems')
             .reduce(
               (reduction, choiceItem) =>
-                reduction +
-                OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString(), maxLineLength) +
-                endOfLine,
+                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString()) + endOfLine,
               '',
             )
         );
@@ -115,7 +113,9 @@ class OrdersContainer extends Component {
               .replace('\n', '')
               .replace(/{CR}/g, '\r')
               .replace(/{LF}/g, '\n')
-              .replace(/{OrderDateTime}/g, placedAt.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
+              .replace(/{OrderDateTime}/g, response.get('placedAt').format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
+              .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('notes'), 'Notes: '))
+              .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('customerName')), 'CustomerName: ')
               .replace(/{TableName}/g, tableName)
               .replace(/{OrderList}/g, orderList),
             numberOfCopies: numberOfPrintCopiesForKitchen,

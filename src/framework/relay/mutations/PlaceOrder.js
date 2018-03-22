@@ -16,6 +16,8 @@ const mutation = graphql`
         cursor
         node {
           placedAt
+          notes
+          customerName
           details {
             menuItemPrice {
               menuItem {
@@ -74,6 +76,15 @@ const commit = (
               .getValue('placedAt'),
           ).withZoneSameInstant(ZoneId.SYSTEM);
 
+          const customerName = payload
+            .getLinkedRecord('order')
+            .getLinkedRecord('node')
+            .getValue('customerName');
+          const notes = payload
+            .getLinkedRecord('order')
+            .getLinkedRecord('node')
+            .getValue('notes');
+
           const details = Immutable.fromJS(
             payload
               .getLinkedRecord('order')
@@ -104,7 +115,7 @@ const commit = (
             });
           });
 
-          onSuccess(placedAt, details);
+          onSuccess(Map({ placedAt, customerName, notes, details }));
         }
       }
     },
