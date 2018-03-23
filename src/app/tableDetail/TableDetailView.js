@@ -94,9 +94,7 @@ class TableDetailView extends Component {
     }, 0);
   };
 
-  getDiscountTypes = () => {
-    return ['$', '%'];
-  };
+  getDiscountTypes = () => ['$', '%'];
 
   getSelectedDiscountType = discountTypeIndex => this.getDiscountTypes()[discountTypeIndex];
 
