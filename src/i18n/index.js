@@ -27,6 +27,7 @@ i18next.init({
         },
         password: { label: 'Password' },
         retypePassword: { label: 'Retype Password' },
+        waitressMode: { label: 'Waitress Mode' },
       },
     },
     zh: {
@@ -48,7 +49,7 @@ i18next.init({
         },
         password: { label: '密码' },
         retypePassword: { label: '重新输入密码' },
-        setupTable: { label: '设置桌子', button: '完成' },
+        waitressMode: { label: '女服务员模式' },
       },
     },
     jp: {
@@ -70,7 +71,7 @@ i18next.init({
         },
         password: { label: '密码' },
         retypePassword: { label: '重新输入密码' },
-        setupTable: { label: '设置桌子', button: '完成' },
+        waitressMode: { label: 'ウェイトレスモード' },
       },
     },
   },
