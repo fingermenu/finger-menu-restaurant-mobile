@@ -63,8 +63,9 @@ class TableDetailContainer extends Component {
             .update('orderChoiceItemPrices', orderChoiceItemPrices =>
               orderChoiceItemPrices.map(orderChoiceItemPrice =>
                 orderChoiceItemPrice
-                  .set('choiceItemPriceId', orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']))
-                  .set('quantity', orderChoiceItemPrice.get('quantity'))
+                  .merge(
+                    Map({ choiceItemPriceId: orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']), quantity: orderChoiceItemPrice.get('quantity') }),
+                  )
                   .delete('choiceItemPrice'),
               ),
             ),
