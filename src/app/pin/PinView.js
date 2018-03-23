@@ -42,20 +42,18 @@ class PinView extends Component {
 
   setPinNumber = number => {
     let pins;
+
     if (this.state.error) {
       // If already has error, reset pins to empty after starting entering new pni
       pins = Immutable.fromJS(this.getPinArray());
     } else {
       pins = Immutable.fromJS(this.state.pins);
     }
+
     const pinIndexToSet = pins.findIndex(pin => pin.get('value') === null);
 
     if (pinIndexToSet !== -1) {
-      const newPins = pins
-        .updateIn([pinIndexToSet, 'value'], function() {
-          return number;
-        })
-        .toJS();
+      const newPins = pins.setIn([pinIndexToSet, 'value'], number).toJS();
       this.setState({ pins: newPins, error: false });
     }
   };

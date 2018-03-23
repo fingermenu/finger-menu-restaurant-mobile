@@ -55,7 +55,7 @@ class TableDetailContainer extends Component {
           detail
             .merge(
               new Map({
-                paid: detail.get('paid') || selectedOrders.find(order => order.get('id') === detail.get('id')) !== undefined,
+                paid: detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
                 menuItemPriceId: detail.getIn(['menuItemPrice', 'id']),
               }),
             )

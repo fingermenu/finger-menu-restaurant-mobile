@@ -11,13 +11,9 @@ import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
-  getTotalOrderQuantity = () => {
-    return Immutable.fromJS(this.props.orders).reduce((total, value) => {
-      return total + value.getIn(['data', 'quantity']);
-    }, 0);
-  };
+  getTotalOrderQuantity = () => Immutable.fromJS(this.props.orders).reduce((total, value) => total + value.getIn(['data', 'quantity']), 0);
 
-  hasOrdered = item => Immutable.fromJS(this.props.orders).findIndex(order => order.getIn(['data', 'menuItemPriceId']) === item.id) >= 0;
+  hasOrdered = item => !!this.props.orders.find(order => order.data.menuItemPriceId === item.id);
 
   keyExtractor = item => item.id;
 
