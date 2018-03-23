@@ -15,14 +15,6 @@ class LandingView extends Component {
           uri: this.props.backgroundImageUrl,
         }}
       >
-        {/*<TouchableItem onPress={this.props.navigateToMenu}>*/}
-        {/*<View style={Styles.overlay}>*/}
-        {/*<Text style={Styles.welcomeText}>{this.props.welcomeText}</Text>*/}
-        {/*<Text style={Styles.restaurantName}>{this.props.restaurantName}</Text>*/}
-        {/*<Text style={Styles.subTitle}>{this.props.restaurantSubTitle}</Text>*/}
-        {/*<Text style={Styles.openingHour}>{this.props.openingHourText}</Text>*/}
-        {/*</View>*/}
-        {/*</TouchableItem>*/}
         <View style={Styles.buttonContainer}>
           <Button title="Start Order" buttonStyle={Styles.button} onPress={this.props.navigateToMenu} />
         </View>
