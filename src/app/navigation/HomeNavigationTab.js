@@ -17,14 +17,14 @@ const tabScreens = {
   Menus: {
     screen: Menus,
     navigationOptions: {
-      tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={26} style={{ color: tintColor }} />,
+      tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} style={{ color: tintColor }} />,
     },
   },
   Info: {
     screen: InfoContainer,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={26} style={{ color: tintColor }} />
+        <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={30} style={{ color: tintColor }} />
       ),
     },
   },
@@ -32,7 +32,7 @@ const tabScreens = {
     screen: OrdersContainer,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={26} style={{ color: tintColor }} />
+        <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={30} style={{ color: tintColor }} />
       ),
     },
   },
@@ -40,7 +40,7 @@ const tabScreens = {
     screen: Account,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={26} style={{ color: tintColor }} />
+        <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={30} style={{ color: tintColor }} />
       ),
     },
   },
@@ -61,6 +61,7 @@ const tabConfig = {
       fontSize: 9,
     },
     iconStyle: {
+      marginTop: 2,
       marginBottom: 0,
     },
     style: {
