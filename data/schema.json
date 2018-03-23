@@ -4812,6 +4812,18 @@
           "description": null,
           "fields": [
             {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "menuItemPrice",
               "description": null,
               "args": [],
@@ -4898,6 +4910,18 @@
           "name": "OrderChoiceItemPrice",
           "description": null,
           "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "choiceItemPrice",
               "description": null,
@@ -6534,6 +6558,16 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "menuItemPriceId",
               "description": null,
               "type": {
@@ -6610,6 +6644,16 @@
           "description": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
             {
               "name": "choiceItemPriceId",
               "description": null,

@@ -292,6 +292,7 @@ type Order implements Node {
 }
 
 type OrderChoiceItemPrice {
+  id: ID
   choiceItemPrice: ChoiceItemPrice!
   quantity: Int!
   notes: String
@@ -299,6 +300,7 @@ type OrderChoiceItemPrice {
 }
 
 input OrderChoiceItemPriceInput {
+  id: ID
   choiceItemPriceId: ID!
   quantity: Int!
   notes: String
@@ -306,6 +308,7 @@ input OrderChoiceItemPriceInput {
 }
 
 type OrderMenuItemPrice {
+  id: ID
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
@@ -314,6 +317,7 @@ type OrderMenuItemPrice {
 }
 
 input OrderMenuItemPriceInput {
+  id: ID
   menuItemPriceId: ID!
   quantity: Int!
   notes: String
