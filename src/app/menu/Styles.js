@@ -33,4 +33,7 @@ export default StyleSheet.create({
   price: {
     fontSize: 14,
   },
+  columnOrderedIconContainer: {
+    paddingRight: 6,
+  },
 });

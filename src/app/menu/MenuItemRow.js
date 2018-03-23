@@ -46,15 +46,12 @@ class MenuItemRow extends Component {
             <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
           </View>
+          {isOrdered > 0 && (
+            <View style={Styles.columnOrderedIconContainer}>
+              <Icon name="ios-checkmark-circle" type="ionicon" size={25} color={DefaultColor.actionButtonColor} />
+            </View>
+          )}
           <Text style={DefaultStyles.primaryFont}>${currentPrice}</Text>
-          <View>
-            <Icon
-              name="dot-single"
-              type="entypo"
-              size={36}
-              color={isOrdered > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
-            />
-          </View>
         </View>
       </TouchableItem>
     );
