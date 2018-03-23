@@ -39,6 +39,7 @@ export default createPaginationContainer(
               placedAt
               cancelledAt
               details {
+                id
                 menuItemPrice {
                   id
                   currentPrice
@@ -58,6 +59,7 @@ export default createPaginationContainer(
                 notes
                 paid
                 orderChoiceItemPrices {
+                  id
                   choiceItemPrice {
                     id
                     currentPrice
