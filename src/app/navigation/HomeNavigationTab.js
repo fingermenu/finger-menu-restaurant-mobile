@@ -48,7 +48,7 @@ const tabScreens = {
 
 const tabConfig = {
   tabBarPosition: 'bottom',
-  animationEnabled: false,
+  animationEnabled: true,
   swipeEnabled: false,
   lazy: true,
   tabBarOptions: {
