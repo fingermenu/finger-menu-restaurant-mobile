@@ -1,6 +1,6 @@
 // @flow
 
-import Immutable from 'immutable';
+import Immutable, { List } from 'immutable';
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -12,16 +12,13 @@ import { DefaultColor, DefaultStyles } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedDiscountButtonIndex: 0,
-      discount: 0,
-      discountType: '$',
-      selectedOrders: Immutable.fromJS([]),
-      isCustomPaymentMode: false,
-    };
-  }
+  state = {
+    selectedDiscountButtonIndex: 0,
+    discount: 0,
+    discountType: '$',
+    selectedOrders: List(),
+    isCustomPaymentMode: false,
+  };
 
   onResetTableConfirmed = () => {
     this.resetPopupDialog.dismiss();
@@ -58,7 +55,7 @@ class TableDetailView extends Component {
   };
 
   onCancelCustomPayPressed = () => {
-    this.setState({ isCustomPaymentMode: false, selectedOrders: Immutable.fromJS([]) });
+    this.setState({ isCustomPaymentMode: false, selectedOrders: List() });
   };
 
   onPayCustomConfirmed = () => {
