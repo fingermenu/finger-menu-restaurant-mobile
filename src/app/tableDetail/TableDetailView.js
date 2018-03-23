@@ -67,15 +67,6 @@ class TableDetailView extends Component {
     this.customPaidPopupDialog.dismiss();
   };
 
-  onOrderSelected = (order, isSelected) => {
-    if (isSelected) {
-      const selectedOrder = Immutable.fromJS(order);
-      this.setState({ selectedOrders: this.state.selectedOrders.push(selectedOrder) });
-    } else {
-      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.getIn(['menuItemPrice', 'id']) === order.menuItemPrice.id) });
-    }
-  };
-
   getBalanceToPay = () => {
     const total = this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal();
 
@@ -141,6 +132,15 @@ class TableDetailView extends Component {
 
   getDiscountDisplayValue = () => {
     return this.state.discountType === '%' ? this.state.discount + this.state.discountType : this.state.discountType + this.state.discount;
+  };
+
+  handleOrderSelected = (order, isSelected) => {
+    if (isSelected) {
+      const selectedOrder = Immutable.fromJS(order);
+      this.setState({ selectedOrders: this.state.selectedOrders.push(selectedOrder) });
+    } else {
+      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.getIn(['menuItemPrice', 'id']) === order.menuItemPrice.id) });
+    }
   };
 
   updateDiscount = discount => {
@@ -307,7 +307,7 @@ class TableDetailView extends Component {
         onViewOrderItemPressed={onViewOrderItemPressed}
         onRemoveOrderPressed={onRemoveOrderPressed}
         enableMultiSelection={this.state.isCustomPaymentMode}
-        onOrderSelected={this.onOrderSelected}
+        onOrderSelected={this.handleOrderSelected}
         isSelected={this.state.selectedOrders.find(_ => _.getIn(['menuItemPrice', 'id']) === info.item.menuItemPrice.id)}
         isPaid={info.item.paid}
       />
