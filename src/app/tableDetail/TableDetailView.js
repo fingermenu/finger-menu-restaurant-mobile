@@ -114,9 +114,7 @@ class TableDetailView extends Component {
     this.customPaidPopupDialog = popupDialog;
   };
 
-  getOrderTotal = () => {
-    return this.props.order ? this.props.order.totalPrice : 0;
-  };
+  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0);
 
   getRemainingTotal = () => {
     if (this.props.order) {
