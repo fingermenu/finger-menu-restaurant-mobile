@@ -295,7 +295,7 @@ class TableDetailView extends Component {
     );
   };
 
-  renderItem = info => {
+  renderOrderItemRow = info => {
     const { order, onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
 
     return (
@@ -358,7 +358,7 @@ class TableDetailView extends Component {
         {order && order.details ? (
           <FlatList
             data={order.details}
-            renderItem={this.renderItem}
+            renderItem={this.renderOrderItemRow}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}
