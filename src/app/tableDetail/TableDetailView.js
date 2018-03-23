@@ -41,7 +41,7 @@ class TableDetailView extends Component {
   };
 
   onSetTablePaidPressed = () => {
-    if (this.props.table.tableState.name === 'Taken') {
+    if (this.props.table.tableState.key === 'taken') {
       this.paidPopupDialog.show();
     }
   };

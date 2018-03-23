@@ -12,7 +12,7 @@ export default createPaginationContainer(
           id
           name
           tableState {
-            name
+            key
           }
         }
         orders(
