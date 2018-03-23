@@ -1,5 +1,6 @@
 // @flow
 
+import cuid from 'cuid';
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -23,6 +24,7 @@ class MenuItemContainer extends Component {
       .filter(choiceItemPrice => values[choiceItemPrice.get('id')])
       .map(choiceItemPrice =>
         Map({
+          id: cuid(),
           choiceItemPriceId: choiceItemPrice.get('id'),
           choiceItemPrice,
           quantity: 1,
@@ -33,6 +35,7 @@ class MenuItemContainer extends Component {
   handleAdd = values => {
     this.props.ordersActions.addOrderItem(
       Map({
+        id: cuid(),
         menuItemPriceId: this.props.user.menuItemPrice.id,
         currentPrice: this.props.user.menuItemPrice.currentPrice,
         menuItem: this.props.user.menuItemPrice.menuItem,
