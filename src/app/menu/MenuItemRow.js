@@ -37,7 +37,7 @@ class MenuItemRow extends Component {
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 
   render = () => {
-    const { menuItemPrice: { currentPrice, menuItem: { name, description, imageUrl } } } = this.props;
+    const { isOrdered, menuItemPrice: { currentPrice, menuItem: { name, description, imageUrl } } } = this.props;
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
@@ -52,7 +52,7 @@ class MenuItemRow extends Component {
               name="dot-single"
               type="entypo"
               size={36}
-              color={this.props.isOrdered > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
+              color={isOrdered > 0 ? DefaultColor.actionButtonColor : DefaultColor.defaultBackgroundColor}
             />
           </View>
         </View>
