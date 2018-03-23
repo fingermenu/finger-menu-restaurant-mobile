@@ -48,7 +48,7 @@ class TablesView extends Component {
     return (
       <View style={Styles.container}>
         <View>
-          <Text>{t('table.manageTable')}</Text>
+          <Text>{t('manageTable.label')}</Text>
         </View>
         <FlatList
           data={this.props.tables}

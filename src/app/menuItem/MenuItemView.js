@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import FastImage from 'react-native-fast-image';
+import { translate } from 'react-i18next';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
 import { ChoiceItemPrices } from '../../components/choiceItems';
@@ -29,6 +30,7 @@ class MenuItemView extends Component {
 
   render = () => {
     const {
+      t,
       handleSubmit,
       menuItemPrice: { menuItem: { name, description, imageUrl }, choiceItemPrices },
       isAddingToOrder,
@@ -46,7 +48,7 @@ class MenuItemView extends Component {
             </View>
             <Text style={Styles.description}>{description}</Text>
           </View>
-          <Field name="notes" component={TextInput} placeholder="Notes" />
+          <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
           <View style={Styles.optionsContainer}>
             {choiceItemPrices.length > 0 && (
               <View style={Styles.choiceItemSectionHeader}>
@@ -104,4 +106,4 @@ function mapStateToProps(state, props) {
 }
 
 // export default MenuItemView;
-export default connect(mapStateToProps)(reduxForm({ form: 'menuItem' })(MenuItemView));
+export default connect(mapStateToProps)(reduxForm({ form: 'menuItem' })(translate()(MenuItemView)));

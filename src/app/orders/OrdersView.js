@@ -78,7 +78,7 @@ class OrdersView extends Component {
         </PopupDialog>
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>
-            Table {tableName} {customerName}
+            {t('table.label')} {tableName}, {customerName}
           </Text>
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
@@ -98,10 +98,10 @@ class OrdersView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
           </ScrollView>
         )}
-        <Input placeholder="Notes" value={notes} onChangeText={onNotesChanged} />
+        <Input placeholder={t('notes.placeholder')} value={notes} onChangeText={onNotesChanged} />
         <MenuActionButton restaurantId={restaurantId} />
         <Button
-          title="Place Order"
+          title={t('placeOrder.button')}
           icon={<Icon name="md-checkmark" type="ionicon" />}
           backgroundColor={orders.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
           onPress={this.onConfirmOrderPressed}

@@ -21,9 +21,11 @@ i18next.init({
         signOut: { label: 'Sign Out' },
         cancel: { button: 'Cancel' },
         email: { label: 'Email' },
+        manageTable: {
+          label: 'Manage Table',
+        },
         table: {
-          manageTable: 'Manage Table',
-          setupTable: 'Setup Table',
+          label: 'Table',
         },
         password: { label: 'Password' },
         retypePassword: { label: 'Retype Password' },
@@ -32,6 +34,8 @@ i18next.init({
         areYouSureToPlaceYourOrderNow: { message: 'Are you sure to place your order now?' },
         placeYourOrder: { label: 'Place Your Order' },
         noOrdersHaveBeenPlacedYet: { message: 'No orders have been placed yet.' },
+        placeOrder: { button: 'Place Order' },
+        notes: { placeholder: 'Notes' },
       },
     },
     zh: {
@@ -47,9 +51,11 @@ i18next.init({
         signOut: { label: '注销' },
         cancel: { button: '取消' },
         email: { label: '电子邮件' },
+        manageTable: {
+          label: '管理餐桌',
+        },
         table: {
-          manageTable: '管理餐桌',
-          setupTable: '设置餐桌',
+          label: '表',
         },
         password: { label: '密码' },
         retypePassword: { label: '重新输入密码' },
@@ -58,6 +64,8 @@ i18next.init({
         areYouSureToPlaceYourOrderNow: { messsage: '你确定现在下单吗？' },
         placeYourOrder: { label: '下订单' },
         noOrdersHaveBeenPlacedYet: { message: '还没有订单。' },
+        placeOrder: { button: '下订单' },
+        notes: { placeholder: '笔记' },
       },
     },
     jp: {
@@ -73,9 +81,11 @@ i18next.init({
         signOut: { label: '' },
         cancel: { button: 'キャンセル' },
         email: { label: 'Eメール' },
+        manageTable: {
+          label: 'テーブルの管理',
+        },
         table: {
-          manageTable: 'テーブルの管理',
-          setupTable: 'セットアップテーブル',
+          label: '表',
         },
         password: { label: 'パスワード' },
         retypePassword: { label: 'パスワードを再入力してください' },
@@ -84,6 +94,8 @@ i18next.init({
         areYouSureToPlaceYourOrderNow: { message: '今すぐ注文してもよろしいですか？' },
         placeYourOrder: { label: 'あなたの注文を置く' },
         noOrdersHaveBeenPlacedYet: { message: 'まだ注文はありません。' },
+        placeOrder: { button: '注文する' },
+        notes: { placeholder: 'ノート' },
       },
     },
   },
