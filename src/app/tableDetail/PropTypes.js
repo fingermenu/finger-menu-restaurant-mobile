@@ -10,7 +10,7 @@ export const TableProp = PropTypes.shape({
   customerName: PropTypes.string,
   notes: PropTypes.stringt,
   tableState: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
   }),
 });
 
