@@ -64,7 +64,7 @@ class TableDetailContainer extends Component {
               orderChoiceItemPrices.map(orderChoiceItemPrice =>
                 orderChoiceItemPrice
                   .set('choiceItemPriceId', orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']))
-                  .set('quantity', 1)
+                  .set('quantity', orderChoiceItemPrice.get('quantity'))
                   .delete('choiceItemPrice'),
               ),
             ),
