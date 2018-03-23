@@ -98,9 +98,7 @@ class TableDetailView extends Component {
     return ['$', '%'];
   };
 
-  getSelectedDiscountType = discountTypeIndex => {
-    return this.getDiscountTypes()[discountTypeIndex];
-  };
+  getSelectedDiscountType = discountTypeIndex => this.getDiscountTypes()[discountTypeIndex];
 
   setResetPopupDialogRef = popupDialog => {
     this.resetPopupDialog = popupDialog;
