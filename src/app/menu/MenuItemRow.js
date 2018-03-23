@@ -37,15 +37,16 @@ class MenuItemRow extends Component {
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 
   render = () => {
+    const { menuItemPrice: { menuItem: { name, description, currentPrice, imageUrl } } } = this.props;
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
           <View style={Styles.rowImageContainer}>
-            {this.props.menuItemPrice.menuItem.imageUrl ? (
+            {imageUrl ? (
               <FastImage
                 style={Styles.image}
                 source={{
-                  uri: this.props.menuItemPrice.menuItem.imageUrl,
+                  uri: imageUrl,
                 }}
               />
             ) : (
@@ -53,9 +54,9 @@ class MenuItemRow extends Component {
             )}
           </View>
           <View style={Styles.rowTextContainer}>
-            <Text style={DefaultStyles.primaryTitleFont}>{this.props.menuItemPrice.menuItem.name}</Text>
-            <Text style={DefaultStyles.primaryLabelFont}>{this.props.menuItemPrice.menuItem.description}</Text>
-            <Text style={DefaultStyles.primaryFont}>${this.props.menuItemPrice.currentPrice}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
+            <Text style={DefaultStyles.primaryFont}>${currentPrice}</Text>
           </View>
           <View>
             <Icon
