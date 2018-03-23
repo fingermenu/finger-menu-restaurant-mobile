@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PopupDialog, { SlideAnimation, DialogTitle, DialogButton } from 'react-native-popup-dialog';
 import { Text, View } from 'react-native';
+import { translate } from 'react-i18next';
 
 class RemoveOrderPopupContainer extends Component {
   onRemoveOrderConfirmed = () => {
@@ -21,6 +22,8 @@ class RemoveOrderPopupContainer extends Component {
       slideFrom: 'bottom',
     });
 
+    const { t } = this.props;
+
     return (
       <PopupDialog
         width={300}
@@ -34,11 +37,11 @@ class RemoveOrderPopupContainer extends Component {
         ref={this.setPopupDialogRef}
       >
         <View>
-          <Text>Are you sure to remove this order?</Text>
+          <Text>{t('areYouSureToRemoveThisOrder.message')}</Text>
         </View>
       </PopupDialog>
     );
   };
 }
 
-export default RemoveOrderPopupContainer;
+export default translate()(RemoveOrderPopupContainer);
