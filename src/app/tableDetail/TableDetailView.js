@@ -132,7 +132,7 @@ class TableDetailView extends Component {
     if (isSelected) {
       this.setState({ selectedOrders: this.state.selectedOrders.push(Immutable.fromJS(order)) });
     } else {
-      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.getIn(['menuItemPrice', 'id']) === order.menuItemPrice.id) });
+      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.get('id') === order.id) });
     }
   };
 
@@ -156,14 +156,12 @@ class TableDetailView extends Component {
         ref={this.setCustomPaidPopupDialogRef}
       >
         <View style={Styles.customPayDialogContainer}>
-          {/*<View>*/}
           <FlatList
             data={this.state.selectedOrders.toJS()}
             renderItem={this.renderSelectedPayingItem}
             keyExtractor={this.keyExtractor}
             extraData={this.state}
           />
-          {/*</View>*/}
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
               <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getCalculatedOrderItemsTotal(this.state.selectedOrders)}</Text>
@@ -301,7 +299,7 @@ class TableDetailView extends Component {
         onRemoveOrderPressed={onRemoveOrderPressed}
         enableMultiSelection={this.state.isCustomPaymentMode}
         onOrderSelected={this.handleOrderSelected}
-        isSelected={this.state.selectedOrders.find(_ => _.getIn(['menuItemPrice', 'id']) === info.item.menuItemPrice.id)}
+        isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
         isPaid={info.item.paid}
       />
     );
