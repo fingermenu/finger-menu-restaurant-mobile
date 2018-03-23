@@ -136,8 +136,7 @@ class TableDetailView extends Component {
 
   handleOrderSelected = (order, isSelected) => {
     if (isSelected) {
-      const selectedOrder = Immutable.fromJS(order);
-      this.setState({ selectedOrders: this.state.selectedOrders.push(selectedOrder) });
+      this.setState({ selectedOrders: this.state.selectedOrders.push(Immutable.fromJS(order)) });
     } else {
       this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.getIn(['menuItemPrice', 'id']) === order.menuItemPrice.id) });
     }
