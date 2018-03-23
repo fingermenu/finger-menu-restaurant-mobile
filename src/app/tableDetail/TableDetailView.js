@@ -76,8 +76,6 @@ class TableDetailView extends Component {
     }
   };
 
-  // onViewMenuPressed = () => {};
-
   getBalanceToPay = () => {
     const total = this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal();
 
