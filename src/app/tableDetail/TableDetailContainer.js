@@ -51,13 +51,14 @@ class TableDetailContainer extends Component {
 
     const orderToUpdate = order
       .update('details', details =>
-        details.map(_ =>
-          _.merge(
-            new Map({
-              paid: selectedOrders.find(od => od.getIn(['menuItemPrice', 'id']) === _.getIn(['menuItemPrice', 'id'])) !== undefined,
-              menuItemPriceId: _.getIn(['menuItemPrice', 'id']),
-            }),
-          )
+        details.map(detail =>
+          detail
+            .merge(
+              new Map({
+                paid: detail.get('paid') || selectedOrders.find(order => order.get('id') === detail.get('id')) !== undefined,
+                menuItemPriceId: detail.getIn(['menuItemPrice', 'id']),
+              }),
+            )
             .delete('menuItemPrice')
             .update('orderChoiceItemPrices', orderChoiceItemPrices =>
               orderChoiceItemPrices.map(orderChoiceItemPrice =>
