@@ -9,7 +9,6 @@ export default StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
-    // padding: 10,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',

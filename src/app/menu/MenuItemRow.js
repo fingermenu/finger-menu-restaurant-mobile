@@ -37,7 +37,7 @@ class MenuItemRow extends Component {
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 
   render = () => {
-    const { menuItemPrice: { menuItem: { name, description, currentPrice, imageUrl } } } = this.props;
+    const { menuItemPrice: { currentPrice, menuItem: { name, description, imageUrl } } } = this.props;
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
@@ -45,6 +45,8 @@ class MenuItemRow extends Component {
           <View style={Styles.rowTextContainer}>
             <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
+          </View>
+          <View style={Styles.rowTextContainer}>
             <Text style={DefaultStyles.primaryFont}>${currentPrice}</Text>
           </View>
           <View>
