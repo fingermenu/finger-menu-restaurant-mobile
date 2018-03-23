@@ -15,7 +15,7 @@ export default StyleSheet.create({
     borderRadius: 1,
     backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
-  rowTextContainer: {
+  columnTextContainer: {
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 15,
