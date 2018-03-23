@@ -21,7 +21,6 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" changeLanguage={changeLanguage} />
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" changeLanguage={changeLanguage} />
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('ko') === 0} language="ko" changeLanguage={changeLanguage} />
       </MenuOptions>
     </Menu>
   </ImageBackground>

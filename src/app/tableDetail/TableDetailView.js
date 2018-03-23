@@ -6,6 +6,7 @@ import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native'
 import PropTypes from 'prop-types';
 import { Badge, Button, ButtonGroup, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import { translate } from 'react-i18next';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
@@ -323,7 +324,7 @@ class TableDetailView extends Component {
   };
 
   render = () => {
-    const { table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop } = this.props;
+    const { t, table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop } = this.props;
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
@@ -358,7 +359,7 @@ class TableDetailView extends Component {
           />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
           </ScrollView>
         )}
         <View style={Styles.paymentSummaryContainer}>
@@ -399,4 +400,4 @@ TableDetailView.propTypes = {
   onRemoveOrderPressed: PropTypes.func.isRequired,
 };
 
-export default TableDetailView;
+export default translate()(TableDetailView);

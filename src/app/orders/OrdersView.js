@@ -5,6 +5,7 @@ import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Button, Icon, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
+import { translate } from 'react-i18next';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
@@ -51,19 +52,19 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const { notes, orders, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
+    const { t, notes, orders, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
 
     return (
       <View style={Styles.container}>
         <PopupDialog
           width={400}
           height={200}
-          dialogTitle={<DialogTitle title="Place Your Order" />}
+          dialogTitle={<DialogTitle title={t('placeYourOrder.label')} />}
           dialogAnimation={slideAnimation}
           ref={this.setConfirmOrderPopupDialogRef}
         >
           <View style={Styles.popupDialogContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>Are you sure to place your order now?</Text>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>{t('areYouSureToPlaceYourOrderNow.message')}</Text>
             <View style={[DefaultStyles.rowContainer, Styles.popupDialogButtonContainer]}>
               <Button
                 title="No"
@@ -79,7 +80,7 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryTitleFont}>
             Table {tableName} {customerName}
           </Text>
-          <Text style={DefaultStyles.primaryLabelFont}>Your Orders</Text>
+          <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
         {orders.length > 0 ? (
@@ -94,7 +95,7 @@ class OrdersView extends Component {
           />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>No orders have been placed yet.</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
           </ScrollView>
         )}
         <Input placeholder="Notes" value={notes} onChangeText={onNotesChanged} />
@@ -127,4 +128,4 @@ OrdersView.defaultProps = {
   notes: null,
 };
 
-export default OrdersView;
+export default translate()(OrdersView);
