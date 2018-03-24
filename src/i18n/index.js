@@ -37,6 +37,8 @@ i18next.init({
         notes: { placeholder: 'Notes' },
         areYouSureToPlaceYourOrderNow: { message: 'Are you sure to place your order now?' },
         areYouSureToRemoveThisOrder: { message: 'Are you sure to remove this order?' },
+        areYouSureToResetTable: { message: 'Are you sure to reset table {0}?' },
+        areYouSureToPayTableInFull: { message: 'Are you sure to pay table table {0} in full?' },
       },
     },
     zh: {
@@ -68,6 +70,8 @@ i18next.init({
         notes: { placeholder: '笔记' },
         areYouSureToPlaceYourOrderNow: { message: '你确定现在下单吗？' },
         areYouSureToRemoveThisOrder: { message: '你确定删除这个命令吗？' },
+        areYouSureToResetTable: { message: '你确定要重置表吗 {0}？' },
+        areYouSureToPayTableInFull: { message: '你确定完全支付表格 {0} 吗？' },
       },
     },
     jp: {
@@ -99,6 +103,8 @@ i18next.init({
         notes: { placeholder: 'ノート' },
         areYouSureToPlaceYourOrderNow: { message: '今すぐ注文してもよろしいですか？' },
         areYouSureToRemoveThisOrder: { message: 'この注文を削除してもよろしいですか？' },
+        areYouSureToResetTable: { message: 'テーブルをリセットしてもよろしいですか {0}？' },
+        areYouSureToPayTableInFull: { message: 'あなたは完全にテーブルテーブル {0} を支払うことは確かですか？' },
       },
     },
   },
