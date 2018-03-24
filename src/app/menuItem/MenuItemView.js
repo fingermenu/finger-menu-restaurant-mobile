@@ -61,7 +61,7 @@ class MenuItemView extends Component {
         </ScrollView>
         <View>
           <View style={Styles.quantityContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('quantity')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
             <Field name="quantity" component={QuantityControl} onChange={this.handleQuantityChanged} />
           </View>
 
