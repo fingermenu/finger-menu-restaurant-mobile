@@ -52,7 +52,7 @@ class MenuItemView extends Component {
           <View style={Styles.optionsContainer}>
             {choiceItemPrices.length > 0 && (
               <View style={Styles.choiceItemSectionHeader}>
-                <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides')}</Text>
+                <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
                 <ListItemSeparator />
               </View>
             )}
