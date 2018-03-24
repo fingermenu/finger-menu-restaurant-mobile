@@ -83,7 +83,7 @@ class OrdersView extends Component {
         </PopupDialog>
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>
-            {t('table.label').replace('{tableName}', tableName)}, {customerName}
+            {t('table.label').replace('{tableName}', tableName) + (customerName ? ',' + customerName : '')}
           </Text>
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
