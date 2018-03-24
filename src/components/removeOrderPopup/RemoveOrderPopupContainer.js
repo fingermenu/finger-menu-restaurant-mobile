@@ -31,8 +31,8 @@ class RemoveOrderPopupContainer extends Component {
         dialogTitle={<DialogTitle title="Confirm Remove Order" />}
         dialogAnimation={slideAnimation}
         actions={[
-          <DialogButton text="No" onPress={this.onRemoveOrderCancelled} key="button-no" />,
-          <DialogButton text="Yes" onPress={this.onRemoveOrderConfirmed} key="button-yes" />,
+          <DialogButton text={t('no.button')} onPress={this.onRemoveOrderCancelled} key="button-no" />,
+          <DialogButton text={t('yes.button')} onPress={this.onRemoveOrderConfirmed} key="button-yes" />,
         ]}
         ref={this.setPopupDialogRef}
       >

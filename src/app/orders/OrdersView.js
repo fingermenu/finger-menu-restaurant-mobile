@@ -67,12 +67,17 @@ class OrdersView extends Component {
             <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>{t('areYouSureToPlaceYourOrderNow.message')}</Text>
             <View style={[DefaultStyles.rowContainer, Styles.popupDialogButtonContainer]}>
               <Button
-                title="No"
+                title={t('no.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.popupDialogButton}
                 onPress={this.onOrderConfirmedCancelled}
               />
-              <Button title="Yes" containerStyle={Styles.buttonContainer} buttonStyle={Styles.popupDialogButton} onPress={this.onOrderConfirmed} />
+              <Button
+                title={t('yes.button')}
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.popupDialogButton}
+                onPress={this.onOrderConfirmed}
+              />
             </View>
           </View>
         </PopupDialog>

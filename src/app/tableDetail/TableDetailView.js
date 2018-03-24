@@ -148,11 +148,13 @@ class TableDetailView extends Component {
   keyExtractor = item => this.props.order.details.indexOf(item).toString();
 
   renderCustomPaymentPopupDialog = (slideAnimation, tableName) => {
+    const { t } = this.props;
+
     return (
       <PopupDialog
         width={400}
         height={500}
-        dialogTitle={<DialogTitle title={'Custom Payment' + tableName} />}
+        dialogTitle={<DialogTitle title={t('customPayment.label') + ' ' + tableName} />}
         dialogAnimation={slideAnimation}
         ref={this.setCustomPaidPopupDialogRef}
       >
@@ -172,17 +174,17 @@ class TableDetailView extends Component {
               <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
             </View>
             <View style={Styles.resetTableDialogButtonContainer}>
-              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Confirm payment?</Text>
+              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>{t('confirmPayment.message')}</Text>
             </View>
             <View style={Styles.resetTableDialogButtonContainer}>
               <Button
-                title="No"
+                title={t('no.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.resetTableDialogButton}
                 onPress={this.onPayCustomCancelled}
               />
               <Button
-                title="Yes"
+                title={t('yes.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.resetTableDialogButton}
                 onPress={this.onPayCustomConfirmed}
@@ -201,7 +203,7 @@ class TableDetailView extends Component {
       <PopupDialog
         width={400}
         height={200}
-        dialogTitle={<DialogTitle title="Reset Table" />}
+        dialogTitle={<DialogTitle title={t('resetTable.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setResetPopupDialogRef}
       >
@@ -211,13 +213,13 @@ class TableDetailView extends Component {
           </Text>
           <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
             <Button
-              title="No"
+              title={t('no.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.resetTableDialogButton}
               onPress={this.onResetTableCancelled}
             />
             <Button
-              title="Yes"
+              title={t('yes.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.resetTableDialogButton}
               onPress={this.onResetTableConfirmed}
@@ -235,7 +237,7 @@ class TableDetailView extends Component {
       <PopupDialog
         width={400}
         height={300}
-        dialogTitle={<DialogTitle title="Full Payment" />}
+        dialogTitle={<DialogTitle title={t('fullPayment.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setPaidPopupDialogRef}
       >
@@ -254,13 +256,13 @@ class TableDetailView extends Component {
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
             <Button
-              title="No"
+              title={t('no.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.resetTableDialogButton}
               onPress={this.onSetTablePaidCancelled}
             />
             <Button
-              title="Yes"
+              title={t('yes.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.resetTableDialogButton}
               onPress={this.onSetTablePaidConfirmed}
@@ -285,12 +287,14 @@ class TableDetailView extends Component {
   };
 
   renderDefaultPaymentButtons = (tableState, order) => {
+    const { t } = this.props;
+
     return (
       <View style={Styles.buttonsContainer}>
-        <Button title="Full Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onSetTablePaidPressed} />
-        <Button title="Split Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onSetTablePaidPressed} />
-        <Button title="Custom Payment" disabled={tableState.name === 'Paid' || !order} onPress={this.onCustomPayPressed} />
-        <Button title="Reset table" backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
+        <Button title={t('fullPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onSetTablePaidPressed} />
+        <Button title={t('splitPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onSetTablePaidPressed} />
+        <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onCustomPayPressed} />
+        <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
       </View>
     );
   };
