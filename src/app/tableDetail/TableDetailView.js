@@ -195,6 +195,8 @@ class TableDetailView extends Component {
   };
 
   renderResetTablePopupDialog = (slideAnimation, tableName) => {
+    const { t } = this.props;
+
     return (
       <PopupDialog
         width={400}
@@ -204,7 +206,9 @@ class TableDetailView extends Component {
         ref={this.setResetPopupDialogRef}
       >
         <View style={Styles.resetTableDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to reset table {tableName}?</Text>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
+            {t('areYouSureToResetTable.message').replace('{0}', tableName)}
+          </Text>
           <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
             <Button
               title="No"
@@ -225,6 +229,8 @@ class TableDetailView extends Component {
   };
 
   renderFullPaymentPopupDialog = (slideAnimation, tableName) => {
+    const { t } = this.props;
+
     return (
       <PopupDialog
         width={400}
@@ -242,7 +248,9 @@ class TableDetailView extends Component {
             <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>Are you sure to pay table {tableName} in full?</Text>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
+              {t('areYouSureToPayTableInFull.message').replace('{0}', tableName)}
+            </Text>
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
             <Button
