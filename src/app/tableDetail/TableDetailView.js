@@ -125,9 +125,8 @@ class TableDetailView extends Component {
     return 0;
   };
 
-  getDiscountDisplayValue = () => {
-    return this.state.discountType === '%' ? this.state.discount + this.state.discountType : this.state.discountType + this.state.discount;
-  };
+  getDiscountDisplayValue = () =>
+    this.state.discountType === '%' ? this.state.discount + this.state.discountType : this.state.discountType + this.state.discount;
 
   handleOrderSelected = (order, isSelected) => {
     if (isSelected) {
@@ -167,11 +166,13 @@ class TableDetailView extends Component {
           />
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
-              <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getCalculatedOrderItemsTotal(this.state.selectedOrders)}</Text>
-              <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>
+                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(this.state.selectedOrders))}
+              </Text>
+              <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
             </View>
             <View style={Styles.paymentSummaryBalanceRow}>
-              <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
+              <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
             </View>
             <View style={Styles.resetTableDialogButtonContainer}>
               <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>{t('confirmPayment.message')}</Text>
@@ -243,11 +244,11 @@ class TableDetailView extends Component {
       >
         <View style={Styles.resetTableDialogContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getRemainingTotal()}</Text>
-            <Text style={DefaultStyles.primaryLabelFont}>Discount {this.getDiscountDisplayValue()}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getRemainingTotal())}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryTitleFont}>Balance to Pay ${this.getBalanceToPay()}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
@@ -378,10 +379,10 @@ class TableDetailView extends Component {
         )}
         <View style={Styles.paymentSummaryContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>Total ${this.getOrderTotal()}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getOrderTotal())}</Text>
             <View style={DefaultStyles.rowContainer}>
               <Input
-                placeholder="Discount"
+                placeholder={t('discount.placeholder')}
                 onChangeText={this.updateDiscount}
                 value={this.state.discount}
                 containerStyle={{ width: 100 }}
@@ -396,7 +397,7 @@ class TableDetailView extends Component {
             </View>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>Balance To Pay ${this.getBalanceToPay()}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
           </View>
         </View>
         {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState, order)}
