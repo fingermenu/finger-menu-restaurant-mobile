@@ -27,12 +27,8 @@ i18next.init({
         signOut: { label: 'Sign Out' },
         cancel: { button: 'Cancel' },
         email: { label: 'Email' },
-        manageTable: {
-          label: 'Manage Table',
-        },
-        table: {
-          label: 'Table',
-        },
+        manageTable: { label: 'Manage Table' },
+        table: { label: 'Table' },
         password: { label: 'Password' },
         retypePassword: { label: 'Retype Password' },
         waitressMode: { label: 'Waitress Mode' },
@@ -72,12 +68,8 @@ i18next.init({
         signOut: { label: '注销' },
         cancel: { button: '取消' },
         email: { label: '电子邮件' },
-        manageTable: {
-          label: '管理餐桌',
-        },
-        table: {
-          label: '表',
-        },
+        manageTable: { label: '管理餐桌' },
+        table: { label: '表' },
         password: { label: '密码' },
         retypePassword: { label: '重新输入密码' },
         waitressMode: { label: '女服务员模式' },
@@ -117,12 +109,8 @@ i18next.init({
         signOut: { label: '' },
         cancel: { button: 'キャンセル' },
         email: { label: 'Eメール' },
-        manageTable: {
-          label: 'テーブルの管理',
-        },
-        table: {
-          label: '表',
-        },
+        manageTable: { label: 'テーブルの管理' },
+        table: { label: '表' },
         password: { label: 'パスワード' },
         retypePassword: { label: 'パスワードを再入力してください' },
         waitressMode: { label: 'ウェイトレスモード' },
