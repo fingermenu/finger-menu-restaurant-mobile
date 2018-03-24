@@ -51,7 +51,9 @@ class OrderItemRow extends Component {
   renderChoiceItems = choiceItems =>
     choiceItems.map(choiceItem => (
       <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
-        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice})
+        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice
+          ? choiceItem.choiceItemPrice.currentPrice.toFixed(2)
+          : ''})
       </Text>
     ));
 
@@ -87,7 +89,7 @@ class OrderItemRow extends Component {
           </View>
           <View style={DefaultStyles.rowContainer}>
             {this.props.isPaid ? <Text style={Styles.paid}>Paid</Text> : <View />}
-            <Text style={Styles.price}>${this.props.menuItemCurrentPrice}</Text>
+            <Text style={Styles.price}>${this.props.menuItemCurrentPrice.toFixed(2)}</Text>
             {this.props.showRemove ? (
               <TouchableIcon
                 onPress={this.onRemoveOrderPressed}
