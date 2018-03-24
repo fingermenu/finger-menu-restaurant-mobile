@@ -73,9 +73,9 @@ class TableDetailView extends Component {
 
     if (this.state.discount > 0) {
       if (this.state.discountType === '$' && this.state.discount < total) {
-        return (total - this.state.discount).toFixed(2);
+        return total - this.state.discount;
       } else if (this.state.discountType === '%' && this.state.discount < 100) {
-        return (total * (100 - this.state.discount) / 100).toFixed(2);
+        return total * (100 - this.state.discount) / 100;
       }
     }
 
