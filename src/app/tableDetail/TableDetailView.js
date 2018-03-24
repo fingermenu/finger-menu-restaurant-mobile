@@ -83,18 +83,14 @@ class TableDetailView extends Component {
   };
 
   getCalculatedOrderItemsTotal = orderItems =>
-    orderItems
-      .reduce(
-        (v, s) =>
-          v +
-          s.get('quantity') *
-            (s.getIn(['menuItemPrice', 'currentPrice']) +
-              s.get('orderChoiceItemPrices').reduce((ov, os) => {
-                return ov + os.getIn(['choiceItemPrice', 'currentPrice']);
-              }, 0)),
-        0,
-      )
-      .toFixed(2);
+    orderItems.reduce(
+      (reduction, value) =>
+        reduction +
+        value.get('quantity') *
+          (value.getIn(['menuItemPrice', 'currentPrice']) +
+            value.get('orderChoiceItemPrices').reduce((ov, os) => ov + os.getIn(['choiceItemPrice', 'currentPrice']), 0.0)),
+      0.0,
+    );
 
   getDiscountTypes = () => ['$', '%'];
 
@@ -112,7 +108,7 @@ class TableDetailView extends Component {
     this.customPaidPopupDialog = popupDialog;
   };
 
-  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0).toFixed(2);
+  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0);
 
   getRemainingTotal = () => {
     if (this.props.order) {
@@ -127,7 +123,9 @@ class TableDetailView extends Component {
   };
 
   getDiscountDisplayValue = () =>
-    this.state.discountType === '%' ? this.state.discount + this.state.discountType : this.state.discountType + this.state.discount;
+    this.state.discountType === '%'
+      ? (this.state.discount ? this.state.discount : '0') + this.state.discountType
+      : this.state.discountType + (this.state.discount ? this.state.discount.toFixed(2) : '0.00');
 
   handleOrderSelected = (order, isSelected) => {
     if (isSelected) {
@@ -138,7 +136,7 @@ class TableDetailView extends Component {
   };
 
   updateDiscount = discount => {
-    this.setState({ discount });
+    this.setState({ discount: discount ? parseFloat(discount) : 0.0 });
   };
 
   updateIndex = selectedDiscountButtonIndex => {
@@ -168,12 +166,14 @@ class TableDetailView extends Component {
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
               <Text style={DefaultStyles.primaryLabelFont}>
-                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(this.state.selectedOrders))}
+                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(this.state.selectedOrders).toFixed(2))}
               </Text>
               <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
             </View>
             <View style={Styles.paymentSummaryBalanceRow}>
-              <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
+              <Text style={DefaultStyles.primaryTitleFont}>
+                {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}
+              </Text>
             </View>
             <View style={Styles.resetTableDialogButtonContainer}>
               <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>{t('confirmPayment.message')}</Text>
@@ -245,11 +245,11 @@ class TableDetailView extends Component {
       >
         <View style={Styles.resetTableDialogContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getRemainingTotal())}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getRemainingTotal().toFixed(2))}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
@@ -361,7 +361,7 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal()}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal().toFixed(2)}</Text>
         </View>
         {order && order.details ? (
           <FlatList
@@ -380,7 +380,7 @@ class TableDetailView extends Component {
         )}
         <View style={Styles.paymentSummaryContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getOrderTotal())}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getOrderTotal().toFixed(2))}</Text>
             <View style={DefaultStyles.rowContainer}>
               <Input
                 placeholder={t('discount.placeholder')}
@@ -398,7 +398,7 @@ class TableDetailView extends Component {
             </View>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay())}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
           </View>
         </View>
         {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState, order)}
