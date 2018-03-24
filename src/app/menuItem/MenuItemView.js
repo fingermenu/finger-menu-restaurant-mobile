@@ -67,7 +67,7 @@ class MenuItemView extends Component {
 
           {isAddingToOrder ? (
             <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>{t('addToOrder').replace('{quantity}', this.state.quantity)}</Text>
+              <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', this.state.quantity)}</Text>
             </TouchableItem>
           ) : (
             <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
