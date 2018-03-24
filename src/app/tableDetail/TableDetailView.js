@@ -73,7 +73,7 @@ class TableDetailView extends Component {
 
     if (this.state.discount > 0) {
       if (this.state.discountType === '$' && this.state.discount < total) {
-        return total - this.state.discount;
+        return (total - this.state.discount).toFixed(2);
       } else if (this.state.discountType === '%' && this.state.discount < 100) {
         return (total * (100 - this.state.discount) / 100).toFixed(2);
       }
@@ -82,18 +82,19 @@ class TableDetailView extends Component {
     return total;
   };
 
-  getCalculatedOrderItemsTotal = orderItems => {
-    return orderItems.reduce((v, s) => {
-      return (
-        v +
-        s.get('quantity') *
-          (s.getIn(['menuItemPrice', 'currentPrice']) +
-            s.get('orderChoiceItemPrices').reduce((ov, os) => {
-              return ov + os.getIn(['choiceItemPrice', 'currentPrice']);
-            }, 0))
-      );
-    }, 0);
-  };
+  getCalculatedOrderItemsTotal = orderItems =>
+    orderItems
+      .reduce(
+        (v, s) =>
+          v +
+          s.get('quantity') *
+            (s.getIn(['menuItemPrice', 'currentPrice']) +
+              s.get('orderChoiceItemPrices').reduce((ov, os) => {
+                return ov + os.getIn(['choiceItemPrice', 'currentPrice']);
+              }, 0)),
+        0,
+      )
+      .toFixed(2);
 
   getDiscountTypes = () => ['$', '%'];
 
@@ -111,7 +112,7 @@ class TableDetailView extends Component {
     this.customPaidPopupDialog = popupDialog;
   };
 
-  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0);
+  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0).toFixed(2);
 
   getRemainingTotal = () => {
     if (this.props.order) {
@@ -122,7 +123,7 @@ class TableDetailView extends Component {
       );
     }
 
-    return 0;
+    return 0.0;
   };
 
   getDiscountDisplayValue = () =>

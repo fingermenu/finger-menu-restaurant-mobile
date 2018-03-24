@@ -51,9 +51,8 @@ class OrderItemRow extends Component {
   renderChoiceItems = choiceItems =>
     choiceItems.map(choiceItem => (
       <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
-        {choiceItem.choiceItemPrice.choiceItem.name} ({choiceItem.choiceItemPrice.currentPrice
-          ? choiceItem.choiceItemPrice.currentPrice.toFixed(2)
-          : ''})
+        {choiceItem.choiceItemPrice.choiceItem.name} -{' '}
+        {choiceItem.choiceItemPrice.currentPrice ? '$' + choiceItem.choiceItemPrice.currentPrice.toFixed(2) : ''}
       </Text>
     ));
 
