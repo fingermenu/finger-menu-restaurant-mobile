@@ -21,8 +21,8 @@ export default StyleSheet.create({
     paddingLeft: 15,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 120,
   },
   title: {
     fontWeight: '700',

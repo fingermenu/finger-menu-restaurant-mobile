@@ -12,8 +12,6 @@ export default StyleSheet.create({
   descriptionContainer: {
     padding: 10,
     backgroundColor: DefaultColor.secondaryBackgroundColor,
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
   nameContainer: {
     flexDirection: 'row',

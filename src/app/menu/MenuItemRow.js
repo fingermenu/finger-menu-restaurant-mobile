@@ -41,7 +41,7 @@ class MenuItemRow extends Component {
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
-          <View>{imageUrl ? <FastImage style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
+          <View>{imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}</View>
           <View style={Styles.columnTextContainer}>
             <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
