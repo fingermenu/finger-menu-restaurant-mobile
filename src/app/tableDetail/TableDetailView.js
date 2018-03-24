@@ -209,7 +209,7 @@ class TableDetailView extends Component {
       >
         <View style={Styles.resetTableDialogContainer}>
           <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
-            {t('areYouSureToResetTable.message').replace('{0}', tableName)}
+            {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
           </Text>
           <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
             <Button
@@ -251,7 +251,7 @@ class TableDetailView extends Component {
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
-              {t('areYouSureToPayTableInFull.message').replace('{0}', tableName)}
+              {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
             </Text>
           </View>
           <View style={Styles.resetTableDialogButtonContainer}>
