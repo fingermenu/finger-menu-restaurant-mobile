@@ -57,6 +57,8 @@ i18next.init({
         updateOrder: { button: 'Update Order' },
         quantity: { label: 'Quantity' },
         wouldYouLikeSomeSides: { message: 'Would you like some sides?' },
+        viewOrder: { label: 'View Order' },
+        numberOfItems: { label: '{numberOfItems} Items' },
       },
     },
     zh: {
@@ -108,6 +110,8 @@ i18next.init({
         updateOrder: { button: '更新订单' },
         quantity: { label: '数量' },
         wouldYouLikeSomeSides: { message: '你想要双方？' },
+        viewOrder: { label: '查看订单' },
+        numberOfItems: { label: '{numberOfItems} 项目' },
       },
     },
     jp: {
@@ -159,6 +163,8 @@ i18next.init({
         updateOrder: { button: '注文の更新' },
         quantity: { label: '量' },
         wouldYouLikeSomeSides: { message: 'あなたはいくつかの側面が欲しいですか？' },
+        viewOrder: { label: '表示の順序' },
+        numberOfItems: { label: '{numberOfItems} アイテム' },
       },
     },
   },
