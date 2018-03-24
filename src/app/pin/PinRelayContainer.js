@@ -27,6 +27,7 @@ export default createPaginationContainer(
                   port
                 }
                 images {
+                  logoImageUrl
                   primaryLandingPageBackgroundImageUrl
                   secondaryLandingPageBackgroundImageUrl
                   primaryTopBannerImageUrl

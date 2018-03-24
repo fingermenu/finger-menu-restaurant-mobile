@@ -17,6 +17,7 @@ import { Alert, BackHandler, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
 import CodePush from 'react-native-code-push';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
+import Config from '../../framework/config';
 import { SplashContainer } from '../splash';
 import AppNavigationStack from './AppNavigationStack';
 import { configureStore } from '../../framework/redux';
@@ -35,11 +36,11 @@ const AppNavigator = StackNavigator(
           titleTextColor="white"
           enableFacebookSignIn={false}
           enableCreateAccount={false}
-          termAndConditionUrl="http://www.fingermenu.co.nz/terms"
+          termAndConditionUrl={Config.fingerMenuTermAndConditionUrl}
           companyName="FingerMenu Ltd"
           labelTextColor="white"
           inputPlaceholderTextColor="white"
-          logoImageUrl="https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Ffingermenu-logo-3.png?alt=media&token=f86549d0-54ce-490e-a077-9800cc6b6a79"
+          logoImageUrl={Config.fingerMenuLogoImageUrl}
           backgroundColor="#24232D"
           displayEnvironmentSelector
         />

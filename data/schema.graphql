@@ -454,6 +454,7 @@ type RestaurantConfigurations {
 }
 
 type RestaurantImages {
+  logoImageUrl: String
   primaryLandingPageBackgroundImageUrl: String
   secondaryLandingPageBackgroundImageUrl: String
   primaryTopBannerImageUrl: String

@@ -10,17 +10,17 @@ class OrderConfirmedContainer extends Component {
     header: null,
   });
 
-  onAddMoreOrdersPressed = () => {
+  handleFingerMenuPressed = () => {
     this.props.navigateToPin();
   };
 
-  render = () => {
-    return <OrderConfirmedView onAddMoreOrdersPressed={this.onAddMoreOrdersPressed} />;
-  };
+  render = () => <OrderConfirmedView onFingerMenuPressed={this.handleFingerMenuPressed} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    restaurantLogoImageUrl: JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations'])).images.logoImageUrl,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
