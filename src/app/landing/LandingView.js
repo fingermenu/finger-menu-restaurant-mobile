@@ -8,7 +8,7 @@ import { translate } from 'react-i18next';
 import Styles from './Styles';
 
 const LandingView = ({ t, backgroundImageUrl, navigateToMenu }) => (
-  <ImageBackground style={Styles.backgroundImage} source={{ uri: backgroundImageUrl }}>
+  <ImageBackground style={Styles.backgroundImage} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
     <View style={Styles.buttonContainer}>
       <Button title={t('startOrder.button')} buttonStyle={Styles.button} onPress={navigateToMenu} />
     </View>
