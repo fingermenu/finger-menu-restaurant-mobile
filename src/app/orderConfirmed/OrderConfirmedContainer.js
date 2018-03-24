@@ -11,7 +11,7 @@ class OrderConfirmedContainer extends Component {
   });
 
   onAddMoreOrdersPressed = () => {
-    this.props.navigateToPn();
+    this.props.navigateToPin();
   };
 
   render = () => {
@@ -25,7 +25,7 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToPn: () =>
+    navigateToPin: () =>
       dispatch(
         NavigationActions.reset({
           index: 0,

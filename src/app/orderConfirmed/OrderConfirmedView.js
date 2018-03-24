@@ -3,9 +3,10 @@
 import React from 'react';
 import { Text, Image, View } from 'react-native';
 import { TouchableItem } from '@microbusiness/common-react-native';
+import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-const OrderConfirmedView = ({ onAddMoreOrdersPressed }) => {
+const OrderConfirmedView = ({ t, onAddMoreOrdersPressed }) => {
   return (
     <View style={Styles.container}>
       <Image
@@ -15,10 +16,7 @@ const OrderConfirmedView = ({ onAddMoreOrdersPressed }) => {
             'https://firebasestorage.googleapis.com/v0/b/firstproject-b2fb1.appspot.com/o/restaurants%2Ftakumi%2Flogo.png?alt=media&token=8276c172-5f83-43b1-9a3f-f734138325f9',
         }}
       />
-      <Text style={Styles.text}>
-        Thank you! The kitchen staff have received your order and are now busy crafting your culinary delights. The waiting staff will collect your
-        tablet shortly.
-      </Text>
+      <Text style={Styles.text}>{t('thankYouForPlacingOrder.message')}</Text>
       <TouchableItem onPress={onAddMoreOrdersPressed}>
         <Image
           style={Styles.image}
@@ -32,4 +30,4 @@ const OrderConfirmedView = ({ onAddMoreOrdersPressed }) => {
   );
 };
 
-export default OrderConfirmedView;
+export default translate()(OrderConfirmedView);

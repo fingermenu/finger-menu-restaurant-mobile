@@ -59,6 +59,10 @@ i18next.init({
         wouldYouLikeSomeSides: { message: 'Would you like some sides?' },
         viewOrder: { label: 'View Order' },
         numberOfItems: { label: '{numberOfItems} Items' },
+        thankYouForPlacingOrder: {
+          message:
+            'Thank you! The kitchen staff have received your order and are now busy crafting your culinary delights. The waiting staff will collect your tablet shortly.',
+        },
       },
     },
     zh: {
@@ -112,6 +116,7 @@ i18next.init({
         wouldYouLikeSomeSides: { message: '你想要双方？' },
         viewOrder: { label: '查看订单' },
         numberOfItems: { label: '{numberOfItems} 项目' },
+        thankYouForPlacingOrder: { message: '谢谢！厨房工作人员已经收到您的订单，现在正忙着制作您的美食。等候的工作人员很快就会收集您的平板电脑。' },
       },
     },
     jp: {
@@ -165,6 +170,10 @@ i18next.init({
         wouldYouLikeSomeSides: { message: 'あなたはいくつかの側面が欲しいですか？' },
         viewOrder: { label: '表示の順序' },
         numberOfItems: { label: '{numberOfItems} アイテム' },
+        thankYouForPlacingOrder: {
+          message:
+            'ありがとうございました！キッチンスタッフがあなたの注文を受け取り、あなたの料理の喜びを作り出すのに忙しいです。待っているスタッフがすぐにあなたのタブレットを収集します。',
+        },
       },
     },
   },
