@@ -352,9 +352,7 @@ class TableDetailView extends Component {
         {this.renderCustomPaymentPopupDialog(slideAnimation, name)}
 
         <View style={Styles.headerContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>
-            {t('table.label')}: {name}
-          </Text>
+          <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', name)}</Text>
           <Badge
             value={tableState.name}
             textStyle={Styles.tableText}

@@ -7,15 +7,16 @@ import { Button, Icon } from 'react-native-elements';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { translate } from 'react-i18next';
 import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { NumberPad } from '../../components/redux-form-components';
 
-const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePressed, onResetTablePressed, table: { name, tableState } }) => (
+const TableSetupView = ({ t, handleSubmit, onSetupTablePressed, onReserveTablePressed, onResetTablePressed, table: { name, tableState } }) => (
   <View style={Styles.container}>
     <View style={DefaultStyles.rowContainer}>
-      <Text style={Styles.headerText}>Table {name}</Text>
+      <Text style={Styles.headerText}>{t('table.label').replace('{tableName}', name)}</Text>
     </View>
     <View>
       <View style={Styles.tableTextContainer}>
@@ -36,14 +37,19 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
       </View>
       <View style={Styles.tableTextContainer}>
         <View style={Styles.textFieldContainer}>
-          <Field name="name" placeholder="Customer name" component={TextInput} leftIcon={<Icon name="user" type="simple-line-icon" size={24} />} />
+          <Field
+            name="name"
+            placeholder={t('customerName.placeholder')}
+            component={TextInput}
+            leftIcon={<Icon name="user" type="simple-line-icon" size={24} />}
+          />
         </View>
       </View>
       <View style={Styles.tableTextContainer}>
         <View style={Styles.textFieldContainer}>
           <Field
             name="notes"
-            placeholder="Reservation notes"
+            placeholder={t('reservationNotes.placeholder')}
             component={TextInput}
             leftIcon={<Icon name="note" type="simple-line-icon" size={24} />}
           />
@@ -53,7 +59,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
     <View style={Styles.buttonRowContainer}>
       <Button
         containerStyle={Styles.buttonContainer}
-        title="Give to Guest"
+        title={t('giveToGuest.button')}
         backgroundColor={DefaultColor.defaultButtonColor}
         icon={<Icon name="food" type="material-community" />}
         buttonStyle={Styles.button}
@@ -61,7 +67,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
       />
       <Button
         containerStyle={{ padding: 20 }}
-        title={tableState.key === 'reserved' ? 'Update Reserve' : 'Reserve'}
+        title={tableState.key === 'reserved' ? t('updateReserve.button') : t('reserve.button')}
         backgroundColor="orange"
         icon={<Icon name="ios-clock-outline" type="ionicon" />}
         buttonStyle={Styles.button}
@@ -70,7 +76,7 @@ const TableSetupView = ({ handleSubmit, onSetupTablePressed, onReserveTablePress
       {tableState.key === 'reserved' ? (
         <Button
           containerStyle={Styles.buttonContainer}
-          title="Reset Table"
+          title={t('resetTable.button')}
           backgroundColor="red"
           icon={<Icon name="ios-clock-outline" type="ionicon" />}
           buttonStyle={Styles.button}
@@ -101,4 +107,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(reduxForm({ form: 'setupTable', enableReinitialize: true })(TableSetupView));
+export default connect(mapStateToProps)(reduxForm({ form: 'setupTable', enableReinitialize: true })(translate()(TableSetupView)));
