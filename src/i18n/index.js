@@ -52,6 +52,7 @@ i18next.init({
         updateReserve: { button: 'Update Reseve' },
         customerName: { placeholder: 'Customer Name' },
         reservationNotes: { placeholder: 'Reservation Notes' },
+        startOrder: { button: 'Start Order' },
       },
     },
     zh: {
@@ -98,6 +99,7 @@ i18next.init({
         updateReserve: { button: '更新储备' },
         customerName: { placeholder: '顾客姓名' },
         reservationNotes: { placeholder: '继续说明' },
+        startOrder: { button: '开始订单' },
       },
     },
     jp: {
@@ -144,6 +146,7 @@ i18next.init({
         updateReserve: { button: '予約を更新する' },
         customerName: { placeholder: '顧客名' },
         reservationNotes: { placeholder: 'リセールノート' },
+        startOrder: { button: '注文を開始する' },
       },
     },
   },

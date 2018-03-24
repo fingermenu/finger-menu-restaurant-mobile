@@ -1,31 +1,19 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import { View, ImageBackground } from 'react-native';
 import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-class LandingView extends Component {
-  renderLandingPage = () => {
-    return (
-      <ImageBackground
-        style={Styles.backgroundImage}
-        source={{
-          uri: this.props.backgroundImageUrl,
-        }}
-      >
-        <View style={Styles.buttonContainer}>
-          <Button title="Start Order" buttonStyle={Styles.button} onPress={this.props.navigateToMenu} />
-        </View>
-      </ImageBackground>
-    );
-  };
-
-  render = () => {
-    return this.renderLandingPage(this.props.landing);
-  };
-}
+const LandingView = ({ t, backgroundImageUrl, navigateToMenu }) => (
+  <ImageBackground style={Styles.backgroundImage} source={{ uri: backgroundImageUrl }}>
+    <View style={Styles.buttonContainer}>
+      <Button title={t('startOrder.button')} buttonStyle={Styles.button} onPress={navigateToMenu} />
+    </View>
+  </ImageBackground>
+);
 
 LandingView.propTypes = {
   restaurantName: PropTypes.string.isRequired,
@@ -40,4 +28,4 @@ LandingView.defaultProps = {
   backgroundImageUrl: null,
 };
 
-export default LandingView;
+export default translate()(LandingView);
