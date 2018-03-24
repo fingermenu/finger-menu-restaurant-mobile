@@ -49,6 +49,8 @@ i18next.init({
         areYouSureToResetTable: { message: 'Are you sure to reset table {tableName}?' },
         areYouSureToPayTableInFull: { message: 'Are you sure to pay table table {tableName} in full?' },
         confirmPayment: { message: 'Confirm payment?' },
+        payItems: { button: 'Pay {numberOfItems} Items' },
+        cancelPayment: { button: 'Cancel Payment' },
       },
     },
     zh: {
@@ -92,6 +94,8 @@ i18next.init({
         areYouSureToResetTable: { message: '你确定要重置表吗 {tableName}？' },
         areYouSureToPayTableInFull: { message: '你确定完全支付表格 {tableName} 吗？' },
         confirmPayment: { message: '确认付款？' },
+        payItems: { button: '支付 {numberOfItems} 项目' },
+        cancelPayment: { button: '取消付款' },
       },
     },
     jp: {
@@ -135,6 +139,8 @@ i18next.init({
         areYouSureToResetTable: { message: 'テーブルをリセットしてもよろしいですか {tableName}？' },
         areYouSureToPayTableInFull: { message: 'あなたは完全にテーブルテーブル {tableName} を支払うことは確かですか？' },
         confirmPayment: { message: 'お支払いを確認しますか？' },
+        payItems: { button: '有料 {numberOfItems} アイテム' },
+        cancelPayment: { button: 'お支払いのキャンセル' },
       },
     },
   },

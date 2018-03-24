@@ -275,14 +275,16 @@ class TableDetailView extends Component {
   };
 
   renderCustomPaymentButtons = () => {
+    const { t } = this.props;
+
     return (
       <View style={Styles.buttonsContainer}>
         <Button
-          title={'Pay ' + this.state.selectedOrders.count() + ' items'}
+          title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
           disabled={this.state.selectedOrders.count() === 0}
           onPress={this.onPayCustomPayPressed}
         />
-        <Button title="Cancel Payment" onPress={this.onCancelCustomPayPressed} />
+        <Button title={t('cancelPayment.button')} onPress={this.onCancelCustomPayPressed} />
       </View>
     );
   };
