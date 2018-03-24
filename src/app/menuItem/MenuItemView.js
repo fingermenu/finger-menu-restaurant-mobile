@@ -52,7 +52,7 @@ class MenuItemView extends Component {
           <View style={Styles.optionsContainer}>
             {choiceItemPrices.length > 0 && (
               <View style={Styles.choiceItemSectionHeader}>
-                <Text style={Styles.choiceItemSectionTitle}>Would you like some sides?</Text>
+                <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides')}</Text>
                 <ListItemSeparator />
               </View>
             )}
@@ -61,17 +61,17 @@ class MenuItemView extends Component {
         </ScrollView>
         <View>
           <View style={Styles.quantityContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>Quantity</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('quantity')}</Text>
             <Field name="quantity" component={QuantityControl} onChange={this.handleQuantityChanged} />
           </View>
 
           {isAddingToOrder ? (
             <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>ADD {this.state.quantity} TO ORDER</Text>
+              <Text style={Styles.text}>{t('addToOrder').replace('{quantity}', this.state.quantity)}</Text>
             </TouchableItem>
           ) : (
             <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>UPDATE ORDER</Text>
+              <Text style={Styles.text}>{t('updateOrder.button')}</Text>
             </TouchableItem>
           )}
         </View>
