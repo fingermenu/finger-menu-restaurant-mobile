@@ -14,7 +14,7 @@ const ChoiceItemPrice = ({ choiceItemPrice: { id, currentPrice, choiceItem: { na
     </View>
     <View style={Styles.optionContainer}>
       <Text style={Styles.optionName}>{name}</Text>
-      <Text style={Styles.price}>${currentPrice}</Text>
+      {currentPrice !== 0 && <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>}
     </View>
   </View>
 );

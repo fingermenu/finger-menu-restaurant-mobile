@@ -51,7 +51,7 @@ class MenuItemRow extends Component {
               <Icon name="ios-checkmark-circle" type="ionicon" size={25} color={DefaultColor.actionButtonColor} />
             </View>
           )}
-          <Text style={DefaultStyles.primaryFont}>${currentPrice}</Text>
+          <Text style={DefaultStyles.primaryFont}>${currentPrice.toFixed(2)}</Text>
         </View>
       </TouchableItem>
     );
