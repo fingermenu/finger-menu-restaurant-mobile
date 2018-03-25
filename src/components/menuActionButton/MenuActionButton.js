@@ -47,7 +47,7 @@ MenuActionButton.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
   };
 }
 

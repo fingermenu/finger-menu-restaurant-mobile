@@ -1415,13 +1415,9 @@
                   "name": "dateRange",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "DateRange",
-                      "ofType": null
-                    }
+                    "kind": "INPUT_OBJECT",
+                    "name": "DateRange",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },

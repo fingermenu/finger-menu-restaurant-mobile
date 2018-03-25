@@ -13,7 +13,7 @@ export function setOrder(payload) {
 export function addOrderItem(payload) {
   return {
     type: ActionTypes.ORDERS_MENU_ADD_MENU_ITEM_PRICE,
-    payload: payload.set('orderItemId', cuid()),
+    payload: payload.set('id', cuid()),
   };
 }
 

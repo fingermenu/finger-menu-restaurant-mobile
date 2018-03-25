@@ -7,21 +7,17 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-const LandingView = ({ t, backgroundImageUrl, navigateToMenu }) => (
+const LandingView = ({ t, backgroundImageUrl, onStartButtonPressed }) => (
   <ImageBackground style={Styles.backgroundImage} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
     <View style={Styles.buttonContainer}>
-      <Button title={t('startOrder.button')} buttonStyle={Styles.button} onPress={navigateToMenu} />
+      <Button title={t('startOrder.button')} buttonStyle={Styles.button} onPress={onStartButtonPressed} />
     </View>
   </ImageBackground>
 );
 
 LandingView.propTypes = {
-  restaurantName: PropTypes.string.isRequired,
-  restaurantSubTitle: PropTypes.string.isRequired,
-  welcomeText: PropTypes.string.isRequired,
-  openingHourText: PropTypes.string.isRequired,
   backgroundImageUrl: PropTypes.string,
-  navigateToMenu: PropTypes.func.isRequired,
+  onStartButtonPressed: PropTypes.func.isRequired,
 };
 
 LandingView.defaultProps = {

@@ -2,13 +2,14 @@
 
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
 import TablesView from './TablesView';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class TablesContainer extends Component {
   state = {
@@ -22,6 +23,10 @@ class TablesContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: name }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
+
+    this.props.applicationStateActions.setActiveRestaurant(
+      Map({ id, name, pin, configurations: configurations ? Immutable.fromJS(configurations) : Map() }),
+    );
   };
 
   componentWillReceiveProps = nextProps => {
@@ -32,10 +37,30 @@ class TablesContainer extends Component {
 
   onTablePressed = table => {
     if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
-      this.props.navigateToTableSetup(table);
+      if (table.tableState.key === 'reserved') {
+        this.setActiveCustomer(table);
+      } else {
+        this.props.applicationStateActions.clearActiveCustomer();
+      }
+
+      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      this.props.navigateToTableSetup();
     } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
+      this.setActiveCustomer(table);
+      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.navigateToTableDetail(table);
     }
+  };
+
+  setActiveCustomer = table => {
+    this.props.applicationStateActions.setActiveCustomer(
+      Map({
+        name: table.customerName,
+        reservationNotes: table.notes,
+        numberOfAdults: table.numberOfAdults,
+        numberOfChildren: table.numberOfChildren,
+      }),
+    );
   };
 
   handleRefresh = () => {
@@ -76,6 +101,8 @@ class TablesContainer extends Component {
 }
 
 TablesContainer.propTypes = {
+  asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTableSetup: PropTypes.func.isRequired,
   navigateToTableDetail: PropTypes.func.isRequired,
 };
@@ -89,24 +116,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    navigateToTableSetup: table =>
-      dispatch(
-        NavigationActions.navigate({
-          routeName: 'TableSetup',
-          params: {
-            table,
-          },
-        }),
-      ),
-    navigateToTableDetail: table =>
-      dispatch(
-        NavigationActions.navigate({
-          routeName: 'TableDetail',
-          params: {
-            table,
-          },
-        }),
-      ),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+    navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
+    navigateToTableDetail: () => dispatch(NavigationActions.navigate({ routeName: 'TableDetail' })),
   };
 }
 

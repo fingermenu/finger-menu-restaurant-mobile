@@ -2,9 +2,11 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import MenuActionButtonView from './MenuActionButtonView';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class MenuActionButtonContainer extends Component {
   componentWillReceiveProps = nextProps => {
@@ -15,8 +17,9 @@ class MenuActionButtonContainer extends Component {
     }
   };
 
-  onMenuActionButtonPressed = menuId => {
-    this.props.navigateToMenu(menuId);
+  onMenuActionButtonPressed = id => {
+    this.props.applicationStateActions.setActiveMenu(Map({ id }));
+    this.props.navigateToMenu();
   };
 
   render = () => {
@@ -25,6 +28,8 @@ class MenuActionButtonContainer extends Component {
 }
 
 MenuActionButtonContainer.propTypes = {
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  navigateToMenu: PropTypes.func.isRequired,
   menus: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
@@ -37,20 +42,8 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToMenu: menuId =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'Home',
-              params: {
-                menuId,
-              },
-            }),
-          ],
-        }),
-      ),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+    navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
   };
 }
 

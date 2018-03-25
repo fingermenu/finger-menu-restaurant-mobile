@@ -304,12 +304,11 @@ class TableDetailView extends Component {
   };
 
   renderOrderItemRow = info => {
-    const { order, onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
+    const { onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
 
     return (
       <OrderItemRow
         orderItem={info.item}
-        orderItemId={order.id}
         menuItem={info.item.menuItemPrice.menuItem}
         menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
         onViewOrderItemPressed={onViewOrderItemPressed}
@@ -323,13 +322,9 @@ class TableDetailView extends Component {
   };
 
   renderSelectedPayingItem = info => {
-    const { order } = this.props;
-
     return (
       <OrderItemRow
         orderItem={info.item}
-        orderItemId={order.id}
-        menuItem={info.item.menuItemPrice.menuItem}
         menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
         enableMultiSelection={false}
         onViewOrderItemPressed={() => {}}
@@ -341,9 +336,7 @@ class TableDetailView extends Component {
 
   render = () => {
     const { t, table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop } = this.props;
-    const slideAnimation = new SlideAnimation({
-      slideFrom: 'bottom',
-    });
+    const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
     const { selectedDiscountButtonIndex } = this.state;
 
     return (
@@ -385,7 +378,7 @@ class TableDetailView extends Component {
               <Input
                 placeholder={t('discount.placeholder')}
                 onChangeText={this.updateDiscount}
-                value={this.state.discount}
+                value={this.state.discount.toString()}
                 containerStyle={{ width: 100 }}
                 maxLength={3}
               />

@@ -22,7 +22,6 @@ export default createPaginationContainer(
           tableId: $tableId
           correlationId: $lastOrderCorrelationId
           restaurantId: $restaurantId
-          dateRange: $dateRange
           sortOption: "PlacedAtDescending"
         ) @connection(key: "User_orders") {
           pageInfo {
@@ -49,12 +48,6 @@ export default createPaginationContainer(
                     name
                     description
                   }
-                  size {
-                    id
-                    name
-                    description
-                    forDisplay
-                  }
                 }
                 quantity
                 notes
@@ -68,12 +61,6 @@ export default createPaginationContainer(
                       id
                       name
                       description
-                    }
-                    size {
-                      id
-                      name
-                      description
-                      forDisplay
                     }
                   }
                 }
@@ -103,7 +90,6 @@ export default createPaginationContainer(
         tableIdForTableQuery: fragmentVariables.tableIdForTableQuery,
         lastOrderCorrelationId: fragmentVariables.lastOrderCorrelationId,
         restaurantId: fragmentVariables.restaurantId,
-        dateRange: fragmentVariables.dateRange,
       };
     },
     variables: { cursor: null },
@@ -115,7 +101,6 @@ export default createPaginationContainer(
         $tableId: ID
         $lastOrderCorrelationId: ID
         $tableIdForTableQuery: ID!
-        $dateRange: DateRange!
       ) {
         user {
           ...TableDetailRelayContainer_user

@@ -21,13 +21,13 @@ export default (state = initialState, action) => {
     );
 
   case ActionTypes.ORDERS_MENU_ADD_MENU_ITEM_PRICE:
-    return state.setIn(['tableOrder', 'details', action.payload.get('orderItemId')], action.payload.delete('orderItemId'));
+    return state.setIn(['tableOrder', 'details', action.payload.get('id')], action.payload);
 
   case ActionTypes.ORDERS_MENU_REMOVE_MENU_ITEM_PRICE:
-    return state.deleteIn(['tableOrder', 'details', action.payload.get('orderItemId')]);
+    return state.deleteIn(['tableOrder', 'details', action.payload.get('id')]);
 
   case ActionTypes.ORDERS_MENU_UPDATE_MENU_ITEM_PRICE:
-    return state.setIn(['tableOrder', 'details', action.payload.get('orderItemId')], action.payload.delete('orderItemId'));
+    return state.setIn(['tableOrder', 'details', action.payload.get('id')], action.payload);
 
   case ActionTypes.ORDERS_MENU_CHANGE_NOTES:
     return state.setIn(['tableOrder', 'notes'], action.notes);

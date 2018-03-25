@@ -655,7 +655,7 @@ type User implements Node {
   table(tableId: ID!): Table
   tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange!, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
 }
 
 type Viewer implements Node {

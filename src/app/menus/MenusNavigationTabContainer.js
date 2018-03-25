@@ -2,6 +2,7 @@
 
 import Immutable, { OrderedMap } from 'immutable';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { TabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import int from 'int';
@@ -15,9 +16,7 @@ class MenusNavigationTabContainer extends Component {
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.props.relay.refetch(_ => ({
-        restaurant: _.restaurantId,
-      }));
+      this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }));
     }
   };
 
@@ -77,13 +76,18 @@ class MenusNavigationTabContainer extends Component {
 }
 
 MenusNavigationTabContainer.propTypes = {
-  // TODO: Add menus props
+  selectedLanguage: PropTypes.string.isRequired,
+  menuId: PropTypes.string,
+};
+
+MenusNavigationTabContainer.defaultProps = {
+  menuId: undefined,
 };
 
 function mapStateToProps(state, props) {
   return {
     menus: props.user.restaurant.menus,
-    menuId: state.navigation.routes[0].routes[0].params ? state.navigation.routes[0].routes[0].params.menuId : undefined,
+    menuId: state.applicationState.getIn(['activeMenu', 'id']),
     selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }

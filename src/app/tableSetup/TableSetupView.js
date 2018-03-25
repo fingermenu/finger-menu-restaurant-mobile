@@ -8,12 +8,19 @@ import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { TableProp } from '../tables/PropTypes';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { NumberPad } from '../../components/redux-form-components';
+import { ActiveTableProp } from '../../framework/applicationState/PropTypes';
 
-const TableSetupView = ({ t, handleSubmit, onSetupTablePressed, onReserveTablePressed, onResetTablePressed, table: { name, tableState } }) => (
+const TableSetupView = ({
+  t,
+  table: { name, tableState: { key: tableStateKey } },
+  handleSubmit,
+  onSetupTablePressed,
+  onReserveTablePressed,
+  onResetTablePressed,
+}) => (
   <View style={Styles.container}>
     <View style={DefaultStyles.rowContainer}>
       <Text style={Styles.headerText}>{t('table.label').replace('{tableName}', name)}</Text>
@@ -67,13 +74,13 @@ const TableSetupView = ({ t, handleSubmit, onSetupTablePressed, onReserveTablePr
       />
       <Button
         containerStyle={{ padding: 20 }}
-        title={tableState.key === 'reserved' ? t('updateReserve.button') : t('reserve.button')}
+        title={tableStateKey === 'reserved' ? t('updateReserve.button') : t('reserve.button')}
         backgroundColor="orange"
         icon={<Icon name="ios-clock-outline" type="ionicon" />}
         buttonStyle={Styles.button}
         onPress={handleSubmit(onReserveTablePressed)}
       />
-      {tableState.key === 'reserved' ? (
+      {tableStateKey === 'reserved' ? (
         <Button
           containerStyle={Styles.buttonContainer}
           title={t('resetTable.button')}
@@ -93,16 +100,19 @@ TableSetupView.propTypes = {
   onSetupTablePressed: PropTypes.func.isRequired,
   onReserveTablePressed: PropTypes.func.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
-  table: TableProp.isRequired,
+  table: ActiveTableProp.isRequired,
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
+  const activeTable = state.applicationState.get('activeTable');
+  const activeCustomer = state.applicationState.get('activeCustomer');
+
   return {
     initialValues: {
-      numberOfAdults: props.table.numberOfAdults ? props.table.numberOfAdults : 2,
-      numberOfChildren: props.table.numberOfChildren ? props.table.numberOfChildren : 0,
-      name: props.table.customerName ? props.table.customerName : '',
-      notes: props.table.notes ? props.table.notes : '',
+      numberOfAdults: activeTable.get('numberOfAdults') || 2,
+      numberOfChildren: activeTable.get('numberOfChildren') || 0,
+      name: activeCustomer.get('name') || '',
+      notes: activeCustomer.get('reservationNotes') || '',
     },
   };
 }

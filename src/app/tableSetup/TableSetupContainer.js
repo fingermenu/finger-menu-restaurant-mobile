@@ -1,18 +1,18 @@
 // @flow
 
-import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import TableSetupView from './TableSetupView';
-import * as ordersActions from '../../app/orders/Actions';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
-import { TableProp } from '../tables/PropTypes';
+import { ActiveTableProp } from '../../framework/applicationState/PropTypes';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class TableSetupContainer extends Component {
   static navigationOptions = {
@@ -24,38 +24,17 @@ class TableSetupContainer extends Component {
   };
 
   onResetTablePressed = () => {
-    UpdateTable.commit(Environment, this.props.userId, {
-      id: this.props.table.id,
-      tableState: 'empty',
-      numberOfAdults: 0,
-      numberOfChildren: 0,
-      customerName: '',
-      notes: '',
-      lastOrderCorrelationId: '',
-    });
-
+    this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty');
     this.props.goBack();
   };
 
-  onSetupTablePressed = value => {
-    this.updateTable(value, 'taken');
-    this.props.navigateToAppHome();
-
-    // Save the table into storage
-    this.props.asyncStorageActions.writeValue(Map({ key: 'servingTableId', value: this.props.table.id }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'servingTableName', value: this.props.table.name }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'servingCustomerName', value: value.name }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'servingCustomerNotes', value: value.notes }));
-    this.props.ordersActions.setOrder(
-      Map({
-        restaurantId: this.props.restaurantId,
-        tableId: this.props.table.id,
-        customerName: value.name,
-        totalPrice: 0,
-        numberOfAdults: value.numberOfAdults,
-        numberOfChildren: value.numberOfChildren,
-      }),
+  onSetupTablePressed = values => {
+    this.updateTable(values, 'taken');
+    this.props.applicationStateActions.setActiveCustomer(
+      Map({ name: values.name, reservationNotes: values.notes, numberOfAdults: values.numberofAdults, numberOfChildren: values.numberOfChildren }),
     );
+    this.props.applicationStateActions.clearActiveOrder();
+    this.props.navigateToAppHome();
   };
 
   onReserveTablePressed = value => {
@@ -63,14 +42,15 @@ class TableSetupContainer extends Component {
     this.props.goBack();
   };
 
-  updateTable = (value, tableStateKey) => {
+  updateTable = (values, tableStateKey) => {
     UpdateTable.commit(Environment, this.props.userId, {
       id: this.props.table.id,
       tableState: tableStateKey,
-      numberOfAdults: value.numberOfAdults,
-      numberOfChildren: value.numberOfChildren,
-      customerName: value.name,
-      notes: value.notes,
+      numberOfAdults: values.numberOfAdults,
+      numberOfChildren: values.numberOfChildren,
+      customerName: values.name,
+      notes: values.notes,
+      lastOrderCorrelationId: values.lastOrderCorrelationId,
     });
   };
 
@@ -85,33 +65,25 @@ class TableSetupContainer extends Component {
 }
 
 TableSetupContainer.propTypes = {
-  table: TableProp.isRequired,
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  navigateToAppHome: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
+  restaurantId: PropTypes.string.isRequired,
+  table: ActiveTableProp.isRequired,
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    table: props.navigation.state.params.table,
-    initialValue: { numberOfAdults: 2 },
     userId: state.userAccess.get('userInfo').get('id'),
-    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    table: state.applicationState.get('activeTable').toJS(),
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    ordersActions: bindActionCreators(ordersActions, dispatch),
-    navigateToAppHome: () =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'Landing',
-            }),
-          ],
-        }),
-      ),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+    navigateToAppHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }

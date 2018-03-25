@@ -16,8 +16,6 @@ export default StyleSheet.create({
     flex: 1,
   },
   touchableContainer: {
-    // padding: 10,
-    // width: 70,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

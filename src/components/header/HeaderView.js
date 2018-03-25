@@ -11,7 +11,7 @@ import i18n from '../../i18n';
 import { ImageUtility } from '../image';
 
 const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
-  <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }}>
+  <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
     <View style={Styles.bannerContainer} />
     <Menu>
       <MenuTrigger>

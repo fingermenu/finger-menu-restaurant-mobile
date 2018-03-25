@@ -1,5 +1,6 @@
 // @flow
 
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
@@ -8,10 +9,15 @@ import PropTypes from 'prop-types';
 import int from 'int';
 import MenuView from './MenuView';
 import * as ordersActions from '../orders/Actions';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class MenuContainer extends Component {
   state = {
     isFetchingTop: false,
+  };
+
+  componentDidMount = () => {
+    this.props.applicationStateActions.clearActiveMenuItemPrice();
   };
 
   componentWillReceiveProps = nextProps => {
@@ -21,7 +27,8 @@ class MenuContainer extends Component {
   };
 
   onViewMenuItemPressed = menuItemPriceId => {
-    this.props.navigateToMenuItem(menuItemPriceId);
+    this.props.applicationStateActions.setActiveMenuItemPrice(Map({ id: menuItemPriceId }));
+    this.props.navigateToMenuItem();
   };
 
   handleRefresh = () => {
@@ -67,8 +74,11 @@ class MenuContainer extends Component {
 }
 
 MenuContainer.propTypes = {
-  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  navigateToMenuItem: PropTypes.func.isRequired,
+  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedLanguage: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -88,7 +98,6 @@ function mapStateToProps(state) {
       .toJS();
 
   return {
-    table: state.asyncStorage.getIn(['keyValues', 'servingTable']),
     orders: orders,
     selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
@@ -96,16 +105,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     ordersActions: bindActionCreators(ordersActions, dispatch),
-    navigateToMenuItem: menuItemPriceId =>
-      dispatch(
-        NavigationActions.navigate({
-          routeName: 'MenuItem',
-          params: {
-            menuItemPriceId,
-          },
-        }),
-      ),
+    navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
   };
 }
 

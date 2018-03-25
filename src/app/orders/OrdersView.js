@@ -11,6 +11,7 @@ import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { MenuActionButton } from '../../components/menuActionButton';
+import { OrderProp } from './PropTypes';
 
 class OrdersView extends Component {
   onOrderConfirmed = () => {
@@ -32,14 +33,12 @@ class OrdersView extends Component {
     this.confirmOrderPopupDialog = popupDialog;
   };
 
-  keyExtractor = item => item.orderItemId;
+  keyExtractor = item => item.id;
 
   renderItem = info => (
     <OrderItemRow
-      orderItem={info.item.data}
-      orderItemId={info.item.orderItemId}
-      menuItem={info.item.data.menuItem}
-      menuItemCurrentPrice={info.item.data.currentPrice}
+      orderItem={info.item}
+      menuItemCurrentPrice={info.item.currentPrice}
       onViewOrderItemPressed={this.props.onViewOrderItemPressed}
       onRemoveOrderPressed={this.props.onRemoveOrderPressed}
       popupDialog={this.popupDialog}
@@ -52,7 +51,7 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const { t, notes, orders, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
+    const { t, notes, inMemoryOrder, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -88,9 +87,9 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
-        {orders.length > 0 ? (
+        {inMemoryOrder.length > 0 ? (
           <FlatList
-            data={orders}
+            data={inMemoryOrder.details}
             renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
@@ -108,7 +107,7 @@ class OrdersView extends Component {
         <Button
           title={t('placeOrder.button')}
           icon={<Icon name="md-checkmark" type="ionicon" />}
-          backgroundColor={orders.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
+          backgroundColor={inMemoryOrder.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
           onPress={this.onConfirmOrderPressed}
         />
       </View>
@@ -117,7 +116,7 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
-  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inMemoryOrder: OrderProp.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,

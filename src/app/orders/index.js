@@ -1,4 +1,4 @@
 // @flow
 
-export OrdersContainer from './OrdersContainer';
+export Orders from './Orders';
 export OrdersReducer from './Reducer';

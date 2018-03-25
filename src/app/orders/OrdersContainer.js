@@ -12,6 +12,7 @@ import OrdersView from './OrdersView';
 import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
+import { OrderProp } from './PropTypes';
 
 const endingDots = '.';
 const maxLineLength = 48;
@@ -56,8 +57,8 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
-  onViewOrderItemPressed = (menuItemPriceId, order, orderItemId) => {
-    this.props.navigateToMenuItem(menuItemPriceId, order, orderItemId);
+  onViewOrderItemPressed = (menuItemPriceId, order, id) => {
+    this.props.navigateToMenuItem(menuItemPriceId, order, id);
   };
 
   onConfirmOrderPressed = () => {
@@ -127,8 +128,8 @@ class OrdersContainer extends Component {
     });
   };
 
-  onRemoveOrderPressed = orderItemId => {
-    this.props.ordersActions.removeOrderItem(Map({ orderItemId }));
+  onRemoveOrderPressed = id => {
+    this.props.ordersActions.removeOrderItem(Map({ id }));
   };
 
   onRefresh = () => {};
@@ -140,11 +141,11 @@ class OrdersContainer extends Component {
   };
 
   render = () => {
-    const { tableOrder, orders, tableName, customerName, restaurantId } = this.props;
+    const { tableOrder, inMemoryOrder, tableName, customerName, restaurantId } = this.props;
 
     return (
       <OrdersView
-        orders={orders}
+        inMemoryOrder={inMemoryOrder}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
@@ -162,7 +163,7 @@ class OrdersContainer extends Component {
 }
 
 OrdersContainer.propTypes = {
-  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inMemoryOrder: OrderProp.isRequired,
   ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
@@ -180,35 +181,33 @@ OrdersContainer.defaultProps = {
   numberOfPrintCopiesForKitchen: 1,
 };
 
-function mapStateToProps(state) {
-  const orders = state.order.getIn(['tableOrder', 'details']).isEmpty()
-    ? []
-    : state.order
-      .getIn(['tableOrder', 'details'])
-      .toSeq()
-      .mapEntries(([key, value]) => [
-        key,
-        {
-          data: value.toJS(),
-          orderItemId: key,
-        },
-      ])
-      .toList()
-      .toJS();
-
+function mapStateToProps(state, ownProps) {
   const restaurantConfigurations = JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']));
   const printerConfig = restaurantConfigurations.printers[0];
   const kitchenOrderTemplate = restaurantConfigurations.documentTemplates.find(
     documentTemplate => documentTemplate.name.localeCompare('KitchenOrder') === 0,
   );
+  const menuItemPrices = ownProps.user.menuItemPrices.edges.map(_ => _.node);
+  /* const choiceItemPrices = ownProps.user.choiceItemPrices.edges.map(_ => _.node); */
+
+  const activeOrder = state.applicationState.getIn('activeOrder').update('details', details =>
+    details.map(detail => {
+      const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(detail.getIn(['menuItemPrice', 'id'])));
+
+      return detail.mergeIn(
+        ['menuItemPrice', 'menuItem'],
+        Map({ name: foundMenuItemPrice ? foundMenuItemPrice.name : null, imageUrl: foundMenuItemPrice ? foundMenuItemPrice.imageUrl : null }),
+      );
+    }),
+  );
 
   return {
-    orders: orders,
+    activeOrder,
     tableOrder: state.order.get('tableOrder'),
     userId: state.userAccess.get('userInfo').get('id'),
-    tableName: state.asyncStorage.getIn(['keyValues', 'servingTableName']),
-    customerName: state.asyncStorage.getIn(['keyValues', 'servingCustomerName']),
-    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    tableName: state.applicationState.getIn(['activeTable', 'name']),
+    customerName: state.applicationState.getIn(['activeCustomer', 'name']),
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.template : null,
     numberOfPrintCopiesForKitchen: restaurantConfigurations.numberOfPrintCopiesForKitchen,
@@ -219,14 +218,14 @@ function mapDispatchToProps(dispatch) {
   return {
     ordersActions: bindActionCreators(ordersActions, dispatch),
     escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
-    navigateToMenuItem: (menuItemPriceId, order, orderItemId) =>
+    navigateToMenuItem: (menuItemPriceId, order, id) =>
       dispatch(
         NavigationActions.navigate({
           routeName: 'MenuItem',
           params: {
             menuItemPriceId,
             order,
-            orderItemId,
+            id,
           },
         }),
       ),

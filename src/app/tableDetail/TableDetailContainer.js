@@ -2,6 +2,7 @@
 
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import TableDetailView from './TableDetailView';
@@ -113,34 +114,22 @@ class TableDetailContainer extends Component {
 }
 
 TableDetailContainer.propTypes = {
+  goBack: PropTypes.func.isRequired,
   table: TableProp.isRequired,
+  restaurantId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, props) {
   return {
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     userId: state.userAccess.get('userInfo').get('id'),
     order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
     table: props.user.table,
-    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToAppHome: tableId =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'Landing',
-              params: {
-                tableId,
-              },
-            }),
-          ],
-        }),
-      ),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }

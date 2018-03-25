@@ -5,10 +5,12 @@ import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import TablesRelayContainer from './TablesRelayContainer';
 import { HeaderContainer } from '../../components/header/';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class Tables extends Component {
   static navigationOptions = () => ({
@@ -19,6 +21,11 @@ class Tables extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
   });
+
+  componentDidMount = () => {
+    this.props.applicationStateActions.clearActiveTable();
+    this.props.applicationStateActions.clearActiveCustomer();
+  };
 
   renderRelayComponent = ({ error, props, retry }) => {
     if (error) {
@@ -32,7 +39,7 @@ class Tables extends Component {
     return <LoadingInProgress />;
   };
 
-  render() {
+  render = () => {
     return (
       <QueryRenderer
         environment={environment}
@@ -51,17 +58,24 @@ class Tables extends Component {
         render={this.renderRelayComponent}
       />
     );
-  }
+  };
 }
 
 Tables.propTypes = {
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    restaurantId: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
   };
 }
 
-export default connect(mapStateToProps)(Tables);
+function mapDispatchToProps(dispatch) {
+  return {
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tables);

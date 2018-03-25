@@ -10,7 +10,7 @@ import { Account } from '../account';
 import i18n from '../../i18n';
 import { HeaderContainer } from '../../components/header';
 import { InfoContainer } from '../info';
-import { OrdersContainer } from '../orders';
+import { Orders } from '../orders';
 import { Menus } from '../menus';
 
 const tabScreens = {
@@ -29,7 +29,7 @@ const tabScreens = {
     },
   },
   Orders: {
-    screen: OrdersContainer,
+    screen: Orders,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={30} style={{ color: tintColor }} />

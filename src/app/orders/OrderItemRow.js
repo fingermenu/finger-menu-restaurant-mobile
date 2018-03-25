@@ -36,10 +36,10 @@ class OrderItemRow extends Component {
   };
 
   onViewOrderItemPressed = () =>
-    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItemId);
+    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItem.id);
 
   onRemoveOrderPressed = () => {
-    this.props.onRemoveOrderPressed(this.props.orderItemId);
+    this.props.onRemoveOrderPressed(this.props.orderItem.id);
   };
 
   handleOrderItemSelected = () => {
@@ -48,11 +48,11 @@ class OrderItemRow extends Component {
     }
   };
 
-  renderChoiceItems = choiceItems =>
-    choiceItems.map(choiceItem => (
-      <Text key={choiceItem.choiceItemPriceId} style={Styles.extraOptions}>
-        {choiceItem.choiceItemPrice.choiceItem.name} -{' '}
-        {choiceItem.choiceItemPrice.currentPrice ? '$' + choiceItem.choiceItemPrice.currentPrice.toFixed(2) : ''}
+  renderChoiceItemPrices = choiceItemPrices =>
+    choiceItemPrices.map(choiceItemPrice => (
+      <Text key={choiceItemPrice.id} style={Styles.extraOptions}>
+        {choiceItemPrice.choiceItemPrice.choiceItem.name} -{' '}
+        {choiceItemPrice.choiceItemPrice.currentPrice ? '$' + choiceItemPrice.choiceItemPrice.currentPrice.toFixed(2) : ''}
       </Text>
     ));
 
@@ -81,10 +81,10 @@ class OrderItemRow extends Component {
             <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={Styles.title}>{this.props.menuItem.name}</Text>
+            <Text style={Styles.title}>{this.props.orderItem.menuItemPrice.menuItem.name}</Text>
             {this.props.orderItem.notes &&
               this.props.orderItem.notes.trim().length > 0 && <Text style={Styles.menuItemNotes}>Notes: {this.props.orderItem.notes}</Text>}
-            {this.renderChoiceItems(this.props.orderItem.orderChoiceItemPrices)}
+            {this.renderChoiceItemPrices(this.props.orderItem.orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
             {this.props.isPaid ? <Text style={Styles.paid}>Paid</Text> : <View />}
@@ -111,8 +111,6 @@ class OrderItemRow extends Component {
 
 OrderItemRow.propTypes = {
   orderItem: OrderItemDetailProp.isRequired,
-  orderItemId: PropTypes.string.isRequired,
-  menuItem: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   menuItemCurrentPrice: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,

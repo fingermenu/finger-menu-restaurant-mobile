@@ -24,14 +24,7 @@ class MenuItem extends Component {
     }
 
     if (props) {
-      return (
-        <MenuItemRelayContainer
-          user={props.user}
-          menuItemPriceId={this.props.menuItemPriceId}
-          order={this.props.order}
-          orderItemId={this.props.orderItemId}
-        />
-      );
+      return <MenuItemRelayContainer user={props.user} menuItemPriceId={this.props.menuItemPriceId} order={this.props.order} id={this.props.id} />;
     }
 
     return <LoadingInProgress />;
@@ -59,18 +52,18 @@ class MenuItem extends Component {
 
 MenuItem.propTypes = {
   menuItemPriceId: PropTypes.string.isRequired,
-  orderItemId: PropTypes.string,
+  id: PropTypes.string,
 };
 
 MenuItem.defaultProps = {
-  orderItemId: null,
+  id: null,
 };
 
 function mapStateToProps(state, props) {
   return {
-    menuItemPriceId: props.navigation.state.params.menuItemPriceId,
+    menuItemPriceId: state.applicationState.getIn(['activeMenuItemPrice', 'id']),
     order: props.navigation.state.params && props.navigation.state.params.order ? props.navigation.state.params.order : null,
-    orderItemId: props.navigation.state.params && props.navigation.state.params.orderItemId ? props.navigation.state.params.orderItemId : null,
+    id: props.navigation.state.params && props.navigation.state.params.id ? props.navigation.state.params.id : null,
   };
 }
 

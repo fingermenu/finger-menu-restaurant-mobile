@@ -3,7 +3,7 @@
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import { bindActionCreators } from 'redux';
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
@@ -13,17 +13,34 @@ import { environment } from '../../framework/relay';
 import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { ActiveRestaurantProp } from '../../framework/applicationState/PropTypes';
 
 class Pin extends Component {
   static navigationOptions = () => ({
     header: null,
   });
 
+  static getDerivedStateFromProps = nextProps => {
+    const { restaurant: { id, pin, name, restaurantConfigurations } } = nextProps;
+
+    if (id && pin && name && restaurantConfigurations && id !== nextProps.activeRestaurant.id) {
+      nextProps.applicationStateActions.setActiveRestaurant(
+        Map({ id, name, pin, configurations: restaurantConfigurations ? Immutable.fromJS(JSON.parse(restaurantConfigurations)) : Map() }),
+      );
+    }
+
+    return null;
+  };
+
+  state = {};
+
   componentDidMount = () => {
-    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
-    this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
-    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));
-    this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+    if (!this.props.activeRestaurant.id) {
+      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
+      this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
+      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));
+      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+    }
 
     this.props.i18n.changeLanguage('en_NZ');
     this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
@@ -42,12 +59,7 @@ class Pin extends Component {
   };
 
   render() {
-    if (this.props.offlineMode) {
-      const { restaurant: { pin, name } } = this.props;
-      if (!pin || !name) {
-        return <LoadingInProgress />;
-      }
-
+    if (this.props.activeRestaurant.id) {
       return <OfflinePinContainer />;
     }
 
@@ -73,14 +85,17 @@ class Pin extends Component {
 
 Pin.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  activeRestaurant: ActiveRestaurantProp.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    offlineMode: !!state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    activeRestaurant: state.applicationState.get('activeRestaurant').toJS(),
     restaurant: {
+      id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
       name: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
       pin: state.asyncStorage.getIn(['keyValues', 'pin']),
+      restaurantConfigurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
     },
   };
 }

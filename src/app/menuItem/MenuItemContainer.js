@@ -25,9 +25,14 @@ class MenuItemContainer extends Component {
       .map(choiceItemPrice =>
         Map({
           id: cuid(),
-          choiceItemPriceId: choiceItemPrice.get('id'),
-          choiceItemPrice,
-          quantity: 1,
+          choiceItemPrice: Map({
+            id: choiceItemPrice.get('id'),
+            quantity: 1,
+            notes: null,
+            choiceItem: Map({
+              id: this.props.user.menuItemPrice.menuItem.id,
+            }),
+          }),
         }),
       );
   };
@@ -36,11 +41,14 @@ class MenuItemContainer extends Component {
     this.props.ordersActions.addOrderItem(
       Map({
         id: cuid(),
-        menuItemPriceId: this.props.user.menuItemPrice.id,
-        currentPrice: this.props.user.menuItemPrice.currentPrice,
-        menuItem: this.props.user.menuItemPrice.menuItem,
-        quantity: values.quantity,
-        notes: values.notes,
+        menuItemPrice: Map({
+          id: this.props.user.menuItemPrice.id,
+          quantity: values.quantity,
+          notes: values.notes,
+          menuItem: Map({
+            id: this.props.user.menuItemPrice.menuItem.id,
+          }),
+        }),
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
       }),
     );
@@ -49,12 +57,15 @@ class MenuItemContainer extends Component {
   handleUpdate = values => {
     this.props.ordersActions.updateOrderItem(
       Map({
-        orderItemId: this.props.orderItemId,
-        menuItemPriceId: this.props.user.menuItemPrice.id,
-        currentPrice: this.props.user.menuItemPrice.currentPrice,
-        menuItem: this.props.user.menuItemPrice.menuItem,
-        quantity: values.quantity,
-        notes: values.notes,
+        id: this.props.id,
+        menuItemPrice: Map({
+          id: this.props.user.menuItemPrice.id,
+          quantity: values.quantity,
+          notes: values.notes,
+          menuItem: Map({
+            id: this.props.user.menuItemPrice.menuItem.id,
+          }),
+        }),
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
       }),
     );
@@ -85,7 +96,7 @@ MenuItemContainer.propTypes = {
 function mapStateToProps(state, ownProps) {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    isAddingToOrder: ownProps.orderItemId === null,
+    isAddingToOrder: ownProps.id === null,
   };
 }
 
