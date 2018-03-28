@@ -10,7 +10,6 @@ export default createPaginationContainer(
       fragment TablesRelayContainer_user on User {
         restaurant(restaurantId: $restaurantId) {
           id
-          name
           pin
           configurations {
             printers {

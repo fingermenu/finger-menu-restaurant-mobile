@@ -17,16 +17,12 @@ class TablesContainer extends Component {
   };
 
   componentDidMount = () => {
-    const { user: { restaurant: { id, name, pin, configurations } } } = this.props;
+    const { user: { restaurant: { id, pin, configurations } } } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantName', value: name }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
-
-    this.props.applicationStateActions.setActiveRestaurant(
-      Map({ id, name, pin, configurations: configurations ? Immutable.fromJS(configurations) : Map() }),
-    );
+    this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
   };
 
   componentWillReceiveProps = nextProps => {
