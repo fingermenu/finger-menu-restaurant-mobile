@@ -198,7 +198,7 @@ function mapStateToProps(state, ownProps) {
       .map(item => {
         const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(item.getIn(['menuItemPrice', 'id'])) === 0);
 
-        return item.set('currentPrice', foundMenuItemPrice.currentPrice).mergeIn(
+        return item.setIn(['menuItemPrice', 'currentPrice'], foundMenuItemPrice.currentPrice).mergeIn(
           ['menuItemPrice', 'menuItem'],
           Map({
             name: foundMenuItemPrice ? foundMenuItemPrice.menuItem.name : null,
