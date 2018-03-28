@@ -67,6 +67,7 @@ function mapStateToProps(state) {
     .toJS();
   const choiceItemPriceIds = state.applicationState
     .getIn(['activeOrder', 'items'])
+    .toList()
     .map(item => item.get('orderChoiceItemPrices'))
     .flatMap(orderChoiceItemPrices => orderChoiceItemPrices.map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id'])))
     .toSet()

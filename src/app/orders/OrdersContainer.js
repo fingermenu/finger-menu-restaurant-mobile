@@ -191,20 +191,36 @@ function mapStateToProps(state, ownProps) {
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
   const menuItemPrices = ownProps.user.menuItemPrices.edges.map(_ => _.node);
-  /* const choiceItemPrices = ownProps.user.choiceItemPrices.edges.map(_ => _.node); */
-
+  const choiceItemPrices = ownProps.user.choiceItemPrices.edges.map(_ => _.node);
   const inMemoryOrder = state.applicationState.get('activeOrder').update('items', items =>
     items
       .map(item => {
         const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(item.getIn(['menuItemPrice', 'id'])) === 0);
 
-        return item.setIn(['menuItemPrice', 'currentPrice'], foundMenuItemPrice.currentPrice).mergeIn(
-          ['menuItemPrice', 'menuItem'],
-          Map({
-            name: foundMenuItemPrice ? foundMenuItemPrice.menuItem.name : null,
-            imageUrl: foundMenuItemPrice ? foundMenuItemPrice.menuItem.imageUrl : null,
-          }),
-        );
+        return item
+          .setIn(['menuItemPrice', 'currentPrice'], foundMenuItemPrice.currentPrice)
+          .mergeIn(
+            ['menuItemPrice', 'menuItem'],
+            Map({
+              name: foundMenuItemPrice ? foundMenuItemPrice.menuItem.name : null,
+              imageUrl: foundMenuItemPrice ? foundMenuItemPrice.menuItem.imageUrl : null,
+            }),
+          )
+          .update('orderChoiceItemPrices', orderChoiceItemPrices =>
+            orderChoiceItemPrices.map(orderChoiceItemPrice => {
+              const foundChoiceItemPrice = choiceItemPrices.find(
+                choiceItemPrice => choiceItemPrice.id.localeCompare(orderChoiceItemPrice.getIn(['choiceItemPrice', 'id'])) === 0,
+              );
+
+              return orderChoiceItemPrice.setIn(['choiceItemPrice', 'currentPrice'], foundChoiceItemPrice.currentPrice).mergeIn(
+                ['choiceItemPrice', 'choiceItem'],
+                Map({
+                  name: foundChoiceItemPrice ? foundChoiceItemPrice.choiceItem.name : null,
+                  imageUrl: foundMenuItemPrice ? foundChoiceItemPrice.choiceItem.imageUrl : null,
+                }),
+              );
+            }),
+          );
       })
       .toList(),
   );
