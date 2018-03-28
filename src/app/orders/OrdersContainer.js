@@ -141,21 +141,21 @@ class OrdersContainer extends Component {
   };
 
   render = () => {
-    const { tableOrder, inMemoryOrder, tableName, customerName, restaurantId } = this.props;
+    const { inMemoryOrder, tableName, customerName, restaurantId } = this.props;
 
     return (
       <OrdersView
-        inMemoryOrder={inMemoryOrder}
+        inMemoryOrderItems={inMemoryOrder.items}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
         tableName={tableName}
         customerName={customerName}
+        notes={inMemoryOrder.notes}
         restaurantId={restaurantId}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.OnRefresh}
         onEndReached={this.OnEndReached}
-        notes={tableOrder.get('notes')}
         onNotesChanged={this.handleNotesChanged}
       />
     );
@@ -182,35 +182,43 @@ OrdersContainer.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const restaurantConfigurations = JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']));
-  const printerConfig = restaurantConfigurations.printers[0];
-  const kitchenOrderTemplate = restaurantConfigurations.documentTemplates.find(
-    documentTemplate => documentTemplate.name.localeCompare('KitchenOrder') === 0,
-  );
+  const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
+  const printerConfig = configurations
+    .get('printers')
+    .first()
+    .toJS();
+  const kitchenOrderTemplate = configurations
+    .get('documentTemplates')
+    .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
   const menuItemPrices = ownProps.user.menuItemPrices.edges.map(_ => _.node);
   /* const choiceItemPrices = ownProps.user.choiceItemPrices.edges.map(_ => _.node); */
 
-  const activeOrder = state.applicationState.getIn('activeOrder').update('details', details =>
-    details.map(detail => {
-      const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(detail.getIn(['menuItemPrice', 'id'])));
+  const inMemoryOrder = state.applicationState.get('activeOrder').update('items', items =>
+    items
+      .map(item => {
+        const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(item.getIn(['menuItemPrice', 'id'])) === 0);
 
-      return detail.mergeIn(
-        ['menuItemPrice', 'menuItem'],
-        Map({ name: foundMenuItemPrice ? foundMenuItemPrice.name : null, imageUrl: foundMenuItemPrice ? foundMenuItemPrice.imageUrl : null }),
-      );
-    }),
+        return item.set('currentPrice', foundMenuItemPrice.currentPrice).mergeIn(
+          ['menuItemPrice', 'menuItem'],
+          Map({
+            name: foundMenuItemPrice ? foundMenuItemPrice.menuItem.name : null,
+            imageUrl: foundMenuItemPrice ? foundMenuItemPrice.menuItem.imageUrl : null,
+          }),
+        );
+      })
+      .toList(),
   );
 
   return {
-    activeOrder,
+    inMemoryOrder: inMemoryOrder.toJS(),
     tableOrder: state.order.get('tableOrder'),
     userId: state.userAccess.get('userInfo').get('id'),
     tableName: state.applicationState.getIn(['activeTable', 'name']),
     customerName: state.applicationState.getIn(['activeCustomer', 'name']),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
-    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.template : null,
-    numberOfPrintCopiesForKitchen: restaurantConfigurations.numberOfPrintCopiesForKitchen,
+    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
+    numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
   };
 }
 
@@ -230,16 +238,7 @@ function mapDispatchToProps(dispatch) {
         }),
       ),
     navigateToOrderConfirmed: () =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'OrderConfirmed',
-            }),
-          ],
-        }),
-      ),
+      dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
   };
 }
 

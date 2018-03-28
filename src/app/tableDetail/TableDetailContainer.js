@@ -49,7 +49,6 @@ class TableDetailContainer extends Component {
 
   onCustomPaidPressed = selectedOrders => {
     const order = Immutable.fromJS(this.props.order);
-
     const orderToUpdate = order
       .update('details', details =>
         details.map(detail =>
@@ -93,7 +92,7 @@ class TableDetailContainer extends Component {
          * }); */
     }
 
-    UpdateOrder.commit(Environment, this.props.userId, orderToUpdate.toJS(), () => {});
+    UpdateOrder.commit(Environment, this.props.userId, orderToUpdate.toJS());
   };
 
   render = () => {

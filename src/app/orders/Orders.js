@@ -60,15 +60,14 @@ Orders.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const menuItemPriceIds = state.order
-    .getIn(['tableOrder', 'details'])
-    .map(detail => detail.getIn(['menuItemPrice', 'id']))
+  const menuItemPriceIds = state.applicationState
+    .getIn(['activeOrder', 'items'])
+    .map(item => item.getIn(['menuItemPrice', 'id']))
     .toSet()
     .toJS();
-  const choiceItemPriceIds = state.order
-    .getIn(['tableOrder', 'details'])
-    .toList()
-    .map(detail => detail.get('orderChoiceItemPrices'))
+  const choiceItemPriceIds = state.applicationState
+    .getIn(['activeOrder', 'items'])
+    .map(item => item.get('orderChoiceItemPrices'))
     .flatMap(orderChoiceItemPrices => orderChoiceItemPrices.map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id'])))
     .toSet()
     .toJS();

@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import OrderConfirmedView from './OrderConfirmedView';
@@ -10,32 +11,26 @@ class OrderConfirmedContainer extends Component {
     header: null,
   });
 
-  handleFingerMenuPressed = () => {
-    this.props.navigateToPin();
-  };
-
-  render = () => <OrderConfirmedView onFingerMenuPressed={this.handleFingerMenuPressed} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
+  render = () => <OrderConfirmedView onFingerMenuPressed={this.props.navigateToPin} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
 }
+
+OrderConfirmedContainer.propTypes = {
+  restaurantLogoImageUrl: PropTypes.string,
+};
+
+OrderConfirmedContainer.defaultProps = {
+  restaurantLogoImageUrl: null,
+};
 
 function mapStateToProps(state) {
   return {
-    restaurantLogoImageUrl: JSON.parse(state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations'])).images.logoImageUrl,
+    restaurantLogoImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'logoImageUrl']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToPin: () =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'Pin',
-            }),
-          ],
-        }),
-      ),
+    navigateToPin: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Pin' })] })),
   };
 }
 

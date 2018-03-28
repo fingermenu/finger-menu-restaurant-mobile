@@ -52,18 +52,11 @@ class MenuItem extends Component {
 
 MenuItem.propTypes = {
   menuItemPriceId: PropTypes.string.isRequired,
-  id: PropTypes.string,
 };
 
-MenuItem.defaultProps = {
-  id: null,
-};
-
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     menuItemPriceId: state.applicationState.getIn(['activeMenuItemPrice', 'id']),
-    order: props.navigation.state.params && props.navigation.state.params.order ? props.navigation.state.params.order : null,
-    id: props.navigation.state.params && props.navigation.state.params.id ? props.navigation.state.params.id : null,
   };
 }
 

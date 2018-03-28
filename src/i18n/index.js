@@ -39,7 +39,7 @@ i18next.init({
         balanceToPay: { label: 'Balance To Pay ${balanceToPay}' },
         noOrdersHaveBeenPlacedYet: { message: 'No orders have been placed yet.' },
         placeOrder: { button: 'Place Order' },
-        notes: { placeholder: 'Notes' },
+        notes: { placeholder: 'Notes', label: 'Notes' },
         areYouSureToPlaceYourOrderNow: { message: 'Are you sure to place your order now?' },
         areYouSureToRemoveThisOrder: { message: 'Are you sure to remove this order?' },
         areYouSureToResetTable: { message: 'Are you sure to reset table {tableName}?' },
@@ -63,6 +63,7 @@ i18next.init({
           message:
             'Thank you! The kitchen staff have received your order and are now busy crafting your culinary delights. The waiting staff will collect your tablet shortly.',
         },
+        paid: { label: 'Paid' },
       },
     },
     zh: {
@@ -96,7 +97,7 @@ i18next.init({
         balanceToPay: { label: '余额支付 ${balanceToPay}' },
         noOrdersHaveBeenPlacedYet: { message: '还没有订单。' },
         placeOrder: { button: '下订单' },
-        notes: { placeholder: '笔记' },
+        notes: { placeholder: '笔记', label: '笔记' },
         areYouSureToPlaceYourOrderNow: { message: '你确定现在下单吗？' },
         areYouSureToRemoveThisOrder: { message: '你确定删除这个命令吗？' },
         areYouSureToResetTable: { message: '你确定要重置表吗 {tableName}？' },
@@ -117,6 +118,7 @@ i18next.init({
         viewOrder: { label: '查看订单' },
         numberOfItems: { label: '{numberOfItems} 项目' },
         thankYouForPlacingOrder: { message: '谢谢！厨房工作人员已经收到您的订单，现在正忙着制作您的美食。等候的工作人员很快就会收集您的平板电脑。' },
+        paid: { label: '付费' },
       },
     },
     jp: {
@@ -150,7 +152,7 @@ i18next.init({
         balanceToPay: { label: '支払う残高 ${balanceToPay}' },
         noOrdersHaveBeenPlacedYet: { message: 'まだ注文はありません。' },
         placeOrder: { button: '注文する' },
-        notes: { placeholder: 'ノート' },
+        notes: { placeholder: 'ノート', label: 'ノート' },
         areYouSureToPlaceYourOrderNow: { message: '今すぐ注文してもよろしいですか？' },
         areYouSureToRemoveThisOrder: { message: 'この注文を削除してもよろしいですか？' },
         areYouSureToResetTable: { message: 'テーブルをリセットしてもよろしいですか {tableName}？' },
@@ -174,6 +176,7 @@ i18next.init({
           message:
             'ありがとうございました！キッチンスタッフがあなたの注文を受け取り、あなたの料理の喜びを作り出すのに忙しいです。待っているスタッフがすぐにあなたのタブレットを収集します。',
         },
+        paid: { label: '有料' },
       },
     },
   },

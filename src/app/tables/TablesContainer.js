@@ -64,14 +64,10 @@ class TablesContainer extends Component {
       return;
     }
 
-    this.setState({
-      isFetchingTop: true,
-    });
+    this.setState({ isFetchingTop: true });
 
     this.props.relay.refetchConnection(this.props.user.tables.edges.length, () => {
-      this.setState({
-        isFetchingTop: false,
-      });
+      this.setState({ isFetchingTop: false });
     });
   };
 

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
-import * as ordersActions from '../orders/Actions';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component {
@@ -38,7 +38,7 @@ class MenuItemContainer extends Component {
   };
 
   handleAdd = values => {
-    this.props.ordersActions.addOrderItem(
+    this.props.applicationStateActions.addItemToActiveOrder(
       Map({
         id: cuid(),
         menuItemPrice: Map({
@@ -55,7 +55,7 @@ class MenuItemContainer extends Component {
   };
 
   handleUpdate = values => {
-    this.props.ordersActions.updateOrderItem(
+    this.props.applicationStateActions.updateItemInActiveOrder(
       Map({
         id: this.props.id,
         menuItemPrice: Map({
@@ -72,37 +72,37 @@ class MenuItemContainer extends Component {
   };
 
   handleSubmit = values => {
-    if (this.props.isAddingToOrder) {
-      this.handleAdd(values);
-    } else {
+    if (this.props.isUpdatingOrder) {
       this.handleUpdate(values);
+    } else {
+      this.handleAdd(values);
     }
 
     this.props.goBack();
   };
 
   render = () => {
-    const { user: { menuItemPrice }, order, isAddingToOrder } = this.props;
+    const { user: { menuItemPrice }, order, isUpdatingOrder } = this.props;
 
-    return <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingToOrder={isAddingToOrder} onSubmit={this.handleSubmit} />;
+    return <MenuItemView menuItemPrice={menuItemPrice} order={order} isUpdatingOrder={isUpdatingOrder} onSubmit={this.handleSubmit} />;
   };
 }
 
 MenuItemContainer.propTypes = {
-  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    isAddingToOrder: ownProps.id === null,
+    isUpdatingOrder: !!ownProps.orderItemId,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    ordersActions: bindActionCreators(ordersActions, dispatch),
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }

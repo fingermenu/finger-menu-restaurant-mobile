@@ -24,7 +24,7 @@ class OrdersView extends Component {
   };
 
   onConfirmOrderPressed = () => {
-    if (this.props.orders.length > 0) {
+    if (this.props.inMemoryOrderItems.length > 0) {
       this.confirmOrderPopupDialog.show();
     }
   };
@@ -51,7 +51,18 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const { t, notes, inMemoryOrder, tableName, customerName, onEndReached, onRefresh, isFetchingTop, restaurantId, onNotesChanged } = this.props;
+    const {
+      t,
+      notes,
+      inMemoryOrderItems,
+      tableName,
+      customerName,
+      onEndReached,
+      onRefresh,
+      isFetchingTop,
+      restaurantId,
+      onNotesChanged,
+    } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -87,9 +98,9 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
-        {inMemoryOrder.length > 0 ? (
+        {inMemoryOrderItems.length > 0 ? (
           <FlatList
-            data={inMemoryOrder.details}
+            data={inMemoryOrderItems}
             renderItem={this.renderItem}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
@@ -107,7 +118,7 @@ class OrdersView extends Component {
         <Button
           title={t('placeOrder.button')}
           icon={<Icon name="md-checkmark" type="ionicon" />}
-          backgroundColor={inMemoryOrder.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
+          backgroundColor={inMemoryOrderItems.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
           onPress={this.onConfirmOrderPressed}
         />
       </View>
@@ -116,13 +127,13 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
-  inMemoryOrder: OrderProp.isRequired,
+  inMemoryOrderItems: OrderProp.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,
+  onNotesChanged: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
-  onNotesChanged: PropTypes.func.isRequired,
   customerName: PropTypes.string,
   notes: PropTypes.string,
 };

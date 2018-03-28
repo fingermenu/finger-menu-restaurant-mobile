@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 import { View, Text } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { OrderItemDetailProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
@@ -57,39 +58,41 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
+    const { t, orderItem, isSelected, showRemove, isPaid, enableMultiSelection } = this.props;
+    const { quantity, orderChoiceItemPrices, menuItemPrice: { currentPrice, notes, menuItemPrice: { menuItem: { name } } } } = orderItem;
+
     return (
       <TouchableItem onPress={this.onViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
-          {this.props.enableMultiSelection ? (
-            !this.props.isPaid ? (
-              <CheckBox
-                center
-                size={28}
-                iconType="material-community"
-                checkedIcon="check-circle-outline"
-                uncheckedIcon="checkbox-blank-circle-outline"
-                checked={this.props.isSelected}
-                onPress={this.handleOrderItemSelected}
-              />
-            ) : (
-              <View />
-            )
-          ) : (
-            <View />
+          {enableMultiSelection &&
+            !isPaid && (
+            <CheckBox
+              center
+              size={28}
+              iconType="material-community"
+              checkedIcon="check-circle-outline"
+              uncheckedIcon="checkbox-blank-circle-outline"
+              checked={isSelected}
+              onPress={this.handleOrderItemSelected}
+            />
           )}
           <View style={Styles.quantityContainer}>
-            <Text style={Styles.quantity}>{this.props.orderItem.quantity}x</Text>
+            <Text style={Styles.quantity}>{quantity}x</Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={Styles.title}>{this.props.orderItem.menuItemPrice.menuItem.name}</Text>
-            {this.props.orderItem.notes &&
-              this.props.orderItem.notes.trim().length > 0 && <Text style={Styles.menuItemNotes}>Notes: {this.props.orderItem.notes}</Text>}
-            {this.renderChoiceItemPrices(this.props.orderItem.orderChoiceItemPrices)}
+            <Text style={Styles.title}>{name}</Text>
+            {notes &&
+              notes.trim() && (
+              <Text style={Styles.menuItemNotes}>
+                {t('notes.label')}: {notes}
+              </Text>
+            )}
+            {this.renderChoiceItemPrices(orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
-            {this.props.isPaid ? <Text style={Styles.paid}>Paid</Text> : <View />}
-            <Text style={Styles.price}>${this.props.menuItemCurrentPrice.toFixed(2)}</Text>
-            {this.props.showRemove ? (
+            {isPaid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
+            <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>
+            {showRemove ? (
               <TouchableIcon
                 onPress={this.onRemoveOrderPressed}
                 iconName="ios-remove-circle-outline"
@@ -127,4 +130,4 @@ OrderItemRow.defaultProps = {
   showRemove: true,
 };
 
-export default OrderItemRow;
+export default translate()(OrderItemRow);
