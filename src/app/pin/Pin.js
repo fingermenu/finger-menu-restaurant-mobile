@@ -21,12 +21,10 @@ class Pin extends Component {
   });
 
   static getDerivedStateFromProps = nextProps => {
-    const { restaurant: { id, pin, name, restaurantConfigurations } } = nextProps;
+    const { restaurant: { id, pin, configurations } } = nextProps;
 
-    if (id && pin && name && restaurantConfigurations && id !== nextProps.activeRestaurant.id) {
-      nextProps.applicationStateActions.setActiveRestaurant(
-        Map({ id, name, pin, configurations: restaurantConfigurations ? Immutable.fromJS(JSON.parse(restaurantConfigurations)) : Map() }),
-      );
+    if (id && pin && configurations && id !== nextProps.activeRestaurant.id) {
+      nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
     }
 
     return null;
@@ -38,7 +36,6 @@ class Pin extends Component {
     if (!this.props.activeRestaurant.id) {
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
-      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantName' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
     }
 
@@ -93,9 +90,8 @@ function mapStateToProps(state) {
     activeRestaurant: state.applicationState.get('activeRestaurant').toJS(),
     restaurant: {
       id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
-      name: state.asyncStorage.getIn(['keyValues', 'restaurantName']),
       pin: state.asyncStorage.getIn(['keyValues', 'pin']),
-      restaurantConfigurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
+      configurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
     },
   };
 }

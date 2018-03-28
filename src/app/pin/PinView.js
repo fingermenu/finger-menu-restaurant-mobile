@@ -107,7 +107,6 @@ class PinView extends Component {
 
 PinView.propTypes = {
   matchingPin: PropTypes.string.isRequired,
-  restaurantName: PropTypes.string.isRequired,
 };
 
 export default PinView;
