@@ -17,11 +17,7 @@ class PinContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
   };
 
-  onPinMatched = () => {
-    this.props.navigateToTables();
-  };
-
-  render = () => <PinView onPinMatched={this.onPinMatched} matchingPin={this.props.restaurant.pin} />;
+  render = () => <PinView onPinMatched={this.props.navigateToTables} matchingPin={this.props.restaurant.pin} />;
 }
 
 function mapStateToProps(state, props) {
