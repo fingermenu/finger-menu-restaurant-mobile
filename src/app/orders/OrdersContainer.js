@@ -3,7 +3,7 @@
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Map, Range } from 'immutable';
+import Immutable, { Map, Range } from 'immutable';
 import { DateTimeFormatter } from 'js-joda';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,6 +13,7 @@ import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { OrderProp } from './PropTypes';
+import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 const endingDots = '.';
 const maxLineLength = 48;
@@ -62,7 +63,42 @@ class OrdersContainer extends Component {
   };
 
   onConfirmOrderPressed = () => {
-    const totalPrice = this.props.tableOrder.get('details').reduce((v, s) => {
+    const order = Immutable.fromJS(this.props.inMemoryOrder);
+    const transformedOrder = order
+      .set('details', order.get('items'))
+      .delete('items')
+      .update('details', details =>
+        details.map(detail => {
+          const menuItemPrice = detail.get('menuItemPrice');
+
+          return detail
+            .merge(
+              Map({
+                menuItemPriceId: menuItemPrice.get('id'),
+                quantity: menuItemPrice.get('quantity'),
+                notes: menuItemPrice.get('notes'),
+                paid: false,
+                orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
+                  const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
+
+                  return orderChoiceItemPrice
+                    .merge(
+                      Map({
+                        choiceItemPriceId: choiceItemPrice.get('id'),
+                        quantity: choiceItemPrice.get('quantity'),
+                        notes: choiceItemPrice.get('notes'),
+                        paid: false,
+                      }),
+                    )
+                    .delete('choiceItemPrice');
+                }),
+              }),
+            )
+            .delete('menuItemPrice');
+        }),
+      );
+
+    const totalPrice = transformedOrder.get('items').reduce((v, s) => {
       return (
         v +
         s.get('quantity') *
@@ -73,9 +109,9 @@ class OrdersContainer extends Component {
       );
     }, 0);
 
-    const orders = this.props.tableOrder
+    const orders = transformedOrder
       .set('totalPrice', totalPrice)
-      .set('details', this.props.tableOrder.get('details').valueSeq())
+      .set('details', this.props.tableOrder.get('items').valueSeq())
       .update('details', details => details.map(_ => _.delete('menuItem').delete('currentPrice')))
       .update('details', details =>
         details.map(_ => _.update('orderChoiceItemPrices', orderChoiceItemPrices => orderChoiceItemPrices.map(oc => oc.delete('choiceItemPrice')))),
@@ -137,7 +173,7 @@ class OrdersContainer extends Component {
   onEndReached = () => {};
 
   handleNotesChanged = notes => {
-    this.props.ordersActions.changeNotes(notes);
+    this.props.applicationStateActions.changeNotes(notes);
   };
 
   render = () => {
@@ -163,6 +199,7 @@ class OrdersContainer extends Component {
 }
 
 OrdersContainer.propTypes = {
+  applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   inMemoryOrder: OrderProp.isRequired,
   ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -240,6 +277,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     ordersActions: bindActionCreators(ordersActions, dispatch),
     escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
     navigateToMenuItem: (menuItemPriceId, order, id) =>

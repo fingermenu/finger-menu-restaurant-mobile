@@ -59,7 +59,7 @@ class OrderItemRow extends Component {
 
   render = () => {
     const { t, orderItem, isSelected, showRemove, isPaid, enableMultiSelection } = this.props;
-    const { quantity, orderChoiceItemPrices, menuItemPrice: { currentPrice, notes, menuItem: { name } } } = orderItem;
+    const { orderChoiceItemPrices, menuItemPrice: { quantity, currentPrice, notes, menuItem: { name } } } = orderItem;
 
     return (
       <TouchableItem onPress={this.onViewOrderItemPressed}>
