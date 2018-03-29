@@ -118,7 +118,6 @@ class OrdersContainer extends Component {
       );
 
     const { restaurantId, customer: { name: customerName, numberOfAdults, numberOfChildren }, table: { id: tableId, name: tableName } } = this.props;
-    console.log(this.props);
     const order = transformedOrder.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS();
 
     PlaceOrder.commit(Environment, this.props.userId, order, response => {
