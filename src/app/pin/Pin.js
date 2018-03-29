@@ -13,7 +13,7 @@ import { environment } from '../../framework/relay';
 import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { ActiveRestaurantProp } from '../../framework/applicationState/PropTypes';
+import { ActiveRestaurantProp } from '../../framework/applicationState';
 
 class Pin extends Component {
   static navigationOptions = () => ({

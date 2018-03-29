@@ -11,7 +11,7 @@ import TableSetupView from './TableSetupView';
 import { UpdateTable } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
-import { ActiveTableProp } from '../../framework/applicationState/PropTypes';
+import { ActiveTableProp } from '../../framework/applicationState';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class TableSetupContainer extends Component {
@@ -31,7 +31,7 @@ class TableSetupContainer extends Component {
   onSetupTablePressed = values => {
     this.updateTable(values, 'taken');
     this.props.applicationStateActions.setActiveCustomer(
-      Map({ name: values.name, reservationNotes: values.notes, numberOfAdults: values.numberofAdults, numberOfChildren: values.numberOfChildren }),
+      Map({ name: values.name, reservationNotes: values.notes, numberOfAdults: values.numberOfAdults, numberOfChildren: values.numberOfChildren }),
     );
     this.props.applicationStateActions.clearActiveOrder();
     this.props.navigateToAppHome();

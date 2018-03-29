@@ -14,6 +14,7 @@ import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { ActiveTableProp, ActiveCustomerProp } from '../../framework/applicationState';
 
 const endingDots = '.';
 const maxLineLength = 48;
@@ -63,9 +64,9 @@ class OrdersContainer extends Component {
   };
 
   onConfirmOrderPressed = () => {
-    const order = Immutable.fromJS(this.props.inMemoryOrder);
-    const transformedOrder = order
-      .set('details', order.get('items'))
+    const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
+    const transformedOrder = inMemoryOrder
+      .set('details', inMemoryOrder.get('items'))
       .delete('items')
       .update('details', details =>
         details.map(detail => {
@@ -85,7 +86,7 @@ class OrdersContainer extends Component {
                     .merge(
                       Map({
                         choiceItemPriceId: choiceItemPrice.get('id'),
-                        quantity: choiceItemPrice.get('quantity'),
+                        quantity: choiceItemPrice.get('currentPrice'),
                         notes: choiceItemPrice.get('notes'),
                         paid: false,
                       }),
@@ -98,29 +99,29 @@ class OrdersContainer extends Component {
         }),
       );
 
-    const totalPrice = transformedOrder.get('items').reduce((v, s) => {
-      return (
-        v +
-        s.get('quantity') *
-          (s.get('currentPrice') +
-            s.get('orderChoiceItemPrices').reduce((ov, os) => {
-              return ov + os.get('quantity') * os.getIn(['choiceItemPrice', 'currentPrice']);
-            }, 0))
+    const totalPrice = inMemoryOrder
+      .get('items')
+      .reduce(
+        (total, menuItemPrice) =>
+          total +
+          menuItemPrice.getIn(['menuItemPrice', 'quantity']) *
+            (menuItemPrice.getIn(['menuItemPrice', 'currentPrice']) +
+              menuItemPrice
+                .get('orderChoiceItemPrices')
+                .reduce(
+                  (totalChoiceItemPrice, orderChoiceItemPrice) =>
+                    totalChoiceItemPrice +
+                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'quantity']) * orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                  0,
+                )),
+        0,
       );
-    }, 0);
 
-    const orders = transformedOrder
-      .set('totalPrice', totalPrice)
-      .set('details', this.props.tableOrder.get('items').valueSeq())
-      .update('details', details => details.map(_ => _.delete('menuItem').delete('currentPrice')))
-      .update('details', details =>
-        details.map(_ => _.update('orderChoiceItemPrices', orderChoiceItemPrices => orderChoiceItemPrices.map(oc => oc.delete('choiceItemPrice')))),
-      )
-      .toJS();
+    const { restaurantId, customer: { name: customerName, numberOfAdults, numberOfChildren }, table: { id: tableId, name: tableName } } = this.props;
+    console.log(this.props);
+    const order = transformedOrder.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS();
 
-    const { tableName } = this.props;
-
-    PlaceOrder.commit(Environment, this.props.userId, orders, response => {
+    PlaceOrder.commit(Environment, this.props.userId, order, response => {
       const { kitchenOrderTemplate } = this.props;
       const orderList = response.get('details').reduce((menuItemsDetail, detail) => {
         return (
@@ -173,11 +174,11 @@ class OrdersContainer extends Component {
   onEndReached = () => {};
 
   handleNotesChanged = notes => {
-    this.props.applicationStateActions.changeNotes(notes);
+    this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
   };
 
   render = () => {
-    const { inMemoryOrder, tableName, customerName, restaurantId } = this.props;
+    const { inMemoryOrder, table: { name: tableName }, customer: { name: customerName }, restaurantId } = this.props;
 
     return (
       <OrdersView
@@ -205,16 +206,15 @@ OrdersContainer.propTypes = {
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
-  tableName: PropTypes.string.isRequired,
+  table: ActiveTableProp.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
-  customerName: PropTypes.string,
+  customer: ActiveCustomerProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 
 OrdersContainer.defaultProps = {
   kitchenOrderTemplate: null,
-  customerName: null,
   numberOfPrintCopiesForKitchen: 1,
 };
 
@@ -266,8 +266,8 @@ function mapStateToProps(state, ownProps) {
     inMemoryOrder: inMemoryOrder.toJS(),
     tableOrder: state.order.get('tableOrder'),
     userId: state.userAccess.get('userInfo').get('id'),
-    tableName: state.applicationState.getIn(['activeTable', 'name']),
-    customerName: state.applicationState.getIn(['activeCustomer', 'name']),
+    table: state.applicationState.get('activeTable').toJS(),
+    customer: state.applicationState.get('activeCustomer').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,

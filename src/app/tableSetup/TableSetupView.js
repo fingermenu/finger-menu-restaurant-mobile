@@ -11,7 +11,7 @@ import { translate } from 'react-i18next';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { NumberPad } from '../../components/redux-form-components';
-import { ActiveTableProp } from '../../framework/applicationState/PropTypes';
+import { ActiveTableProp } from '../../framework/applicationState';
 
 const TableSetupView = ({
   t,
