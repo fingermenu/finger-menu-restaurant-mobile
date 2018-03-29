@@ -86,7 +86,7 @@ class OrdersContainer extends Component {
                     .merge(
                       Map({
                         choiceItemPriceId: choiceItemPrice.get('id'),
-                        quantity: choiceItemPrice.get('currentPrice'),
+                        quantity: choiceItemPrice.get('quantity'),
                         notes: choiceItemPrice.get('notes'),
                         paid: false,
                       }),
