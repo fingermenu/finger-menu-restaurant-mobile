@@ -36,4 +36,17 @@ export default StyleSheet.create({
   columnOrderedIconContainer: {
     paddingRight: 6,
   },
+  footerContainer: {
+    backgroundColor: DefaultColor.defaultBannerColor,
+    padding: 10,
+  },
+  footerTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  footerText: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 20,
+  },
 });

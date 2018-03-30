@@ -56,7 +56,7 @@ class MenuContainer extends Component {
   };
 
   render = () => {
-    const { user: { menuItemPrices }, inMemoryMenuItemPricesToOrder } = this.props;
+    const { user: { menuItemPrices }, inMemoryMenuItemPricesToOrder, navigateToOrders } = this.props;
 
     return (
       <MenuView
@@ -70,6 +70,7 @@ class MenuContainer extends Component {
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
+        onPlaceOrderPressed={navigateToOrders}
       />
     );
   };
@@ -83,6 +84,7 @@ MenuContainer.propTypes = {
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
   selectedLanguage: PropTypes.string.isRequired,
+  navigateToOrders: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -103,6 +105,7 @@ function mapDispatchToProps(dispatch) {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
+    navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
   };
 }
 

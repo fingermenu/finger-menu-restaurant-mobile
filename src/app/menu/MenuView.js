@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Styles from './Styles';
 import { MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
-import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
+import MenuFooterView from './MenuFooterView';
 import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
@@ -23,7 +23,7 @@ class MenuView extends Component {
   );
 
   render = () => {
-    const { inMemoryMenuItemPricesToOrder, isFetchingTop, onEndReached, onRefresh, menuItemPrices } = this.props;
+    const { inMemoryMenuItemPricesToOrder, isFetchingTop, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -36,13 +36,16 @@ class MenuView extends Component {
           refreshing={isFetchingTop}
           ItemSeparatorComponent={this.renderItemSeparator}
         />
-        {inMemoryMenuItemPricesToOrder.length > 0 && <PlaceOrderControlContainer totalOrderQuantity={this.getTotalOrderQuantity()} />}
+        {inMemoryMenuItemPricesToOrder.length > 0 && (
+          <MenuFooterView totalOrderQuantity={this.getTotalOrderQuantity()} onPlaceOrderPressed={onPlaceOrderPressed} />
+        )}
       </View>
     );
   };
 }
 
 MenuView.propTypes = {
+  onPlaceOrderPressed: PropTypes.func.isRequired,
   menuItemPrices: MenuItemPricesProp.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
