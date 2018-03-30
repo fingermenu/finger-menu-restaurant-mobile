@@ -94,12 +94,19 @@ MenuItemView.defaultProps = {
   order: null,
 };
 
-function mapStateToProps(state, props) {
-  const initialValues = { quantity: props.order ? props.order.quantity : 1, notes: props.order ? props.order.notes : null };
+function mapStateToProps(state) {
+  const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
+  const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
+    ? null
+    : state.applicationState.getIn(['activeOrder', 'details', activeOrderMenuItemPrice.get('id')]);
+  const initialValues = {
+    quantity: activeOrderDetail ? activeOrderDetail.get('quantity') : 1,
+    notes: activeOrderDetail ? activeOrderDetail.get('notes') : null,
+  };
 
-  if (props.order) {
-    props.order.orderChoiceItemPrices.forEach(ocp => {
-      initialValues[ocp.choiceItemPriceId] = true;
+  if (activeOrderDetail) {
+    activeOrderDetail.get('orderChoiceItemPrices').forEach(ocp => {
+      initialValues[ocp.get('choiceItemPriceId')] = true;
     });
   }
 
