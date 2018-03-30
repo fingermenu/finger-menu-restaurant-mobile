@@ -64,7 +64,7 @@ class MenuItemContainer extends Component {
     const { activeOrderMenuItemPriceId, user: { menuItemPrice }, order } = this.props;
 
     return (
-      <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={activeOrderMenuItemPriceId !== null} onSubmit={this.handleSubmit} />
+      <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={activeOrderMenuItemPriceId === null} onSubmit={this.handleSubmit} />
     );
   };
 }
