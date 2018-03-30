@@ -56,12 +56,14 @@ class MenuContainer extends Component {
   };
 
   render = () => {
+    const { user: { menuItemPrices }, inMemoryMenuItemPricesToOrder } = this.props;
+
     return (
       <MenuView
-        menuItemPrices={this.props.user.menuItemPrices.edges
+        menuItemPrices={menuItemPrices.edges
           .map(_ => _.node)
           .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
-        orders={this.props.orders}
+        inMemoryMenuItemPricesToOrder={inMemoryMenuItemPricesToOrder}
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
@@ -77,28 +79,21 @@ MenuContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
-  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
+  ).isRequired,
   selectedLanguage: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
-  const orders = state.order.getIn(['tableOrder', 'details']).isEmpty()
-    ? []
-    : state.order
-      .getIn(['tableOrder', 'details'])
-      .toSeq()
-      .mapEntries(([key, value]) => [
-        key,
-        {
-          data: value.toJS(),
-          orderItemId: key,
-        },
-      ])
-      .toList()
-      .toJS();
+  const inMemoryMenuItemPricesToOrder = state.applicationState
+    .getIn(['activeOrder', 'details'])
+    .map(item => Map({ id: item.getIn(['menuItemPrice', 'id']), quantity: item.get('quantity') }))
+    .toSet()
+    .toJS();
 
   return {
-    orders: orders,
+    inMemoryMenuItemPricesToOrder,
     selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }

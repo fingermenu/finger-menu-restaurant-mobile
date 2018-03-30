@@ -39,7 +39,18 @@ export const ActiveMenuItemPrice = PropTypes.shape({
   id: PropTypes.string,
 });
 
+export const MenuItemPriceProp = PropTypes.shape({
+  menuItemPriceId: PropTypes.string.isRequired,
+});
+
+export const OrderDetailProp = PropTypes.shape({
+  menuItemPrice: MenuItemPriceProp.isRequired,
+});
+
+export const OrderDetailsProp = PropTypes.arrayOf(OrderDetailProp.isRequired);
+
 export const ActiveOrder = PropTypes.shape({
   correlationId: PropTypes.string,
+  details: OrderDetailsProp.isRequired,
   notes: PropTypes.string,
 });

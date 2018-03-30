@@ -11,9 +11,9 @@ import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
-  getTotalOrderQuantity = () => Immutable.fromJS(this.props.orders).reduce((total, value) => total + value.getIn(['data', 'quantity']), 0);
+  getTotalOrderQuantity = () => Immutable.fromJS(this.props.inMemoryMenuItemPricesToOrder).reduce((total, value) => total + value.quantity, 0);
 
-  hasOrdered = item => !!this.props.orders.find(order => order.data.menuItemPriceId === item.id);
+  hasOrdered = item => !!this.props.inMemoryMenuItemPricesToOrder.find(_ => _.id.localeCompare(item.id) === 0);
 
   keyExtractor = item => item.id;
 
@@ -24,18 +24,19 @@ class MenuView extends Component {
   );
 
   render = () => {
+    const { inMemoryMenuItemPricesToOrder, isFetchingTop, onEndReached, onRefresh, menuItemPrices } = this.props;
     return (
       <View style={Styles.container}>
         <FlatList
-          data={this.props.menuItemPrices}
+          data={menuItemPrices}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor}
-          onEndReached={this.props.onEndReached}
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.isFetchingTop}
+          onEndReached={onEndReached}
+          onRefresh={onRefresh}
+          refreshing={isFetchingTop}
           ItemSeparatorComponent={this.renderItemSeparator}
         />
-        {this.props.orders.length > 0 ? <PlaceOrderControlContainer totalOrderQuantity={this.getTotalOrderQuantity()} /> : <View />}
+        {inMemoryMenuItemPricesToOrder.length > 0 && <PlaceOrderControlContainer totalOrderQuantity={this.getTotalOrderQuantity()} />}
       </View>
     );
   };
@@ -43,7 +44,9 @@ class MenuView extends Component {
 
 MenuView.propTypes = {
   menuItemPrices: MenuItemPricesProp.isRequired,
-  orders: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
+  ).isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
   isFetchingTop: PropTypes.bool,
   onRefresh: PropTypes.func,
