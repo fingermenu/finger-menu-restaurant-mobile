@@ -25,8 +25,9 @@ class MenuContainer extends Component {
     }
   };
 
-  onViewMenuItemPressed = menuItemPriceId => {
-    this.props.applicationStateActions.setActiveMenuItemPrice(Map({ id: menuItemPriceId }));
+  onViewMenuItemPressed = id => {
+    this.props.applicationStateActions.clearActiveOrderMenuItemPrice();
+    this.props.applicationStateActions.setActiveMenuItemPrice(Map({ id }));
     this.props.navigateToMenuItem();
   };
 

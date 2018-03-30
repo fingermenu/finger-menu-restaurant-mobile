@@ -55,8 +55,11 @@ MenuItem.propTypes = {
 };
 
 function mapStateToProps(state) {
+  const activeMenuItemPrice = state.applicationState.get('activeMenuItemPrice');
+  const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
+
   return {
-    menuItemPriceId: state.applicationState.getIn(['activeMenuItemPrice', 'id']),
+    menuItemPriceId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('menuItemPriceId') : activeMenuItemPrice.get('id'),
   };
 }
 

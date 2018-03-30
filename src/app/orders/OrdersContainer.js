@@ -108,7 +108,8 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
-  handleViewOrderItemPressed = ({ id, menuItemPriceId }) => {
+  handleViewOrderItemPressed = ({ id, menuItemPrice: { id: menuItemPriceId } }) => {
+    this.props.applicationStateActions.clearActiveMenuItemPrice();
     this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId }));
     this.props.navigateToMenuItem();
   };
