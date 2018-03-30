@@ -114,12 +114,11 @@ class OrderItemRow extends Component {
 
 OrderItemRow.propTypes = {
   orderItem: OrderItemDetailProp.isRequired,
-  menuItemCurrentPrice: PropTypes.number.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
+  onOrderSelected: PropTypes.func,
   enableMultiSelection: PropTypes.bool,
   isSelected: PropTypes.bool,
-  onOrderSelected: PropTypes.func,
   showRemove: PropTypes.bool,
 };
 

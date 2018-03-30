@@ -43,8 +43,10 @@ export const OrderItemDetailProp = PropTypes.shape({
   quantity: PropTypes.number,
 });
 
+export const OrderItemDetailsProp = PropTypes.arrayOf(OrderItemDetailProp.isRequired);
+
 export const OrderProp = PropTypes.shape({
-  details: OrderItemDetailProp.isRequired,
+  details: OrderItemDetailsProp.isRequired,
   notes: PropTypes.string,
   customerName: PropTypes.string,
   numberOfAdults: PropTypes.number,

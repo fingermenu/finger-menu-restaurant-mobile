@@ -11,7 +11,7 @@ import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { MenuActionButton } from '../../components/menuActionButton';
-import { OrderItemDetailProp } from './PropTypes';
+import { OrderItemDetailsProp } from './PropTypes';
 
 class OrdersView extends Component {
   onOrderConfirmed = () => {
@@ -127,7 +127,7 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
-  inMemoryOrderItems: OrderItemDetailProp.isRequired,
+  inMemoryOrderItems: OrderItemDetailsProp.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,
   onConfirmOrderPressed: PropTypes.func.isRequired,
