@@ -59,9 +59,7 @@ class PinView extends Component {
   };
 
   validate = pins => {
-    const pinString = Immutable.fromJS(pins).reduce((v, s) => {
-      return v + s.get('value');
-    }, '');
+    const pinString = pins.reduce((reduction, pin) => reduction + pin.value, '');
 
     // If matching pin
     if (pinString === this.props.matchingPin) {
