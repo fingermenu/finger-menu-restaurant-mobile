@@ -44,13 +44,13 @@ export default (state = initialState, action) => {
 
   case ActionTypes.APPLICATION_STATE_ADD_ITEM_TO_ACTIVE_ORDER:
   case ActionTypes.APPLICATION_STATE_UPDATE_ITEM_IN_ACTIVE_ORDER:
-    return state.setIn(['activeOrder', 'items', action.payload.get('id')], action.payload);
+    return state.setIn(['activeOrder', 'details', action.payload.get('id')], action.payload);
 
   case ActionTypes.APPLICATION_STATE_REMOVE_ITEM_FROM_ACTIVE_ORDER:
-    return state.deleteIn(['activeOrder', 'items', action.payload.get('id')]);
+    return state.deleteIn(['activeOrder', 'details', action.payload.get('id')]);
 
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_ORDER:
-    return state.set('activeOrder', Map({ items: OrderedMap() }));
+    return state.set('activeOrder', Map({ details: OrderedMap() }));
 
   default:
     return state;

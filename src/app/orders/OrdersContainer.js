@@ -56,43 +56,40 @@ class OrdersContainer extends Component {
   };
 
   static convertOrderToOrderRequest = order =>
-    order
-      .set('details', order.get('items'))
-      .delete('items')
-      .update('details', details =>
-        details.map(detail => {
-          const menuItemPrice = detail.get('menuItemPrice');
+    order.update('details', details =>
+      details.map(detail => {
+        const menuItemPrice = detail.get('menuItemPrice');
 
-          return detail
-            .merge(
-              Map({
-                menuItemPriceId: menuItemPrice.get('id'),
-                quantity: detail.get('quantity'),
-                notes: detail.get('notes'),
-                paid: detail.get('paid'),
-                orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
-                  const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
+        return detail
+          .merge(
+            Map({
+              menuItemPriceId: menuItemPrice.get('id'),
+              quantity: detail.get('quantity'),
+              notes: detail.get('notes'),
+              paid: detail.get('paid'),
+              orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
+                const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
-                  return orderChoiceItemPrice
-                    .merge(
-                      Map({
-                        choiceItemPriceId: choiceItemPrice.get('id'),
-                        quantity: orderChoiceItemPrice.get('quantity'),
-                        notes: orderChoiceItemPrice.get('notes'),
-                        paid: orderChoiceItemPrice.get('paid'),
-                      }),
-                    )
-                    .delete('choiceItemPrice');
-                }),
+                return orderChoiceItemPrice
+                  .merge(
+                    Map({
+                      choiceItemPriceId: choiceItemPrice.get('id'),
+                      quantity: orderChoiceItemPrice.get('quantity'),
+                      notes: orderChoiceItemPrice.get('notes'),
+                      paid: orderChoiceItemPrice.get('paid'),
+                    }),
+                  )
+                  .delete('choiceItemPrice');
               }),
-            )
-            .delete('menuItemPrice');
-        }),
-      );
+            }),
+          )
+          .delete('menuItemPrice');
+      }),
+    );
 
   static calculateTotalPrice = order =>
     order
-      .get('items')
+      .get('details')
       .reduce(
         (total, menuItemPrice) =>
           total +
@@ -201,7 +198,7 @@ class OrdersContainer extends Component {
 
     return (
       <OrdersView
-        inMemoryOrderItems={inMemoryOrder.items}
+        inMemoryOrderItems={inMemoryOrder.details}
         onViewOrderItemPressed={this.onViewOrderItemPressed}
         onConfirmOrderPressed={this.onConfirmOrderPressed}
         onRemoveOrderPressed={this.onRemoveOrderPressed}
@@ -248,12 +245,12 @@ function mapStateToProps(state, ownProps) {
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
   const menuItemPrices = ownProps.user.menuItemPrices.edges.map(_ => _.node);
   const choiceItemPrices = ownProps.user.choiceItemPrices.edges.map(_ => _.node);
-  const inMemoryOrder = state.applicationState.get('activeOrder').update('items', items =>
-    items
-      .map(item => {
-        const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(item.getIn(['menuItemPrice', 'id'])) === 0);
+  const inMemoryOrder = state.applicationState.get('activeOrder').update('details', details =>
+    details
+      .map(detail => {
+        const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.id.localeCompare(detail.getIn(['menuItemPrice', 'id'])) === 0);
 
-        return item
+        return detail
           .setIn(['menuItemPrice', 'currentPrice'], foundMenuItemPrice.currentPrice)
           .mergeIn(
             ['menuItemPrice', 'menuItem'],
