@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import OrdersView from './OrdersView';
-import * as ordersActions from './Actions';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { OrderProp } from './PropTypes';
@@ -136,7 +135,7 @@ class OrdersContainer extends Component {
   };
 
   onRemoveOrderPressed = id => {
-    this.props.ordersActions.removeOrderItem(Map({ id }));
+    this.props.applicationStateActions.removeItemFromActiveOrder(Map({ id }));
   };
 
   onRefresh = () => {};
@@ -217,7 +216,6 @@ class OrdersContainer extends Component {
 OrdersContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   inMemoryOrder: OrderProp.isRequired,
-  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
@@ -279,7 +277,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     inMemoryOrder: inMemoryOrder.toJS(),
-    tableOrder: state.order.get('tableOrder'),
     userId: state.userAccess.get('userInfo').get('id'),
     table: state.applicationState.get('activeTable').toJS(),
     customer: state.applicationState.get('activeCustomer').toJS(),
@@ -293,7 +290,6 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    ordersActions: bindActionCreators(ordersActions, dispatch),
     escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
     navigateToMenuItem: (menuItemPriceId, order, id) =>
       dispatch(

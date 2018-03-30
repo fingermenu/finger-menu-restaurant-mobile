@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
 import MenuView from './MenuView';
-import * as ordersActions from '../orders/Actions';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class MenuContainer extends Component {
@@ -78,7 +77,6 @@ class MenuContainer extends Component {
 
 MenuContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  ordersActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenuItem: PropTypes.func.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
@@ -103,7 +101,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    ordersActions: bindActionCreators(ordersActions, dispatch),
     navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
     navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
   };
