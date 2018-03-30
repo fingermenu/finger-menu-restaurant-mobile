@@ -106,7 +106,7 @@ function mapStateToProps(state) {
 
   if (activeOrderDetail) {
     activeOrderDetail.get('orderChoiceItemPrices').forEach(ocp => {
-      initialValues[ocp.get('choiceItemPriceId')] = true;
+      initialValues[ocp.getIn(['choiceItemPrice', 'id'])] = true;
     });
   }
 
