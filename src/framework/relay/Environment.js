@@ -2,7 +2,6 @@
 
 import { ConfigReader } from '@microbusiness/common-react-native';
 import { UserService } from '@microbusiness/parse-server-common-react-native';
-import Immutable from 'immutable';
 import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import i18n from '../../i18n';
@@ -28,11 +27,7 @@ const fetchQuery = async (operation, variables) => {
   const result = await response.json();
 
   if (result.errors && result.errors.length > 0) {
-    const errorMessage = Immutable.fromJS(result.errors)
-      .map(error => error.get('message'))
-      .reduce((reduction, value) => `${reduction}\n${value}`);
-
-    throw new Error(errorMessage);
+    throw new Error(result.errors.reduce((reduction, error) => `${reduction}\n${error.message}`));
   }
 
   return result;
