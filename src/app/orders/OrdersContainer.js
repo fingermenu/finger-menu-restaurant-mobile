@@ -108,11 +108,12 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
-  onViewOrderItemPressed = (menuItemPriceId, order, id) => {
-    this.props.navigateToMenuItem(menuItemPriceId, order, id);
+  handleViewOrderItemPressed = ({ id, menuItemPriceId }) => {
+    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId }));
+    this.props.navigateToMenuItem();
   };
 
-  onConfirmOrderPressed = () => {
+  handleConfirmOrderPressed = () => {
     const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
     const orderRequest = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
     const totalPrice = OrdersContainer.calculateTotalPrice(inMemoryOrder);
@@ -134,13 +135,13 @@ class OrdersContainer extends Component {
     );
   };
 
-  onRemoveOrderPressed = id => {
+  handleRemoveOrderPressed = ({ id }) => {
     this.props.applicationStateActions.removeItemFromActiveOrder(Map({ id }));
   };
 
-  onRefresh = () => {};
+  handleRefresh = () => {};
 
-  onEndReached = () => {};
+  handleEndReached = () => {};
 
   handleNotesChanged = notes => {
     this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
@@ -197,16 +198,16 @@ class OrdersContainer extends Component {
     return (
       <OrdersView
         inMemoryOrderItems={inMemoryOrder.details}
-        onViewOrderItemPressed={this.onViewOrderItemPressed}
-        onConfirmOrderPressed={this.onConfirmOrderPressed}
-        onRemoveOrderPressed={this.onRemoveOrderPressed}
+        onViewOrderItemPressed={this.handleViewOrderItemPressed}
+        onConfirmOrderPressed={this.handleConfirmOrderPressed}
+        onRemoveOrderPressed={this.handleRemoveOrderPressed}
         tableName={tableName}
         customerName={customerName}
         notes={inMemoryOrder.notes}
         restaurantId={restaurantId}
         isFetchingTop={this.state.isFetchingTop}
-        onRefresh={this.OnRefresh}
-        onEndReached={this.OnEndReached}
+        onRefresh={this.handleRefresh}
+        onEndReached={this.handleEndReached}
         onNotesChanged={this.handleNotesChanged}
       />
     );
@@ -291,17 +292,7 @@ function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
-    navigateToMenuItem: (menuItemPriceId, order, id) =>
-      dispatch(
-        NavigationActions.navigate({
-          routeName: 'MenuItem',
-          params: {
-            menuItemPriceId,
-            order,
-            id,
-          },
-        }),
-      ),
+    navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
     navigateToOrderConfirmed: () =>
       dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
   };

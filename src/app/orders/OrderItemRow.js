@@ -36,11 +36,12 @@ class OrderItemRow extends Component {
     return this.state.orderItem.get('id') === nextOrderItem.get('id');
   };
 
-  onViewOrderItemPressed = () =>
-    this.onViewOrderItemPressedDebounced(this.props.orderItem.menuItemPriceId, this.props.orderItem, this.props.orderItem.id);
+  handleRemoveOrderPressed = () => {
+    this.props.onRemoveOrderPressed(this.props.orderItem);
+  };
 
-  onRemoveOrderPressed = () => {
-    this.props.onRemoveOrderPressed(this.props.orderItem.id);
+  handleViewOrderItemPressed = () => {
+    this.onViewOrderItemPressedDebounced(this.props.orderItem);
   };
 
   handleOrderItemSelected = () => {
@@ -62,7 +63,7 @@ class OrderItemRow extends Component {
     const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name } } } = orderItem;
 
     return (
-      <TouchableItem onPress={this.onViewOrderItemPressed}>
+      <TouchableItem onPress={this.handleViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
           {enableMultiSelection &&
             !paid && (
@@ -94,7 +95,7 @@ class OrderItemRow extends Component {
             <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>
             {showRemove ? (
               <TouchableIcon
-                onPress={this.onRemoveOrderPressed}
+                onPress={this.handleRemoveOrderPressed}
                 iconName="ios-remove-circle-outline"
                 iconType="ionicon"
                 iconColor={DefaultColor.iconColor}
