@@ -93,14 +93,13 @@ class OrdersContainer extends Component {
       .reduce(
         (total, menuItemPrice) =>
           total +
-          menuItemPrice.getIn(['menuItemPrice', 'quantity']) *
+          menuItemPrice.get('quantity') *
             (menuItemPrice.getIn(['menuItemPrice', 'currentPrice']) +
               menuItemPrice
                 .get('orderChoiceItemPrices')
                 .reduce(
                   (totalChoiceItemPrice, orderChoiceItemPrice) =>
-                    totalChoiceItemPrice +
-                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'quantity']) * orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                    totalChoiceItemPrice + orderChoiceItemPrice.get('quantity') * orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
                   0,
                 )),
         0,
