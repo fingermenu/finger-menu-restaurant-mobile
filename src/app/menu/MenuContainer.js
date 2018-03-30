@@ -89,6 +89,7 @@ function mapStateToProps(state) {
   const inMemoryMenuItemPricesToOrder = state.applicationState
     .getIn(['activeOrder', 'details'])
     .map(item => Map({ id: item.getIn(['menuItemPrice', 'id']), quantity: item.get('quantity') }))
+    .toList()
     .toJS();
 
   return {

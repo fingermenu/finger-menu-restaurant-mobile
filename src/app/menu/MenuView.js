@@ -24,6 +24,7 @@ class MenuView extends Component {
 
   render = () => {
     const { inMemoryMenuItemPricesToOrder, isFetchingTop, onEndReached, onRefresh, menuItemPrices } = this.props;
+
     return (
       <View style={Styles.container}>
         <FlatList
