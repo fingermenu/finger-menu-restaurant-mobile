@@ -33,7 +33,7 @@ class MenuItemView extends Component {
       t,
       handleSubmit,
       menuItemPrice: { menuItem: { name, description, imageUrl }, choiceItemPrices },
-      isUpdatingOrder,
+      isAddingOrder,
       menuItemPrice,
     } = this.props;
 
@@ -65,17 +65,17 @@ class MenuItemView extends Component {
             <Field name="quantity" component={QuantityControl} onChange={this.handleQuantityChanged} />
           </View>
 
-          {isUpdatingOrder ? (
-            <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>{t('updateOrder.button').toUpperCase()}</Text>
-            </TouchableItem>
-          ) : (
+          {isAddingOrder ? (
             <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
               <Text style={Styles.text}>
                 {t('addToOrder.button')
                   .replace('{quantity}', this.state.quantity)
                   .toUpperCase()}
               </Text>
+            </TouchableItem>
+          ) : (
+            <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
+              <Text style={Styles.text}>{t('updateOrder.button').toUpperCase()}</Text>
             </TouchableItem>
           )}
         </View>
@@ -87,7 +87,7 @@ class MenuItemView extends Component {
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
   order: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  isUpdatingOrder: PropTypes.bool.isRequired,
+  isAddingOrder: PropTypes.bool.isRequired,
 };
 
 MenuItemView.defaultProps = {

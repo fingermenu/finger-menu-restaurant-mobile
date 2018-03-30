@@ -75,7 +75,7 @@ class MenuItemContainer extends Component {
   };
 
   handleSubmit = values => {
-    if (this.props.isUpdatingOrder) {
+    if (this.props.isAddingOrder) {
       this.handleUpdate(values);
     } else {
       this.handleAdd(values);
@@ -85,9 +85,9 @@ class MenuItemContainer extends Component {
   };
 
   render = () => {
-    const { user: { menuItemPrice }, order, isUpdatingOrder } = this.props;
+    const { user: { menuItemPrice }, order, isAddingOrder } = this.props;
 
-    return <MenuItemView menuItemPrice={menuItemPrice} order={order} isUpdatingOrder={isUpdatingOrder} onSubmit={this.handleSubmit} />;
+    return <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={isAddingOrder} onSubmit={this.handleSubmit} />;
   };
 }
 
@@ -96,10 +96,10 @@ MenuItemContainer.propTypes = {
   goBack: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    isUpdatingOrder: !!ownProps.orderItemId,
+    isAddingOrder: state.applicationState.get('activeOrderMenuItemPrice').isEmpty(),
   };
 }
 
