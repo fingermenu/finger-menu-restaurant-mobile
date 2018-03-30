@@ -49,30 +49,36 @@ class TableDetailContainer extends Component {
 
   onCustomPaidPressed = selectedOrders => {
     const order = Immutable.fromJS(this.props.order);
-    const orderToUpdate = order
-      .update('details', details =>
-        details.map(detail =>
-          detail
-            .merge(
-              new Map({
-                paid: detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
-                menuItemPriceId: detail.getIn(['menuItemPrice', 'id']),
-              }),
-            )
-            .delete('menuItemPrice')
-            .update('orderChoiceItemPrices', orderChoiceItemPrices =>
-              orderChoiceItemPrices.map(orderChoiceItemPrice =>
-                orderChoiceItemPrice
+    const orderToUpdate = order.update('details', details =>
+      details.map(detail => {
+        const menuItemPrice = detail.get('menuItemPrice');
+
+        return detail
+          .merge(
+            Map({
+              menuItemPriceId: menuItemPrice.get('id'),
+              quantity: detail.get('quantity'),
+              notes: detail.get('notes'),
+              paid: detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
+              orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
+                const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
+
+                return orderChoiceItemPrice
                   .merge(
-                    Map({ choiceItemPriceId: orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']), quantity: orderChoiceItemPrice.get('quantity') }),
+                    Map({
+                      choiceItemPriceId: choiceItemPrice.get('id'),
+                      quantity: orderChoiceItemPrice.get('quantity'),
+                      notes: orderChoiceItemPrice.get('notes'),
+                      paid: orderChoiceItemPrice.get('paid'),
+                    }),
                   )
-                  .delete('choiceItemPrice'),
-              ),
-            ),
-        ),
-      )
-      .set('restaurantId', this.props.restaurantId)
-      .set('tableId', this.props.table.id);
+                  .delete('choiceItemPrice');
+              }),
+            }),
+          )
+          .delete('menuItemPrice');
+      }),
+    );
 
     // If all orders have been paid
     if (
@@ -92,7 +98,11 @@ class TableDetailContainer extends Component {
          * }); */
     }
 
-    UpdateOrder.commit(Environment, this.props.userId, orderToUpdate.toJS());
+    UpdateOrder.commit(
+      Environment,
+      this.props.userId,
+      orderToUpdate.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
+    );
   };
 
   render = () => {

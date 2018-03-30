@@ -54,6 +54,9 @@ export default createPaginationContainer(
                 paid
                 orderChoiceItemPrices {
                   id
+                  notes
+                  quantity
+                  paid
                   choiceItemPrice {
                     id
                     currentPrice
