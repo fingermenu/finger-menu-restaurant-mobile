@@ -58,14 +58,14 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
-    const { t, orderItem, isSelected, showRemove, isPaid, enableMultiSelection } = this.props;
-    const { orderChoiceItemPrices, menuItemPrice: { quantity, currentPrice, notes, menuItem: { name } } } = orderItem;
+    const { t, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
+    const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name } } } = orderItem;
 
     return (
       <TouchableItem onPress={this.onViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
           {enableMultiSelection &&
-            !isPaid && (
+            !paid && (
             <CheckBox
               center
               size={28}
@@ -90,7 +90,7 @@ class OrderItemRow extends Component {
             {this.renderChoiceItemPrices(orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
-            {isPaid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
+            {paid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
             <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>
             {showRemove ? (
               <TouchableIcon

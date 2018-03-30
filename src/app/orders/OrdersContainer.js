@@ -67,9 +67,9 @@ class OrdersContainer extends Component {
             .merge(
               Map({
                 menuItemPriceId: menuItemPrice.get('id'),
-                quantity: menuItemPrice.get('quantity'),
-                notes: menuItemPrice.get('notes'),
-                paid: false,
+                quantity: detail.get('quantity'),
+                notes: detail.get('notes'),
+                paid: detail.get('paid'),
                 orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                   const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -77,9 +77,9 @@ class OrdersContainer extends Component {
                     .merge(
                       Map({
                         choiceItemPriceId: choiceItemPrice.get('id'),
-                        quantity: choiceItemPrice.get('quantity'),
-                        notes: choiceItemPrice.get('notes'),
-                        paid: false,
+                        quantity: orderChoiceItemPrice.get('quantity'),
+                        notes: orderChoiceItemPrice.get('notes'),
+                        paid: orderChoiceItemPrice.get('paid'),
                       }),
                     )
                     .delete('choiceItemPrice');
@@ -119,8 +119,8 @@ class OrdersContainer extends Component {
 
   onConfirmOrderPressed = () => {
     const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
-    const orderRequest = OrdersContainer.convertOrderToOrderRequest();
-    const totalPrice = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
+    const orderRequest = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
+    const totalPrice = OrdersContainer.calculateTotalPrice(inMemoryOrder);
     const {
       navigateToOrderConfirmed,
       restaurantId,

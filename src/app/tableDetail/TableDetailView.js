@@ -316,7 +316,6 @@ class TableDetailView extends Component {
         enableMultiSelection={this.state.isCustomPaymentMode}
         onOrderSelected={this.handleOrderSelected}
         isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
-        isPaid={info.item.paid}
       />
     );
   };

@@ -25,10 +25,11 @@ class MenuItemContainer extends Component {
       .map(choiceItemPrice =>
         Map({
           id: cuid(),
+          quantity: 1,
+          notes: null,
+          paid: false,
           choiceItemPrice: Map({
             id: choiceItemPrice.get('id'),
-            quantity: 1,
-            notes: null,
             choiceItem: Map({
               id: this.props.user.menuItemPrice.menuItem.id,
             }),
@@ -41,10 +42,11 @@ class MenuItemContainer extends Component {
     this.props.applicationStateActions.addItemToActiveOrder(
       Map({
         id: cuid(),
+        quantity: values.quantity,
+        notes: values.notes,
+        paid: false,
         menuItemPrice: Map({
           id: this.props.user.menuItemPrice.id,
-          quantity: values.quantity,
-          notes: values.notes,
           menuItem: Map({
             id: this.props.user.menuItemPrice.menuItem.id,
           }),
@@ -58,10 +60,11 @@ class MenuItemContainer extends Component {
     this.props.applicationStateActions.updateItemInActiveOrder(
       Map({
         id: this.props.id,
+        quantity: values.quantity,
+        notes: values.notes,
+        paid: false,
         menuItemPrice: Map({
           id: this.props.user.menuItemPrice.id,
-          quantity: values.quantity,
-          notes: values.notes,
           menuItem: Map({
             id: this.props.user.menuItemPrice.menuItem.id,
           }),
