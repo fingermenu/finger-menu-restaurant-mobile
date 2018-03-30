@@ -55,18 +55,9 @@ class OrdersContainer extends Component {
       .reduce((reduction, value) => reduction + value + endOfLine, '');
   };
 
-  state = {
-    isFetchingTop: false,
-  };
-
-  onViewOrderItemPressed = (menuItemPriceId, order, id) => {
-    this.props.navigateToMenuItem(menuItemPriceId, order, id);
-  };
-
-  onConfirmOrderPressed = () => {
-    const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
-    const transformedOrder = inMemoryOrder
-      .set('details', inMemoryOrder.get('items'))
+  static convertOrderToOrderRequest = order =>
+    order
+      .set('details', order.get('items'))
       .delete('items')
       .update('details', details =>
         details.map(detail => {
@@ -99,7 +90,8 @@ class OrdersContainer extends Component {
         }),
       );
 
-    const totalPrice = inMemoryOrder
+  static calculateTotalPrice = order =>
+    order
       .get('items')
       .reduce(
         (total, menuItemPrice) =>
@@ -117,51 +109,34 @@ class OrdersContainer extends Component {
         0,
       );
 
-    const { restaurantId, customer: { name: customerName, numberOfAdults, numberOfChildren }, table: { id: tableId, name: tableName } } = this.props;
-    const order = transformedOrder.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS();
+  state = {
+    isFetchingTop: false,
+  };
 
-    PlaceOrder.commit(Environment, this.props.userId, order, response => {
-      const { kitchenOrderTemplate } = this.props;
-      const orderList = response.get('details').reduce((menuItemsDetail, detail) => {
-        return (
-          menuItemsDetail +
-          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
-          endOfLine +
-          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: ') +
-          detail
-            .get('choiceItems')
-            .reduce(
-              (reduction, choiceItem) =>
-                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString()) + endOfLine,
-              '',
-            )
-        );
-      }, '');
+  onViewOrderItemPressed = (menuItemPriceId, order, id) => {
+    this.props.navigateToMenuItem(menuItemPriceId, order, id);
+  };
 
-      if (kitchenOrderTemplate) {
-        const { printerConfig: { hostname, port }, numberOfPrintCopiesForKitchen } = this.props;
+  onConfirmOrderPressed = () => {
+    const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
+    const orderRequest = OrdersContainer.convertOrderToOrderRequest();
+    const totalPrice = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
+    const {
+      navigateToOrderConfirmed,
+      restaurantId,
+      customer: { name: customerName, numberOfAdults, numberOfChildren },
+      table: { id: tableId },
+    } = this.props;
 
-        this.props.escPosPrinterActions.printDocument(
-          Map({
-            hostname,
-            port,
-            documentContent: kitchenOrderTemplate
-              .replace('\r', '')
-              .replace('\n', '')
-              .replace(/{CR}/g, '\r')
-              .replace(/{LF}/g, '\n')
-              .replace(/{OrderDateTime}/g, response.get('placedAt').format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
-              .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('notes'), 'Notes: '))
-              .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('customerName')), 'CustomerName: ')
-              .replace(/{TableName}/g, tableName)
-              .replace(/{OrderList}/g, orderList),
-            numberOfCopies: numberOfPrintCopiesForKitchen,
-          }),
-        );
-      }
-
-      this.props.navigateToOrderConfirmed();
-    });
+    PlaceOrder.commit(
+      Environment,
+      this.props.userId,
+      orderRequest.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS(),
+      response => {
+        this.printOrder(response);
+        navigateToOrderConfirmed();
+      },
+    );
   };
 
   onRemoveOrderPressed = id => {
@@ -174,6 +149,51 @@ class OrdersContainer extends Component {
 
   handleNotesChanged = notes => {
     this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
+  };
+
+  printOrder = response => {
+    if (!kitchenOrderTemplate) {
+      return;
+    }
+
+    const { kitchenOrderTemplate, table: { name: tableName } } = this.props;
+    const orderList = response
+      .get('details')
+      .reduce(
+        (menuItemsDetail, detail) =>
+          menuItemsDetail +
+          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
+          endOfLine +
+          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: ') +
+          detail
+            .get('choiceItems')
+            .reduce(
+              (reduction, choiceItem) =>
+                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString()) + endOfLine,
+              '',
+            ),
+        '',
+      );
+
+    const { printerConfig: { hostname, port }, numberOfPrintCopiesForKitchen } = this.props;
+
+    this.props.escPosPrinterActions.printDocument(
+      Map({
+        hostname,
+        port,
+        documentContent: kitchenOrderTemplate
+          .replace('\r', '')
+          .replace('\n', '')
+          .replace(/{CR}/g, '\r')
+          .replace(/{LF}/g, '\n')
+          .replace(/{OrderDateTime}/g, response.get('placedAt').format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
+          .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('notes'), 'Notes: '))
+          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('customerName')), 'CustomerName: ')
+          .replace(/{TableName}/g, tableName)
+          .replace(/{OrderList}/g, orderList),
+        numberOfCopies: numberOfPrintCopiesForKitchen,
+      }),
+    );
   };
 
   render = () => {
