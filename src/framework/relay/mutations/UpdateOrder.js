@@ -1,9 +1,7 @@
 // @flow
 
-// import Immutable, { Map } from 'immutable';
 import { commitMutation, graphql } from 'react-relay';
-// import cuid from 'cuid';
-// import { ConnectionHandler } from 'relay-runtime';
+import { ConnectionHandler } from 'relay-runtime';
 import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
@@ -16,21 +14,42 @@ const mutation = graphql`
         __typename
         cursor
         node {
+          id
+          numberOfAdults
+          numberOfChildren
+          customerName
+          notes
+          totalPrice
           placedAt
+          cancelledAt
           details {
+            id
             menuItemPrice {
+              id
+              currentPrice
               menuItem {
-                nameToPrint
+                id
+                name
+                description
               }
             }
             quantity
+            notes
+            paid
             orderChoiceItemPrices {
+              id
+              notes
+              quantity
+              paid
               choiceItemPrice {
+                id
+                currentPrice
                 choiceItem {
-                  nameToPrint
+                  id
+                  name
+                  description
                 }
               }
-              quantity
             }
           }
         }
@@ -39,20 +58,20 @@ const mutation = graphql`
   }
 `;
 
-// const sharedUpdater = (store, userId, ordersEdge) => {
-//   const userProxy = store.get(userId);
-//   if (!userProxy) {
-//     return;
-//   }
-//
-//   const connection = ConnectionHandler.getConnection(userProxy, 'User_orders');
-//
-//   if (!connection) {
-//     return;
-//   }
-//
-//   ConnectionHandler.insertEdgeAfter(connection, ordersEdge);
-// };
+const sharedUpdater = (store, userId, ordersEdge) => {
+  const userProxy = store.get(userId);
+  if (!userProxy) {
+    return;
+  }
+
+  const connection = ConnectionHandler.getConnection(userProxy, 'User_orders');
+
+  if (!connection) {
+    return;
+  }
+
+  ConnectionHandler.insertEdgeAfter(connection, ordersEdge);
+};
 
 const commit = (
   environment,
@@ -82,6 +101,10 @@ const commit = (
       if (errorMessage) {
         reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
       } else {
+        const orderEdge = payload.getLinkedRecord('order');
+
+        sharedUpdater(store, userId, orderEdge);
+
         if (onSuccess) {
           onSuccess();
         }
