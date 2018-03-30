@@ -38,68 +38,51 @@ class MenuItemContainer extends Component {
       );
   };
 
-  handleAdd = values => {
-    this.props.applicationStateActions.addItemToActiveOrder(
-      Map({
-        id: cuid(),
-        quantity: values.quantity,
-        notes: values.notes,
-        paid: false,
-        menuItemPrice: Map({
-          id: this.props.user.menuItemPrice.id,
-          menuItem: Map({
-            id: this.props.user.menuItemPrice.menuItem.id,
-          }),
-        }),
-        orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
-      }),
-    );
-  };
+  handleSubmit = values => {
+    const { activeOrderMenuItemPriceId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
 
-  handleUpdate = values => {
     this.props.applicationStateActions.updateItemInActiveOrder(
       Map({
-        id: this.props.id,
+        id: activeOrderMenuItemPriceId ? activeOrderMenuItemPriceId : cuid(),
         quantity: values.quantity,
         notes: values.notes,
         paid: false,
         menuItemPrice: Map({
-          id: this.props.user.menuItemPrice.id,
+          id: menuItemPriceId,
           menuItem: Map({
-            id: this.props.user.menuItemPrice.menuItem.id,
+            id: menuItemId,
           }),
         }),
         orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
       }),
     );
-  };
-
-  handleSubmit = values => {
-    if (this.props.isAddingOrder) {
-      this.handleUpdate(values);
-    } else {
-      this.handleAdd(values);
-    }
 
     this.props.goBack();
   };
 
   render = () => {
-    const { user: { menuItemPrice }, order, isAddingOrder } = this.props;
+    const { activeOrderMenuItemPriceId, user: { menuItemPrice }, order } = this.props;
 
-    return <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={isAddingOrder} onSubmit={this.handleSubmit} />;
+    return (
+      <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={activeOrderMenuItemPriceId !== null} onSubmit={this.handleSubmit} />
+    );
   };
 }
 
 MenuItemContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
+  activeOrderMenuItemPriceId: PropTypes.string,
+};
+
+MenuItemContainer.defaultProps = {
+  activeOrderMenuItemPriceId: null,
 };
 
 function mapStateToProps(state) {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    isAddingOrder: state.applicationState.get('activeOrderMenuItemPrice').isEmpty(),
+    activeOrderMenuItemPriceId: state.applicationState.getIn(['activeOrderMenuItemPrice', 'id']),
   };
 }
 
