@@ -1,6 +1,5 @@
 // @flow
 
-import Immutable, { OrderedMap } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TabNavigator } from 'react-navigation';
@@ -21,23 +20,22 @@ class MenusNavigationTabContainer extends Component {
   };
 
   getMenusScreens = () =>
-    Immutable.fromJS(this.props.user.restaurant.menus)
-      .sort((menu1, menu2) => int(menu1.get('sortOrderIndex')).cmp(menu2.get('sortOrderIndex')))
-      .reduce(
-        (reduction, menu) =>
-          reduction.set(menu.get('id'), {
-            screen: props => <MenuContainer {...props} menuItemPrices={menu.get('menuItemPrices').toJS()} onRefresh={this.handleRefresh} />,
-            navigationOptions: {
-              tabBarLabel: menu.get('name'),
-              headerStyle: {
-                backgroundColor: DefaultColor.defaultBannerColor,
-              },
+    this.props.user.restaurant.menus
+      .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
+      .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))
+      .reduce((reduction, menu) => {
+        reduction[menu.id] = {
+          screen: props => <MenuContainer {...props} menuItemPrices={menu.menuItemPrices} onRefresh={this.handleRefresh} />,
+          navigationOptions: {
+            tabBarLabel: menu.name,
+            headerStyle: {
+              backgroundColor: DefaultColor.defaultBannerColor,
             },
-          }),
+          },
+        };
 
-        OrderedMap(),
-      )
-      .toJS();
+        return reduction;
+      }, {});
 
   getMenusTabConfig = () => {
     const MenusTabConfig = {

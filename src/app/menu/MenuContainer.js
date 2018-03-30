@@ -28,9 +28,9 @@ class MenuContainer extends Component {
 
     return (
       <MenuView
-        menuItemPrices={menuItemPrices.sort((menuItemPrice1, menuItemPrice2) =>
-          int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex),
-        )}
+        menuItemPrices={menuItemPrices
+          .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
+          .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
         inMemoryMenuItemPricesToOrder={inMemoryMenuItemPricesToOrder}
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
