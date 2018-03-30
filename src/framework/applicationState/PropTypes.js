@@ -39,6 +39,11 @@ export const ActiveMenuItemPrice = PropTypes.shape({
   id: PropTypes.string,
 });
 
+export const ActiveOrderMenuItemPrice = PropTypes.shape({
+  id: PropTypes.string,
+  menuItemPriceId: PropTypes.string,
+});
+
 export const MenuItemPriceProp = PropTypes.shape({
   menuItemPriceId: PropTypes.string.isRequired,
 });

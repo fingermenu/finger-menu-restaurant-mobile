@@ -9,5 +9,6 @@ export {
   ActiveCustomerProp,
   ActiveMenu,
   ActiveMenuItemPrice,
+  ActiveOrderMenuItemPrice,
   ActiveOrder,
 } from './PropTypes';

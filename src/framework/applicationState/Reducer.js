@@ -39,6 +39,12 @@ export default (state = initialState, action) => {
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_MENU_ITEM_PRICE:
     return state.set('activeMenuItemPrice', Map());
 
+  case ActionTypes.APPLICATION_STATE_SET_ACTIVE_ORDER_MENU_ITEM_PRICE:
+    return state.set('activeOrderMenuItemPrice', action.payload);
+
+  case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_ORDER_MENU_ITEM_PRICE:
+    return state.set('activeOrderMenuItemPrice', Map());
+
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_ORDER_TOP_INFO:
     return state.update('activeOrder', activeOrder => activeOrder.merge(action.payload));
 

@@ -9,5 +9,6 @@ export default Map({
   activeCustomer: Map(),
   activeMenu: Map(),
   activeMenuItemPrice: Map(),
+  activeOrderMenuItemPrice: Map(),
   activeOrder: Map({ items: OrderedMap() }),
 });

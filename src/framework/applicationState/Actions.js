@@ -77,6 +77,19 @@ export function clearActiveMenuItemPrice() {
   };
 }
 
+export function setActiveOrderMenuItemPrice(payload) {
+  return {
+    type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_ORDER_MENU_ITEM_PRICE,
+    payload,
+  };
+}
+
+export function clearActiveOrderMenuItemPrice() {
+  return {
+    type: ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_ORDER_MENU_ITEM_PRICE,
+  };
+}
+
 export function setActiveOrderTopInfo(payload) {
   return {
     type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_ORDER_TOP_INFO,
