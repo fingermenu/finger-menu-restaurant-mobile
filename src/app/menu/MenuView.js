@@ -1,6 +1,5 @@
 // @flow
 
-import Immutable from 'immutable';
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -11,7 +10,7 @@ import { PlaceOrderControlContainer } from '../../components/placeOrderControl';
 import { ListItemSeparator } from '../../components/list/';
 
 class MenuView extends Component {
-  getTotalOrderQuantity = () => Immutable.fromJS(this.props.inMemoryMenuItemPricesToOrder).reduce((total, value) => total + value.quantity, 0);
+  getTotalOrderQuantity = () => this.props.inMemoryMenuItemPricesToOrder.reduce((total, value) => total + value.quantity, 0);
 
   hasOrdered = item => !!this.props.inMemoryMenuItemPricesToOrder.find(_ => _.id.localeCompare(item.id) === 0);
 
