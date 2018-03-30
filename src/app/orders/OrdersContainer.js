@@ -164,14 +164,14 @@ class OrdersContainer extends Component {
           menuItemsDetail +
           OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
           endOfLine +
-          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: ') +
           detail
             .get('choiceItems')
             .reduce(
               (reduction, choiceItem) =>
                 reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString()) + endOfLine,
               '',
-            ),
+            ) +
+          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
         '',
       );
 
