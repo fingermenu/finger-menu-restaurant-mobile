@@ -27,7 +27,7 @@ const fetchQuery = async (operation, variables) => {
   const result = await response.json();
 
   if (result.errors && result.errors.length > 0) {
-    throw new Error(result.errors.reduce((reduction, error) => `${reduction}\n${error.message}`));
+    throw new Error(result.errors.map(error => error.message).reduce((reduction, message) => `${reduction}\n${message}`));
   }
 
   return result;
