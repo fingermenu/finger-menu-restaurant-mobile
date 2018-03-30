@@ -11,18 +11,8 @@ import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class MenuContainer extends Component {
-  state = {
-    isFetchingTop: false,
-  };
-
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
-  };
-
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.handleRefresh();
-    }
   };
 
   onViewMenuItemPressed = id => {
@@ -31,44 +21,22 @@ class MenuContainer extends Component {
     this.props.navigateToMenuItem();
   };
 
-  handleRefresh = () => {
-    if (this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.setState({
-      isFetchingTop: true,
-    });
-
-    this.props.relay.refetchConnection(this.props.user.menuItemPrices.edges.length, () => {
-      this.setState({
-        isFetchingTop: false,
-      });
-    });
-  };
-
-  handleEndReached = () => {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(30, () => {});
-  };
+  handleEndReached = () => true;
 
   render = () => {
-    const { user: { menuItemPrices }, inMemoryMenuItemPricesToOrder, navigateToOrders } = this.props;
+    const { menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders } = this.props;
 
     return (
       <MenuView
-        menuItemPrices={menuItemPrices.edges
-          .map(_ => _.node)
-          .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
+        menuItemPrices={menuItemPrices.sort((menuItemPrice1, menuItemPrice2) =>
+          int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex),
+        )}
         inMemoryMenuItemPricesToOrder={inMemoryMenuItemPricesToOrder}
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
-        isFetchingTop={this.state.isFetchingTop}
-        onRefresh={this.handleRefresh}
+        isFetchingTop={false}
+        onRefresh={onRefresh}
         onEndReached={this.handleEndReached}
         onPlaceOrderPressed={navigateToOrders}
       />
@@ -78,11 +46,11 @@ class MenuContainer extends Component {
 
 MenuContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  onRefresh: PropTypes.func.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
-  selectedLanguage: PropTypes.string.isRequired,
   navigateToOrders: PropTypes.func.isRequired,
 };
 
@@ -95,7 +63,6 @@ function mapStateToProps(state) {
 
   return {
     inMemoryMenuItemPricesToOrder,
-    selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 }
 

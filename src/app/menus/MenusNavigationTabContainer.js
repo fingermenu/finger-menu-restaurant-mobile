@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { TabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import int from 'int';
+import { MenuContainer } from '../menu';
 import { DefaultColor } from '../../style';
-import { Menu } from '../menu';
 
 class MenusNavigationTabContainer extends Component {
   static navigationOptions = ({ screenProps }) => ({
@@ -21,12 +21,12 @@ class MenusNavigationTabContainer extends Component {
   };
 
   getMenusScreens = () =>
-    Immutable.fromJS(this.props.menus)
+    Immutable.fromJS(this.props.user.restaurant.menus)
       .sort((menu1, menu2) => int(menu1.get('sortOrderIndex')).cmp(menu2.get('sortOrderIndex')))
       .reduce(
         (reduction, menu) =>
           reduction.set(menu.get('id'), {
-            screen: props => <Menu {...props} menuId={menu.get('id')} />,
+            screen: props => <MenuContainer {...props} menuItemPrices={menu.get('menuItemPrices').toJS()} onRefresh={this.handleRefresh} />,
             navigationOptions: {
               tabBarLabel: menu.get('name'),
               headerStyle: {
@@ -68,6 +68,10 @@ class MenusNavigationTabContainer extends Component {
     return MenusTabConfig;
   };
 
+  handleRefresh = () => {
+    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+  };
+
   render = () => {
     const MenuNavigationTab = TabNavigator(this.getMenusScreens(), this.getMenusTabConfig());
 
@@ -84,9 +88,8 @@ MenusNavigationTabContainer.defaultProps = {
   menuId: undefined,
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    menus: props.user.restaurant.menus,
     menuId: state.applicationState.getIn(['activeMenu', 'id']),
     selectedLanguage: state.applicationState.get('selectedLanguage'),
   };

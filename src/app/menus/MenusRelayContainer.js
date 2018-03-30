@@ -13,6 +13,17 @@ export default createRefetchContainer(
             id
             name
             sortOrderIndex
+            menuItemPrices {
+              id
+              currentPrice
+              sortOrderIndex
+              menuItem {
+                id
+                name
+                description
+                imageUrl
+              }
+            }
           }
         }
       }
