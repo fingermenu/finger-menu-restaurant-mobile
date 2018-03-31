@@ -40,7 +40,9 @@ class MenuItemView extends Component {
     return (
       <View style={Styles.container}>
         <ScrollView>
-          <View style={Styles.imageContainer}>{imageUrl ? <FastImage style={Styles.image} source={{ uri: imageUrl }} /> : <View />}</View>
+          <View style={Styles.imageContainer}>
+            {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.stretch} source={{ uri: imageUrl }} /> : <View />}
+          </View>
           <View style={Styles.descriptionContainer}>
             <View style={Styles.nameContainer}>
               <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
