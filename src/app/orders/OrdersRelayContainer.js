@@ -8,6 +8,12 @@ export default createRefetchContainer(
   {
     user: graphql`
       fragment OrdersRelayContainer_user on User {
+        restaurant(restaurantId: $restaurantId) {
+          menus {
+            id
+            name
+          }
+        }
         table(tableId: $tableId) {
           id
           name
@@ -47,7 +53,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query OrdersRelayContainer_user_PaginationQuery($tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
+    query OrdersRelayContainer_user_PaginationQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
       user {
         ...OrdersRelayContainer_user
       }

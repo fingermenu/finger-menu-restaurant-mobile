@@ -10,8 +10,8 @@ import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { MenuActionButton } from '../../components/menuActionButton';
-import { OrderItemDetailsProp } from './PropTypes';
+import { MenuActionButtonContainer } from '../../components/menuActionButton';
+import { MenusProp, OrderItemDetailsProp } from './PropTypes';
 
 class OrdersView extends Component {
   onOrderConfirmed = () => {
@@ -51,18 +51,7 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const {
-      t,
-      notes,
-      inMemoryOrderItems,
-      tableName,
-      customerName,
-      onEndReached,
-      onRefresh,
-      isFetchingTop,
-      restaurantId,
-      onNotesChanged,
-    } = this.props;
+    const { t, notes, inMemoryOrderItems, tableName, customerName, onEndReached, onRefresh, isFetchingTop, menus, onNotesChanged } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -114,7 +103,7 @@ class OrdersView extends Component {
           </ScrollView>
         )}
         <Input placeholder={t('notes.placeholder')} value={notes} onChangeText={onNotesChanged} />
-        <MenuActionButton restaurantId={restaurantId} />
+        <MenuActionButtonContainer menus={menus} />
         <Button
           title={t('placeOrder.button')}
           icon={<Icon name="md-checkmark" type="ionicon" />}
@@ -133,7 +122,7 @@ OrdersView.propTypes = {
   onConfirmOrderPressed: PropTypes.func.isRequired,
   onNotesChanged: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
-  restaurantId: PropTypes.string.isRequired,
+  menus: MenusProp.isRequired,
   customerName: PropTypes.string,
   notes: PropTypes.string,
 };

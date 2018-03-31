@@ -8,16 +8,9 @@ import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import MenuActionButtonView from './MenuActionButtonView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { MenusProp } from './PropTypes';
 
 class MenuActionButtonContainer extends Component {
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.props.relay.refetch(_ => ({
-        restaurant: _.restaurantId,
-      }));
-    }
-  };
-
   onMenuActionButtonPressed = id => {
     this.props.applicationStateActions.setActiveMenu(Map({ id }));
     this.props.navigateToMenu();
@@ -31,14 +24,11 @@ class MenuActionButtonContainer extends Component {
 MenuActionButtonContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenu: PropTypes.func.isRequired,
-  menus: PropTypes.arrayOf(PropTypes.object).isRequired,
+  menus: MenusProp.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    menus: props.user.restaurant.menus,
-    selectedLanguage: state.applicationState.get('selectedLanguage'),
-  };
+function mapStateToProps() {
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

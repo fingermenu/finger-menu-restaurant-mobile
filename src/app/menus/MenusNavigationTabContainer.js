@@ -15,7 +15,7 @@ class MenusNavigationTabContainer extends Component {
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+      this.handleRefresh();
     }
   };
 

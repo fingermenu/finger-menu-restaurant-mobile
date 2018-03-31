@@ -1,3 +1,3 @@
 // @flow
 
-export MenuActionButton from './MenuActionButton';
+export MenuActionButtonContainer from './MenuActionButtonContainer';

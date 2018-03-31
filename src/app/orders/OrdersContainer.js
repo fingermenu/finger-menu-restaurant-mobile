@@ -13,7 +13,7 @@ import { PlaceOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { ActiveTableProp, ActiveCustomerProp } from '../../framework/applicationState';
+import { ActiveCustomerProp } from '../../framework/applicationState';
 
 const endingDots = '.';
 const maxLineLength = 48;
@@ -108,6 +108,17 @@ class OrdersContainer extends Component {
     isFetchingTop: false,
   };
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
+      this.props.relay.refetch(_ => ({
+        restaurant: _.restaurantId,
+        tableId: _.tableId,
+        choiceItemPriceIds: _.choiceItemPriceIds,
+        menuItemPriceIds: _.menuItemPriceIds,
+      }));
+    }
+  };
+
   handleViewOrderItemPressed = ({ id, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
     this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId }));
@@ -122,7 +133,7 @@ class OrdersContainer extends Component {
       navigateToOrderConfirmed,
       restaurantId,
       customer: { name: customerName, numberOfAdults, numberOfChildren },
-      table: { id: tableId },
+      user: { table: { id: tableId } },
     } = this.props;
 
     PlaceOrder.commit(
@@ -153,7 +164,7 @@ class OrdersContainer extends Component {
       return;
     }
 
-    const { kitchenOrderTemplate, table: { name: tableName } } = this.props;
+    const { kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
     const orderList = response
       .get('details')
       .reduce(
@@ -194,7 +205,7 @@ class OrdersContainer extends Component {
   };
 
   render = () => {
-    const { inMemoryOrder, table: { name: tableName }, customer: { name: customerName }, restaurantId } = this.props;
+    const { inMemoryOrder, customer: { name: customerName }, user: { restaurant: { menus }, table: { name: tableName } } } = this.props;
 
     return (
       <OrdersView
@@ -205,7 +216,7 @@ class OrdersContainer extends Component {
         tableName={tableName}
         customerName={customerName}
         notes={inMemoryOrder.notes}
-        restaurantId={restaurantId}
+        menus={menus}
         isFetchingTop={this.state.isFetchingTop}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
@@ -217,11 +228,11 @@ class OrdersContainer extends Component {
 
 OrdersContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  inMemoryOrder: OrderProp.isRequired,
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  selectedLanguage: PropTypes.string.isRequired,
+  inMemoryOrder: OrderProp.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
-  table: ActiveTableProp.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
   customer: ActiveCustomerProp.isRequired,
@@ -278,9 +289,9 @@ function mapStateToProps(state, ownProps) {
   );
 
   return {
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
     inMemoryOrder: inMemoryOrder.toJS(),
     userId: state.userAccess.get('userInfo').get('id'),
-    table: state.applicationState.get('activeTable').toJS(),
     customer: state.applicationState.get('activeCustomer').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,

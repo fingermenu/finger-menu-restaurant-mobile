@@ -6,6 +6,7 @@ import ActionButton from 'react-native-action-button';
 import { Icon } from 'react-native-elements';
 import Styles from './Styles';
 import { DefaultColor } from '../../style';
+import { MenusProp } from './PropTypes';
 
 const MenuActionButtonView = ({ onMenuActionButtonPressed, menus }) => (
   <ActionButton buttonColor={DefaultColor.actionButtonColor} offsetX={50} offsetY={60}>
@@ -21,7 +22,7 @@ const MenuActionButtonView = ({ onMenuActionButtonPressed, menus }) => (
 
 MenuActionButtonView.propTypes = {
   onMenuActionButtonPressed: PropTypes.func.isRequired,
-  menus: PropTypes.arrayOf(PropTypes.object).isRequired,
+  menus: MenusProp.isRequired,
 };
 
 export default MenuActionButtonView;

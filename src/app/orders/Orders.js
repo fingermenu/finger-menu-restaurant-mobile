@@ -37,13 +37,14 @@ class Orders extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query OrdersQuery($tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
+          query OrdersQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
             user {
               ...OrdersRelayContainer_user
             }
           }
         `}
         variables={{
+          restaurantId: this.props.restaurantId,
           tableId: this.props.tableId,
           menuItemPriceIds: this.props.menuItemPriceIds,
           choiceItemPriceIds: this.props.choiceItemPriceIds,
@@ -55,6 +56,7 @@ class Orders extends Component {
 }
 
 Orders.propTypes = {
+  restaurantId: PropTypes.string.isRequired,
   menuItemPriceIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   choiceItemPriceIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 };
@@ -74,6 +76,7 @@ function mapStateToProps(state) {
     .toJS();
 
   return {
+    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     tableId: state.applicationState.getIn(['activeTable', 'id']),
     menuItemPriceIds,
     choiceItemPriceIds,

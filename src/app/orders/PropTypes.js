@@ -54,3 +54,10 @@ export const OrderProp = PropTypes.shape({
   restaurantId: PropTypes.string,
   tableId: PropTypes.string,
 });
+
+export const MenuProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+});
+
+export const MenusProp = PropTypes.arrayOf(MenuProp.isRequired);
