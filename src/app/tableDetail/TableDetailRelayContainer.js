@@ -46,7 +46,7 @@ export default createPaginationContainer(
                   menuItem {
                     id
                     name
-                    description
+                    imageUrl
                   }
                 }
                 quantity
@@ -63,7 +63,6 @@ export default createPaginationContainer(
                     choiceItem {
                       id
                       name
-                      description
                     }
                   }
                 }

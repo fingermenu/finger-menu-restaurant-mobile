@@ -46,8 +46,9 @@ export default StyleSheet.create({
     flex: 100,
   },
   image: {
-    width: 50,
-    height: 50,
+    marginRight: 5,
+    width: 70,
+    height: 70,
   },
   title: {
     fontSize: 26,

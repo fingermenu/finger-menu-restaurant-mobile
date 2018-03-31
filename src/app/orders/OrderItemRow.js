@@ -8,6 +8,7 @@ import { View, Text } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
+import FastImage from 'react-native-fast-image';
 import { OrderItemDetailProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
@@ -60,7 +61,7 @@ class OrderItemRow extends Component {
 
   render = () => {
     const { t, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
-    const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name } } } = orderItem;
+    const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name, imageUrl } } } = orderItem;
     const totalPrice =
       currentPrice * quantity +
       quantity *
@@ -73,6 +74,9 @@ class OrderItemRow extends Component {
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
+          <View style={Styles.imageContainer}>
+            {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
+          </View>
           {enableMultiSelection &&
             !paid && (
             <CheckBox
