@@ -50,17 +50,25 @@ class OrderItemRow extends Component {
     }
   };
 
-  renderChoiceItemPrices = choiceItemPrices =>
-    choiceItemPrices.map(choiceItemPrice => (
-      <Text key={choiceItemPrice.id} style={Styles.extraOptions}>
-        {choiceItemPrice.choiceItemPrice.choiceItem.name} -{' '}
-        {choiceItemPrice.choiceItemPrice.currentPrice ? '$' + choiceItemPrice.choiceItemPrice.currentPrice.toFixed(2) : ''}
+  renderChoiceItemPrices = orderChoiceItemPrices =>
+    orderChoiceItemPrices.map(orderChoiceItemPrice => (
+      <Text key={orderChoiceItemPrice.id} style={Styles.extraOptions}>
+        {orderChoiceItemPrice.choiceItemPrice.choiceItem.name} -{' '}
+        {orderChoiceItemPrice.choiceItemPrice.currentPrice ? '$' + orderChoiceItemPrice.choiceItemPrice.currentPrice.toFixed(2) : ''}
       </Text>
     ));
 
   render = () => {
     const { t, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
     const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name } } } = orderItem;
+    const totalPrice =
+      currentPrice * quantity +
+      quantity *
+        orderChoiceItemPrices.reduce(
+          (totalChoiceItemPrices, orderChoiceItemPrice) =>
+            totalChoiceItemPrices + orderChoiceItemPrice.quantity * orderChoiceItemPrice.choiceItemPrice.currentPrice,
+          0.0,
+        );
 
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
@@ -92,7 +100,7 @@ class OrderItemRow extends Component {
           </View>
           <View style={DefaultStyles.rowContainer}>
             {paid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
-            <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>
+            <Text style={Styles.price}>${totalPrice.toFixed(2)}</Text>
             {showRemove ? (
               <TouchableIcon
                 onPress={this.handleRemoveOrderPressed}
