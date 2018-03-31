@@ -78,7 +78,6 @@ const commit = (environment, userId, { id, tableState, numberOfAdults, numberOfC
       const id = cuid();
       const node = store.create(id, 'item');
 
-      node.setValue(true, 'savingInProgress');
       node.setValue(id, 'id');
       node.setValue(numberOfAdults, 'numberOfAdults');
       node.setValue(numberOfChildren, 'numberOfChildren');

@@ -20,6 +20,24 @@ class TableDetailContainer extends Component {
   };
 
   onResetTablePressed = () => {
+    this.setTableStateToEmpty();
+    this.props.goBack();
+  };
+
+  onSetPaidPressed = () => {
+    this.updateorder(null, true);
+    this.setTableStateToPaid();
+    this.props.goBack();
+  };
+
+  onCustomPaidPressed = selectedOrders => {
+    // If all orders have been paid
+    if (this.updateOrder(selectedOrders, false)) {
+      this.setTableStateToPaid();
+    }
+  };
+
+  setTableStateToEmpty = () => {
     UpdateTable.commit(Environment, this.props.userId, {
       id: this.props.table.id,
       tableState: 'empty',
@@ -29,11 +47,9 @@ class TableDetailContainer extends Component {
       notes: '',
       lastOrderCorrelationId: '',
     });
-
-    this.props.goBack();
   };
 
-  onSetPaidPressed = () => {
+  setTableStateToPaid = () => {
     UpdateTable.commit(Environment, this.props.userId, {
       id: this.props.table.id,
       tableState: 'paid',
@@ -42,14 +58,31 @@ class TableDetailContainer extends Component {
       customerName: '',
       notes: '',
     });
-
-    //TODO: UpdateOrder:
-    this.props.goBack();
   };
 
-  onCustomPaidPressed = selectedOrders => {
+  updateOrder = (selectedOrders, setAllMenuItemPricesPaid) => {
     const order = Immutable.fromJS(this.props.order);
-    const orderToUpdate = order.update('details', details =>
+    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
+
+    UpdateOrder.commit(
+      Environment,
+      this.props.userId,
+      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
+      order.get('details').map(detail => detail.get('menuItemPrice')),
+      order
+        .get('details')
+        .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
+        .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+    );
+
+    return orderUpdateRequest
+      .get('details')
+      .filterNot(_ => _.get('paid'))
+      .isEmpty();
+  };
+
+  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid) => {
+    return order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
 
@@ -59,7 +92,7 @@ class TableDetailContainer extends Component {
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
-              paid: detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
+              paid: setAllMenuItemPricesPaid || detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -78,30 +111,6 @@ class TableDetailContainer extends Component {
           )
           .delete('menuItemPrice');
       }),
-    );
-
-    // If all orders have been paid
-    if (
-      orderToUpdate
-        .get('details')
-        .filterNot(_ => _.get('paid'))
-        .count() === 0
-    ) {
-      /* UpdateTable.commit(Environment, this.props.userId, {
-         *   id: this.props.table.id,
-         *   tableState: 'paid',
-         *   numberOfAdults: 0,
-         *   numberOfChildren: 0,
-         *   customerName: '',
-         *   notes: '',
-         *   lastOrderCorrelationId: '',
-         * }); */
-    }
-
-    UpdateOrder.commit(
-      Environment,
-      this.props.userId,
-      orderToUpdate.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
     );
   };
 

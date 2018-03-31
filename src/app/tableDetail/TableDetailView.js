@@ -143,7 +143,9 @@ class TableDetailView extends Component {
     this.setState({ selectedDiscountButtonIndex, discountType: this.getSelectedDiscountType(selectedDiscountButtonIndex) });
   };
 
-  keyExtractor = item => this.props.order.details.indexOf(item).toString();
+  keyExtractor = item => item.id;
+
+  selectedOrdersKeyExtractor = item => item.id;
 
   renderCustomPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
@@ -160,7 +162,7 @@ class TableDetailView extends Component {
           <FlatList
             data={this.state.selectedOrders.toJS()}
             renderItem={this.renderSelectedPayingItem}
-            keyExtractor={this.keyExtractor}
+            keyExtractor={this.selectedOrdersKeyExtractor}
             extraData={this.state}
           />
           <View>
@@ -282,7 +284,7 @@ class TableDetailView extends Component {
       <View style={Styles.buttonsContainer}>
         <Button
           title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
-          disabled={this.state.selectedOrders.count() === 0}
+          disabled={this.state.selectedOrders.isEmpty()}
           onPress={this.onPayCustomPayPressed}
         />
         <Button title={t('cancelPayment.button')} onPress={this.onCancelCustomPayPressed} />
