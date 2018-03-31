@@ -14,7 +14,7 @@ class LandingContainer extends Component {
   render = () => {
     const { backgroundImageUrl, navigateToMenu } = this.props;
 
-    return <LandingView backgroundImageUrl={backgroundImageUrl} onStartButtonPressed={navigateToMenu} />;
+    return <LandingView backgroundImageUrl={backgroundImageUrl} onEnterButtonPressed={navigateToMenu} />;
   };
 }
 
