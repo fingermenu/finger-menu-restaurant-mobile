@@ -74,7 +74,7 @@ const TableSetupView = ({
       />
       <Button
         containerStyle={{ padding: 20 }}
-        title={tableStateKey === 'reserved' ? t('updateReserve.button') : t('reserve.button')}
+        title={tableStateKey === 'reserved' ? t('updateReservation.button') : t('reserve.button')}
         backgroundColor="orange"
         icon={<Icon name="ios-clock-outline" type="ionicon" />}
         buttonStyle={Styles.button}
