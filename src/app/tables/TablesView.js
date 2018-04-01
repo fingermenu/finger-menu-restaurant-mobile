@@ -31,7 +31,7 @@ class TablesView extends Component {
   };
 
   render = () => {
-    const { t, onEndReached, onRefresh, isFetchingTop } = this.props;
+    const { t, onEndReached, onRefresh, isRefreshing } = this.props;
     const groupedTables = Immutable.fromJS(this.props.tables)
       .groupBy(t => (t.has('tableState') ? t.getIn(['tableState', 'key']) : 'empty'))
       .mapEntries(([key, value]) => [
@@ -57,7 +57,7 @@ class TablesView extends Component {
           renderItem={this.renderItem}
           onEndReached={onEndReached}
           onRefresh={onRefresh}
-          refreshing={isFetchingTop}
+          refreshing={isRefreshing}
         />
         <View style={Styles.tableLegendsContainer}>
           {this.renderBadgeSummaryItem({
@@ -84,6 +84,7 @@ class TablesView extends Component {
 
 TablesView.propTypes = {
   onTablePressed: PropTypes.func.isRequired,
+  isRefreshing: PropTypes.bool.isRequired,
 };
 
 export default translate()(TablesView);

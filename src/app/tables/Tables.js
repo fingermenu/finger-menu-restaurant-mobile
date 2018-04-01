@@ -44,15 +44,13 @@ class Tables extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TablesQuery($count: Int!, $cursor: String, $restaurantId: ID!) {
+          query TablesQuery($restaurantId: ID!) {
             user {
               ...TablesRelayContainer_user
             }
           }
         `}
         variables={{
-          cursor: null,
-          count: 1000,
           restaurantId: this.props.restaurantId,
         }}
         render={this.renderRelayComponent}

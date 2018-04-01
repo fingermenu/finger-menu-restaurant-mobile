@@ -13,7 +13,7 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 
 class TablesContainer extends Component {
   state = {
-    isFetchingTop: false,
+    isRefreshing: false,
   };
 
   componentDidMount = () => {
@@ -60,31 +60,25 @@ class TablesContainer extends Component {
   };
 
   handleRefresh = () => {
-    if (this.props.relay.isLoading()) {
+    if (this.state.isRefreshing) {
       return;
     }
 
-    this.setState({ isFetchingTop: true });
+    this.setState({ isRefreshing: true });
 
-    this.props.relay.refetchConnection(this.props.user.tables.edges.length, () => {
-      this.setState({ isFetchingTop: false });
+    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }), null, () => {
+      this.setState({ isRefreshing: false });
     });
   };
 
-  handleEndReached = () => {
-    if (!this.props.relay.hasMore() || this.props.relay.isLoading()) {
-      return;
-    }
-
-    this.props.relay.loadMore(30, () => {});
-  };
+  handleEndReached = () => true;
 
   render = () => {
     return (
       <TablesView
         tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
         onTablePressed={this.onTablePressed}
-        isFetchingTop={this.state.isFetchingTop}
+        isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
       />
