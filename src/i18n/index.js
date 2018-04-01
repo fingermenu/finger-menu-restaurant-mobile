@@ -65,6 +65,7 @@ i18next.init({
         },
         paid: { label: 'Paid' },
         payNow: { button: 'Pay Now' },
+        confirm: { button: 'Confirm' },
       },
     },
     zh: {
@@ -121,6 +122,7 @@ i18next.init({
         thankYouForPlacingOrder: { message: '谢谢！厨房工作人员已经收到您的订单，现在正忙着制作您的美食。等候的工作人员很快就会收集您的平板电脑。' },
         paid: { label: '付费' },
         payNow: { button: '现在付款' },
+        confirm: { button: '确认' },
       },
     },
     jp: {
@@ -180,6 +182,7 @@ i18next.init({
         },
         paid: { label: '有料' },
         payNow: { label: '今払う' },
+        confirm: { button: '確認' },
       },
     },
   },

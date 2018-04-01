@@ -182,16 +182,16 @@ class TableDetailView extends Component {
             </View>
             <View style={Styles.centeredRowContainer}>
               <Button
-                title={t('no.button')}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-                onPress={this.onPayCustomCancelled}
-              />
-              <Button
-                title={t('yes.button')}
+                title={t('confirm.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.button}
                 onPress={this.onPayCustomConfirmed}
+              />
+              <Button
+                title={t('cancel.button')}
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.button}
+                onPress={this.onPayCustomCancelled}
               />
             </View>
           </View>
