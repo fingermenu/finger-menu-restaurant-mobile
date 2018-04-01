@@ -64,16 +64,13 @@ class Pin extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query PinQuery($count: Int!, $cursor: String) {
+          query PinQuery {
             user {
               ...PinRelayContainer_user
             }
           }
         `}
-        variables={{
-          cursor: null,
-          count: 30,
-        }}
+        variables={{}}
         render={this.renderRelayComponent}
       />
     );
