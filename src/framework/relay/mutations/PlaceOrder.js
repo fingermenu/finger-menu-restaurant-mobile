@@ -31,8 +31,7 @@ const mutation = graphql`
               currentPrice
               menuItem {
                 id
-                name
-                description
+                nameToPrint
               }
             }
             quantity
@@ -48,8 +47,7 @@ const mutation = graphql`
                 currentPrice
                 choiceItem {
                   id
-                  name
-                  description
+                  nameToPrint
                 }
               }
             }

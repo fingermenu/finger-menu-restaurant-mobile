@@ -14,23 +14,23 @@ import { MenuActionButtonContainer } from '../../components/menuActionButton';
 import { MenusProp, OrderItemDetailsProp } from './PropTypes';
 
 class OrdersView extends Component {
-  onOrderConfirmed = () => {
-    this.confirmOrderPopupDialog.dismiss();
+  setConfirmOrderPopupDialogRef = popupDialog => {
+    this.confirmOrderPopupDialogRef = popupDialog;
+  };
+
+  handleOrderConfirmedCancelled = () => {
+    this.confirmOrderPopupDialogRef.dismiss();
+  };
+
+  handleOrderConfirmed = () => {
+    this.confirmOrderPopupDialogRef.dismiss();
     this.props.onConfirmOrderPressed();
   };
 
-  onOrderConfirmedCancelled = () => {
-    this.confirmOrderPopupDialog.dismiss();
-  };
-
-  onConfirmOrderPressed = () => {
+  handleConfirmOrderPressed = () => {
     if (this.props.inMemoryOrderItems.length > 0) {
-      this.confirmOrderPopupDialog.show();
+      this.confirmOrderPopupDialogRef.show();
     }
-  };
-
-  setConfirmOrderPopupDialogRef = popupDialog => {
-    this.confirmOrderPopupDialog = popupDialog;
   };
 
   keyExtractor = item => item.id;
@@ -69,13 +69,13 @@ class OrdersView extends Component {
                 title={t('no.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.popupDialogButton}
-                onPress={this.onOrderConfirmedCancelled}
+                onPress={this.handleOrderConfirmedCancelled}
               />
               <Button
                 title={t('yes.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.popupDialogButton}
-                onPress={this.onOrderConfirmed}
+                onPress={this.handleOrderConfirmed}
               />
             </View>
           </View>
@@ -108,7 +108,7 @@ class OrdersView extends Component {
           title={t('placeOrder.button')}
           icon={<Icon name="md-checkmark" type="ionicon" />}
           backgroundColor={inMemoryOrderItems.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
-          onPress={this.onConfirmOrderPressed}
+          onPress={this.handleConfirmOrderPressed}
         />
       </View>
     );
