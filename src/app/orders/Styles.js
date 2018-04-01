@@ -73,7 +73,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   popupDialogButton: {
-    width: 70,
+    width: 120,
     backgroundColor: DefaultColor.actionButtonColor,
   },
   buttonContainer: {
