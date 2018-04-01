@@ -106,55 +106,57 @@ const commit = (
 
         sharedUpdater(store, userId, orderEdge);
 
-        if (onSuccess) {
-          const placedAt = ZonedDateTime.parse(
-            payload
-              .getLinkedRecord('order')
-              .getLinkedRecord('node')
-              .getValue('placedAt'),
-          ).withZoneSameInstant(ZoneId.SYSTEM);
-
-          const customerName = payload
-            .getLinkedRecord('order')
-            .getLinkedRecord('node')
-            .getValue('customerName');
-          const notes = payload
-            .getLinkedRecord('order')
-            .getLinkedRecord('node')
-            .getValue('notes');
-
-          const details = Immutable.fromJS(
-            payload
-              .getLinkedRecord('order')
-              .getLinkedRecord('node')
-              .getLinkedRecords('details'),
-          ).map(detail => {
-            const menuItemName = detail
-              .getLinkedRecord('menuItemPrice')
-              .getLinkedRecord('menuItem')
-              .getValue('nameToPrint');
-            const quantity = detail.getValue('quantity');
-            const notes = detail.getValue('notes');
-            const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
-
-            return Map({
-              name: menuItemName,
-              quantity,
-              notes,
-              choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
-                const choiceItemName = orderChoiceItemPrice
-                  .getLinkedRecord('choiceItemPrice')
-                  .getLinkedRecord('choiceItem')
-                  .getValue('nameToPrint');
-                const choiceItemQuantity = orderChoiceItemPrice.getValue('quantity');
-
-                return Map({ name: choiceItemName, quantity: choiceItemQuantity });
-              }),
-            });
-          });
-
-          onSuccess(Map({ placedAt, customerName, notes, details }));
+        if (!onSuccess) {
+          return;
         }
+
+        const placedAt = ZonedDateTime.parse(
+          payload
+            .getLinkedRecord('order')
+            .getLinkedRecord('node')
+            .getValue('placedAt'),
+        ).withZoneSameInstant(ZoneId.SYSTEM);
+
+        const customerName = payload
+          .getLinkedRecord('order')
+          .getLinkedRecord('node')
+          .getValue('customerName');
+        const notes = payload
+          .getLinkedRecord('order')
+          .getLinkedRecord('node')
+          .getValue('notes');
+
+        const details = Immutable.fromJS(
+          payload
+            .getLinkedRecord('order')
+            .getLinkedRecord('node')
+            .getLinkedRecords('details'),
+        ).map(detail => {
+          const menuItemName = detail
+            .getLinkedRecord('menuItemPrice')
+            .getLinkedRecord('menuItem')
+            .getValue('nameToPrint');
+          const quantity = detail.getValue('quantity');
+          const notes = detail.getValue('notes');
+          const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
+
+          return Map({
+            name: menuItemName,
+            quantity,
+            notes,
+            choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
+              const choiceItemName = orderChoiceItemPrice
+                .getLinkedRecord('choiceItemPrice')
+                .getLinkedRecord('choiceItem')
+                .getValue('nameToPrint');
+              const choiceItemQuantity = orderChoiceItemPrice.getValue('quantity');
+
+              return Map({ name: choiceItemName, quantity: choiceItemQuantity });
+            }),
+          });
+        });
+
+        onSuccess(Map({ placedAt, customerName, notes, details }));
       }
     },
   });
