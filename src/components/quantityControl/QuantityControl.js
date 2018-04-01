@@ -23,7 +23,13 @@ class QuantityControl extends Component {
   };
 
   handleValueDecrease = () => {
-    this.handleValueChange(this.getValue() - 1);
+    const newValue = this.getValue() - 1;
+
+    if (newValue < 1) {
+      return;
+    }
+
+    this.handleValueChange(newValue);
   };
 
   handleValueIncrease = () => {
