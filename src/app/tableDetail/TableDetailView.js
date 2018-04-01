@@ -216,12 +216,17 @@ class TableDetailView extends Component {
             {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
           </Text>
           <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
-            <Button title={t('no.button')} containerStyle={Styles.buttonContainer} buttonStyle={Styles.button} onPress={this.onResetTableCancelled} />
             <Button
-              title={t('yes.button')}
+              title={t('resetTable.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
               onPress={this.onResetTableConfirmed}
+            />
+            <Button
+              title={t('cancel.button')}
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.button}
+              onPress={this.onResetTableCancelled}
             />
           </View>
         </View>
