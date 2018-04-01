@@ -185,6 +185,7 @@ class OrdersContainer extends Component {
       .reduce(
         (menuItemsDetail, detail) =>
           menuItemsDetail +
+          endOfLine +
           OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
           endOfLine +
           detail

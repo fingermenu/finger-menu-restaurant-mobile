@@ -11,6 +11,14 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      quantity: props.quantity,
+    };
+  }
+
   componentWillReceiveProps = nextProps => {
     if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
       this.props.relay.refetch(_ => ({
@@ -38,13 +46,17 @@ class MenuItemContainer extends Component {
       );
   };
 
+  handleQuantityChanged = quantity => {
+    this.setState({ quantity });
+  };
+
   handleSubmit = values => {
     const { activeOrderMenuItemPriceId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
 
     this.props.applicationStateActions.updateItemInActiveOrder(
       Map({
         id: activeOrderMenuItemPriceId ? activeOrderMenuItemPriceId : cuid(),
-        quantity: values.quantity,
+        quantity: this.state.quantity,
         notes: values.notes,
         paid: false,
         menuItemPrice: Map({
@@ -64,7 +76,14 @@ class MenuItemContainer extends Component {
     const { activeOrderMenuItemPriceId, user: { menuItemPrice }, order } = this.props;
 
     return (
-      <MenuItemView menuItemPrice={menuItemPrice} order={order} isAddingOrder={activeOrderMenuItemPriceId === null} onSubmit={this.handleSubmit} />
+      <MenuItemView
+        menuItemPrice={menuItemPrice}
+        order={order}
+        isAddingOrder={activeOrderMenuItemPriceId === null}
+        onSubmit={this.handleSubmit}
+        quantity={this.state.quantity}
+        onQuantityChanged={this.handleQuantityChanged}
+      />
     );
   };
 }
@@ -80,9 +99,15 @@ MenuItemContainer.defaultProps = {
 };
 
 function mapStateToProps(state) {
+  const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
+  const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
+    ? null
+    : state.applicationState.getIn(['activeOrder', 'details', activeOrderMenuItemPrice.get('id')]);
+
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
     activeOrderMenuItemPriceId: state.applicationState.getIn(['activeOrderMenuItemPrice', 'id']),
+    quantity: activeOrderDetail ? activeOrderDetail.get('quantity') : 1,
   };
 }
 
