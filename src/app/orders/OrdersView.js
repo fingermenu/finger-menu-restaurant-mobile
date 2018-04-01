@@ -51,7 +51,7 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const { t, notes, inMemoryOrderItems, tableName, customerName, onEndReached, onRefresh, isFetchingTop, menus, onNotesChanged } = this.props;
+    const { t, notes, inMemoryOrderItems, tableName, customerName, onEndReached, onRefresh, isRefreshing, menus, onNotesChanged } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -94,7 +94,7 @@ class OrdersView extends Component {
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}
-            refreshing={isFetchingTop}
+            refreshing={isRefreshing}
             ItemSeparatorComponent={this.renderSeparator}
           />
         ) : (
@@ -116,6 +116,9 @@ class OrdersView extends Component {
 }
 
 OrdersView.propTypes = {
+  isRefreshing: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
+  onEndReached: PropTypes.func.isRequired,
   inMemoryOrderItems: OrderItemDetailsProp.isRequired,
   onViewOrderItemPressed: PropTypes.func.isRequired,
   onRemoveOrderPressed: PropTypes.func.isRequired,

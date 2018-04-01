@@ -105,17 +105,12 @@ class OrdersContainer extends Component {
       );
 
   state = {
-    isFetchingTop: false,
+    isRefreshing: false,
   };
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.props.relay.refetch(_ => ({
-        restaurant: _.restaurantId,
-        tableId: _.tableId,
-        choiceItemPriceIds: _.choiceItemPriceIds,
-        menuItemPriceIds: _.menuItemPriceIds,
-      }));
+      this.handleRefresh();
     }
   };
 
@@ -151,9 +146,28 @@ class OrdersContainer extends Component {
     this.props.applicationStateActions.removeItemFromActiveOrder(Map({ id }));
   };
 
-  handleRefresh = () => {};
+  handleRefresh = () => {
+    if (this.state.isRefreshing) {
+      return;
+    }
 
-  handleEndReached = () => {};
+    this.setState({ isRefreshing: true });
+
+    this.props.relay.refetch(
+      _ => ({
+        restaurant: _.restaurantId,
+        tableId: _.tableId,
+        choiceItemPriceIds: _.choiceItemPriceIds,
+        menuItemPriceIds: _.menuItemPriceIds,
+      }),
+      null,
+      () => {
+        this.setState({ isRefreshing: false });
+      },
+    );
+  };
+
+  handleEndReached = () => true;
 
   handleNotesChanged = notes => {
     this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
@@ -217,7 +231,7 @@ class OrdersContainer extends Component {
         customerName={customerName}
         notes={inMemoryOrder.notes}
         menus={menus}
-        isFetchingTop={this.state.isFetchingTop}
+        isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onNotesChanged={this.handleNotesChanged}
