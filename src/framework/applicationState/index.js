@@ -8,7 +8,7 @@ export {
   ActiveTableProp,
   ActiveCustomerProp,
   ActiveMenu,
-  ActiveMenuItemPrice,
-  ActiveOrderMenuItemPrice,
+  ActiveMenuItemPriceProp,
+  ActiveOrderMenuItemPriceProp,
   ActiveOrder,
 } from './PropTypes';

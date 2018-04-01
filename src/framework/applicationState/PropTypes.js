@@ -35,11 +35,11 @@ export const ActiveMenu = PropTypes.shape({
   id: PropTypes.string,
 });
 
-export const ActiveMenuItemPrice = PropTypes.shape({
+export const ActiveMenuItemPriceProp = PropTypes.shape({
   id: PropTypes.string,
 });
 
-export const ActiveOrderMenuItemPrice = PropTypes.shape({
+export const ActiveOrderMenuItemPriceProp = PropTypes.shape({
   id: PropTypes.string,
   menuItemPriceId: PropTypes.string,
 });
