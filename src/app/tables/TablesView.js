@@ -83,8 +83,10 @@ class TablesView extends Component {
 }
 
 TablesView.propTypes = {
-  onTablePressed: PropTypes.func.isRequired,
   isRefreshing: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
+  onEndReached: PropTypes.func.isRequired,
+  onTablePressed: PropTypes.func.isRequired,
 };
 
 export default translate()(TablesView);

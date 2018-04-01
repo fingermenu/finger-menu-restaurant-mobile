@@ -35,22 +35,13 @@ class TableDetail extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TableDetailQuery(
-            $count: Int!
-            $cursor: String
-            $restaurantId: ID!
-            $tableId: ID
-            $lastOrderCorrelationId: ID
-            $tableIdForTableQuery: ID!
-          ) {
+          query TableDetailQuery($restaurantId: ID!, $tableId: ID, $lastOrderCorrelationId: ID, $tableIdForTableQuery: ID!) {
             user {
               ...TableDetailRelayContainer_user
             }
           }
         `}
         variables={{
-          cursor: null,
-          count: 1000,
           tableId: this.props.tableId,
           lastOrderCorrelationId: this.props.lastOrderCorrelationId,
           tableIdForTableQuery: this.props.tableId,

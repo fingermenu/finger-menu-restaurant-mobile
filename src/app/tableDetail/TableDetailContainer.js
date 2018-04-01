@@ -11,6 +11,10 @@ import { UpdateTable, UpdateOrder } from '../../framework/relay/mutations';
 import Environment from '../../framework/relay/Environment';
 
 class TableDetailContainer extends Component {
+  state = {
+    isRefreshing: false,
+  };
+
   onViewOrderItemPressed = () => {
     return true;
   };
@@ -81,6 +85,29 @@ class TableDetailContainer extends Component {
       .isEmpty();
   };
 
+  handleRefresh = () => {
+    if (this.state.isRefreshing) {
+      return;
+    }
+
+    this.setState({ isRefreshing: true });
+
+    this.props.relay.refetch(
+      _ => ({
+        restaurant: _.restaurantId,
+        tableId: _.tableId,
+        lastOrderCorrelationId: _.lastOrderCorrelationId,
+        tableIdForTableQuery: _.tableIdForTableQuery,
+      }),
+      null,
+      () => {
+        this.setState({ isRefreshing: false });
+      },
+    );
+  };
+
+  handleEndReached = () => true;
+
   convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid) => {
     return order.update('details', details =>
       details.map(detail => {
@@ -126,6 +153,9 @@ class TableDetailContainer extends Component {
         onResetTablePressed={this.onResetTablePressed}
         onSetPaidPressed={this.onSetPaidPressed}
         onCustomPaidPressed={this.onCustomPaidPressed}
+        isRefreshing={this.state.isRefreshing}
+        onRefresh={this.handleRefresh}
+        onEndReached={this.handleEndReached}
       />
     );
   };

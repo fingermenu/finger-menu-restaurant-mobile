@@ -336,7 +336,7 @@ class TableDetailView extends Component {
   };
 
   render = () => {
-    const { t, table: { name, tableState }, order, onEndReached, onRefresh, isFetchingTop } = this.props;
+    const { t, table: { name, tableState }, order, onEndReached, onRefresh, isRefreshing } = this.props;
     const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
     const { selectedDiscountButtonIndex } = this.state;
 
@@ -364,7 +364,7 @@ class TableDetailView extends Component {
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}
-            refreshing={isFetchingTop}
+            refreshing={isRefreshing}
             extraData={this.state}
           />
         ) : (
@@ -402,6 +402,9 @@ class TableDetailView extends Component {
 }
 
 TableDetailView.propTypes = {
+  isRefreshing: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
+  onEndReached: PropTypes.func.isRequired,
   table: TableProp.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
