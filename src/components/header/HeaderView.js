@@ -15,7 +15,7 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
     <View style={Styles.bannerContainer} />
     <Menu>
       <MenuTrigger>
-        <FastImage style={Styles.image} source={ImageUtility.getImageSource('translation')} />
+        <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />
       </MenuTrigger>
       <MenuOptions>
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
