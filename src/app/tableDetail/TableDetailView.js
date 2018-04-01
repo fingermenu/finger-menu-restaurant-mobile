@@ -177,20 +177,20 @@ class TableDetailView extends Component {
                 {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}
               </Text>
             </View>
-            <View style={Styles.resetTableDialogButtonContainer}>
+            <View style={Styles.centeredRowContainer}>
               <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>{t('confirmPayment.message')}</Text>
             </View>
-            <View style={Styles.resetTableDialogButtonContainer}>
+            <View style={Styles.centeredRowContainer}>
               <Button
                 title={t('no.button')}
                 containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
+                buttonStyle={Styles.button}
                 onPress={this.onPayCustomCancelled}
               />
               <Button
                 title={t('yes.button')}
                 containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.resetTableDialogButton}
+                buttonStyle={Styles.button}
                 onPress={this.onPayCustomConfirmed}
               />
             </View>
@@ -215,17 +215,12 @@ class TableDetailView extends Component {
           <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
             {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
           </Text>
-          <View style={[DefaultStyles.rowContainer, Styles.resetTableDialogButtonContainer]}>
-            <Button
-              title={t('no.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.resetTableDialogButton}
-              onPress={this.onResetTableCancelled}
-            />
+          <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
+            <Button title={t('no.button')} containerStyle={Styles.buttonContainer} buttonStyle={Styles.button} onPress={this.onResetTableCancelled} />
             <Button
               title={t('yes.button')}
               containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.resetTableDialogButton}
+              buttonStyle={Styles.button}
               onPress={this.onResetTableConfirmed}
             />
           </View>
@@ -253,23 +248,23 @@ class TableDetailView extends Component {
           <View style={Styles.paymentSummaryBalanceRow}>
             <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
           </View>
-          <View style={Styles.resetTableDialogButtonContainer}>
+          <View style={Styles.centeredRowContainer}>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
               {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
             </Text>
           </View>
-          <View style={Styles.resetTableDialogButtonContainer}>
+          <View style={Styles.centeredRowContainer}>
             <Button
-              title={t('no.button')}
+              title={t('payNow.button')}
               containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.resetTableDialogButton}
-              onPress={this.onSetTablePaidCancelled}
+              buttonStyle={Styles.button}
+              onPress={this.onSetTablePaidConfirmed}
             />
             <Button
-              title={t('yes.button')}
+              title={t('cancel.button')}
               containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.resetTableDialogButton}
-              onPress={this.onSetTablePaidConfirmed}
+              buttonStyle={Styles.button}
+              onPress={this.onSetTablePaidCancelled}
             />
           </View>
         </View>

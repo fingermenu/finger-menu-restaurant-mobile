@@ -66,15 +66,15 @@ export default StyleSheet.create({
     padding: 10,
     flex: 1,
   },
-  resetTableDialogButtonContainer: {
+  centeredRowContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
   resetTableDialogText: {
     justifyContent: 'center',
   },
-  resetTableDialogButton: {
-    width: 70,
+  button: {
+    width: 100,
     backgroundColor: DefaultColor.actionButtonColor,
   },
   buttonContainer: {

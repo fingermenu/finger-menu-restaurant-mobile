@@ -64,6 +64,7 @@ i18next.init({
             'Thank you! The kitchen staff have received your order and are now busy crafting your culinary delights. The waiting staff will collect your tablet shortly.',
         },
         paid: { label: 'Paid' },
+        payNow: { button: 'Pay Now' },
       },
     },
     zh: {
@@ -119,6 +120,7 @@ i18next.init({
         numberOfItems: { label: '{numberOfItems} 项目' },
         thankYouForPlacingOrder: { message: '谢谢！厨房工作人员已经收到您的订单，现在正忙着制作您的美食。等候的工作人员很快就会收集您的平板电脑。' },
         paid: { label: '付费' },
+        payNow: { button: '现在付款' },
       },
     },
     jp: {
@@ -177,6 +179,7 @@ i18next.init({
             'ありがとうございました！キッチンスタッフがあなたの注文を受け取り、あなたの料理の喜びを作り出すのに忙しいです。待っているスタッフがすぐにあなたのタブレットを収集します。',
         },
         paid: { label: '有料' },
+        payNow: { label: '今払う' },
       },
     },
   },
