@@ -74,7 +74,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    width: 100,
+    width: 120,
     backgroundColor: DefaultColor.actionButtonColor,
   },
   buttonContainer: {
