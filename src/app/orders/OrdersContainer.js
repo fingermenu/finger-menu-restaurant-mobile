@@ -174,11 +174,12 @@ class OrdersContainer extends Component {
   };
 
   printOrder = response => {
+    const { kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
+
     if (!kitchenOrderTemplate) {
       return;
     }
 
-    const { kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
     const orderList = response
       .get('details')
       .reduce(

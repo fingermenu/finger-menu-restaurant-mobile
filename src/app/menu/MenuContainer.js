@@ -46,7 +46,7 @@ class MenuContainer extends Component {
 
 MenuContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  isRefreshing: PropTypes.func.isRequired,
+  isRefreshing: PropTypes.bool.isRequired,
   onRefresh: PropTypes.func.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
