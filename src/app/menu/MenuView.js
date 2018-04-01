@@ -23,7 +23,7 @@ class MenuView extends Component {
   );
 
   render = () => {
-    const { inMemoryMenuItemPricesToOrder, isFetchingTop, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
+    const { inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -33,7 +33,7 @@ class MenuView extends Component {
           keyExtractor={this.keyExtractor}
           onEndReached={onEndReached}
           onRefresh={onRefresh}
-          refreshing={isFetchingTop}
+          refreshing={isRefreshing}
           ItemSeparatorComponent={this.renderItemSeparator}
         />
         {inMemoryMenuItemPricesToOrder.length > 0 && (
@@ -45,21 +45,15 @@ class MenuView extends Component {
 }
 
 MenuView.propTypes = {
+  isRefreshing: PropTypes.bool.isRequired,
+  onRefresh: PropTypes.func.isRequired,
+  onEndReached: PropTypes.func.isRequired,
   onPlaceOrderPressed: PropTypes.func.isRequired,
   menuItemPrices: MenuItemPricesProp.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
-  isFetchingTop: PropTypes.bool,
-  onRefresh: PropTypes.func,
-  onEndReached: PropTypes.func,
-};
-
-MenuView.defaultProps = {
-  isFetchingTop: false,
-  onRefresh: null,
-  onEndReached: null,
 };
 
 export default MenuView;

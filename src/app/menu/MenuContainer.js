@@ -24,7 +24,7 @@ class MenuContainer extends Component {
   handleEndReached = () => true;
 
   render = () => {
-    const { menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders } = this.props;
+    const { menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders, isRefreshing } = this.props;
 
     return (
       <MenuView
@@ -35,7 +35,7 @@ class MenuContainer extends Component {
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
-        isFetchingTop={false}
+        isRefreshing={isRefreshing}
         onRefresh={onRefresh}
         onEndReached={this.handleEndReached}
         onPlaceOrderPressed={navigateToOrders}
@@ -46,6 +46,7 @@ class MenuContainer extends Component {
 
 MenuContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  isRefreshing: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(

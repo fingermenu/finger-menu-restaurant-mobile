@@ -13,6 +13,10 @@ class MenusNavigationTabContainer extends Component {
     tabBarLabel: screenProps.t('home.label'),
   });
 
+  state = {
+    isRefreshing: false,
+  };
+
   componentWillReceiveProps = nextProps => {
     if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
       this.handleRefresh();
@@ -25,7 +29,9 @@ class MenusNavigationTabContainer extends Component {
       .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))
       .reduce((reduction, menu) => {
         reduction[menu.id] = {
-          screen: props => <MenuContainer {...props} menuItemPrices={menu.menuItemPrices} onRefresh={this.handleRefresh} />,
+          screen: props => (
+            <MenuContainer {...props} menuItemPrices={menu.menuItemPrices} onRefresh={this.handleRefresh} isRefreshing={this.state.isRefreshing} />
+          ),
           navigationOptions: {
             tabBarLabel: menu.name,
             headerStyle: {
@@ -67,7 +73,15 @@ class MenusNavigationTabContainer extends Component {
   };
 
   handleRefresh = () => {
-    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+    if (this.state.isRefreshing) {
+      return;
+    }
+
+    this.setState({ isRefreshing: true });
+
+    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }), null, () => {
+      this.setState({ isRefreshing: false });
+    });
   };
 
   render = () => {
