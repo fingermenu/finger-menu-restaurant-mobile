@@ -49,8 +49,10 @@ class TableSetupContainer extends Component {
   };
 
   onReserveTablePressed = value => {
-    this.updateTable(value, 'reserved', () => {
-      this.props.goBack();
+    this.updateTable(value, 'reserved', {
+      onSuccess: () => {
+        this.props.goBack();
+      },
     });
   };
 
