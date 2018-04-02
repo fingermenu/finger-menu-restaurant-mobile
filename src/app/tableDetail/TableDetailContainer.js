@@ -28,9 +28,10 @@ class TableDetailContainer extends Component {
   };
 
   onSetPaidPressed = () => {
-    this.updateOrder(null, true);
-    this.setTableStateToPaid();
-    this.props.goBack();
+    this.updateOrder(null, true, () => {
+      this.setTableStateToPaid();
+      this.props.goBack();
+    });
   };
 
   onCustomPaidPressed = selectedOrders => {
