@@ -43,7 +43,6 @@ class TableDetailContainer extends Component {
   };
 
   onCustomPaidPressed = selectedOrders => {
-    // If all orders have been paid
     const allOrdersPaid = this.updateOrder(selectedOrders, false, {
       onSuccess: () => {
         if (allOrdersPaid) {
