@@ -35,9 +35,11 @@ class TableDetailContainer extends Component {
 
   onCustomPaidPressed = selectedOrders => {
     // If all orders have been paid
-    if (this.updateOrder(selectedOrders, false)) {
-      this.setTableStateToPaid();
-    }
+    const allOrdersPaid = this.updateOrder(selectedOrders, false, () => {
+      if (allOrdersPaid) {
+        this.setTableStateToPaid();
+      }
+    });
   };
 
   setTableStateToEmpty = () => {
@@ -77,7 +79,7 @@ class TableDetailContainer extends Component {
     );
   };
 
-  updateOrder = (selectedOrders, setAllMenuItemPricesPaid) => {
+  updateOrder = (selectedOrders, setAllMenuItemPricesPaid, onSuccess) => {
     const order = Immutable.fromJS(this.props.order);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
     const { restaurantId, tableId, lastOrderCorrelationId } = this.props;
@@ -98,6 +100,9 @@ class TableDetailContainer extends Component {
       },
       {
         user: this.props.user,
+      },
+      {
+        onSuccess,
       },
     );
 
