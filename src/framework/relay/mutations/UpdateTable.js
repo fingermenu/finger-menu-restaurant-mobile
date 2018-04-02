@@ -75,6 +75,17 @@ const commit = (
     updater: store => {
       sharedUpdater(store, user, store.getRootField('updateTable').getLinkedRecord('table'), connectionFilters);
     },
+    optimisticResponse: {
+      updateTable: Common.createTableOptimisticResponse({
+        id,
+        tableState,
+        numberOfAdults,
+        numberOfChildren,
+        customerName,
+        notes,
+        lastOrderCorrelationId,
+      }),
+    },
     optimisticUpdater: store => {
       sharedUpdater(
         store,

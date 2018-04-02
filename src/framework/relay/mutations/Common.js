@@ -137,6 +137,22 @@ export default class Common {
     return orderLinkedRecord;
   };
 
+  static createTableOptimisticResponse = ({ id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId }) => {
+    return {
+      node: {
+        id,
+        numberOfAdults,
+        numberOfChildren,
+        customerName,
+        notes,
+        lastOrderCorrelationId,
+        tableState: {
+          key: tableState,
+        },
+      },
+    };
+  };
+
   static createTableNodeForOptimisticUpdater = (
     store,
     { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
