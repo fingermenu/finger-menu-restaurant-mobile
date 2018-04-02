@@ -45,13 +45,15 @@ class TableDetailContainer extends Component {
   onCustomPaidPressed = selectedOrders => {
     const allOrdersPaid = this.updateOrder(selectedOrders, false, {
       onSuccess: () => {
-        if (allOrdersPaid) {
-          this.setTableStateToPaid({
-            onSuccess: () => {
-              this.props.goBack();
-            },
-          });
+        if (!allOrdersPaid) {
+          return;
         }
+
+        this.setTableStateToPaid({
+          onSuccess: () => {
+            this.props.goBack();
+          },
+        });
       },
     });
   };
