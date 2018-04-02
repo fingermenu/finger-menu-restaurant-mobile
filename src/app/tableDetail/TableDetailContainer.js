@@ -23,27 +23,41 @@ class TableDetailContainer extends Component {
   };
 
   onResetTablePressed = () => {
-    this.setTableStateToEmpty();
-    this.props.goBack();
+    this.setTableStateToEmpty({
+      onSuccess: () => {
+        this.props.goBack();
+      },
+    });
   };
 
   onSetPaidPressed = () => {
-    this.updateOrder(null, true, () => {
-      this.setTableStateToPaid();
-      this.props.goBack();
+    this.updateOrder(null, true, {
+      onSuccess: () => {
+        this.setTableStateToPaid({
+          onSuccess: () => {
+            this.props.goBack();
+          },
+        });
+      },
     });
   };
 
   onCustomPaidPressed = selectedOrders => {
     // If all orders have been paid
-    const allOrdersPaid = this.updateOrder(selectedOrders, false, () => {
-      if (allOrdersPaid) {
-        this.setTableStateToPaid();
-      }
+    const allOrdersPaid = this.updateOrder(selectedOrders, false, {
+      onSuccess: () => {
+        if (allOrdersPaid) {
+          this.setTableStateToPaid({
+            onSuccess: () => {
+              this.props.goBack();
+            },
+          });
+        }
+      },
     });
   };
 
-  setTableStateToEmpty = () => {
+  setTableStateToEmpty = callbacks => {
     UpdateTable(
       this.props.relay.environment,
       {
@@ -59,10 +73,11 @@ class TableDetailContainer extends Component {
       {
         user: this.props.user,
       },
+      callbacks,
     );
   };
 
-  setTableStateToPaid = () => {
+  setTableStateToPaid = callbacks => {
     UpdateTable(
       this.props.relay.environment,
       {
@@ -77,10 +92,11 @@ class TableDetailContainer extends Component {
       {
         user: this.props.user,
       },
+      callbacks,
     );
   };
 
-  updateOrder = (selectedOrders, setAllMenuItemPricesPaid, onSuccess) => {
+  updateOrder = (selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
     const order = Immutable.fromJS(this.props.order);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
     const { restaurantId, tableId, lastOrderCorrelationId } = this.props;
@@ -102,9 +118,7 @@ class TableDetailContainer extends Component {
       {
         user: this.props.user,
       },
-      {
-        onSuccess,
-      },
+      callbacks,
     );
 
     return orderUpdateRequest

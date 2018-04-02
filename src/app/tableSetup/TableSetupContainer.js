@@ -24,34 +24,52 @@ class TableSetupContainer extends Component {
   };
 
   onResetTablePressed = () => {
-    this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty');
-    this.props.goBack();
+    this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty', {
+      onSuccess: () => {
+        this.props.goBack();
+      },
+    });
   };
 
   onSetupTablePressed = values => {
-    this.updateTable(values, 'taken');
-    this.props.applicationStateActions.setActiveCustomer(
-      Map({ name: values.name, reservationNotes: values.notes, numberOfAdults: values.numberOfAdults, numberOfChildren: values.numberOfChildren }),
-    );
-    this.props.applicationStateActions.clearActiveOrder();
-    this.props.navigateToAppHome();
+    this.updateTable(values, 'taken', {
+      onSuccess: () => {
+        this.props.applicationStateActions.setActiveCustomer(
+          Map({
+            name: values.name,
+            reservationNotes: values.notes,
+            numberOfAdults: values.numberOfAdults,
+            numberOfChildren: values.numberOfChildren,
+          }),
+        );
+        this.props.applicationStateActions.clearActiveOrder();
+        this.props.navigateToAppHome();
+      },
+    });
   };
 
   onReserveTablePressed = value => {
-    this.updateTable(value, 'reserved');
-    this.props.goBack();
+    this.updateTable(value, 'reserved', () => {
+      this.props.goBack();
+    });
   };
 
-  updateTable = (values, tableStateKey) => {
-    UpdateTable(Environment, {
-      id: this.props.table.id,
-      tableState: tableStateKey,
-      numberOfAdults: values.numberOfAdults,
-      numberOfChildren: values.numberOfChildren,
-      customerName: values.name,
-      notes: values.notes,
-      lastOrderCorrelationId: values.lastOrderCorrelationId,
-    });
+  updateTable = (values, tableStateKey, callbacks) => {
+    UpdateTable(
+      Environment,
+      {
+        id: this.props.table.id,
+        tableState: tableStateKey,
+        numberOfAdults: values.numberOfAdults,
+        numberOfChildren: values.numberOfChildren,
+        customerName: values.name,
+        notes: values.notes,
+        lastOrderCorrelationId: values.lastOrderCorrelationId,
+      },
+      {},
+      {},
+      callbacks,
+    );
   };
 
   render = () => (
