@@ -10,7 +10,6 @@ import Common from './Common';
 const mutation = graphql`
   mutation PlaceOrderMutation($input: PlaceOrderInput!) {
     placeOrder(input: $input) {
-      errorMessage
       order {
         __typename
         cursor
@@ -89,7 +88,7 @@ const commit = (
   choiceItemPrices,
   connectionFilters = {},
   { user } = {},
-  { onSuccess, onFailure } = {},
+  { onSuccess, onError } = {},
 ) => {
   return commitMutation(environment, {
     mutation,
@@ -106,28 +105,7 @@ const commit = (
       },
     },
     updater: store => {
-      const rootField = store.getRootField('placeOrder');
-      const errorMessage = rootField.getValue('errorMessage');
-
-      if (errorMessage) {
-        reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
-
-        if (!onFailure) {
-          return;
-        }
-
-        onFailure(errorMessage);
-      } else {
-        const orderLinkedRecord = rootField.getLinkedRecord('order');
-
-        sharedUpdater(store, user, orderLinkedRecord, connectionFilters);
-
-        if (!onSuccess) {
-          return;
-        }
-
-        onSuccess(Common.convertOrderMutationResponseToMap(orderLinkedRecord));
-      }
+      sharedUpdater(store, user, store.getRootField('placeOrder').getLinkedRecord('order'), connectionFilters);
     },
     optimisticResponse: {
       placeOrder: Common.createOrderOptimisticResponse(
@@ -148,6 +126,26 @@ const commit = (
         ),
         connectionFilters,
       );
+    },
+    onCompleted: (response, errors) => {
+      if (errors && errors.length > 0) {
+        return;
+      }
+
+      if (!onSuccess) {
+        return;
+      }
+
+      onSuccess(response.placeOrder.order.node);
+    },
+    onError: ({ message: errorMessage }) => {
+      reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
+
+      if (!onError) {
+        return;
+      }
+
+      onError(errorMessage);
     },
   });
 };

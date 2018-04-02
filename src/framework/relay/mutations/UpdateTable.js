@@ -10,7 +10,6 @@ import Common from './Common';
 const mutation = graphql`
   mutation UpdateTableMutation($input: UpdateTableInput!) {
     updateTable(input: $input) {
-      errorMessage
       table {
         __typename
         cursor
@@ -58,7 +57,7 @@ const commit = (
   { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
   connectionFilters = {},
   { user } = {},
-  { onSuccess, onFailure } = {},
+  { onSuccess, onError } = {},
 ) => {
   return commitMutation(environment, {
     mutation,
@@ -74,28 +73,7 @@ const commit = (
       },
     },
     updater: store => {
-      const rootField = store.getRootField('updateTable');
-      const errorMessage = rootField.getValue('errorMessage');
-
-      if (errorMessage) {
-        reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
-
-        if (!onFailure) {
-          return;
-        }
-
-        onFailure(errorMessage);
-      } else {
-        const tableLinkedRecord = rootField.getLinkedRecord('table');
-
-        sharedUpdater(store, user, tableLinkedRecord, connectionFilters);
-
-        if (!onSuccess) {
-          return;
-        }
-
-        onSuccess(Common.convertTableMutationResponseToMap(tableLinkedRecord));
-      }
+      sharedUpdater(store, user, store.getRootField('updateTable').getLinkedRecord('table'), connectionFilters);
     },
     optimisticUpdater: store => {
       sharedUpdater(
@@ -112,6 +90,26 @@ const commit = (
         }),
         connectionFilters,
       );
+    },
+    onCompleted: (response, errors) => {
+      if (errors && errors.length > 0) {
+        return;
+      }
+
+      if (!onSuccess) {
+        return;
+      }
+
+      onSuccess(response.updateTable.table.node);
+    },
+    onError: ({ message: errorMessage }) => {
+      reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
+
+      if (!onError) {
+        return;
+      }
+
+      onError(errorMessage);
     },
   });
 };

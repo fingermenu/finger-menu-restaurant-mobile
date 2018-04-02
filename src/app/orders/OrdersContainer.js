@@ -4,7 +4,7 @@ import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/e
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Immutable, { Map, Range } from 'immutable';
-import { DateTimeFormatter } from 'js-joda';
+import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
@@ -182,33 +182,27 @@ class OrdersContainer extends Component {
     this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
   };
 
-  printOrder = response => {
+  printOrder = ({ details, placedAt, notes, customerName }) => {
     const { kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
 
     if (!kitchenOrderTemplate) {
       return;
     }
 
-    const orderList = response
-      .get('details')
-      .reduce(
-        (menuItemsDetail, detail) =>
-          menuItemsDetail +
-          endOfLine +
-          OrdersContainer.alignTextsOnEachEdge(detail.get('nameToPrint'), detail.get('quantity').toString()) +
-          endOfLine +
-          detail
-            .get('choiceItems')
-            .reduce(
-              (reduction, choiceItem) =>
-                reduction +
-                OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('nameToPrint'), choiceItem.get('quantity').toString()) +
-                endOfLine,
-              '',
-            ) +
-          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
-        '',
-      );
+    const orderList = details.reduce(
+      (menuItemsDetail, { notes, quantity, menuItemPrice: { menuItem: { nameToPrint } }, orderChoiceItemPrices }) =>
+        menuItemsDetail +
+        endOfLine +
+        OrdersContainer.alignTextsOnEachEdge(nameToPrint, quantity.toString()) +
+        endOfLine +
+        orderChoiceItemPrices.reduce(
+          (reduction, { quantity, choiceItemPrice: { choiceItem: { nameToPrint } } }) =>
+            reduction + OrdersContainer.alignTextsOnEachEdge('  ' + nameToPrint, quantity.toString()) + endOfLine,
+          '',
+        ) +
+        OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '),
+      '',
+    );
 
     const { printerConfig: { hostname, port }, numberOfPrintCopiesForKitchen } = this.props;
 
@@ -221,9 +215,14 @@ class OrdersContainer extends Component {
           .replace('\n', '')
           .replace(/{CR}/g, '\r')
           .replace(/{LF}/g, '\n')
-          .replace(/{OrderDateTime}/g, response.get('placedAt').format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')))
-          .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('notes'), 'Notes: '))
-          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(response.get('customerName')), 'CustomerName: ')
+          .replace(
+            /{OrderDateTime}/g,
+            ZonedDateTime.parse(placedAt)
+              .withZoneSameInstant(ZoneId.SYSTEM)
+              .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
+          )
+          .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '))
+          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(customerName), 'CustomerName: ')
           .replace(/{TableName}/g, tableName)
           .replace(/{OrderList}/g, orderList),
         numberOfCopies: numberOfPrintCopiesForKitchen,

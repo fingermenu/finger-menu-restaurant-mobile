@@ -1,58 +1,8 @@
 // @flow
 
 import cuid from 'cuid';
-import Immutable, { Map } from 'immutable';
-import { ZonedDateTime, ZoneId } from 'js-joda';
 
 export default class Common {
-  static convertOrderMutationResponseToMap = orderLinkedRecord => {
-    const nodeLinkedRecord = orderLinkedRecord.getLinkedRecord('node');
-    const detailsLinkedRecords = Immutable.fromJS(nodeLinkedRecord.getLinkedRecords('details')).map(detailLinkedRecord => {
-      const menuItemPriceLinkedRecord = detailLinkedRecord.getLinkedRecord('menuItemPrice');
-      const menuItemLinkedRecord = menuItemPriceLinkedRecord.getLinkedRecord('menuItem');
-      const orderChoiceItemPrices = Immutable.fromJS(detailLinkedRecord.getLinkedRecords('orderChoiceItemPrices'));
-
-      return Map({
-        currentPrice: menuItemPriceLinkedRecord.getValue('currentPrice'),
-        name: menuItemLinkedRecord.getValue('name'),
-        nameToPrint: menuItemLinkedRecord.getValue('nameToPrint'),
-        description: menuItemLinkedRecord.getValue('description'),
-        quantity: detailLinkedRecord.getValue('quantity'),
-        notes: detailLinkedRecord.getValue('notes'),
-        paid: detailLinkedRecord.getValue('paid'),
-        choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
-          const choiceItemPriceLinkedRecord = orderChoiceItemPrice.getLinkedRecord('choiceItemPrice');
-          const choiceItemLinkedRecord = choiceItemPriceLinkedRecord.getLinkedRecord('choiceItem');
-
-          return Map({
-            currentPrice: choiceItemPriceLinkedRecord.getValue('currentPrice'),
-            name: choiceItemLinkedRecord.getValue('name'),
-            nameToPrint: choiceItemLinkedRecord.getValue('nameToPrint'),
-            description: choiceItemLinkedRecord.getValue('description'),
-            quantity: orderChoiceItemPrice.getValue('quantity'),
-            notes: orderChoiceItemPrice.getValue('notes'),
-            paid: orderChoiceItemPrice.getValue('paid'),
-          });
-        }),
-      });
-    });
-
-    const cancelledAt = nodeLinkedRecord.getValue('cancelledAt');
-
-    return Map({
-      id: nodeLinkedRecord.getValue('id'),
-      correlationId: nodeLinkedRecord.getValue('correlationId'),
-      placedAt: ZonedDateTime.parse(nodeLinkedRecord.getValue('placedAt')).withZoneSameInstant(ZoneId.SYSTEM),
-      cancelledAt: cancelledAt ? ZonedDateTime.parse(cancelledAt).withZoneSameInstant(ZoneId.SYSTEM) : null,
-      customerName: nodeLinkedRecord.getValue('customerName'),
-      notes: nodeLinkedRecord.getValue('notes'),
-      totalPrice: nodeLinkedRecord.getValue('totalPrice'),
-      numberOfAdults: nodeLinkedRecord.getValue('numberOfAdults'),
-      numberOfChildren: nodeLinkedRecord.getValue('numberOfChildren'),
-      details: detailsLinkedRecords,
-    });
-  };
-
   static createOrderOptimisticResponse = (
     { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
     menuItemPrices,
@@ -185,26 +135,6 @@ export default class Common {
     orderLinkedRecord.setLinkedRecord(node, 'node');
 
     return orderLinkedRecord;
-  };
-
-  static convertTableMutationResponseToMap = tableLinkedRecord => {
-    const nodeLinkedRecord = tableLinkedRecord.getLinkedRecord('node');
-    const tableStateLinkedRecord = nodeLinkedRecord.getLinkedRecord('tableState');
-
-    return Map({
-      id: nodeLinkedRecord.getValue('id'),
-      name: nodeLinkedRecord.getValue('name'),
-      numberOfAdults: nodeLinkedRecord.getValue('numberOfAdults'),
-      numberOfChildren: nodeLinkedRecord.getValue('numberOfChildren'),
-      customerName: nodeLinkedRecord.getValue('customerName'),
-      notes: nodeLinkedRecord.getValue('notes'),
-      lastOrderCorrelationId: nodeLinkedRecord.getValue('lastOrderCorrelationId'),
-      tableState: Map({
-        id: tableStateLinkedRecord.getValue('id'),
-        key: tableStateLinkedRecord.getValue('key'),
-        name: tableStateLinkedRecord.getValue('name'),
-      }),
-    });
   };
 
   static createTableNodeForOptimisticUpdater = (
