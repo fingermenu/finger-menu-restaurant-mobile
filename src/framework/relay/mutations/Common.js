@@ -53,6 +53,66 @@ export default class Common {
     });
   };
 
+  static createOrderOptimisticResponse = (
+    { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+    menuItemPrices,
+    choiceItemPrices,
+  ) => {
+    const convertedDetails = details.map(({ id, quantity, notes, paid, menuItemPriceId, orderChoiceItemPrices }) => {
+      const foundMenuItemPrice = menuItemPrices.find(menuItemPrice => menuItemPrice.get('id').localeCompare(menuItemPriceId) === 0);
+      const convertedOrderChoiceItemPrices = orderChoiceItemPrices.map(({ id, quantity, notes, paid, choiceItemPriceId }) => {
+        const foundChoiceItemPrice = choiceItemPrices.find(choiceItemPrice => choiceItemPrice.get('id').localeCompare(choiceItemPriceId) === 0);
+
+        return {
+          id,
+          paid,
+          quantity,
+          notes,
+          choiceItemPrice: {
+            id: choiceItemPriceId,
+            currentPrice: foundChoiceItemPrice.get('currentPrice'),
+            choiceItem: {
+              id: foundChoiceItemPrice.getIn(['choiceItem', 'id']),
+              name: foundChoiceItemPrice.getIn(['choiceItem', 'name']),
+              description: foundChoiceItemPrice.getIn(['choiceItem', 'description']),
+            },
+          },
+        };
+      });
+
+      return {
+        id,
+        quantity,
+        notes,
+        paid,
+        menuItemPrice: {
+          id: menuItemPriceId,
+          currentPrice: foundMenuItemPrice.get('currentPrice'),
+          menuItem: {
+            id: foundMenuItemPrice.getIn(['menuItem', 'id']),
+            name: foundMenuItemPrice.getIn(['menuItem', 'name']),
+            description: foundMenuItemPrice.getIn(['menuItem', 'description']),
+          },
+          orderChoiceItemPrices: convertedOrderChoiceItemPrices,
+        },
+      };
+    });
+
+    return {
+      node: {
+        id,
+        tableId,
+        restaurantId,
+        numberOfAdults,
+        numberOfChildren,
+        customerName,
+        notes,
+        totalPrice,
+        details: convertedDetails,
+      },
+    };
+  };
+
   static createOrderNodeForOptimisticUpdater = (
     store,
     { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
@@ -90,34 +150,26 @@ export default class Common {
       menuItemLinkedRecord.setValue(foundMenuItemPrice.getIn(['menuItem', 'name']), 'name');
       menuItemLinkedRecord.setValue(foundMenuItemPrice.getIn(['menuItem', 'description']), 'description');
 
-      const choiceItemPricesLinkedRecords = orderChoiceItemPrices.map(
-        ({
-          id: orderChoiceItemPriceId,
-          quantity: choiceItemPriceQuantity,
-          notes: choiceItemPriceNotes,
-          paid: choiceItemPricePaid,
-          choiceItemPriceId,
-        }) => {
-          const foundChoiceItemPrice = choiceItemPrices.find(choiceItemPrice => choiceItemPrice.get('id').localeCompare(choiceItemPriceId) === 0);
-          const orderChoiceItemPriceLinkedRecord = store.create(cuid(), 'orderChoiceItemPrice');
+      const choiceItemPricesLinkedRecords = orderChoiceItemPrices.map(({ id, quantity, notes, paid, choiceItemPriceId }) => {
+        const foundChoiceItemPrice = choiceItemPrices.find(choiceItemPrice => choiceItemPrice.get('id').localeCompare(choiceItemPriceId) === 0);
+        const orderChoiceItemPriceLinkedRecord = store.create(cuid(), 'orderChoiceItemPrice');
 
-          orderChoiceItemPriceLinkedRecord.setValue(orderChoiceItemPriceId, 'id');
-          orderChoiceItemPriceLinkedRecord.setValue(foundChoiceItemPrice.get('currentPrice'), 'currentPrice');
-          orderChoiceItemPriceLinkedRecord.setValue(choiceItemPricePaid, 'paid');
-          orderChoiceItemPriceLinkedRecord.setValue(choiceItemPriceQuantity, 'quantity');
-          orderChoiceItemPriceLinkedRecord.setValue(choiceItemPriceNotes, 'notes');
+        orderChoiceItemPriceLinkedRecord.setValue(id, 'id');
+        orderChoiceItemPriceLinkedRecord.setValue(foundChoiceItemPrice.get('currentPrice'), 'currentPrice');
+        orderChoiceItemPriceLinkedRecord.setValue(paid, 'paid');
+        orderChoiceItemPriceLinkedRecord.setValue(quantity, 'quantity');
+        orderChoiceItemPriceLinkedRecord.setValue(notes, 'notes');
 
-          const choiceItemLinkedRecord = store.create(cuid(), 'choiceItem');
+        const choiceItemLinkedRecord = store.create(cuid(), 'choiceItem');
 
-          choiceItemLinkedRecord.setValue(choiceItemPriceId, 'id');
-          choiceItemLinkedRecord.setValue(foundChoiceItemPrice.getIn(['choiceItem', 'name']), 'name');
-          choiceItemLinkedRecord.setValue(foundChoiceItemPrice.getIn(['choiceItem', 'description']), 'description');
+        choiceItemLinkedRecord.setValue(choiceItemPriceId, 'id');
+        choiceItemLinkedRecord.setValue(foundChoiceItemPrice.getIn(['choiceItem', 'name']), 'name');
+        choiceItemLinkedRecord.setValue(foundChoiceItemPrice.getIn(['choiceItem', 'description']), 'description');
 
-          orderChoiceItemPriceLinkedRecord.setLinkedRecord(choiceItemLinkedRecord, 'choiceItem');
+        orderChoiceItemPriceLinkedRecord.setLinkedRecord(choiceItemLinkedRecord, 'choiceItem');
 
-          return orderChoiceItemPriceLinkedRecord;
-        },
-      );
+        return orderChoiceItemPriceLinkedRecord;
+      });
 
       menuItemPriceLinkedRecord.setLinkedRecords(choiceItemPricesLinkedRecords, 'choiceItemPrices');
       menuItemPriceLinkedRecord.setLinkedRecord(menuItemLinkedRecord, 'menuItem');

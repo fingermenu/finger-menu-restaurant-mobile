@@ -129,6 +129,13 @@ const commit = (
         onSuccess(Common.convertOrderMutationResponseToMap(orderLinkedRecord));
       }
     },
+    optimisticResponse: {
+      placeOrder: Common.createOrderOptimisticResponse(
+        { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+        menuItemPrices,
+        choiceItemPrices,
+      ),
+    },
     optimisticUpdater: store => {
       sharedUpdater(
         store,
