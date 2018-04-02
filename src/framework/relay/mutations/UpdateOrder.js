@@ -87,7 +87,7 @@ const commit = (
   { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
   menuItemPrices,
   choiceItemPrices,
-  { user }: {},
+  { user } = {},
   { onSuccess, onFailure } = {},
 ) => {
   return commitMutation(environment, {

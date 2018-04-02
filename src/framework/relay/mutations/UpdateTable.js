@@ -56,7 +56,7 @@ const sharedUpdater = (store, user, tableLinkedRecord) => {
 const commit = (
   environment,
   { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
-  { user }: {},
+  { user } = {},
   { onSuccess, onFailure } = {},
 ) => {
   return commitMutation(environment, {
