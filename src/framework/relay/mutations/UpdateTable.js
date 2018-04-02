@@ -33,7 +33,7 @@ const mutation = graphql`
   }
 `;
 
-const sharedUpdater = (store, user, tableLinkedRecord) => {
+const sharedUpdater = (store, user, tableLinkedRecord, connectionFilters) => {
   if (!user) {
     return;
   }
@@ -44,7 +44,7 @@ const sharedUpdater = (store, user, tableLinkedRecord) => {
     return;
   }
 
-  const connection = ConnectionHandler.getConnection(userProxy, 'User_tables');
+  const connection = ConnectionHandler.getConnection(userProxy, 'User_tables', connectionFilters);
 
   if (!connection) {
     return;
@@ -56,6 +56,7 @@ const sharedUpdater = (store, user, tableLinkedRecord) => {
 const commit = (
   environment,
   { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
+  connectionFilters = {},
   { user } = {},
   { onSuccess, onFailure } = {},
 ) => {
@@ -87,7 +88,7 @@ const commit = (
       } else {
         const tableLinkedRecord = rootField.getLinkedRecord('table');
 
-        sharedUpdater(store, user, tableLinkedRecord);
+        sharedUpdater(store, user, tableLinkedRecord, connectionFilters);
 
         if (!onSuccess) {
           return;
@@ -109,6 +110,7 @@ const commit = (
           notes,
           lastOrderCorrelationId,
         }),
+        connectionFilters,
       );
     },
   });

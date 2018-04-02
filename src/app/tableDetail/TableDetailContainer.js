@@ -52,6 +52,7 @@ class TableDetailContainer extends Component {
         notes: '',
         lastOrderCorrelationId: '',
       },
+      {},
       {
         user: this.props.user,
       },
@@ -69,6 +70,7 @@ class TableDetailContainer extends Component {
         customerName: '',
         notes: '',
       },
+      {},
       {
         user: this.props.user,
       },
@@ -78,6 +80,7 @@ class TableDetailContainer extends Component {
   updateOrder = (selectedOrders, setAllMenuItemPricesPaid) => {
     const order = Immutable.fromJS(this.props.order);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
+    const { restaurantId, tableId, lastOrderCorrelationId } = this.props;
 
     UpdateOrder(
       this.props.relay.environment,
@@ -87,6 +90,12 @@ class TableDetailContainer extends Component {
         .get('details')
         .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
         .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+      {
+        tableId,
+        correlationId: lastOrderCorrelationId,
+        restaurantId,
+        sortOption: 'PlacedAtDescending',
+      },
       {
         user: this.props.user,
       },
@@ -177,14 +186,20 @@ class TableDetailContainer extends Component {
 TableDetailContainer.propTypes = {
   goBack: PropTypes.func.isRequired,
   table: TableProp.isRequired,
+  tableId: PropTypes.string.isRequired,
+  lastOrderCorrelationId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, props) {
+  const activeTable = state.applicationState.get('activeTable');
+
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
     table: props.user.table,
+    tableId: activeTable.get('id'),
+    lastOrderCorrelationId: activeTable.get('lastOrderCorrelationId'),
   };
 }
 

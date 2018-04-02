@@ -138,6 +138,7 @@ class OrdersContainer extends Component {
         .get('details')
         .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
         .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+      {},
       {
         user: this.props.user,
       },

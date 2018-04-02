@@ -62,7 +62,7 @@ const mutation = graphql`
   }
 `;
 
-const sharedUpdater = (store, user, orderLinkedRecord) => {
+const sharedUpdater = (store, user, orderLinkedRecord, connectionFilters) => {
   if (!user) {
     return;
   }
@@ -73,7 +73,7 @@ const sharedUpdater = (store, user, orderLinkedRecord) => {
     return;
   }
 
-  const connection = ConnectionHandler.getConnection(userProxy, 'User_orders');
+  const connection = ConnectionHandler.getConnection(userProxy, 'User_orders', connectionFilters);
 
   if (!connection) {
     return;
@@ -87,6 +87,7 @@ const commit = (
   { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
   menuItemPrices,
   choiceItemPrices,
+  connectionFilters = {},
   { user } = {},
   { onSuccess, onFailure } = {},
 ) => {
@@ -119,7 +120,7 @@ const commit = (
       } else {
         const orderLinkedRecord = rootField.getLinkedRecord('order');
 
-        sharedUpdater(store, user, orderLinkedRecord);
+        sharedUpdater(store, user, orderLinkedRecord, connectionFilters);
 
         if (!onSuccess) {
           return;
@@ -138,6 +139,7 @@ const commit = (
           menuItemPrices,
           choiceItemPrices,
         ),
+        connectionFilters,
       );
     },
   });
