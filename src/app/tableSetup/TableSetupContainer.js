@@ -43,7 +43,7 @@ class TableSetupContainer extends Component {
   };
 
   updateTable = (values, tableStateKey) => {
-    UpdateTable.commit(Environment, this.props.userId, {
+    UpdateTable(Environment, {
       id: this.props.table.id,
       tableState: tableStateKey,
       numberOfAdults: values.numberOfAdults,
@@ -74,7 +74,6 @@ TableSetupContainer.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    userId: state.userAccess.get('userInfo').get('id'),
     table: state.applicationState.get('activeTable').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
   };

@@ -8,6 +8,7 @@ export default createRefetchContainer(
   {
     user: graphql`
       fragment TableDetailRelayContainer_user on User {
+        id
         table(tableId: $tableIdForTableQuery) {
           id
           name

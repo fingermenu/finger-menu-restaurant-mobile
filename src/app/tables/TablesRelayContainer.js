@@ -8,6 +8,7 @@ export default createRefetchContainer(
   {
     user: graphql`
       fragment TablesRelayContainer_user on User {
+        id
         restaurant(restaurantId: $restaurantId) {
           id
           pin

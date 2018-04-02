@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import OrdersView from './OrdersView';
 import { PlaceOrder } from '../../framework/relay/mutations';
-import Environment from '../../framework/relay/Environment';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveCustomerProp } from '../../framework/applicationState';
@@ -131,13 +130,22 @@ class OrdersContainer extends Component {
       user: { table: { id: tableId } },
     } = this.props;
 
-    PlaceOrder.commit(
-      Environment,
-      this.props.userId,
+    PlaceOrder(
+      this.props.relay.environment,
       orderRequest.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS(),
-      response => {
-        this.printOrder(response);
-        navigateToOrderConfirmed();
+      inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
+      inMemoryOrder
+        .get('details')
+        .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
+        .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+      {
+        user: this.props.user,
+      },
+      {
+        onSuccess: response => {
+          this.printOrder(response);
+          navigateToOrderConfirmed();
+        },
       },
     );
   };
@@ -186,13 +194,15 @@ class OrdersContainer extends Component {
         (menuItemsDetail, detail) =>
           menuItemsDetail +
           endOfLine +
-          OrdersContainer.alignTextsOnEachEdge(detail.get('name'), detail.get('quantity').toString()) +
+          OrdersContainer.alignTextsOnEachEdge(detail.get('nameToPrint'), detail.get('quantity').toString()) +
           endOfLine +
           detail
             .get('choiceItems')
             .reduce(
               (reduction, choiceItem) =>
-                reduction + OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('name'), choiceItem.get('quantity').toString()) + endOfLine,
+                reduction +
+                OrdersContainer.alignTextsOnEachEdge('  ' + choiceItem.get('nameToPrint'), choiceItem.get('quantity').toString()) +
+                endOfLine,
               '',
             ) +
           OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
@@ -307,7 +317,6 @@ function mapStateToProps(state, ownProps) {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
     inMemoryOrder: inMemoryOrder.toJS(),
-    userId: state.userAccess.get('userInfo').get('id'),
     customer: state.applicationState.get('activeCustomer').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,

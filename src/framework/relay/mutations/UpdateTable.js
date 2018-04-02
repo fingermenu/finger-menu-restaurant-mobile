@@ -2,10 +2,10 @@
 
 import { commitMutation, graphql } from 'react-relay';
 import { ConnectionHandler } from 'relay-runtime';
-import cuid from 'cuid';
 import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
+import Common from './Common';
 
 const mutation = graphql`
   mutation UpdateTableMutation($input: UpdateTableInput!) {
@@ -33,8 +33,13 @@ const mutation = graphql`
   }
 `;
 
-const sharedUpdater = (store, userId, tableEdge) => {
-  const userProxy = store.get(userId);
+const sharedUpdater = (store, user, tableLinkedRecord) => {
+  if (!user) {
+    return;
+  }
+
+  const userProxy = store.get(user.id);
+
   if (!userProxy) {
     return;
   }
@@ -45,10 +50,15 @@ const sharedUpdater = (store, userId, tableEdge) => {
     return;
   }
 
-  ConnectionHandler.insertEdgeAfter(connection, tableEdge);
+  ConnectionHandler.insertEdgeAfter(connection, tableLinkedRecord);
 };
 
-const commit = (environment, userId, { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId }) => {
+const commit = (
+  environment,
+  { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
+  { user }: {},
+  { onSuccess, onFailure } = {},
+) => {
   return commitMutation(environment, {
     mutation,
     variables: {
@@ -63,36 +73,45 @@ const commit = (environment, userId, { id, tableState, numberOfAdults, numberOfC
       },
     },
     updater: store => {
-      const payload = store.getRootField('updateTable');
-      const errorMessage = payload.getValue('errorMessage');
+      const rootField = store.getRootField('updateTable');
+      const errorMessage = rootField.getValue('errorMessage');
 
       if (errorMessage) {
         reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
-      } else {
-        const tableEdge = payload.getLinkedRecord('table');
 
-        sharedUpdater(store, userId, tableEdge);
+        if (!onFailure) {
+          return;
+        }
+
+        onFailure(errorMessage);
+      } else {
+        const tableLinkedRecord = rootField.getLinkedRecord('table');
+
+        sharedUpdater(store, user, tableLinkedRecord);
+
+        if (!onSuccess) {
+          return;
+        }
+
+        onSuccess(Common.convertTableMutationResponseToMap(tableLinkedRecord));
       }
     },
     optimisticUpdater: store => {
-      const id = cuid();
-      const node = store.create(id, 'item');
-
-      node.setValue(id, 'id');
-      node.setValue(numberOfAdults, 'numberOfAdults');
-      node.setValue(numberOfChildren, 'numberOfChildren');
-      node.setValue(customerName, 'customerName');
-      node.setValue(notes, 'notes');
-      node.setValue(tableState, 'tableState');
-
-      const tablesEdge = store.create(cuid(), 'tablesEdge');
-
-      tablesEdge.setLinkedRecord(node, 'node');
-      sharedUpdater(store, userId, tablesEdge);
+      sharedUpdater(
+        store,
+        user,
+        Common.createTableNodeForOptimisticUpdater(store, {
+          id,
+          tableState,
+          numberOfAdults,
+          numberOfChildren,
+          customerName,
+          notes,
+          lastOrderCorrelationId,
+        }),
+      );
     },
   });
 };
 
-export default {
-  commit,
-};
+export default commit;

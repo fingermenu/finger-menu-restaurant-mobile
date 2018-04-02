@@ -8,7 +8,6 @@ import { NavigationActions } from 'react-navigation';
 import TableDetailView from './TableDetailView';
 import { TableProp } from './PropTypes';
 import { UpdateTable, UpdateOrder } from '../../framework/relay/mutations';
-import Environment from '../../framework/relay/Environment';
 
 class TableDetailContainer extends Component {
   state = {
@@ -42,41 +41,55 @@ class TableDetailContainer extends Component {
   };
 
   setTableStateToEmpty = () => {
-    UpdateTable.commit(Environment, this.props.userId, {
-      id: this.props.table.id,
-      tableState: 'empty',
-      numberOfAdults: 0,
-      numberOfChildren: 0,
-      customerName: '',
-      notes: '',
-      lastOrderCorrelationId: '',
-    });
+    UpdateTable(
+      this.props.relay.environment,
+      {
+        id: this.props.table.id,
+        tableState: 'empty',
+        numberOfAdults: 0,
+        numberOfChildren: 0,
+        customerName: '',
+        notes: '',
+        lastOrderCorrelationId: '',
+      },
+      {
+        user: this.props.user,
+      },
+    );
   };
 
   setTableStateToPaid = () => {
-    UpdateTable.commit(Environment, this.props.userId, {
-      id: this.props.table.id,
-      tableState: 'paid',
-      numberOfAdults: 0,
-      numberOfChildren: 0,
-      customerName: '',
-      notes: '',
-    });
+    UpdateTable(
+      this.props.relay.environment,
+      {
+        id: this.props.table.id,
+        tableState: 'paid',
+        numberOfAdults: 0,
+        numberOfChildren: 0,
+        customerName: '',
+        notes: '',
+      },
+      {
+        user: this.props.user,
+      },
+    );
   };
 
   updateOrder = (selectedOrders, setAllMenuItemPricesPaid) => {
     const order = Immutable.fromJS(this.props.order);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
 
-    UpdateOrder.commit(
-      Environment,
-      this.props.userId,
+    UpdateOrder(
+      this.props.relay.environment,
       orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
       order.get('details').map(detail => detail.get('menuItemPrice')),
       order
         .get('details')
         .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
         .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+      {
+        user: this.props.user,
+      },
     );
 
     return orderUpdateRequest
@@ -170,7 +183,6 @@ TableDetailContainer.propTypes = {
 function mapStateToProps(state, props) {
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-    userId: state.userAccess.get('userInfo').get('id'),
     order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
     table: props.user.table,
   };

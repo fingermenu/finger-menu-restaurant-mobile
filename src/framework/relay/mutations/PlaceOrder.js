@@ -1,12 +1,11 @@
 // @flow
 
-import Immutable, { Map } from 'immutable';
 import { commitMutation, graphql } from 'react-relay';
 import { ConnectionHandler } from 'relay-runtime';
-import { ZonedDateTime, ZoneId } from 'js-joda';
 import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
+import Common from './Common';
 
 const mutation = graphql`
   mutation PlaceOrderMutation($input: PlaceOrderInput!) {
@@ -17,6 +16,7 @@ const mutation = graphql`
         cursor
         node {
           id
+          correlationId
           numberOfAdults
           numberOfChildren
           customerName
@@ -31,7 +31,9 @@ const mutation = graphql`
               currentPrice
               menuItem {
                 id
+                name
                 nameToPrint
+                description
               }
             }
             quantity
@@ -47,7 +49,9 @@ const mutation = graphql`
                 currentPrice
                 choiceItem {
                   id
+                  name
                   nameToPrint
+                  description
                 }
               }
             }
@@ -58,8 +62,13 @@ const mutation = graphql`
   }
 `;
 
-const sharedUpdater = (store, userId, ordersEdge) => {
-  const userProxy = store.get(userId);
+const sharedUpdater = (store, user, orderLinkedRecord) => {
+  if (!user) {
+    return;
+  }
+
+  const userProxy = store.get(user.id);
+
   if (!userProxy) {
     return;
   }
@@ -70,14 +79,16 @@ const sharedUpdater = (store, userId, ordersEdge) => {
     return;
   }
 
-  ConnectionHandler.insertEdgeAfter(connection, ordersEdge);
+  ConnectionHandler.insertEdgeAfter(connection, orderLinkedRecord);
 };
 
 const commit = (
   environment,
-  userId,
   { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
-  onSuccess,
+  menuItemPrices,
+  choiceItemPrices,
+  { user }: {},
+  { onSuccess, onFailure } = {},
 ) => {
   return commitMutation(environment, {
     mutation,
@@ -94,72 +105,42 @@ const commit = (
       },
     },
     updater: store => {
-      const payload = store.getRootField('placeOrder');
-      const errorMessage = payload.getValue('errorMessage');
+      const rootField = store.getRootField('placeOrder');
+      const errorMessage = rootField.getValue('errorMessage');
 
       if (errorMessage) {
         reduxStore.dispatch(messageBarActions.add(errorMessage, NotificationType.ERROR));
-      } else {
-        const orderEdge = payload.getLinkedRecord('order');
 
-        sharedUpdater(store, userId, orderEdge);
+        if (!onFailure) {
+          return;
+        }
+
+        onFailure(errorMessage);
+      } else {
+        const orderLinkedRecord = rootField.getLinkedRecord('order');
+
+        sharedUpdater(store, user, orderLinkedRecord);
 
         if (!onSuccess) {
           return;
         }
 
-        const placedAt = ZonedDateTime.parse(
-          payload
-            .getLinkedRecord('order')
-            .getLinkedRecord('node')
-            .getValue('placedAt'),
-        ).withZoneSameInstant(ZoneId.SYSTEM);
-
-        const customerName = payload
-          .getLinkedRecord('order')
-          .getLinkedRecord('node')
-          .getValue('customerName');
-        const notes = payload
-          .getLinkedRecord('order')
-          .getLinkedRecord('node')
-          .getValue('notes');
-
-        const details = Immutable.fromJS(
-          payload
-            .getLinkedRecord('order')
-            .getLinkedRecord('node')
-            .getLinkedRecords('details'),
-        ).map(detail => {
-          const menuItemName = detail
-            .getLinkedRecord('menuItemPrice')
-            .getLinkedRecord('menuItem')
-            .getValue('nameToPrint');
-          const quantity = detail.getValue('quantity');
-          const notes = detail.getValue('notes');
-          const orderChoiceItemPrices = Immutable.fromJS(detail.getLinkedRecords('orderChoiceItemPrices'));
-
-          return Map({
-            name: menuItemName,
-            quantity,
-            notes,
-            choiceItems: orderChoiceItemPrices.map(orderChoiceItemPrice => {
-              const choiceItemName = orderChoiceItemPrice
-                .getLinkedRecord('choiceItemPrice')
-                .getLinkedRecord('choiceItem')
-                .getValue('nameToPrint');
-              const choiceItemQuantity = orderChoiceItemPrice.getValue('quantity');
-
-              return Map({ name: choiceItemName, quantity: choiceItemQuantity });
-            }),
-          });
-        });
-
-        onSuccess(Map({ placedAt, customerName, notes, details }));
+        onSuccess(Common.convertOrderMutationResponseToMap(orderLinkedRecord));
       }
+    },
+    optimisticUpdater: store => {
+      sharedUpdater(
+        store,
+        user,
+        Common.createOrderNodeForOptimisticUpdater(
+          store,
+          { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+          menuItemPrices,
+          choiceItemPrices,
+        ),
+      );
     },
   });
 };
 
-export default {
-  commit,
-};
+export default commit;
