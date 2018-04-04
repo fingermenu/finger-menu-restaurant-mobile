@@ -139,6 +139,45 @@ const addListener = createReduxBoundAddListener('root');
 export const reduxStore = configureStore(navigationReducer, reactNavigationMiddleware);
 
 class AppWithNavigationState extends Component {
+  static getDerivedStateFromProps = nextProps => {
+    nextProps.notifications.keySeq().forEach(notificationId => {
+      const notification = nextProps.notifications.get(notificationId);
+      const notificationType = notification.get('type');
+      const notificationMessage = notification.get('message');
+
+      if (notificationType === NotificationType.ERROR) {
+        Alert.alert('Error', notificationMessage);
+      } else if (notificationType === NotificationType.WARNING) {
+        Alert.alert('Warning', notificationMessage);
+      } else if (notificationType === NotificationType.INFO) {
+        Alert.alert('Info', notificationMessage);
+      } else if (notificationType === NotificationType.SUCCESS) {
+        Alert.alert('Success', notificationMessage);
+      }
+
+      nextProps.notificationActions.remove(notificationId);
+    });
+
+    nextProps.userAccessFailedOperations.keySeq().forEach(operationId => {
+      nextProps.notificationActions.add(nextProps.userAccessFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      nextProps.userAccessActions.acknowledgeFailedOperation(Map({ operationId }));
+    });
+
+    nextProps.asyncStorageFailedOperations.keySeq().forEach(operationId => {
+      nextProps.notificationActions.add(nextProps.asyncStorageFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      nextProps.asyncStorageActions.acknowledgeFailedOperation(Map({ operationId }));
+    });
+
+    nextProps.escPosPrinterFailedOperations.keySeq().forEach(operationId => {
+      nextProps.notificationActions.add(nextProps.escPosPrinterFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
+      nextProps.escPosPrinterActions.acknowledgeFailedOperation(Map({ operationId }));
+    });
+
+    return null;
+  };
+
+  state = {};
+
   componentDidMount = () => {
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
@@ -212,41 +251,6 @@ class AppWithNavigationState extends Component {
       },
       ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate(receivedBytes / totalBytes * 100),
     );
-  };
-
-  componentWillReceiveProps = nextProps => {
-    nextProps.notifications.keySeq().forEach(notificationId => {
-      const notification = nextProps.notifications.get(notificationId);
-      const notificationType = notification.get('type');
-      const notificationMessage = notification.get('message');
-
-      if (notificationType === NotificationType.ERROR) {
-        Alert.alert('Error', notificationMessage);
-      } else if (notificationType === NotificationType.WARNING) {
-        Alert.alert('Warning', notificationMessage);
-      } else if (notificationType === NotificationType.INFO) {
-        Alert.alert('Info', notificationMessage);
-      } else if (notificationType === NotificationType.SUCCESS) {
-        Alert.alert('Success', notificationMessage);
-      }
-
-      this.props.notificationActions.remove(notificationId);
-    });
-
-    nextProps.userAccessFailedOperations.keySeq().forEach(operationId => {
-      this.props.notificationActions.add(nextProps.userAccessFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
-      this.props.userAccessActions.acknowledgeFailedOperation(Map({ operationId }));
-    });
-
-    nextProps.asyncStorageFailedOperations.keySeq().forEach(operationId => {
-      this.props.notificationActions.add(nextProps.asyncStorageFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
-      this.props.asyncStorageActions.acknowledgeFailedOperation(Map({ operationId }));
-    });
-
-    nextProps.escPosPrinterFailedOperations.keySeq().forEach(operationId => {
-      this.props.notificationActions.add(nextProps.escPosPrinterFailedOperations.getIn([operationId, 'errorMessage']), NotificationType.ERROR);
-      this.props.escPosPrinterActions.acknowledgeFailedOperation(Map({ operationId }));
-    });
   };
 
   componentWillUnmount = () => {
