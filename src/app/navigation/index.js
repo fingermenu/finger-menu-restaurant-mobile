@@ -12,6 +12,7 @@ import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { addNavigationHelpers, NavigationActions, StackNavigator } from 'react-navigation';
+import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { bindActionCreators } from 'redux';
 import { Alert, BackHandler, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -129,7 +130,13 @@ const navigationReducer = (state, action) => {
   return newState || state;
 };
 
-export const reduxStore = configureStore(navigationReducer);
+// Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
+const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', state => {
+  return state.navigation;
+});
+const addListener = createReduxBoundAddListener('root');
+
+export const reduxStore = configureStore(navigationReducer, reactNavigationMiddleware);
 
 class AppWithNavigationState extends Component {
   componentDidMount = () => {
@@ -261,6 +268,7 @@ class AppWithNavigationState extends Component {
         navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
           state: this.props.navigation,
+          addListener,
         })}
       />
     </View>

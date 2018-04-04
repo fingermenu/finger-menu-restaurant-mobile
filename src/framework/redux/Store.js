@@ -27,9 +27,9 @@ const rootSagas = function* sagas() {
   ];
 };
 
-export default function configureStore(navigationReducer, initialState) {
+export default function configureStore(navigationReducer, navigationMiddleware, initialState) {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = applyMiddleware(sagaMiddleware);
+  const middleware = applyMiddleware(sagaMiddleware, navigationMiddleware);
   const store = createStore(getReducers(navigationReducer), initialState, middleware);
 
   sagaMiddleware.run(rootSagas);
