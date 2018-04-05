@@ -1,7 +1,6 @@
 // @flow
 
 import { TouchableItem } from '@microbusiness/common-react-native';
-import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Text } from 'react-native';
@@ -18,21 +17,7 @@ class MenuItemRow extends Component {
     super(props, context);
 
     this.onViewMenuItemPressedDebounced = debounce(this.props.onViewMenuItemPressed, config.navigationDelay);
-
-    this.state = { menuItemPrice: Immutable.fromJS(props.menuItemPrice) };
   }
-
-  componentWillReceiveProps = nextProps => {
-    const menuItemPrice = Immutable.fromJS(nextProps.menuItemPrice);
-
-    if (!this.state.menuItemPrice.equals(menuItemPrice)) {
-      this.setState({ menuItemPrice });
-    }
-  };
-
-  shouldComponentUpdate = nextProps => {
-    return this.state.menuItemPrice.equals(Immutable.fromJS(nextProps.menuItemPrice));
-  };
 
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 

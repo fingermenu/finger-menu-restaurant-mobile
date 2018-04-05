@@ -8,6 +8,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    height: 60,
   },
   bannerContainer: {
     flex: 10,
