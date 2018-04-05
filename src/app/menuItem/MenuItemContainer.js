@@ -11,21 +11,28 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component {
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
+      nextProps.relay.refetch(_ => ({
+        menuItemPriceId: _.menuItemPriceId,
+      }));
+
+      return {
+        selectedLanguage: nextProps.selectedLanguage,
+      };
+    }
+
+    return null;
+  };
+
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       quantity: props.quantity,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
     };
   }
-
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.props.relay.refetch(_ => ({
-        menuItemPriceId: _.menuItemPriceId,
-      }));
-    }
-  };
 
   getSelectedChoiceItemPrices = values => {
     return Immutable.fromJS(this.props.user.menuItemPrice.choiceItemPrices)
