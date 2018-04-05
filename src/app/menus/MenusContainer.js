@@ -13,15 +13,26 @@ class MenusContainer extends Component {
     tabBarLabel: screenProps.t('home.label'),
   });
 
-  state = {
-    isRefreshing: false,
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
+      nextProps.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+
+      return {
+        selectedLanguage: nextProps.selectedLanguage,
+      };
+    }
+
+    return null;
   };
 
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.handleRefresh();
-    }
-  };
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
 
   getMenusScreens = () =>
     this.props.user.restaurant.menus
