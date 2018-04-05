@@ -103,15 +103,31 @@ class OrdersContainer extends Component {
         0,
       );
 
-  state = {
-    isRefreshing: false,
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
+      nextProps.relay.refetch(_ => ({
+        restaurant: _.restaurantId,
+        tableId: _.tableId,
+        choiceItemPriceIds: _.choiceItemPriceIds,
+        menuItemPriceIds: _.menuItemPriceIds,
+      }));
+
+      return {
+        selectedLanguage: nextProps.selectedLanguage,
+      };
+    }
+
+    return null;
   };
 
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.handleRefresh();
-    }
-  };
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
 
   handleViewOrderItemPressed = ({ id, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
