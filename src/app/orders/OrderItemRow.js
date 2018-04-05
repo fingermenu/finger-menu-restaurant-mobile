@@ -1,7 +1,6 @@
 // @flow
 
 import { TouchableItem, TouchableIcon } from '@microbusiness/common-react-native';
-import Immutable from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { View, Text } from 'react-native';
@@ -19,23 +18,7 @@ class OrderItemRow extends Component {
     super(props, context);
 
     this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
-
-    this.state = { orderItem: Immutable.fromJS(props.orderItem) };
   }
-
-  componentWillReceiveProps = nextProps => {
-    const orderItem = Immutable.fromJS(nextProps.orderItem);
-
-    if (!this.state.orderItem.equals(orderItem)) {
-      this.setState({ orderItem });
-    }
-  };
-
-  shouldComponentUpdate = nextProps => {
-    const nextOrderItem = Immutable.fromJS(nextProps.orderItem);
-
-    return this.state.orderItem.get('id') === nextOrderItem.get('id');
-  };
 
   handleRemoveOrderPressed = () => {
     this.props.onRemoveOrderPressed(this.props.orderItem);
