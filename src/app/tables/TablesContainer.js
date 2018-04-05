@@ -12,9 +12,26 @@ import TablesView from './TablesView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 
 class TablesContainer extends Component {
-  state = {
-    isRefreshing: false,
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
+      nextProps.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+
+      return {
+        selectedLanguage: nextProps.selectedLanguage,
+      };
+    }
+
+    return null;
   };
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
 
   componentDidMount = () => {
     const { user: { restaurant: { id, pin, configurations } } } = this.props;
@@ -23,12 +40,6 @@ class TablesContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
     this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
-  };
-
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.selectedLanguage.localeCompare(this.props.selectedLanguage) !== 0) {
-      this.handleRefresh();
-    }
   };
 
   onTablePressed = table => {
