@@ -1,3 +1,3 @@
 // @flow
 
-export Menus from './Menus';
+export MenusRelayContainer from './MenusRelayContainer';

@@ -1,20 +1,24 @@
 // @flow
 
 /* eslint-disable react/no-multi-comp */
+import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
+import { graphql, QueryRenderer } from 'react-relay';
 import { TabNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import { Account } from '../account';
 import i18n from '../../i18n';
 import { HeaderContainer } from '../../components/header';
+import { MenusRelayContainer } from '../menus';
 import { InfoContainer } from '../info';
-import { Orders } from '../orders';
-import { Menus } from '../menus';
+import { OrdersRelayContainer } from '../orders';
 
 const tabScreens = {
   Menus: {
-    screen: Menus,
+    screen: props => <MenusRelayContainer user={props.screenProps.user} />,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} style={{ color: tintColor }} />,
     },
@@ -28,7 +32,7 @@ const tabScreens = {
     },
   },
   Orders: {
-    screen: Orders,
+    screen: props => <OrdersRelayContainer user={props.screenProps.user} />,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={30} style={{ color: tintColor }} />
@@ -73,17 +77,70 @@ const tabConfig = {
 };
 
 const createHomeNavigationTab = ({ initialRouteName } = {}) => {
-  return class HomeNavigation extends Component {
+  class HomeNavigation extends Component {
     static navigationOptions = () => ({
       headerTitle: <HeaderContainer />,
     });
 
-    render = () => {
-      const HomeNavigationTab = TabNavigator(tabScreens, { ...tabConfig, initialRouteName });
+    renderRelayComponent = ({ error, props, retry }) => {
+      if (error) {
+        return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+      }
 
-      return <HomeNavigationTab screenProps={{ t: i18n.getFixedT() }} />;
+      if (props) {
+        const HomeNavigationTab = TabNavigator(tabScreens, { ...tabConfig, initialRouteName });
+
+        return <HomeNavigationTab screenProps={{ t: i18n.getFixedT(), user: props.user }} />;
+      }
+
+      return <LoadingInProgress />;
+    };
+
+    render = () => (
+      <QueryRenderer
+        environment={environment}
+        query={graphql`
+          query HomeNavigationTabQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
+            user {
+              ...MenusRelayContainer_user
+              ...OrdersRelayContainer_user
+            }
+          }
+        `}
+        variables={{
+          restaurantId: this.props.restaurantId,
+          tableId: this.props.tableId,
+          menuItemPriceIds: this.props.menuItemPriceIds,
+          choiceItemPriceIds: this.props.choiceItemPriceIds,
+        }}
+        render={this.renderRelayComponent}
+      />
+    );
+  }
+
+  const mapStateToProps = state => {
+    const menuItemPriceIds = state.applicationState
+      .getIn(['activeOrder', 'details'])
+      .map(item => item.getIn(['menuItemPrice', 'id']))
+      .toSet()
+      .toJS();
+    const choiceItemPriceIds = state.applicationState
+      .getIn(['activeOrder', 'details'])
+      .toList()
+      .map(item => item.get('orderChoiceItemPrices'))
+      .flatMap(orderChoiceItemPrices => orderChoiceItemPrices.map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id'])))
+      .toSet()
+      .toJS();
+
+    return {
+      restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+      tableId: state.applicationState.getIn(['activeTable', 'id']),
+      menuItemPriceIds,
+      choiceItemPriceIds,
     };
   };
+
+  return connect(mapStateToProps)(HomeNavigation);
 };
 
 export const HomeNavigationTab = createHomeNavigationTab();

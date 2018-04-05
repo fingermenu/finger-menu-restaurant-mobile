@@ -1,10 +1,10 @@
 // @flow
 
 import { createRefetchContainer, graphql } from 'react-relay';
-import MenusNavigationTabContainer from './MenusNavigationTabContainer';
+import MenusContainer from './MenusContainer';
 
 export default createRefetchContainer(
-  MenusNavigationTabContainer,
+  MenusContainer,
   {
     user: graphql`
       fragment MenusRelayContainer_user on User {

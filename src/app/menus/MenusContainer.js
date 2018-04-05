@@ -8,7 +8,7 @@ import int from 'int';
 import { MenuContainer } from '../menu';
 import { DefaultColor } from '../../style';
 
-class MenusNavigationTabContainer extends Component {
+class MenusContainer extends Component {
   static navigationOptions = ({ screenProps }) => ({
     tabBarLabel: screenProps.t('home.label'),
   });
@@ -30,7 +30,13 @@ class MenusNavigationTabContainer extends Component {
       .reduce((reduction, menu) => {
         reduction[menu.id] = {
           screen: props => (
-            <MenuContainer {...props} menuItemPrices={menu.menuItemPrices} onRefresh={this.handleRefresh} isRefreshing={this.state.isRefreshing} />
+            <MenuContainer
+              {...props}
+              key={menu.id}
+              menuItemPrices={menu.menuItemPrices}
+              onRefresh={this.handleRefresh}
+              isRefreshing={this.state.isRefreshing}
+            />
           ),
           navigationOptions: {
             tabBarLabel: menu.name,
@@ -91,12 +97,12 @@ class MenusNavigationTabContainer extends Component {
   };
 }
 
-MenusNavigationTabContainer.propTypes = {
+MenusContainer.propTypes = {
   selectedLanguage: PropTypes.string.isRequired,
   menuId: PropTypes.string,
 };
 
-MenusNavigationTabContainer.defaultProps = {
+MenusContainer.defaultProps = {
   menuId: undefined,
 };
 
@@ -107,4 +113,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MenusNavigationTabContainer);
+export default connect(mapStateToProps)(MenusContainer);
