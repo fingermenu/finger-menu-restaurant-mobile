@@ -42,7 +42,18 @@ class TablesContainer extends Component {
     this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
   };
 
-  onTablePressed = table => {
+  setActiveCustomer = table => {
+    this.props.applicationStateActions.setActiveCustomer(
+      Map({
+        name: table.customerName,
+        reservationNotes: table.notes,
+        numberOfAdults: table.numberOfAdults,
+        numberOfChildren: table.numberOfChildren,
+      }),
+    );
+  };
+
+  handleTablePressed = table => {
     if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
       if (table.tableState.key === 'reserved') {
         this.setActiveCustomer(table);
@@ -57,17 +68,6 @@ class TablesContainer extends Component {
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.navigateToTableDetail(table);
     }
-  };
-
-  setActiveCustomer = table => {
-    this.props.applicationStateActions.setActiveCustomer(
-      Map({
-        name: table.customerName,
-        reservationNotes: table.notes,
-        numberOfAdults: table.numberOfAdults,
-        numberOfChildren: table.numberOfChildren,
-      }),
-    );
   };
 
   handleRefresh = () => {
@@ -88,7 +88,7 @@ class TablesContainer extends Component {
     return (
       <TablesView
         tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
-        onTablePressed={this.onTablePressed}
+        onTablePressed={this.handleTablePressed}
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
