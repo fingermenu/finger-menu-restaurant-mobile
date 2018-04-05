@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.4.37",
+  "version": "0.4.38",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -95,7 +95,7 @@
     "flow-bin": "0.69.0",
     "husky": "^0.14.3",
     "jest": "22.4.3",
-    "lint-staged": "^7.0.3",
+    "lint-staged": "^7.0.4",
     "plist": "^3.0.1",
     "prettier": "1.11.1",
     "react-devtools": "3.2.1",
