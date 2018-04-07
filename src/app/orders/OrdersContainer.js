@@ -1,6 +1,7 @@
 // @flow
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Immutable, { Map, Range } from 'immutable';
@@ -161,6 +162,7 @@ class OrdersContainer extends Component {
       {
         onSuccess: response => {
           this.printOrder(response);
+          this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: 'orderPlaced' }));
           navigateToOrderConfirmed();
         },
       },
@@ -271,6 +273,7 @@ class OrdersContainer extends Component {
 OrdersContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   selectedLanguage: PropTypes.string.isRequired,
   inMemoryOrder: OrderProp.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
@@ -345,6 +348,7 @@ function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
     navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
     navigateToOrderConfirmed: () =>
       dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
