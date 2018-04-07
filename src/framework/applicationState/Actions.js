@@ -1,8 +1,5 @@
 // @flow
 
-/* eslint-disable import/prefer-default-export */
-
-import cuid from 'cuid';
 import ActionTypes from './ActionTypes';
 
 export function selectedLanguageChanged(selectedLanguage) {
@@ -97,16 +94,9 @@ export function setActiveOrderTopInfo(payload) {
   };
 }
 
-export function addItemToActiveOrder(payload) {
+export function addOrUpdateItemInActiveOrder(payload) {
   return {
-    type: ActionTypes.APPLICATION_STATE_ADD_ITEM_TO_ACTIVE_ORDER,
-    payload: payload.set('id', cuid()),
-  };
-}
-
-export function updateItemInActiveOrder(payload) {
-  return {
-    type: ActionTypes.APPLICATION_STATE_UPDATE_ITEM_IN_ACTIVE_ORDER,
+    type: ActionTypes.APPLICATION_STATE_ADD_OR_UPDATE_ITEM_TO_ACTIVE_ORDER,
     payload,
   };
 }

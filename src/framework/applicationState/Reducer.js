@@ -48,8 +48,7 @@ export default (state = initialState, action) => {
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_ORDER_TOP_INFO:
     return state.update('activeOrder', activeOrder => activeOrder.merge(action.payload));
 
-  case ActionTypes.APPLICATION_STATE_ADD_ITEM_TO_ACTIVE_ORDER:
-  case ActionTypes.APPLICATION_STATE_UPDATE_ITEM_IN_ACTIVE_ORDER:
+  case ActionTypes.APPLICATION_STATE_ADD_OR_UPDATE_ITEM_TO_ACTIVE_ORDER:
     return state.setIn(['activeOrder', 'details', action.payload.get('id')], action.payload);
 
   case ActionTypes.APPLICATION_STATE_REMOVE_ITEM_FROM_ACTIVE_ORDER:

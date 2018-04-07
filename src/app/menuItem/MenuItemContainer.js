@@ -60,7 +60,7 @@ class MenuItemContainer extends Component {
   handleSubmit = values => {
     const { activeOrderMenuItemPriceId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
 
-    this.props.applicationStateActions.updateItemInActiveOrder(
+    this.props.applicationStateActions.addOrUpdateItemInActiveOrder(
       Map({
         id: activeOrderMenuItemPriceId ? activeOrderMenuItemPriceId : cuid(),
         quantity: this.state.quantity,
