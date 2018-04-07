@@ -3,6 +3,7 @@ package com.fingermenurestaurant;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.peel.react.TcpSocketsModule;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new GoogleAnalyticsBridgePackage(),
           new TcpSocketsModule(),
           new ReactNativeConfigPackage(),
           new ReactNativeExceptionHandlerPackage(),

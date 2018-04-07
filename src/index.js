@@ -1,10 +1,9 @@
 // @flow
 
-import { ConfigReader, LoadingInProgress } from '@microbusiness/common-react-native';
-import { configParseServerSdk, ConfigReader as ParseServerConfigReader } from '@microbusiness/parse-server-common-react-native';
+import { LoadingInProgress } from '@microbusiness/common-react-native';
+import { configParseServerSdk, ConfigReader } from '@microbusiness/parse-server-common-react-native';
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
-import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
+import { Alert, AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import RNRestart from 'react-native-restart';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
@@ -40,7 +39,7 @@ export default class FingerMenuRestaurant extends Component {
 
     AsyncStorage.getItem('@global:environment')
       .then(environment => {
-        const parseServerConfigReader = new ParseServerConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
+        const parseServerConfigReader = new ConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
 
         configParseServerSdk(
           parseServerConfigReader.getParseServerUrl(),
@@ -52,7 +51,7 @@ export default class FingerMenuRestaurant extends Component {
       .catch(error => {
         Alert.alert(error.message);
 
-        const parseServerConfigReader = new ParseServerConfigReader();
+        const parseServerConfigReader = new ConfigReader();
 
         configParseServerSdk(
           parseServerConfigReader.getParseServerUrl(),

@@ -2,6 +2,7 @@
 
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { bindActionCreators } from 'redux';
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
@@ -41,6 +42,7 @@ class Pin extends Component {
 
     this.props.i18n.changeLanguage('en_NZ');
     this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: 'Pin' }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -79,6 +81,8 @@ class Pin extends Component {
 
 Pin.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   activeRestaurant: ActiveRestaurantProp.isRequired,
 };
 
@@ -97,6 +101,7 @@ function mapDispatchToProps(dispatch) {
   return {
     asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   };
 }
 

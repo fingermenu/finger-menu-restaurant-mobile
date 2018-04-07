@@ -1,6 +1,8 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
@@ -25,6 +27,7 @@ class Tables extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveTable();
     this.props.applicationStateActions.clearActiveCustomer();
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: 'Tables' }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -61,6 +64,7 @@ class Tables extends Component {
 
 Tables.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
 };
 
@@ -73,6 +77,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   };
 }
 
