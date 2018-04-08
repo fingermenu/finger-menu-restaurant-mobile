@@ -164,7 +164,7 @@ class OrdersContainer extends Component {
         onSuccess: response => {
           this.printOrder(response);
           this.props.applicationStateActions.clearActiveOrder();
-          this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId, notes: '' }));
+          this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId }));
           this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: 'orderPlaced' }));
           navigateToOrderConfirmed();
         },
