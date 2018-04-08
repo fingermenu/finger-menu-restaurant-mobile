@@ -42,7 +42,8 @@ class OrdersView extends Component {
       onViewOrderItemPressed={this.props.onViewOrderItemPressed}
       onRemoveOrderPressed={this.props.onRemoveOrderPressed}
       popupDialog={this.popupDialog}
-      displaySmaller={false}
+      orderItemIsEditable
+      showRemove
     />
   );
 
@@ -53,7 +54,8 @@ class OrdersView extends Component {
       onViewOrderItemPressed={this.props.onViewOrderItemPressed}
       onRemoveOrderPressed={this.props.onRemoveOrderPressed}
       popupDialog={this.popupDialog}
-      displaySmaller
+      orderItemIsEditable={false}
+      showRemove={false}
     />
   );
 

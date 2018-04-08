@@ -306,19 +306,16 @@ class TableDetailView extends Component {
   };
 
   renderOrderItemRow = info => {
-    const { onViewOrderItemPressed, onRemoveOrderPressed } = this.props;
-
     return (
       <OrderItemRow
         orderItem={info.item}
         menuItem={info.item.menuItemPrice.menuItem}
         menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-        onViewOrderItemPressed={onViewOrderItemPressed}
-        onRemoveOrderPressed={onRemoveOrderPressed}
         enableMultiSelection={this.state.isCustomPaymentMode}
         onOrderSelected={this.handleOrderSelected}
         isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
-        displaySmaller={false}
+        orderItemIsEditable
+        showRemove={false}
       />
     );
   };
@@ -329,10 +326,8 @@ class TableDetailView extends Component {
         orderItem={info.item}
         menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
         enableMultiSelection={false}
-        onViewOrderItemPressed={() => {}}
-        onRemoveOrderPressed={() => {}}
+        orderItemIsEditable
         showRemove={false}
-        displaySmaller={false}
       />
     );
   };
@@ -411,8 +406,6 @@ TableDetailView.propTypes = {
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
   onCustomPaidPressed: PropTypes.func.isRequired,
-  onViewOrderItemPressed: PropTypes.func.isRequired,
-  onRemoveOrderPressed: PropTypes.func.isRequired,
 };
 
 export default translate()(TableDetailView);

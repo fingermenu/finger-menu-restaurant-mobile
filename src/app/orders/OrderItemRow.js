@@ -17,10 +17,18 @@ class OrderItemRow extends Component {
   constructor(props, context) {
     super(props, context);
 
-    if (!props.displaySmaller) {
-      this.onRemoveOrderPressedDebounced = debounce(this.props.onRemoveOrderPressed, config.navigationDelay);
-      this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
-      this.onOrderSelectedDebounced = debounce(this.props.onOrderSelected, config.navigationDelay);
+    if (props.orderItemIsEditable) {
+      if (this.props.onRemoveOrderPressed) {
+        this.onRemoveOrderPressedDebounced = debounce(this.props.onRemoveOrderPressed, config.navigationDelay);
+      }
+
+      if (this.props.onViewOrderItemPressed) {
+        this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
+      }
+
+      if (this.props.onOrderSelected) {
+        this.onOrderSelectedDebounced = debounce(this.props.onOrderSelected, config.navigationDelay);
+      }
     }
   }
 
@@ -51,7 +59,7 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
-    const { t, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
+    const { t, orderItemIsEditable, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
     const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name, imageUrl } } } = orderItem;
     const totalPrice =
       currentPrice * quantity +
@@ -94,7 +102,7 @@ class OrderItemRow extends Component {
           <View style={DefaultStyles.rowContainer}>
             {paid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
             <Text style={Styles.price}>${totalPrice.toFixed(2)}</Text>
-            {showRemove ? (
+            {orderItemIsEditable && showRemove ? (
               <TouchableIcon
                 onPress={this.handleRemoveOrderPressed}
                 iconName="ios-remove-circle-outline"
@@ -121,8 +129,8 @@ OrderItemRow.propTypes = {
   onOrderSelected: PropTypes.func,
   enableMultiSelection: PropTypes.bool,
   isSelected: PropTypes.bool,
-  showRemove: PropTypes.bool,
-  displaySmaller: PropTypes.bool.isRequired,
+  showRemove: PropTypes.bool.isRequired,
+  orderItemIsEditable: PropTypes.bool.isRequired,
 };
 
 OrderItemRow.defaultProps = {
@@ -131,7 +139,6 @@ OrderItemRow.defaultProps = {
   onViewOrderItemPressed: null,
   onRemoveOrderPressed: null,
   onOrderSelected: null,
-  showRemove: true,
 };
 
 export default translate()(OrderItemRow);

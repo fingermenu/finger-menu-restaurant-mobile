@@ -14,14 +14,6 @@ class TableDetailContainer extends Component {
     isRefreshing: false,
   };
 
-  onViewOrderItemPressed = () => {
-    return true;
-  };
-
-  onRemoveOrderPressed = () => {
-    return true;
-  };
-
   onResetTablePressed = () => {
     this.setTableStateToEmpty({
       onSuccess: () => {
@@ -191,8 +183,6 @@ class TableDetailContainer extends Component {
       <TableDetailView
         table={table}
         order={order}
-        onViewOrderItemPressed={this.onViewOrderItemPressed}
-        onRemoveOrderPressed={this.onRemoveOrderPressed}
         onResetTablePressed={this.onResetTablePressed}
         onSetPaidPressed={this.onSetPaidPressed}
         onCustomPaidPressed={this.onCustomPaidPressed}
