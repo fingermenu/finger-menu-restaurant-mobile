@@ -318,6 +318,7 @@ class TableDetailView extends Component {
         enableMultiSelection={this.state.isCustomPaymentMode}
         onOrderSelected={this.handleOrderSelected}
         isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
+        displaySmaller={false}
       />
     );
   };
@@ -331,6 +332,7 @@ class TableDetailView extends Component {
         onViewOrderItemPressed={() => {}}
         onRemoveOrderPressed={() => {}}
         showRemove={false}
+        displaySmaller={false}
       />
     );
   };

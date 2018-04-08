@@ -17,20 +17,28 @@ class OrderItemRow extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
+    if (!props.displaySmaller) {
+      this.onRemoveOrderPressedDebounced = debounce(this.props.onRemoveOrderPressed, config.navigationDelay);
+      this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
+      this.onOrderSelectedDebounced = debounce(this.props.onOrderSelected, config.navigationDelay);
+    }
   }
 
   handleRemoveOrderPressed = () => {
-    this.props.onRemoveOrderPressed(this.props.orderItem);
+    if (this.onRemoveOrderPressedDebounced) {
+      this.onRemoveOrderPressedDebounced(this.props.orderItem);
+    }
   };
 
   handleViewOrderItemPressed = () => {
-    this.onViewOrderItemPressedDebounced(this.props.orderItem);
+    if (this.onViewOrderItemPressedDebounced) {
+      this.onViewOrderItemPressedDebounced(this.props.orderItem);
+    }
   };
 
   handleOrderItemSelected = () => {
-    if (this.props.onOrderSelected) {
-      this.props.onOrderSelected(this.props.orderItem, !this.props.isSelected);
+    if (this.onOrderSelectedDebounced) {
+      this.onOrderSelectedDebounced(this.props.orderItem, !this.props.isSelected);
     }
   };
 
@@ -57,9 +65,7 @@ class OrderItemRow extends Component {
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
-          <View style={Styles.imageContainer}>
-            {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
-          </View>
+          {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
           {enableMultiSelection &&
             !paid && (
             <CheckBox
@@ -110,17 +116,20 @@ class OrderItemRow extends Component {
 
 OrderItemRow.propTypes = {
   orderItem: OrderItemDetailProp.isRequired,
-  onViewOrderItemPressed: PropTypes.func.isRequired,
-  onRemoveOrderPressed: PropTypes.func.isRequired,
+  onViewOrderItemPressed: PropTypes.func,
+  onRemoveOrderPressed: PropTypes.func,
   onOrderSelected: PropTypes.func,
   enableMultiSelection: PropTypes.bool,
   isSelected: PropTypes.bool,
   showRemove: PropTypes.bool,
+  displaySmaller: PropTypes.bool.isRequired,
 };
 
 OrderItemRow.defaultProps = {
   enableMultiSelection: false,
   isSelected: false,
+  onViewOrderItemPressed: null,
+  onRemoveOrderPressed: null,
   onOrderSelected: null,
   showRemove: true,
 };

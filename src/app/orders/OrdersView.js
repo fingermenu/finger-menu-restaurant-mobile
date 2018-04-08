@@ -35,13 +35,25 @@ class OrdersView extends Component {
 
   keyExtractor = item => item.id;
 
-  renderItem = info => (
+  renderInMemoryOrderItem = info => (
     <OrderItemRow
       orderItem={info.item}
       menuItemCurrentPrice={info.item.currentPrice}
       onViewOrderItemPressed={this.props.onViewOrderItemPressed}
       onRemoveOrderPressed={this.props.onRemoveOrderPressed}
       popupDialog={this.popupDialog}
+      displaySmaller={false}
+    />
+  );
+
+  renderOrderItem = info => (
+    <OrderItemRow
+      orderItem={info.item}
+      menuItemCurrentPrice={info.item.currentPrice}
+      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+      popupDialog={this.popupDialog}
+      displaySmaller
     />
   );
 
@@ -105,7 +117,7 @@ class OrdersView extends Component {
               <FlatList
                 key={order.id}
                 data={order.details}
-                renderItem={this.renderItem}
+                renderItem={this.renderOrderItem}
                 keyExtractor={this.keyExtractor}
                 onEndReached={onEndReached}
                 onRefresh={onRefresh}
@@ -119,7 +131,7 @@ class OrdersView extends Component {
         {inMemoryOrderItems.length > 0 ? (
           <FlatList
             data={inMemoryOrderItems}
-            renderItem={this.renderItem}
+            renderItem={this.renderInMemoryOrderItem}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}

@@ -12,6 +12,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   orderRowContainer: {
+    height: 100,
     padding: 15,
     backgroundColor: DefaultColor.secondaryBackgroundColor,
   },
