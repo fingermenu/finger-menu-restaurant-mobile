@@ -83,7 +83,7 @@ const sharedUpdater = (store, user, orderLinkedRecord, connectionFilters) => {
 
 const commit = (
   environment,
-  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+  { id, restaurantId, correlationId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
   menuItemPrices,
   choiceItemPrices,
   connectionFilters = {},
@@ -96,6 +96,7 @@ const commit = (
       input: {
         id,
         restaurantId,
+        correlationId,
         tableId,
         numberOfAdults,
         numberOfChildren,

@@ -253,10 +253,15 @@ class OrdersContainer extends Component {
   };
 
   render = () => {
-    const { inMemoryOrder, customer: { name: customerName }, user: { restaurant: { menus }, table: { name: tableName } } } = this.props;
+    const {
+      inMemoryOrder,
+      customer: { name: customerName },
+      user: { orders: { edges: orders }, restaurant: { menus }, table: { name: tableName } },
+    } = this.props;
 
     return (
       <OrdersView
+        orders={orders.map(_ => _.node)}
         inMemoryOrderItems={inMemoryOrder.details}
         onViewOrderItemPressed={this.handleViewOrderItemPressed}
         onConfirmOrderPressed={this.handleConfirmOrderPressed}

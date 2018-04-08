@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, Icon, Input } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { translate } from 'react-i18next';
 import OrderItemRow from './OrderItemRow';
@@ -51,7 +51,19 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const { t, notes, inMemoryOrderItems, tableName, customerName, onEndReached, onRefresh, isRefreshing, menus, onNotesChanged } = this.props;
+    const {
+      t,
+      notes,
+      orders,
+      inMemoryOrderItems,
+      tableName,
+      customerName,
+      onEndReached,
+      onRefresh,
+      isRefreshing,
+      menus,
+      onNotesChanged,
+    } = this.props;
 
     return (
       <View style={Styles.container}>
@@ -87,6 +99,23 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
+        {orders.length > 0 && (
+          <ScrollView>
+            {orders.map(order => (
+              <FlatList
+                key={order.id}
+                data={order.details}
+                renderItem={this.renderItem}
+                keyExtractor={this.keyExtractor}
+                onEndReached={onEndReached}
+                onRefresh={onRefresh}
+                refreshing={isRefreshing}
+                ItemSeparatorComponent={this.renderSeparator}
+              />
+            ))}
+          </ScrollView>
+        )}
+
         {inMemoryOrderItems.length > 0 ? (
           <FlatList
             data={inMemoryOrderItems}
@@ -98,18 +127,17 @@ class OrdersView extends Component {
             ItemSeparatorComponent={this.renderSeparator}
           />
         ) : (
-          <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
-          </ScrollView>
+          orders.length === 0 && (
+            <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
+              <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
+            </ScrollView>
+          )
         )}
         <Input placeholder={t('notes.placeholder')} value={notes} onChangeText={onNotesChanged} />
         <MenuActionButtonContainer menus={menus} />
-        <Button
-          title={t('placeOrder.button')}
-          icon={<Icon name="md-checkmark" type="ionicon" />}
-          backgroundColor={inMemoryOrderItems.length === 0 ? DefaultColor.defaultFontColorDisabled : DefaultColor.defaultButtonColor}
-          onPress={this.handleConfirmOrderPressed}
-        />
+        {inMemoryOrderItems.length > 0 && (
+          <Button title={t('placeOrder.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleConfirmOrderPressed} />
+        )}
       </View>
     );
   };
