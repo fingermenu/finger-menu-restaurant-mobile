@@ -201,9 +201,9 @@ class OrdersContainer extends Component {
   };
 
   printOrder = ({ details, placedAt, notes, customerName }) => {
-    const { kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
+    const { printerConfig, kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
 
-    if (!kitchenOrderTemplate) {
+    if (!kitchenOrderTemplate || !printerConfig) {
       return;
     }
 
@@ -291,10 +291,12 @@ OrdersContainer.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
-  const printerConfig = configurations
-    .get('printers')
-    .first()
-    .toJS();
+  const printerConfig = configurations.get('printers').isEmpty()
+    ? null
+    : configurations
+      .get('printers')
+      .first()
+      .toJS();
   const kitchenOrderTemplate = configurations
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
