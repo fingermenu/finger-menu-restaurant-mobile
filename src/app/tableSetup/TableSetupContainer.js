@@ -43,7 +43,7 @@ class TableSetupContainer extends Component {
           }),
         );
         this.props.applicationStateActions.clearActiveOrder();
-        this.props.navigateToAppHome();
+        this.props.navigateToLanding();
       },
     });
   };
@@ -86,7 +86,7 @@ class TableSetupContainer extends Component {
 
 TableSetupContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  navigateToAppHome: PropTypes.func.isRequired,
+  navigateToLanding: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
   table: ActiveTableProp.isRequired,
@@ -102,7 +102,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToAppHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
+    navigateToLanding: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }

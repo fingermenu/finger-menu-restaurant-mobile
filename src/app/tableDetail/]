@@ -166,8 +166,8 @@ class TableDetailContainer extends Component {
     );
   };
 
-  handleGiveToGuestPressed = () => {
-    const { customerName, numberOfAdults, numberOfChildren, correlationId } = this.props.user.orders.edges[0].node;
+    handleGiveToGuestPressed = () => {
+        const {customerName,numberOfAdults, numberOfChildren, correlationId} = this.props.user.orders[0];
 
     this.props.applicationStateActions.setActiveCustomer(
       Map({
@@ -177,8 +177,7 @@ class TableDetailContainer extends Component {
       }),
     );
     this.props.applicationStateActions.clearActiveOrder();
-    this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
-    this.props.navigateToHome();
+        this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: correlationId }));
   };
 
   handleEndReached = () => true;

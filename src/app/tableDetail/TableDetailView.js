@@ -298,7 +298,7 @@ class TableDetailView extends Component {
   };
 
   renderDefaultPaymentButtons = tableState => {
-    const { t, orders } = this.props;
+    const { t, orders, onGiveToGuestPressed } = this.props;
 
     return (
       <View style={Styles.buttonsContainer}>
@@ -314,6 +314,7 @@ class TableDetailView extends Component {
         />
         <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
+        <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken' || orders.length === 0} onPress={onGiveToGuestPressed} />
       </View>
     );
   };
@@ -424,6 +425,7 @@ TableDetailView.propTypes = {
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
   onCustomPaidPressed: PropTypes.func.isRequired,
+  onGiveToGuestPressed: PropTypes.func.isRequired,
 };
 
 export default translate()(TableDetailView);

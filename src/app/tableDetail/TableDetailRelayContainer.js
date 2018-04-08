@@ -26,6 +26,7 @@ export default createRefetchContainer(
           edges {
             node {
               id
+              correlationId
               numberOfAdults
               numberOfChildren
               customerName
