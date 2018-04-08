@@ -21,53 +21,6 @@ class TableDetailView extends Component {
     isCustomPaymentMode: false,
   };
 
-  onResetTableConfirmed = () => {
-    this.resetPopupDialog.dismiss();
-    this.props.onResetTablePressed();
-  };
-
-  onResetTableCancelled = () => {
-    this.resetPopupDialog.dismiss();
-  };
-
-  onResetTablePressed = () => this.resetPopupDialog.show();
-
-  onSetTablePaidConfirmed = () => {
-    this.paidPopupDialog.dismiss();
-    this.props.onSetPaidPressed();
-  };
-
-  onSetTablePaidCancelled = () => {
-    this.paidPopupDialog.dismiss();
-  };
-
-  onSetTablePaidPressed = () => {
-    if (this.props.table.tableState.key === 'taken') {
-      this.paidPopupDialog.show();
-    }
-  };
-
-  onCustomPayPressed = () => {
-    this.setState({ isCustomPaymentMode: true });
-  };
-
-  onPayCustomPayPressed = () => {
-    this.customPaidPopupDialog.show();
-  };
-
-  onCancelCustomPayPressed = () => {
-    this.setState({ isCustomPaymentMode: false, selectedOrders: List() });
-  };
-
-  onPayCustomConfirmed = () => {
-    this.customPaidPopupDialog.dismiss();
-    this.props.onCustomPaidPressed(this.state.selectedOrders);
-  };
-
-  onPayCustomCancelled = () => {
-    this.customPaidPopupDialog.dismiss();
-  };
-
   getBalanceToPay = () => {
     const total = this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal();
 
@@ -108,24 +61,76 @@ class TableDetailView extends Component {
     this.customPaidPopupDialog = popupDialog;
   };
 
-  getOrderTotal = () => (this.props.order ? this.props.order.totalPrice : 0);
+  getOrderTotal = () => this.props.orders.reduce((totalPrice, order) => totalPrice + order.totalPrice, 0);
 
-  getRemainingTotal = () => {
-    if (this.props.order) {
-      return this.getCalculatedOrderItemsTotal(
-        Immutable.fromJS(this.props.order)
-          .get('details')
-          .filterNot(_ => _.get('paid')),
-      );
-    }
-
-    return 0.0;
-  };
+  getRemainingTotal = () =>
+    this.props.orders.reduce(
+      (remainingTotal, order) =>
+        remainingTotal +
+        this.getCalculatedOrderItemsTotal(
+          Immutable.fromJS(order)
+            .get('details')
+            .filterNot(_ => _.get('paid')),
+        ),
+      0,
+    );
 
   getDiscountDisplayValue = () =>
     this.state.discountType === '%'
       ? (this.state.discount ? this.state.discount : '0') + this.state.discountType
       : this.state.discountType + (this.state.discount ? this.state.discount.toFixed(2) : '0.00');
+
+  handleResetTableConfirmed = () => {
+    this.resetPopupDialog.dismiss();
+    this.props.onResetTablePressed();
+  };
+
+  handleResetTableCancelled = () => {
+    this.resetPopupDialog.dismiss();
+  };
+
+  handleResetTablePressed = () => this.resetPopupDialog.show();
+
+  handleSetTablePaidConfirmed = () => {
+    this.paidPopupDialog.dismiss();
+    this.setState({ selectedOrders: List() });
+    this.props.onSetPaidPressed();
+  };
+
+  handleSetTablePaidCancelled = () => {
+    this.paidPopupDialog.dismiss();
+  };
+
+  handleSetTablePaidPressed = () => {
+    if (this.props.table.tableState.key === 'taken') {
+      this.paidPopupDialog.show();
+    }
+  };
+
+  handleCustomPayPressed = () => {
+    this.setState({ isCustomPaymentMode: true });
+  };
+
+  handlePayCustomPayPressed = () => {
+    this.customPaidPopupDialog.show();
+  };
+
+  handleCancelCustomPayPressed = () => {
+    this.setState({ isCustomPaymentMode: false, selectedOrders: List() });
+  };
+
+  handlePayCustomConfirmed = () => {
+    this.customPaidPopupDialog.dismiss();
+
+    const { selectedOrders } = this.state;
+
+    this.setState({ selectedOrders: List() });
+    this.props.onCustomPaidPressed(selectedOrders);
+  };
+
+  handlePayCustomCancelled = () => {
+    this.customPaidPopupDialog.dismiss();
+  };
 
   handleOrderSelected = (order, isSelected) => {
     if (isSelected) {
@@ -185,13 +190,13 @@ class TableDetailView extends Component {
                 title={t('confirm.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.button}
-                onPress={this.onPayCustomConfirmed}
+                onPress={this.handlePayCustomConfirmed}
               />
               <Button
                 title={t('cancel.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.button}
-                onPress={this.onPayCustomCancelled}
+                onPress={this.handlePayCustomCancelled}
               />
             </View>
           </View>
@@ -220,13 +225,13 @@ class TableDetailView extends Component {
               title={t('resetTable.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
-              onPress={this.onResetTableConfirmed}
+              onPress={this.handleResetTableConfirmed}
             />
             <Button
               title={t('cancel.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
-              onPress={this.onResetTableCancelled}
+              onPress={this.handleResetTableCancelled}
             />
           </View>
         </View>
@@ -263,13 +268,13 @@ class TableDetailView extends Component {
               title={t('payNow.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
-              onPress={this.onSetTablePaidConfirmed}
+              onPress={this.handleSetTablePaidConfirmed}
             />
             <Button
               title={t('cancel.button')}
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
-              onPress={this.onSetTablePaidCancelled}
+              onPress={this.handleSetTablePaidCancelled}
             />
           </View>
         </View>
@@ -285,22 +290,30 @@ class TableDetailView extends Component {
         <Button
           title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
           disabled={this.state.selectedOrders.isEmpty()}
-          onPress={this.onPayCustomPayPressed}
+          onPress={this.handlePayCustomPayPressed}
         />
-        <Button title={t('cancelPayment.button')} onPress={this.onCancelCustomPayPressed} />
+        <Button title={t('cancelPayment.button')} onPress={this.handleCancelCustomPayPressed} />
       </View>
     );
   };
 
-  renderDefaultPaymentButtons = (tableState, order) => {
-    const { t } = this.props;
+  renderDefaultPaymentButtons = tableState => {
+    const { t, orders } = this.props;
 
     return (
       <View style={Styles.buttonsContainer}>
-        <Button title={t('fullPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onSetTablePaidPressed} />
-        <Button title={t('splitPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onSetTablePaidPressed} />
-        <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || !order} onPress={this.onCustomPayPressed} />
-        <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.onResetTablePressed} />
+        <Button
+          title={t('fullPayment.button')}
+          disabled={tableState.key === 'paid' || orders.length === 0}
+          onPress={this.handleSetTablePaidPressed}
+        />
+        <Button
+          title={t('splitPayment.button')}
+          disabled={tableState.key === 'paid' || orders.length === 0}
+          onPress={this.handleSetTablePaidPressed}
+        />
+        <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
+        <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
       </View>
     );
   };
@@ -333,7 +346,7 @@ class TableDetailView extends Component {
   };
 
   render = () => {
-    const { t, table: { name, tableState }, order, onEndReached, onRefresh, isRefreshing } = this.props;
+    const { t, table: { name, tableState }, orders, onEndReached, onRefresh, isRefreshing } = this.props;
     const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
     const { selectedDiscountButtonIndex } = this.state;
 
@@ -354,16 +367,21 @@ class TableDetailView extends Component {
           />
           <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal().toFixed(2)}</Text>
         </View>
-        {order && order.details ? (
-          <FlatList
-            data={order.details}
-            renderItem={this.renderOrderItemRow}
-            keyExtractor={this.keyExtractor}
-            onEndReached={onEndReached}
-            onRefresh={onRefresh}
-            refreshing={isRefreshing}
-            extraData={this.state}
-          />
+        {orders.length > 0 ? (
+          <ScrollView>
+            {orders.map(order => (
+              <FlatList
+                key={order.id}
+                data={order.details}
+                renderItem={this.renderOrderItemRow}
+                keyExtractor={this.keyExtractor}
+                onEndReached={onEndReached}
+                onRefresh={onRefresh}
+                refreshing={isRefreshing}
+                extraData={this.state}
+              />
+            ))}
+          </ScrollView>
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
             <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
@@ -392,7 +410,7 @@ class TableDetailView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
           </View>
         </View>
-        {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState, order)}
+        {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
       </View>
     );
   };

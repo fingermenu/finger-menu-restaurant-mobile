@@ -23,30 +23,63 @@ class TableDetailContainer extends Component {
   };
 
   onSetPaidPressed = () => {
-    this.updateOrder(null, true, {
-      onSuccess: () => {
-        this.setTableStateToPaid({
-          onSuccess: () => {
-            this.props.goBack();
-          },
-        });
-      },
+    const { user: { orders: { edges } } } = this.props;
+    const orders = edges.map(_ => _.node);
+    let totalUpdated = 0;
+
+    orders.forEach(order => {
+      this.updateOrder(order, null, true, {
+        onSuccess: () => {
+          totalUpdated = totalUpdated + 1;
+
+          if (orders.length !== totalUpdated) {
+            return;
+          }
+
+          this.setTableStateToPaid({
+            onSuccess: () => {
+              this.props.goBack();
+            },
+          });
+        },
+      });
     });
   };
 
   onCustomPaidPressed = selectedOrders => {
-    const allOrdersPaid = this.updateOrder(selectedOrders, false, {
-      onSuccess: () => {
-        if (!allOrdersPaid) {
-          return;
-        }
+    const { user: { orders: { edges } } } = this.props;
+    const allOrders = edges.map(_ => _.node);
+    const orders = allOrders.filter(order =>
+      order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
+    );
+    const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
+    let totalUpdated = 0;
+    let allPaidFlag = true;
 
-        this.setTableStateToPaid({
-          onSuccess: () => {
-            this.props.goBack();
-          },
-        });
-      },
+    orders.forEach(order => {
+      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, {
+        onSuccess: () => {
+          totalUpdated = totalUpdated + 1;
+
+          if (!allOrdersPaid) {
+            allPaidFlag = false;
+          }
+
+          if (orders.length !== totalUpdated) {
+            return;
+          }
+
+          if (!allPaidFlag || excludedOrders.filter(excludedOrder => excludedOrder.details.find(_ => !_.paid)).length !== 0) {
+            return;
+          }
+
+          this.setTableStateToPaid({
+            onSuccess: () => {
+              this.props.goBack();
+            },
+          });
+        },
+      });
     });
   };
 
@@ -89,10 +122,9 @@ class TableDetailContainer extends Component {
     );
   };
 
-  updateOrder = (selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
-    const order = Immutable.fromJS(this.props.order);
+  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
+    const order = Immutable.fromJS(orderToUpdate);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
-    const { restaurantId, tableId, lastOrderCorrelationId } = this.props;
 
     UpdateOrder(
       this.props.relay.environment,
@@ -102,15 +134,6 @@ class TableDetailContainer extends Component {
         .get('details')
         .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
         .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
-      {
-        tableId,
-        correlationId: lastOrderCorrelationId,
-        restaurantId,
-        sortOption: 'PlacedAtDescending',
-      },
-      {
-        user: this.props.user,
-      },
       callbacks,
     );
 
@@ -154,7 +177,10 @@ class TableDetailContainer extends Component {
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
-              paid: setAllMenuItemPricesPaid || detail.get('paid') || !!selectedOrders.find(order => order.get('id') === detail.get('id')),
+              paid:
+                setAllMenuItemPricesPaid ||
+                detail.get('paid') ||
+                !!selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -177,12 +203,12 @@ class TableDetailContainer extends Component {
   };
 
   render = () => {
-    const { table, order } = this.props;
+    const { table, user: { orders: { edges: orders } } } = this.props;
 
     return (
       <TableDetailView
         table={table}
-        order={order}
+        orders={orders.map(_ => _.node)}
         onResetTablePressed={this.onResetTablePressed}
         onSetPaidPressed={this.onSetPaidPressed}
         onCustomPaidPressed={this.onCustomPaidPressed}
@@ -198,7 +224,6 @@ TableDetailContainer.propTypes = {
   goBack: PropTypes.func.isRequired,
   table: TableProp.isRequired,
   tableId: PropTypes.string.isRequired,
-  lastOrderCorrelationId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
 };
 
@@ -207,10 +232,8 @@ function mapStateToProps(state, props) {
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-    order: props.user.orders.edges.length > 0 ? props.user.orders.edges[0].node : null,
     table: props.user.table,
     tableId: activeTable.get('id'),
-    lastOrderCorrelationId: activeTable.get('lastOrderCorrelationId'),
   };
 }
 

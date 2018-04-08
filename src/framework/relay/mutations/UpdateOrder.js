@@ -1,7 +1,6 @@
 // @flow
 
 import { commitMutation, graphql } from 'react-relay';
-import { ConnectionHandler } from 'relay-runtime';
 import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
@@ -61,33 +60,11 @@ const mutation = graphql`
   }
 `;
 
-const sharedUpdater = (store, user, orderLinkedRecord, connectionFilters) => {
-  if (!user) {
-    return;
-  }
-
-  const userProxy = store.get(user.id);
-
-  if (!userProxy) {
-    return;
-  }
-
-  const connection = ConnectionHandler.getConnection(userProxy, 'User_orders', connectionFilters);
-
-  if (!connection) {
-    return;
-  }
-
-  ConnectionHandler.insertEdgeAfter(connection, orderLinkedRecord);
-};
-
 const commit = (
   environment,
   { id, restaurantId, correlationId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
   menuItemPrices,
   choiceItemPrices,
-  connectionFilters = {},
-  { user } = {},
   { onSuccess, onError } = {},
 ) => {
   return commitMutation(environment, {
@@ -106,28 +83,12 @@ const commit = (
         details,
       },
     },
-    updater: store => {
-      sharedUpdater(store, user, store.getRootField('updateOrder').getLinkedRecord('order'), connectionFilters);
-    },
     optimisticResponse: {
       updateOrder: Common.createOrderOptimisticResponse(
         { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
         menuItemPrices,
         choiceItemPrices,
       ),
-    },
-    optimisticUpdater: store => {
-      sharedUpdater(
-        store,
-        user,
-        Common.createOrderNodeForOptimisticUpdater(
-          store,
-          { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
-          menuItemPrices,
-          choiceItemPrices,
-        ),
-        connectionFilters,
-      );
     },
     onCompleted: (response, errors) => {
       if (errors && errors.length > 0) {
