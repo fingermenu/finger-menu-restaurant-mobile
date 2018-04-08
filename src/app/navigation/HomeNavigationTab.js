@@ -100,7 +100,7 @@ const createHomeNavigationTab = ({ initialRouteName } = {}) => {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query HomeNavigationTabQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
+          query HomeNavigationTabQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!], $correlationId: ID) {
             user {
               ...MenusRelayContainer_user
               ...OrdersRelayContainer_user
@@ -112,6 +112,7 @@ const createHomeNavigationTab = ({ initialRouteName } = {}) => {
           tableId: this.props.tableId,
           menuItemPriceIds: this.props.menuItemPriceIds,
           choiceItemPriceIds: this.props.choiceItemPriceIds,
+          correlationId: this.props.correlationId,
         }}
         render={this.renderRelayComponent}
       />
@@ -137,6 +138,7 @@ const createHomeNavigationTab = ({ initialRouteName } = {}) => {
       tableId: state.applicationState.getIn(['activeTable', 'id']),
       menuItemPriceIds,
       choiceItemPriceIds,
+      correlationId: state.applicationState.getIn(['activeOrder', 'correlationId']),
     };
   };
 

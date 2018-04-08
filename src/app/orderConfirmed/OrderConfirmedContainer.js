@@ -11,10 +11,11 @@ class OrderConfirmedContainer extends Component {
     header: null,
   });
 
-  render = () => <OrderConfirmedView onFingerMenuPressed={this.props.navigateToPin} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
+  render = () => <OrderConfirmedView onFingerMenuPressed={this.props.navigateToMenu} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
 }
 
 OrderConfirmedContainer.propTypes = {
+  navigateToMenu: PropTypes.func.isRequired,
   restaurantLogoImageUrl: PropTypes.string,
 };
 
@@ -30,7 +31,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    navigateToPin: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Pin' })] })),
+    navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
   };
 }
 

@@ -50,11 +50,65 @@ export default createRefetchContainer(
             }
           }
         }
+        orders(first: 1000, tableId: $tableId, correlationId: $correlationId, restaurantId: $restaurantId, sortOption: "PlacedAtDescending")
+          @connection(key: "User_orders") {
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+          edges {
+            node {
+              id
+              numberOfAdults
+              numberOfChildren
+              customerName
+              notes
+              totalPrice
+              placedAt
+              cancelledAt
+              details {
+                id
+                menuItemPrice {
+                  id
+                  currentPrice
+                  menuItem {
+                    id
+                    name
+                    imageUrl
+                  }
+                }
+                quantity
+                notes
+                paid
+                orderChoiceItemPrices {
+                  id
+                  notes
+                  quantity
+                  paid
+                  choiceItemPrice {
+                    id
+                    currentPrice
+                    choiceItem {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     `,
   },
   graphql`
-    query OrdersRelayContainer_user_PaginationQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!]) {
+    query OrdersRelayContainer_user_PaginationQuery(
+      $restaurantId: ID!
+      $tableId: ID!
+      $choiceItemPriceIds: [ID!]
+      $menuItemPriceIds: [ID!]
+      $correlationId: ID
+    ) {
       user {
         ...OrdersRelayContainer_user
       }

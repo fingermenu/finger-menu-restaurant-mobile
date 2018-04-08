@@ -111,6 +111,7 @@ class OrdersContainer extends Component {
         tableId: _.tableId,
         choiceItemPriceIds: _.choiceItemPriceIds,
         menuItemPriceIds: _.menuItemPriceIds,
+        correlationId: _.correlationId,
       }));
 
       return {
@@ -162,6 +163,8 @@ class OrdersContainer extends Component {
       {
         onSuccess: response => {
           this.printOrder(response);
+          this.props.applicationStateActions.clearActiveOrder();
+          this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId, notes: '' }));
           this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: 'orderPlaced' }));
           navigateToOrderConfirmed();
         },
@@ -186,6 +189,7 @@ class OrdersContainer extends Component {
         tableId: _.tableId,
         choiceItemPriceIds: _.choiceItemPriceIds,
         menuItemPriceIds: _.menuItemPriceIds,
+        correlationId: _.correlationId,
       }),
       null,
       () => {
