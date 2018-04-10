@@ -1,3 +1,3 @@
 // @flow
 
-export OrdersRelayContainer from './OrdersRelayContainer';
+export Orders from './Orders';
