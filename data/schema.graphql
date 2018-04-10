@@ -307,6 +307,7 @@ input OrderChoiceItemPriceInput {
 
 type OrderMenuItemPrice {
   id: ID
+  groupId: ID
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
@@ -316,6 +317,7 @@ type OrderMenuItemPrice {
 
 input OrderMenuItemPriceInput {
   id: ID
+  groupId: ID
   menuItemPriceId: ID!
   quantity: Int!
   notes: String
