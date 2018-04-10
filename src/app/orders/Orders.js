@@ -75,13 +75,14 @@ function mapStateToProps(state) {
     .flatMap(orderChoiceItemPrices => orderChoiceItemPrices.map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id'])))
     .toSet()
     .toJS();
+  const correlationId = state.applicationState.getIn(['activeOrder', 'correlationId']);
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     tableId: state.applicationState.getIn(['activeTable', 'id']),
     menuItemPriceIds,
     choiceItemPriceIds,
-    correlationId: state.applicationState.getIn(['activeOrder', 'correlationId']),
+    correlationId: correlationId ? correlationId : '',
   };
 }
 
