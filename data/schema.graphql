@@ -7,7 +7,6 @@ input AddChoiceItemInput {
 }
 
 type AddChoiceItemPayload {
-  errorMessage: String
   choiceItem: ChoiceItemTypeEdge
   clientMutationId: String
 }
@@ -21,7 +20,6 @@ input AddMenuItemInput {
 }
 
 type AddMenuItemPayload {
-  errorMessage: String
   menuItem: MenuItemTypeEdge
   clientMutationId: String
 }
@@ -39,7 +37,6 @@ input AddRestaurantInput {
 }
 
 type AddRestaurantPayload {
-  errorMessage: String
   restaurant: RestaurantTypeEdge
   clientMutationId: String
 }
@@ -61,7 +58,6 @@ input CancelOrderInput {
 }
 
 type CancelOrderPayload {
-  errorMessage: String
   order: OrderTypeEdge
   clientMutationId: String
 }
@@ -86,6 +82,7 @@ type ChoiceItemPrice implements Node {
   choiceItem: ChoiceItem
   size: Size
   sortOrderIndex: Int
+  tags: [Tag!]
 }
 
 # A connection to a list of items.
@@ -204,6 +201,7 @@ type MenuItemPrice implements Node {
   sortOrderIndex: Int
   toBeServedWithMenuItemPrices: [BeServedWithMenuItemPrice!]
   choiceItemPrices: [ChoiceItemPrice!]
+  tags: [Tag!]
 }
 
 # A connection to a list of items.
@@ -405,7 +403,6 @@ input PlaceOrderInput {
 }
 
 type PlaceOrderPayload {
-  errorMessage: String
   order: OrderTypeEdge
   clientMutationId: String
 }
@@ -474,6 +471,29 @@ type RestaurantTypeConnection {
 type RestaurantTypeEdge {
   # The item at the end of the edge
   node: Restaurant
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type ServingTime implements Node {
+  id: ID!
+  tag: Tag
+}
+
+# A connection to a list of items.
+type ServingTimeTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ServingTimeTypeEdge]
+}
+
+# An edge in a connection.
+type ServingTimeTypeEdge {
+  # The item at the end of the edge
+  node: ServingTime
 
   # A cursor for use in pagination
   cursor: String!
@@ -610,7 +630,6 @@ input UpdateOrderInput {
 }
 
 type UpdateOrderPayload {
-  errorMessage: String
   order: OrderTypeEdge
   clientMutationId: String
 }
@@ -629,7 +648,6 @@ input UpdateTableInput {
 }
 
 type UpdateTablePayload {
-  errorMessage: String
   table: TableTypeEdge
   clientMutationId: String
 }
@@ -656,6 +674,8 @@ type User implements Node {
   tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
   orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
+  servingTime(servingTimeId: ID!): ServingTime
+  servingTimes(after: String, first: Int, before: String, last: Int, servingTimeIds: [ID!], sortOption: String): ServingTimeTypeConnection
 }
 
 type Viewer implements Node {
