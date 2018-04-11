@@ -19,10 +19,6 @@ export default createRefetchContainer(
         }
         orders(first: 1000, tableId: $tableId, correlationId: $lastOrderCorrelationId, restaurantId: $restaurantId, sortOption: "PlacedAtDescending")
           @connection(key: "User_orders") {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id

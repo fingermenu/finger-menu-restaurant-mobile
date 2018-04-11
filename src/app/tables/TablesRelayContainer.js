@@ -34,10 +34,6 @@ export default createRefetchContainer(
           }
         }
         tables(first: 1000, restaurantId: $restaurantId) @connection(key: "User_tables") {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id

@@ -20,10 +20,6 @@ export default createRefetchContainer(
           name
         }
         menuItemPrices(menuItemPriceIds: $menuItemPriceIds, first: 1000, after: null) {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id
@@ -36,10 +32,6 @@ export default createRefetchContainer(
           }
         }
         choiceItemPrices(choiceItemPriceIds: $choiceItemPriceIds, first: 1000, after: null) {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id
@@ -52,10 +44,6 @@ export default createRefetchContainer(
         }
         orders(first: 1000, tableId: $tableId, correlationId: $correlationId, restaurantId: $restaurantId, sortOption: "PlacedAtDescending")
           @connection(key: "User_orders") {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id

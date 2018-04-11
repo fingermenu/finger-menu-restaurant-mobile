@@ -9,6 +9,16 @@ export default createRefetchContainer(
     user: graphql`
       fragment MenusRelayContainer_user on User {
         id
+        servingTimes(first: 1000, after: null) {
+          edges {
+            node {
+              id
+              tag {
+                id
+              }
+            }
+          }
+        }
         restaurant(restaurantId: $restaurantId) {
           menus {
             id
@@ -24,6 +34,9 @@ export default createRefetchContainer(
                 description
                 imageUrl
               }
+            }
+            tags {
+              id
             }
           }
         }

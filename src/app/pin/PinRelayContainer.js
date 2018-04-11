@@ -10,10 +10,6 @@ export default createRefetchContainer(
       fragment PinRelayContainer_user on User {
         id
         restaurants(first: 1000) @connection(key: "User_restaurants") {
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
           edges {
             node {
               id
