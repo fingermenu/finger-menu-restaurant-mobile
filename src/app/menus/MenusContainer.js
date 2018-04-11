@@ -29,7 +29,6 @@ class MenusContainer extends Component {
     super(props, context);
 
     this.state = {
-      isRefreshing: false,
       selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
     };
   }
@@ -40,15 +39,7 @@ class MenusContainer extends Component {
       .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))
       .reduce((reduction, menu) => {
         reduction[menu.id] = {
-          screen: props => (
-            <MenuContainer
-              {...props}
-              key={menu.id}
-              menuItemPrices={menu.menuItemPrices}
-              onRefresh={this.handleRefresh}
-              isRefreshing={this.state.isRefreshing}
-            />
-          ),
+          screen: props => <MenuContainer {...props} key={menu.id} menuItemPrices={menu.menuItemPrices} isRefreshing={false} />,
           navigationOptions: {
             tabBarLabel: menu.name,
             headerStyle: {
@@ -87,18 +78,6 @@ class MenusContainer extends Component {
     };
 
     return MenusTabConfig;
-  };
-
-  handleRefresh = () => {
-    if (this.state.isRefreshing) {
-      return;
-    }
-
-    this.setState({ isRefreshing: true });
-
-    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }), null, () => {
-      this.setState({ isRefreshing: false });
-    });
   };
 
   render = () => {

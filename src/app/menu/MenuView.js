@@ -46,7 +46,6 @@ class MenuView extends Component {
 
 MenuView.propTypes = {
   isRefreshing: PropTypes.bool.isRequired,
-  onRefresh: PropTypes.func.isRequired,
   onEndReached: PropTypes.func.isRequired,
   onPlaceOrderPressed: PropTypes.func.isRequired,
   menuItemPrices: MenuItemPricesProp.isRequired,
@@ -54,6 +53,11 @@ MenuView.propTypes = {
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
   onViewMenuItemPressed: PropTypes.func.isRequired,
+  onRefresh: PropTypes.func,
+};
+
+MenuView.defaultProps = {
+  onRefresh: null,
 };
 
 export default MenuView;
