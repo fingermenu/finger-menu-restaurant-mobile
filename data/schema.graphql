@@ -313,6 +313,7 @@ type OrderMenuItemPrice {
   notes: String
   paid: Boolean
   orderChoiceItemPrices: [OrderChoiceItemPrice!]
+  servingTime: ServingTime
 }
 
 input OrderMenuItemPriceInput {
@@ -323,6 +324,7 @@ input OrderMenuItemPriceInput {
   notes: String
   paid: Boolean
   orderChoiceItemPrices: [OrderChoiceItemPriceInput!]
+  servingTimeId: ID
 }
 
 # A connection to a list of items.
