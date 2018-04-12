@@ -132,6 +132,37 @@ class OrdersContainer extends Component {
     };
   }
 
+  getPrintableOrderDetails = details =>
+    details.reduce(
+      (menuItemsDetail, detail) =>
+        menuItemsDetail +
+        endOfLine +
+        OrdersContainer.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
+        endOfLine +
+        detail
+          .get('orderChoiceItemPrices')
+          .reduce(
+            (reduction, orderChoiceItemPrices) =>
+              reduction +
+              OrdersContainer.alignTextsOnEachEdge(
+                '  ' + orderChoiceItemPrices.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                orderChoiceItemPrices.get('quantity').toString(),
+              ) +
+              endOfLine,
+            '',
+          ) +
+        OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
+      '',
+    );
+
+  getPrintableOrderDetailsWithServingTime = (servingTime, details) =>
+    servingTime.padStart(maxLineLength / 2, '-').padEnd(maxLineLength, '-') +
+    endOfLine +
+    endOfLine +
+    this.getPrintableOrderDetails(details) +
+    endOfLine +
+    endOfLine;
+
   handleViewOrderItemPressed = ({ id, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
     this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId, servingTimeId }));
@@ -220,37 +251,32 @@ class OrdersContainer extends Component {
       return;
     }
 
-    const orderList = details.reduce(
-      (
-        menuItemsDetail,
-        {
-          notes,
-          quantity,
-          menuItemPrice: {
-            menuItem: { nameToPrint },
-          },
-          orderChoiceItemPrices,
-        },
-      ) =>
-        menuItemsDetail +
-        endOfLine +
-        OrdersContainer.alignTextsOnEachEdge(nameToPrint, quantity.toString()) +
-        endOfLine +
-        orderChoiceItemPrices.reduce(
-          (
-            reduction,
-            {
-              quantity,
-              choiceItemPrice: {
-                choiceItem: { nameToPrint },
-              },
-            },
-          ) => reduction + OrdersContainer.alignTextsOnEachEdge('  ' + nameToPrint, quantity.toString()) + endOfLine,
-          '',
-        ) +
-        OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '),
-      '',
-    );
+    const immutableDetails = Immutable.fromJS(details);
+    const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => detail.get('servingTime'));
+    const detailsWithServingTimes = immutableDetails.filter(detail => detail.get('servingTime'));
+    const groupedDetails = detailsWithServingTimes.groupBy(detail => detail.getIn(['servingTime', 'id']));
+    let finalOrderList = groupedDetails
+      .keySeq()
+      .map(servingTimeId =>
+        Map({
+          servingTimeNameToPrint: groupedDetails
+            .get(servingTimeId)
+            .first()
+            .getIn(['servingTime', 'tag', 'nameToPrint']),
+          details: groupedDetails.get(servingTimeId),
+        }),
+      )
+      .map(groupedDetailsWithServingTime =>
+        this.getPrintableOrderDetailsWithServingTime(
+          groupedDetailsWithServingTime.get('servingTimeNameToPrint'),
+          groupedDetailsWithServingTime.get('details'),
+        ),
+      )
+      .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
+
+    if (!detailsWithUnspecifiedServingTime.isEmpty()) {
+      finalOrderList = finalOrderList + this.getPrintableOrderDetailsWithServingTime('Unspecified', detailsWithUnspecifiedServingTime);
+    }
 
     const {
       printerConfig: { hostname, port },
@@ -275,7 +301,7 @@ class OrdersContainer extends Component {
           .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '))
           .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(customerName), 'CustomerName: ')
           .replace(/{TableName}/g, tableName)
-          .replace(/{OrderList}/g, orderList),
+          .replace(/{OrderList}/g, finalOrderList),
         numberOfCopies: numberOfPrintCopiesForKitchen,
       }),
     );

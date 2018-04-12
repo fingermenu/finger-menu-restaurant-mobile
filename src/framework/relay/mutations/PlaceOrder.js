@@ -41,7 +41,7 @@ const mutation = graphql`
             servingTime {
               id
               tag {
-                name
+                nameToPrint
               }
             }
             orderChoiceItemPrices {
