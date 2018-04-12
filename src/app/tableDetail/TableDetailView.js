@@ -307,11 +307,6 @@ class TableDetailView extends Component {
           disabled={tableState.key === 'paid' || orders.length === 0}
           onPress={this.handleSetTablePaidPressed}
         />
-        <Button
-          title={t('splitPayment.button')}
-          disabled={tableState.key === 'paid' || orders.length === 0}
-          onPress={this.handleSetTablePaidPressed}
-        />
         <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
         <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken' || orders.length === 0} onPress={onGiveToGuestPressed} />
