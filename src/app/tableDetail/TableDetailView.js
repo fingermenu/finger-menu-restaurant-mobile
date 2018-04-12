@@ -337,12 +337,20 @@ class TableDetailView extends Component {
         enableMultiSelection={false}
         orderItemIsEditable
         showRemove={false}
+        showImage={false}
       />
     );
   };
 
   render = () => {
-    const { t, table: { name, tableState }, orders, onEndReached, onRefresh, isRefreshing } = this.props;
+    const {
+      t,
+      table: { name, tableState },
+      orders,
+      onEndReached,
+      onRefresh,
+      isRefreshing,
+    } = this.props;
     const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
     const { selectedDiscountButtonIndex } = this.state;
 

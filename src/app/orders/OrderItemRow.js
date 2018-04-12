@@ -59,8 +59,17 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
-    const { t, orderItemIsEditable, orderItem, isSelected, showRemove, enableMultiSelection } = this.props;
-    const { orderChoiceItemPrices, notes, quantity, paid, menuItemPrice: { currentPrice, menuItem: { name, imageUrl } } } = orderItem;
+    const { t, orderItemIsEditable, orderItem, isSelected, showImage, showRemove, enableMultiSelection } = this.props;
+    const {
+      orderChoiceItemPrices,
+      notes,
+      quantity,
+      paid,
+      menuItemPrice: {
+        currentPrice,
+        menuItem: { name, imageUrl },
+      },
+    } = orderItem;
     const totalPrice =
       currentPrice * quantity +
       quantity *
@@ -73,7 +82,7 @@ class OrderItemRow extends Component {
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
         <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
-          {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
+          {showImage && imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
           {enableMultiSelection &&
             !paid && (
             <CheckBox
@@ -131,6 +140,7 @@ OrderItemRow.propTypes = {
   isSelected: PropTypes.bool,
   showRemove: PropTypes.bool.isRequired,
   orderItemIsEditable: PropTypes.bool.isRequired,
+  showImage: PropTypes.bool,
 };
 
 OrderItemRow.defaultProps = {
@@ -139,6 +149,7 @@ OrderItemRow.defaultProps = {
   onViewOrderItemPressed: null,
   onRemoveOrderPressed: null,
   onOrderSelected: null,
+  showImage: true,
 };
 
 export default translate()(OrderItemRow);
