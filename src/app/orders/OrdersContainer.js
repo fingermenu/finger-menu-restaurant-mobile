@@ -132,9 +132,9 @@ class OrdersContainer extends Component {
     };
   }
 
-  handleViewOrderItemPressed = ({ id, menuItemPrice: { id: menuItemPriceId } }) => {
+  handleViewOrderItemPressed = ({ id, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
-    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId }));
+    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId, servingTimeId }));
     this.props.navigateToMenuItem();
   };
 
@@ -146,7 +146,9 @@ class OrdersContainer extends Component {
       navigateToOrderConfirmed,
       restaurantId,
       customer: { name: customerName, numberOfAdults, numberOfChildren },
-      user: { table: { id: tableId } },
+      user: {
+        table: { id: tableId },
+      },
     } = this.props;
 
     PlaceOrder(
@@ -206,28 +208,54 @@ class OrdersContainer extends Component {
   };
 
   printOrder = ({ details, placedAt, notes, customerName }) => {
-    const { printerConfig, kitchenOrderTemplate, user: { table: { name: tableName } } } = this.props;
+    const {
+      printerConfig,
+      kitchenOrderTemplate,
+      user: {
+        table: { name: tableName },
+      },
+    } = this.props;
 
     if (!kitchenOrderTemplate || !printerConfig) {
       return;
     }
 
     const orderList = details.reduce(
-      (menuItemsDetail, { notes, quantity, menuItemPrice: { menuItem: { nameToPrint } }, orderChoiceItemPrices }) =>
+      (
+        menuItemsDetail,
+        {
+          notes,
+          quantity,
+          menuItemPrice: {
+            menuItem: { nameToPrint },
+          },
+          orderChoiceItemPrices,
+        },
+      ) =>
         menuItemsDetail +
         endOfLine +
         OrdersContainer.alignTextsOnEachEdge(nameToPrint, quantity.toString()) +
         endOfLine +
         orderChoiceItemPrices.reduce(
-          (reduction, { quantity, choiceItemPrice: { choiceItem: { nameToPrint } } }) =>
-            reduction + OrdersContainer.alignTextsOnEachEdge('  ' + nameToPrint, quantity.toString()) + endOfLine,
+          (
+            reduction,
+            {
+              quantity,
+              choiceItemPrice: {
+                choiceItem: { nameToPrint },
+              },
+            },
+          ) => reduction + OrdersContainer.alignTextsOnEachEdge('  ' + nameToPrint, quantity.toString()) + endOfLine,
           '',
         ) +
         OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '),
       '',
     );
 
-    const { printerConfig: { hostname, port }, numberOfPrintCopiesForKitchen } = this.props;
+    const {
+      printerConfig: { hostname, port },
+      numberOfPrintCopiesForKitchen,
+    } = this.props;
 
     this.props.escPosPrinterActions.printDocument(
       Map({
@@ -257,7 +285,11 @@ class OrdersContainer extends Component {
     const {
       inMemoryOrder,
       customer: { name: customerName },
-      user: { orders: { edges: orders }, restaurant: { menus }, table: { name: tableName } },
+      user: {
+        orders: { edges: orders },
+        restaurant: { menus },
+        table: { name: tableName },
+      },
     } = this.props;
 
     return (
