@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import int from 'int';
 import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { MenuTagsProp, ServingTimesProp } from './PropTypes';
 
 class MenuContainer extends Component {
   componentDidMount = () => {
@@ -17,7 +18,13 @@ class MenuContainer extends Component {
 
   onViewMenuItemPressed = id => {
     this.props.applicationStateActions.clearActiveOrderMenuItemPrice();
-    this.props.applicationStateActions.setActiveMenuItemPrice(Map({ id }));
+
+    const { servingTimes, menuTags } = this.props;
+    const filteredServingTime = servingTimes.filter(servingTime => menuTags.find(menuTag => menuTag.id.localeCompare(servingTime.tag.id) === 0));
+
+    this.props.applicationStateActions.setActiveMenuItemPrice(
+      Map({ id, servingTimeId: filteredServingTime.length > 0 ? filteredServingTime[0].id : null }),
+    );
     this.props.navigateToMenuItem();
   };
 
@@ -52,6 +59,8 @@ MenuContainer.propTypes = {
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
   navigateToOrders: PropTypes.func.isRequired,
+  menuTags: MenuTagsProp.isRequired,
+  servingTimes: ServingTimesProp.isRequired,
   onRefresh: PropTypes.func,
 };
 

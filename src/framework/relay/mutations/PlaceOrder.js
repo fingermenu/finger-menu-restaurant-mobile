@@ -38,6 +38,12 @@ const mutation = graphql`
             quantity
             notes
             paid
+            servingTime {
+              id
+              tag {
+                name
+              }
+            }
             orderChoiceItemPrices {
               id
               notes

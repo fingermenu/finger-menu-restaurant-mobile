@@ -66,6 +66,7 @@ class OrdersContainer extends Component {
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
               paid: detail.get('paid'),
+              servingTimeId: detail.get('servingTimeId'),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 

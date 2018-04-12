@@ -18,3 +18,16 @@ export const MenuItemPriceProp = PropTypes.shape({
 export const MenuItemsProp = PropTypes.arrayOf(MenuItemProp);
 
 export const MenuItemPricesProp = PropTypes.arrayOf(MenuItemPriceProp);
+
+export const MenuTagProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+});
+
+export const MenuTagsProp = PropTypes.arrayOf(MenuTagProp.isRequired);
+
+export const ServingTimeProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  tag: MenuTagProp.isRequired,
+});
+
+export const ServingTimesProp = PropTypes.arrayOf(ServingTimeProp.isRequired);

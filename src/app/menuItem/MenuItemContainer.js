@@ -58,7 +58,7 @@ class MenuItemContainer extends Component {
   };
 
   handleSubmit = values => {
-    const { activeOrderMenuItemPriceId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
+    const { activeOrderMenuItemPriceId, servingTimeId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
 
     this.props.applicationStateActions.addOrUpdateItemInActiveOrder(
       Map({
@@ -66,6 +66,7 @@ class MenuItemContainer extends Component {
         quantity: this.state.quantity,
         notes: values.notes,
         paid: false,
+        servingTimeId,
         menuItemPrice: Map({
           id: menuItemPriceId,
           menuItem: Map({
@@ -99,10 +100,12 @@ MenuItemContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
   activeOrderMenuItemPriceId: PropTypes.string,
+  servingTimeId: PropTypes.string,
 };
 
 MenuItemContainer.defaultProps = {
   activeOrderMenuItemPriceId: null,
+  servingTimeId: null,
 };
 
 function mapStateToProps(state) {
@@ -110,11 +113,13 @@ function mapStateToProps(state) {
   const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
     ? null
     : state.applicationState.getIn(['activeOrder', 'details', activeOrderMenuItemPrice.get('id')]);
+  const activeMenuItemPrice = state.applicationState.get('activeMenuItemPrice');
 
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    activeOrderMenuItemPriceId: state.applicationState.getIn(['activeOrderMenuItemPrice', 'id']),
+    activeOrderMenuItemPriceId: activeOrderMenuItemPrice.get('id'),
     quantity: activeOrderDetail ? activeOrderDetail.get('quantity') : 1,
+    servingTimeId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('servingTimeId') : activeMenuItemPrice.get('servingTimeId'),
   };
 }
 
