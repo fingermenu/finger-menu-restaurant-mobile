@@ -155,13 +155,11 @@ class OrdersContainer extends Component {
       '',
     );
 
-  getPrintableOrderDetailsWithServingTime = (servingTime, details) =>
-    servingTime.padStart(maxLineLength / 2, '-').padEnd(maxLineLength, '-') +
-    endOfLine +
-    endOfLine +
-    this.getPrintableOrderDetails(details) +
-    endOfLine +
-    endOfLine;
+  getPrintableOrderDetailsWithServingTime = (servingTime, details) => {
+    const padding = Array(Math.floor((maxLineLength - servingTime.length) / 2 + 1)).join('-');
+
+    return padding + servingTime + padding + endOfLine + endOfLine + this.getPrintableOrderDetails(details) + endOfLine + endOfLine;
+  };
 
   handleViewOrderItemPressed = ({ id, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
