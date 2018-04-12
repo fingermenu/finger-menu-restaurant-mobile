@@ -252,8 +252,8 @@ class OrdersContainer extends Component {
     }
 
     const immutableDetails = Immutable.fromJS(details);
-    const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => detail.get('servingTime'));
-    const detailsWithServingTimes = immutableDetails.filter(detail => detail.get('servingTime'));
+    const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => !!detail.get('servingTime'));
+    const detailsWithServingTimes = immutableDetails.filter(detail => !!detail.get('servingTime'));
     const groupedDetails = detailsWithServingTimes.groupBy(detail => detail.getIn(['servingTime', 'id']));
     let finalOrderList = groupedDetails
       .keySeq()
