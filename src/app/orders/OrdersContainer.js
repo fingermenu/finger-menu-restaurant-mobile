@@ -36,18 +36,18 @@ class OrdersContainer extends Component {
     return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
   };
 
-  static splitTextIntoMultipleLines = (str, prefixStr = '', lineLength = maxLineLength) => {
+  static splitTextIntoMultipleLines = (str, prefixText = '', trimText = true, lineLength = maxLineLength) => {
     if (!str) {
       return '';
     }
 
-    const trimmedStr = str.trim();
+    const trimmedText = str.trim();
 
-    if (trimmedStr.length === 0) {
+    if (trimmedText.length === 0) {
       return '';
     }
 
-    const finalStr = prefixStr + trimmedStr;
+    const finalStr = prefixText + (trimText ? trimmedText : str);
 
     return Range(0, finalStr.length / lineLength)
       .map(idx => finalStr.substring(idx * lineLength, (idx + 1) * lineLength))
@@ -132,28 +132,50 @@ class OrdersContainer extends Component {
     };
   }
 
-  getPrintableOrderDetails = details =>
-    details.reduce(
-      (menuItemsDetail, detail) =>
-        menuItemsDetail +
-        endOfLine +
-        OrdersContainer.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
-        endOfLine +
-        detail
-          .get('orderChoiceItemPrices')
+  getPrintableOrderDetails = details => {
+    const groupedDetails = details.groupBy(detail => {
+      const choiceItemPriceIds = detail
+        .get('orderChoiceItemPrices')
+        .map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']))
+        .sort((id1, id2) => id1.localeCompare(id2))
+        .reduce((reduction, id) => reduction + id, '');
+      const notes = detail.get('notes') ? detail.get('notes') : '';
+
+      return detail.getIn(['menuItemPrice', 'id']) + notes + choiceItemPriceIds;
+    });
+
+    return groupedDetails
+      .keySeq()
+      .map(key =>
+        groupedDetails
+          .get(key)
           .reduce(
-            (reduction, orderChoiceItemPrices) =>
-              reduction +
-              OrdersContainer.alignTextsOnEachEdge(
-                '  ' + orderChoiceItemPrices.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
-                orderChoiceItemPrices.get('quantity').toString(),
-              ) +
-              endOfLine,
-            '',
-          ) +
-        OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
-      '',
-    );
+            (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
+            Map(),
+          ),
+      )
+      .reduce(
+        (menuItemsDetail, detail) =>
+          menuItemsDetail +
+          endOfLine +
+          OrdersContainer.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
+          endOfLine +
+          detail
+            .get('orderChoiceItemPrices')
+            .reduce(
+              (reduction, orderChoiceItemPrices) =>
+                reduction +
+                OrdersContainer.splitTextIntoMultipleLines(
+                  '  ' + orderChoiceItemPrices.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                  '',
+                  false,
+                ),
+              '',
+            ) +
+          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
+        '',
+      );
+  };
 
   getPrintableOrderDetailsWithServingTime = (servingTime, details) => {
     const padding = Array(Math.floor((maxLineLength - servingTime.length) / 2 + 1)).join('-');
@@ -297,7 +319,7 @@ class OrdersContainer extends Component {
               .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
           )
           .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '))
-          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(customerName), 'CustomerName: ')
+          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(customerName), 'Customer Name: ')
           .replace(/{TableName}/g, tableName)
           .replace(/{OrderList}/g, finalOrderList),
         numberOfCopies: numberOfPrintCopiesForKitchen,
