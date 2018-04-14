@@ -12,6 +12,10 @@ export default createRefetchContainer(
         table(tableId: $tableIdForTableQuery) {
           id
           name
+          customerName
+          notes
+          numberOfAdults
+          numberOfChildren
           tableState {
             key
             name

@@ -25,7 +25,11 @@ class TableDetailContainer extends Component {
   };
 
   onSetPaidPressed = () => {
-    const { user: { orders: { edges } } } = this.props;
+    const {
+      user: {
+        orders: { edges },
+      },
+    } = this.props;
     const orders = edges.map(_ => _.node);
     let totalUpdated = 0;
 
@@ -49,7 +53,11 @@ class TableDetailContainer extends Component {
   };
 
   onCustomPaidPressed = selectedOrders => {
-    const { user: { orders: { edges } } } = this.props;
+    const {
+      user: {
+        orders: { edges },
+      },
+    } = this.props;
     const allOrders = edges.map(_ => _.node);
     const orders = allOrders.filter(order =>
       order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
@@ -124,25 +132,15 @@ class TableDetailContainer extends Component {
     );
   };
 
-  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
-    const order = Immutable.fromJS(orderToUpdate);
-    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
-
-    UpdateOrder(
-      this.props.relay.environment,
-      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
-      order.get('details').map(detail => detail.get('menuItemPrice')),
-      order
-        .get('details')
-        .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
-        .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
-      callbacks,
+  setActiveCustomer = table => {
+    this.props.applicationStateActions.setActiveCustomer(
+      Map({
+        name: table.customerName,
+        reservationNotes: table.notes,
+        numberOfAdults: table.numberOfAdults,
+        numberOfChildren: table.numberOfChildren,
+      }),
     );
-
-    return orderUpdateRequest
-      .get('details')
-      .filterNot(_ => _.get('paid'))
-      .isEmpty();
   };
 
   handleRefresh = () => {
@@ -167,18 +165,26 @@ class TableDetailContainer extends Component {
   };
 
   handleGiveToGuestPressed = () => {
-    const { customerName, numberOfAdults, numberOfChildren, correlationId } = this.props.user.orders.edges[0].node;
+    if (this.props.user.orders.edges.length > 0) {
+      const { customerName, numberOfAdults, numberOfChildren, correlationId } = this.props.user.orders.edges[0].node;
 
-    this.props.applicationStateActions.setActiveCustomer(
-      Map({
-        name: customerName,
-        numberOfAdults,
-        numberOfChildren,
-      }),
-    );
-    this.props.applicationStateActions.clearActiveOrder();
-    this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
-    this.props.navigateToHome();
+      this.props.applicationStateActions.setActiveCustomer(
+        Map({
+          name: customerName,
+          numberOfAdults,
+          numberOfChildren,
+        }),
+      );
+      this.props.applicationStateActions.clearActiveOrder();
+      this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
+      this.props.navigateToHome();
+    } else {
+      const { table } = this.props;
+
+      this.setActiveCustomer(table);
+      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      this.props.navigateToTableSetup();
+    }
   };
 
   handleEndReached = () => true;
@@ -219,8 +225,34 @@ class TableDetailContainer extends Component {
     );
   };
 
+  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
+    const order = Immutable.fromJS(orderToUpdate);
+    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
+
+    UpdateOrder(
+      this.props.relay.environment,
+      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
+      order.get('details').map(detail => detail.get('menuItemPrice')),
+      order
+        .get('details')
+        .flatMap(detail => detail.getIn(['orderChoiceItemPrices']))
+        .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
+      callbacks,
+    );
+
+    return orderUpdateRequest
+      .get('details')
+      .filterNot(_ => _.get('paid'))
+      .isEmpty();
+  };
+
   render = () => {
-    const { table, user: { orders: { edges: orders } } } = this.props;
+    const {
+      table,
+      user: {
+        orders: { edges: orders },
+      },
+    } = this.props;
 
     return (
       <TableDetailView
@@ -240,6 +272,8 @@ class TableDetailContainer extends Component {
 
 TableDetailContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  navigateToHome: PropTypes.func.isRequired,
+  navigateToTableSetup: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
   table: TableProp.isRequired,
   tableId: PropTypes.string.isRequired,
@@ -260,6 +294,7 @@ function mapDispatchToProps(dispatch) {
   return {
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     navigateToHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+    navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
     goBack: () => dispatch(NavigationActions.back()),
   };
 }
