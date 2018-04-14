@@ -9,6 +9,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import { translate } from 'react-i18next';
+import int from 'int';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
 import { ChoiceItemPrices } from '../../components/choiceItems';
@@ -28,12 +29,14 @@ const MenuItemView = ({
   dietaryOptions,
   onQuantityChanged,
 }) => {
-  const choiceItemPricesOfTypeDietaryOption = choiceItemPrices.filter(
-    choiceItemPrice => !!choiceItemPrice.tags.find(tag => !!dietaryOptions.find(dietaryOption => dietaryOption.tag.id.localeCompare(tag.id) === 0)),
-  );
-  const otherChoiceItemPrices = choiceItemPrices.filter(
-    choiceItemPrice => choiceItemPricesOfTypeDietaryOption.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0) === undefined,
-  );
+  const choiceItemPricesOfTypeDietaryOption = choiceItemPrices
+    .filter(
+      choiceItemPrice => !!choiceItemPrice.tags.find(tag => !!dietaryOptions.find(dietaryOption => dietaryOption.tag.id.localeCompare(tag.id) === 0)),
+    )
+    .sort((choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex));
+  const otherChoiceItemPrices = choiceItemPrices
+    .filter(choiceItemPrice => choiceItemPricesOfTypeDietaryOption.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0) === undefined)
+    .sort((choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex));
 
   return (
     <View style={Styles.container}>
