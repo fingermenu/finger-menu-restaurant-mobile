@@ -55,17 +55,22 @@ class TableDetail extends Component {
 
 TableDetail.propTypes = {
   tableId: PropTypes.string.isRequired,
-  lastOrderCorrelationId: PropTypes.string.isRequired,
+  lastOrderCorrelationId: PropTypes.string,
   restaurantId: PropTypes.string.isRequired,
+};
+
+TableDetail.defaultProps = {
+  lastOrderCorrelationId: '',
 };
 
 function mapStateToProps(state) {
   const activeTable = state.applicationState.get('activeTable');
+  const lastOrderCorrelationId = activeTable.get('lastOrderCorrelationId');
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     tableId: activeTable.get('id'),
-    lastOrderCorrelationId: activeTable.get('lastOrderCorrelationId'),
+    lastOrderCorrelationId: lastOrderCorrelationId ? lastOrderCorrelationId : '',
   };
 }
 
