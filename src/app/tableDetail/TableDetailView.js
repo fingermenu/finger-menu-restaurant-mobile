@@ -9,7 +9,7 @@ import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dia
 import { translate } from 'react-i18next';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
-import { DefaultColor, DefaultStyles } from '../../style';
+import { DefaultColor, DefaultStyles, PopupDialogSize } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
@@ -97,6 +97,12 @@ class TableDetailView extends Component {
     this.props.onSetPaidPressed();
   };
 
+  handleSetTablePaidAndResetConfirmed = () => {
+    this.paidPopupDialog.dismiss();
+    this.setState({ selectedOrders: List() });
+    this.props.onSetPaidAndResetPressed();
+  };
+
   handleSetTablePaidCancelled = () => {
     this.paidPopupDialog.dismiss();
   };
@@ -157,8 +163,8 @@ class TableDetailView extends Component {
 
     return (
       <PopupDialog
-        width={400}
-        height={500}
+        width={PopupDialogSize.width}
+        height={PopupDialogSize.height}
         dialogTitle={<DialogTitle title={t('customPayment.label') + ' ' + tableName} />}
         dialogAnimation={slideAnimation}
         ref={this.setCustomPaidPopupDialogRef}
@@ -210,8 +216,8 @@ class TableDetailView extends Component {
 
     return (
       <PopupDialog
-        width={400}
-        height={200}
+        width={PopupDialogSize.width}
+        height={PopupDialogSize.height}
         dialogTitle={<DialogTitle title={t('resetTable.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setResetPopupDialogRef}
@@ -244,8 +250,8 @@ class TableDetailView extends Component {
 
     return (
       <PopupDialog
-        width={400}
-        height={300}
+        width={PopupDialogSize.width}
+        height={PopupDialogSize.height}
         dialogTitle={<DialogTitle title={t('fullPayment.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setPaidPopupDialogRef}
@@ -269,6 +275,12 @@ class TableDetailView extends Component {
               containerStyle={Styles.buttonContainer}
               buttonStyle={Styles.button}
               onPress={this.handleSetTablePaidConfirmed}
+            />
+            <Button
+              title={t('payAndResetTableNow.button')}
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.button}
+              onPress={this.handleSetTablePaidAndResetConfirmed}
             />
             <Button
               title={t('cancel.button')}
@@ -420,6 +432,7 @@ TableDetailView.propTypes = {
   table: TableProp.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
+  onSetPaidAndResetPressed: PropTypes.func.isRequired,
   onCustomPaidPressed: PropTypes.func.isRequired,
   onGiveToGuestPressed: PropTypes.func.isRequired,
 };

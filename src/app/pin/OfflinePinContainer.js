@@ -12,7 +12,7 @@ import PinView from './PinView';
 class OfflinePinContainer extends Component {
   handlePinMatched = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: 'navigate', optionalValues: Map({ label: 'Pin to Tables', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: 'OfflinePin-navigate', optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
     this.props.navigateToTables();
   };

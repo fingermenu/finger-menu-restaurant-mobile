@@ -4,15 +4,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
+import debounce from 'lodash.debounce';
 import Styles from './Styles';
 import { TableProp } from './PropTypes';
 import Common from './Common';
+import config from '../../framework/config';
 
 class TableView extends Component {
-  onTablePressed = () => this.props.onTablePressed(this.props.table);
+  constructor(props, context) {
+    super(props, context);
+
+    this.onTablePressed = debounce(this.props.onTablePressed, config.navigationDelay);
+  }
+
+  handleTablePressed = () => this.onTablePressed(this.props.table);
 
   render = () => {
-    const { table: { name, numberOfAdults, numberOfChildren, customerName, tableState } } = this.props;
+    const {
+      table: { name, numberOfAdults, numberOfChildren, customerName, tableState },
+    } = this.props;
     const style = Common.getTableStyle(tableState ? tableState.key : 'empty');
 
     return (
@@ -24,7 +34,7 @@ class TableView extends Component {
             title={name}
             containerStyle={Styles.tableItemContainer}
             buttonStyle={[style, Styles.tableButton]}
-            onPress={this.onTablePressed}
+            onPress={this.handleTablePressed}
           />
           <View style={Styles.tableTextContainer}>
             <Text>{numberOfAdults ? numberOfAdults : 0}</Text>

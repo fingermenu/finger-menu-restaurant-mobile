@@ -16,83 +16,6 @@ class TableDetailContainer extends Component {
     isRefreshing: false,
   };
 
-  onResetTablePressed = () => {
-    this.setTableStateToEmpty({
-      onSuccess: () => {
-        this.props.goBack();
-      },
-    });
-  };
-
-  onSetPaidPressed = () => {
-    const {
-      user: {
-        orders: { edges },
-      },
-    } = this.props;
-    const orders = edges.map(_ => _.node);
-    let totalUpdated = 0;
-
-    orders.forEach(order => {
-      this.updateOrder(order, null, true, {
-        onSuccess: () => {
-          totalUpdated = totalUpdated + 1;
-
-          if (orders.length !== totalUpdated) {
-            return;
-          }
-
-          this.setTableStateToPaid({
-            onSuccess: () => {
-              this.props.goBack();
-            },
-          });
-        },
-      });
-    });
-  };
-
-  onCustomPaidPressed = selectedOrders => {
-    const {
-      user: {
-        orders: { edges },
-      },
-    } = this.props;
-    const allOrders = edges.map(_ => _.node);
-    const orders = allOrders.filter(order =>
-      order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
-    );
-    const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
-    let totalUpdated = 0;
-    let allPaidFlag = true;
-
-    orders.forEach(order => {
-      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, {
-        onSuccess: () => {
-          totalUpdated = totalUpdated + 1;
-
-          if (!allOrdersPaid) {
-            allPaidFlag = false;
-          }
-
-          if (orders.length !== totalUpdated) {
-            return;
-          }
-
-          if (!allPaidFlag || excludedOrders.filter(excludedOrder => excludedOrder.details.find(_ => !_.paid)).length !== 0) {
-            return;
-          }
-
-          this.setTableStateToPaid({
-            onSuccess: () => {
-              this.props.goBack();
-            },
-          });
-        },
-      });
-    });
-  };
-
   setTableStateToEmpty = callbacks => {
     UpdateTable(
       this.props.relay.environment,
@@ -141,6 +64,107 @@ class TableDetailContainer extends Component {
         numberOfChildren: table.numberOfChildren,
       }),
     );
+  };
+
+  handleResetTablePressed = () => {
+    this.setTableStateToEmpty({
+      onSuccess: () => {
+        this.props.goBack();
+      },
+    });
+  };
+
+  handleSetPaidPressed = () => {
+    const {
+      user: {
+        orders: { edges },
+      },
+    } = this.props;
+    const orders = edges.map(_ => _.node);
+    let totalUpdated = 0;
+
+    orders.forEach(order => {
+      this.updateOrder(order, null, true, {
+        onSuccess: () => {
+          totalUpdated = totalUpdated + 1;
+
+          if (orders.length !== totalUpdated) {
+            return;
+          }
+
+          this.setTableStateToPaid({
+            onSuccess: () => {
+              this.props.goBack();
+            },
+          });
+        },
+      });
+    });
+  };
+
+  handleSetPaidAndResetPressed = () => {
+    const {
+      user: {
+        orders: { edges },
+      },
+    } = this.props;
+    const orders = edges.map(_ => _.node);
+    let totalUpdated = 0;
+
+    orders.forEach(order => {
+      this.updateOrder(order, null, true, {
+        onSuccess: () => {
+          totalUpdated = totalUpdated + 1;
+
+          if (orders.length !== totalUpdated) {
+            return;
+          }
+
+          this.handleResetTablePressed();
+        },
+      });
+    });
+  };
+
+  handleCustomPaidPressed = selectedOrders => {
+    const {
+      user: {
+        orders: { edges },
+      },
+    } = this.props;
+    const allOrders = edges.map(_ => _.node);
+    const orders = allOrders.filter(order =>
+      order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
+    );
+    const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
+    let totalUpdated = 0;
+    let allPaidFlag = true;
+
+    orders.forEach(order => {
+      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, {
+        onSuccess: () => {
+          totalUpdated = totalUpdated + 1;
+
+          if (!allOrdersPaid) {
+            allPaidFlag = false;
+          }
+
+          if (orders.length !== totalUpdated) {
+            return;
+          }
+
+          if (!allPaidFlag || excludedOrders.filter(excludedOrder => excludedOrder.details.find(_ => !_.paid)).length !== 0) {
+            return;
+          }
+
+          this.setTableStateToPaid({
+            onSuccess: () => {
+              this.props.goBack();
+            },
+          });
+        },
+      });
+    });
   };
 
   handleRefresh = () => {
@@ -258,9 +282,10 @@ class TableDetailContainer extends Component {
       <TableDetailView
         table={table}
         orders={orders.map(_ => _.node)}
-        onResetTablePressed={this.onResetTablePressed}
-        onSetPaidPressed={this.onSetPaidPressed}
-        onCustomPaidPressed={this.onCustomPaidPressed}
+        onResetTablePressed={this.handleResetTablePressed}
+        onSetPaidPressed={this.handleSetPaidPressed}
+        onSetPaidAndResetPressed={this.handleSetPaidAndResetPressed}
+        onCustomPaidPressed={this.handleCustomPaidPressed}
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}

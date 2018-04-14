@@ -87,6 +87,6 @@ export default StyleSheet.create({
     marginBottom: 30,
   },
   placeOrderContainer: {
-    marginBottom: 30,
+    marginBottom: 5,
   },
 });

@@ -1,1 +1,1 @@
-export { DefaultColor, DefaultStyles, Sizes } from './DefaultStyles';
+export { DefaultColor, DefaultStyles, Sizes, PopupDialogSize } from './DefaultStyles';

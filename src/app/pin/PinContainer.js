@@ -12,7 +12,9 @@ import PinView from './PinView';
 
 class PinContainer extends Component {
   componentDidMount = () => {
-    const { restaurant: { id, pin, configurations } } = this.props;
+    const {
+      restaurant: { id, pin, configurations },
+    } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
@@ -21,7 +23,7 @@ class PinContainer extends Component {
 
   handlePinMatched = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: 'navigate', optionalValues: Map({ label: 'Pin to Tables', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: 'Pin-navigate', optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
     this.props.navigateToTables();
   };

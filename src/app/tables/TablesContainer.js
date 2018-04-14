@@ -1,5 +1,6 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
 import Immutable, { Map } from 'immutable';
@@ -34,7 +35,11 @@ class TablesContainer extends Component {
   }
 
   componentDidMount = () => {
-    const { user: { restaurant: { id, pin, configurations } } } = this.props;
+    const {
+      user: {
+        restaurant: { id, pin, configurations },
+      },
+    } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
@@ -62,10 +67,16 @@ class TablesContainer extends Component {
       }
 
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      this.props.googleAnalyticsTrackerActions.trackEvent(
+        Map({ category: 'ui-waiter', action: 'Tables-navigate', optionalValues: Map({ label: 'Table Setup', value: 0 }) }),
+      );
       this.props.navigateToTableSetup();
     } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
       this.setActiveCustomer(table);
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      this.props.googleAnalyticsTrackerActions.trackEvent(
+        Map({ category: 'ui-waiter', action: 'Tables-navigate', optionalValues: Map({ label: 'Table Detail', value: 0 }) }),
+      );
       this.props.navigateToTableDetail(table);
     }
   };
@@ -98,6 +109,7 @@ class TablesContainer extends Component {
 }
 
 TablesContainer.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTableSetup: PropTypes.func.isRequired,
@@ -112,6 +124,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
     asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),

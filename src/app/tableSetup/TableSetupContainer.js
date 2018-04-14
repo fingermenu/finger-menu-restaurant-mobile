@@ -1,5 +1,6 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
@@ -23,15 +24,25 @@ class TableSetupContainer extends Component {
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
   };
 
-  onResetTablePressed = () => {
+  handleResetTablePressed = () => {
+    this.props.googleAnalyticsTrackerActions.trackEvent(
+      Map({ category: 'ui-waiter', action: 'TableSetup-buttonPress', optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
+    );
     this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty', {
       onSuccess: () => {
+        this.props.googleAnalyticsTrackerActions.trackEvent(
+          Map({
+            category: 'ui-waiter',
+            action: 'TableSetup-navigate',
+            optionalValues: Map({ label: 'Going back - Reset Table', value: 0 }),
+          }),
+        );
         this.props.goBack();
       },
     });
   };
 
-  onSetupTablePressed = values => {
+  handleSetupTablePressed = values => {
     this.updateTable(values, 'taken', {
       onSuccess: () => {
         this.props.applicationStateActions.setActiveCustomer(
@@ -43,14 +54,27 @@ class TableSetupContainer extends Component {
           }),
         );
         this.props.applicationStateActions.clearActiveOrder();
+        this.props.googleAnalyticsTrackerActions.trackEvent(
+          Map({ category: 'ui-waiter', action: 'TableSetup-navigate', optionalValues: Map({ label: 'Landing', value: 0 }) }),
+        );
         this.props.navigateToLanding();
       },
     });
   };
 
-  onReserveTablePressed = value => {
+  handleReserveTablePressed = value => {
+    this.props.googleAnalyticsTrackerActions.trackEvent(
+      Map({ category: 'ui-waiter', action: 'TableSetup-buttonPress', optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
+    );
     this.updateTable(value, 'reserved', {
       onSuccess: () => {
+        this.props.googleAnalyticsTrackerActions.trackEvent(
+          Map({
+            category: 'ui-waiter',
+            action: 'TableSetup-navigate',
+            optionalValues: Map({ label: 'Going back - Reserve button', value: 0 }),
+          }),
+        );
         this.props.goBack();
       },
     });
@@ -77,14 +101,15 @@ class TableSetupContainer extends Component {
   render = () => (
     <TableSetupView
       table={this.props.table}
-      onSetupTablePressed={this.onSetupTablePressed}
-      onReserveTablePressed={this.onReserveTablePressed}
-      onResetTablePressed={this.onResetTablePressed}
+      onSetupTablePressed={this.handleSetupTablePressed}
+      onReserveTablePressed={this.handleReserveTablePressed}
+      onResetTablePressed={this.handleResetTablePressed}
     />
   );
 }
 
 TableSetupContainer.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToLanding: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
@@ -101,6 +126,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     navigateToLanding: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
     goBack: () => dispatch(NavigationActions.back()),

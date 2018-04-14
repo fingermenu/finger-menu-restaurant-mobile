@@ -21,10 +21,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textFieldContainer: {
-    paddingLeft: 50,
-    paddingRight: 50,
-  },
   valueContainer: {
     flex: 50,
   },
@@ -37,7 +33,10 @@ export default StyleSheet.create({
     fontWeight: '500',
   },
   tableBadgeContainer: {
-    padding: 25,
+    paddingTop: 25,
+    paddingBottom: 25,
+    paddingLeft: 50,
+    paddingRight: 50,
   },
   tableBadgeWrapper: {
     paddingLeft: 15,

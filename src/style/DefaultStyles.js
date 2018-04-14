@@ -2,6 +2,7 @@
 
 import { Dimensions, Platform } from 'react-native';
 
+const screen = Dimensions.get('window');
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
 const HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
@@ -19,7 +20,6 @@ const DEFAULT_BUTTON_COLOR = '#2891F2';
 const DEFAULT_ICON_COLOR = '#283128';
 const ICON_PRESS_COLOR = 'rgba(100,154,89, .32)';
 const ACTION_BUTTON_COLOR = 'rgba(40,145,242, 1)';
-const screen = Dimensions.get('window');
 
 export const DefaultColor = {
   defaultBannerColor: DEFAULT_BANNER_COLOR,
@@ -74,4 +74,9 @@ export const DefaultStyles = {
     height: 48,
     width: 48,
   },
+};
+
+export const PopupDialogSize = {
+  height: Sizes.screenHeight / 2,
+  width: Sizes.screenWidth - 10,
 };

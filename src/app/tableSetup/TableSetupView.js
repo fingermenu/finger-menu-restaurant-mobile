@@ -15,7 +15,10 @@ import { ActiveTableProp } from '../../framework/applicationState';
 
 const TableSetupView = ({
   t,
-  table: { name, tableState: { key: tableStateKey } },
+  table: {
+    name,
+    tableState: { key: tableStateKey },
+  },
   handleSubmit,
   onSetupTablePressed,
   onReserveTablePressed,
@@ -43,24 +46,20 @@ const TableSetupView = ({
         </View>
       </View>
       <View style={Styles.tableTextContainer}>
-        <View style={Styles.textFieldContainer}>
-          <Field
-            name="name"
-            placeholder={t('customerName.placeholder')}
-            component={TextInput}
-            leftIcon={<Icon name="user" type="simple-line-icon" size={24} />}
-          />
-        </View>
+        <Field
+          name="name"
+          placeholder={t('customerName.placeholder')}
+          component={TextInput}
+          leftIcon={<Icon name="user" type="simple-line-icon" size={24} />}
+        />
       </View>
       <View style={Styles.tableTextContainer}>
-        <View style={Styles.textFieldContainer}>
-          <Field
-            name="notes"
-            placeholder={t('reservationNotes.placeholder')}
-            component={TextInput}
-            leftIcon={<Icon name="note" type="simple-line-icon" size={24} />}
-          />
-        </View>
+        <Field
+          name="notes"
+          placeholder={t('reservationNotes.placeholder')}
+          component={TextInput}
+          leftIcon={<Icon name="note" type="simple-line-icon" size={24} />}
+        />
       </View>
     </View>
     <View style={Styles.buttonRowContainer}>
