@@ -53,8 +53,8 @@ class OrderItemRow extends Component {
   renderChoiceItemPrices = orderChoiceItemPrices =>
     orderChoiceItemPrices.map(orderChoiceItemPrice => (
       <Text key={orderChoiceItemPrice.id} style={Styles.extraOptions}>
-        {orderChoiceItemPrice.choiceItemPrice.choiceItem.name} -{' '}
-        {orderChoiceItemPrice.choiceItemPrice.currentPrice ? '$' + orderChoiceItemPrice.choiceItemPrice.currentPrice.toFixed(2) : ''}
+        {orderChoiceItemPrice.choiceItemPrice.choiceItem.name}
+        {orderChoiceItemPrice.choiceItemPrice.currentPrice ? ' - $' + orderChoiceItemPrice.choiceItemPrice.currentPrice.toFixed(2) : ''}
       </Text>
     ));
 

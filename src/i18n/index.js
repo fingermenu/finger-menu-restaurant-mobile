@@ -66,6 +66,7 @@ i18next.init({
         paid: { label: 'Paid' },
         payNow: { button: 'Pay Now' },
         confirm: { button: 'Confirm' },
+        dietaryOptions: { label: 'Dietary Options' },
       },
     },
     zh: {
@@ -123,6 +124,7 @@ i18next.init({
         paid: { label: '付费' },
         payNow: { button: '现在付款' },
         confirm: { button: '确认' },
+        dietaryOptions: { label: '膳食选择' },
       },
     },
     jp: {
@@ -183,6 +185,7 @@ i18next.init({
         paid: { label: '有料' },
         payNow: { label: '今払う' },
         confirm: { button: '確認' },
+        dietaryOptions: { label: '食事のオプション' },
       },
     },
   },

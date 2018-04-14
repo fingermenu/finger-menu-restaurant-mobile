@@ -58,7 +58,16 @@ class MenuItemContainer extends Component {
   };
 
   handleSubmit = values => {
-    const { activeOrderMenuItemPriceId, servingTimeId, user: { menuItemPrice: { id: menuItemPriceId, menuItem: { id: menuItemId } } } } = this.props;
+    const {
+      activeOrderMenuItemPriceId,
+      servingTimeId,
+      user: {
+        menuItemPrice: {
+          id: menuItemPriceId,
+          menuItem: { id: menuItemId },
+        },
+      },
+    } = this.props;
 
     this.props.applicationStateActions.addOrUpdateItemInActiveOrder(
       Map({
@@ -81,12 +90,15 @@ class MenuItemContainer extends Component {
   };
 
   render = () => {
-    const { activeOrderMenuItemPriceId, user: { menuItemPrice }, order } = this.props;
+    const {
+      activeOrderMenuItemPriceId,
+      user: { dietaryOptions, menuItemPrice },
+    } = this.props;
 
     return (
       <MenuItemView
         menuItemPrice={menuItemPrice}
-        order={order}
+        dietaryOptions={dietaryOptions.edges.map(_ => _.node)}
         isAddingOrder={activeOrderMenuItemPriceId === null}
         onSubmit={this.handleSubmit}
         quantity={this.state.quantity}
