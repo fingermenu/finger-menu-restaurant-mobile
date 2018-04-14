@@ -569,6 +569,7 @@ type SizeTypeEdge {
 input SubmitUserFeedbackInput {
   questionAndAnswers: [QuestionAndAnswerInput!]
   others: String
+  restaurantId: ID
   clientMutationId: String
 }
 
@@ -736,6 +737,7 @@ type UserFeedback implements Node {
   questionAndAnswers: [QuestionAndAnswer!]
   others: String
   submittedAt: String!
+  restaurant: Restaurant
 }
 
 # A connection to a list of items.
