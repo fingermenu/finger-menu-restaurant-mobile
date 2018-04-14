@@ -11,6 +11,7 @@ export default createRefetchContainer(
         id
         table(tableId: $tableIdForTableQuery) {
           id
+          lastOrderCorrelationId
           name
           customerName
           notes
