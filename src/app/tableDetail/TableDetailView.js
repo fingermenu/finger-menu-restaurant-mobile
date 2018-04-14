@@ -406,6 +406,7 @@ class TableDetailView extends Component {
                 value={this.state.discount.toString()}
                 containerStyle={{ width: 100 }}
                 maxLength={3}
+                keyboardType="numeric"
               />
               <ButtonGroup
                 onPress={this.updateIndex}
