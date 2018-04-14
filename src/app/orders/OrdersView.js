@@ -1,5 +1,6 @@
 // @flow
 
+import Immutable from 'immutable';
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -35,29 +36,21 @@ class OrdersView extends Component {
 
   keyExtractor = item => item.id;
 
-  renderInMemoryOrderItem = info => (
-    <OrderItemRow
-      orderItem={info.item}
-      menuItemCurrentPrice={info.item.currentPrice}
-      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-      popupDialog={this.popupDialog}
-      orderItemIsEditable
-      showRemove
-    />
-  );
+  renderOrderItem = info => {
+    const isInMemoryOrder = !!this.props.inMemoryOrderItems.find(item => item.id.localeCompare(info.item.id) === 0);
 
-  renderOrderItem = info => (
-    <OrderItemRow
-      orderItem={info.item}
-      menuItemCurrentPrice={info.item.currentPrice}
-      onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-      onRemoveOrderPressed={this.props.onRemoveOrderPressed}
-      popupDialog={this.popupDialog}
-      orderItemIsEditable={false}
-      showRemove={false}
-    />
-  );
+    return (
+      <OrderItemRow
+        orderItem={info.item}
+        menuItemCurrentPrice={info.item.currentPrice}
+        onViewOrderItemPressed={this.props.onViewOrderItemPressed}
+        onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+        popupDialog={this.popupDialog}
+        orderItemIsEditable={isInMemoryOrder}
+        showRemove={isInMemoryOrder}
+      />
+    );
+  };
 
   renderSeparator = () => <ListItemSeparator />;
 
@@ -113,27 +106,12 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
-        {orders.length > 0 && (
-          <ScrollView>
-            {orders.map(order => (
-              <FlatList
-                key={order.id}
-                data={order.details}
-                renderItem={this.renderOrderItem}
-                keyExtractor={this.keyExtractor}
-                onEndReached={onEndReached}
-                onRefresh={onRefresh}
-                refreshing={isRefreshing}
-                ItemSeparatorComponent={this.renderSeparator}
-              />
-            ))}
-          </ScrollView>
-        )}
-
-        {inMemoryOrderItems.length > 0 ? (
+        {inMemoryOrderItems.length + orders.length > 0 ? (
           <FlatList
-            data={inMemoryOrderItems}
-            renderItem={this.renderInMemoryOrderItem}
+            data={Immutable.fromJS(inMemoryOrderItems)
+              .concat(Immutable.fromJS(orders).flatMap(order => order.get('details')))
+              .toJS()}
+            renderItem={this.renderOrderItem}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}
