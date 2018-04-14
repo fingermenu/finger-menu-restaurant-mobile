@@ -21,8 +21,10 @@ class TableDetailView extends Component {
     isCustomPaymentMode: false,
   };
 
+  getTotal = () => (this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal());
+
   getBalanceToPay = () => {
-    const total = this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal();
+    const total = this.getTotal();
 
     if (this.state.discount > 0) {
       if (this.state.discountType === '$' && this.state.discount < total) {
@@ -79,6 +81,20 @@ class TableDetailView extends Component {
     this.state.discountType === '%'
       ? (this.state.discount ? this.state.discount : '0') + this.state.discountType
       : this.state.discountType + (this.state.discount ? this.state.discount.toFixed(2) : '0.00');
+
+  isDiscountValid = () => {
+    if (this.state.discount >= 0) {
+      if (this.state.discountType === '$' && this.state.discount <= this.getTotal()) {
+        return true;
+      } else if (this.state.discountType === '%' && this.state.discount <= 100) {
+        return true;
+      }
+
+      return false;
+    }
+
+    return false;
+  };
 
   handleResetTableConfirmed = () => {
     this.resetPopupDialog.dismiss();
@@ -301,7 +317,7 @@ class TableDetailView extends Component {
       <View style={Styles.buttonsContainer}>
         <Button
           title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
-          disabled={this.state.selectedOrders.isEmpty()}
+          disabled={this.state.selectedOrders.isEmpty() || !this.isDiscountValid()}
           onPress={this.handlePayCustomPayPressed}
         />
         <Button title={t('cancelPayment.button')} onPress={this.handleCancelCustomPayPressed} />
@@ -316,7 +332,7 @@ class TableDetailView extends Component {
       <View style={Styles.buttonsContainer}>
         <Button
           title={t('fullPayment.button')}
-          disabled={tableState.key === 'paid' || orders.length === 0}
+          disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
           onPress={this.handleSetTablePaidPressed}
         />
         <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
