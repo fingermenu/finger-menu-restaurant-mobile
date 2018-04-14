@@ -126,6 +126,29 @@ input DateRange {
   to: String!
 }
 
+type DietaryOption implements Node {
+  id: ID!
+  tag: Tag
+}
+
+# A connection to a list of items.
+type DietaryOptionTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DietaryOptionTypeEdge]
+}
+
+# An edge in a connection.
+type DietaryOptionTypeEdge {
+  # The item at the end of the edge
+  node: DietaryOption
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 type DocumentTemplate {
   name: String
   template: String!
@@ -266,6 +289,7 @@ type Mutation {
   placeOrder(input: PlaceOrderInput!): PlaceOrderPayload
   updateOrder(input: UpdateOrderInput!): UpdateOrderPayload
   cancelOrder(input: CancelOrderInput!): CancelOrderPayload
+  submitUserFeedback(input: SubmitUserFeedbackInput!): SubmitUserFeedbackPayload
 }
 
 # An object with an ID
@@ -429,6 +453,16 @@ type Query {
   ): Node
 }
 
+type QuestionAndAnswer {
+  question: String
+  answer: String
+}
+
+input QuestionAndAnswerInput {
+  question: String
+  answer: String
+}
+
 type Restaurant implements Node {
   id: ID!
   name: String
@@ -530,6 +564,17 @@ type SizeTypeEdge {
 
   # A cursor for use in pagination
   cursor: String!
+}
+
+input SubmitUserFeedbackInput {
+  questionAndAnswers: [QuestionAndAnswerInput!]
+  others: String
+  clientMutationId: String
+}
+
+type SubmitUserFeedbackPayload {
+  userFeedback: UserFeedbackTypeEdge
+  clientMutationId: String
 }
 
 type Table implements Node {
@@ -680,6 +725,35 @@ type User implements Node {
   orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
   servingTime(servingTimeId: ID!): ServingTime
   servingTimes(after: String, first: Int, before: String, last: Int, servingTimeIds: [ID!], sortOption: String): ServingTimeTypeConnection
+  dietaryOption(dietaryOptionId: ID!): DietaryOption
+  dietaryOptions(after: String, first: Int, before: String, last: Int, dietaryOptionIds: [ID!], sortOption: String): DietaryOptionTypeConnection
+  userFeedback(userFeedbackId: ID!): UserFeedback
+  userFeedbacks(after: String, first: Int, before: String, last: Int, userFeedbackIds: [ID!], others: String, dateRange: DateRange, sortOption: String): UserFeedbackTypeConnection
+}
+
+type UserFeedback implements Node {
+  id: ID!
+  questionAndAnswers: [QuestionAndAnswer!]
+  others: String
+  submittedAt: String!
+}
+
+# A connection to a list of items.
+type UserFeedbackTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [UserFeedbackTypeEdge]
+}
+
+# An edge in a connection.
+type UserFeedbackTypeEdge {
+  # The item at the end of the edge
+  node: UserFeedback
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 type Viewer implements Node {
