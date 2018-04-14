@@ -314,33 +314,29 @@ class TableDetailView extends Component {
     );
   };
 
-  renderOrderItemRow = info => {
-    return (
-      <OrderItemRow
-        orderItem={info.item}
-        menuItem={info.item.menuItemPrice.menuItem}
-        menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-        enableMultiSelection={this.state.isCustomPaymentMode}
-        onOrderSelected={this.handleOrderSelected}
-        isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
-        orderItemIsEditable
-        showRemove={false}
-      />
-    );
-  };
+  renderOrderItemRow = info => (
+    <OrderItemRow
+      orderItem={info.item}
+      menuItem={info.item.menuItemPrice.menuItem}
+      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+      enableMultiSelection={this.state.isCustomPaymentMode}
+      onOrderSelected={this.handleOrderSelected}
+      isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
+      orderItemIsEditable
+      showRemove={false}
+    />
+  );
 
-  renderSelectedPayingItem = info => {
-    return (
-      <OrderItemRow
-        orderItem={info.item}
-        menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-        enableMultiSelection={false}
-        orderItemIsEditable
-        showRemove={false}
-        showImage={false}
-      />
-    );
-  };
+  renderSelectedPayingItem = info => (
+    <OrderItemRow
+      orderItem={info.item}
+      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+      enableMultiSelection={false}
+      orderItemIsEditable
+      showRemove={false}
+      showImage={false}
+    />
+  );
 
   render = () => {
     const {
@@ -372,20 +368,17 @@ class TableDetailView extends Component {
           <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal().toFixed(2)}</Text>
         </View>
         {orders.length > 0 ? (
-          <ScrollView>
-            {orders.map(order => (
-              <FlatList
-                key={order.id}
-                data={order.details}
-                renderItem={this.renderOrderItemRow}
-                keyExtractor={this.keyExtractor}
-                onEndReached={onEndReached}
-                onRefresh={onRefresh}
-                refreshing={isRefreshing}
-                extraData={this.state}
-              />
-            ))}
-          </ScrollView>
+          <FlatList
+            data={Immutable.fromJS(orders)
+              .flatMap(order => order.get('details'))
+              .toJS()}
+            renderItem={this.renderOrderItemRow}
+            keyExtractor={this.keyExtractor}
+            onEndReached={onEndReached}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            extraData={this.state}
+          />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
             <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
