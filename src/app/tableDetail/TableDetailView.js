@@ -15,7 +15,7 @@ import { TableProp } from './PropTypes';
 class TableDetailView extends Component {
   state = {
     selectedDiscountButtonIndex: 0,
-    discount: 0,
+    discount: '',
     discountType: '$',
     selectedOrders: List(),
     isCustomPaymentMode: false,
@@ -25,12 +25,14 @@ class TableDetailView extends Component {
 
   getBalanceToPay = () => {
     const total = this.getTotal();
+    const discount = this.convertStringDiscountValueToDecimal();
+    const { discountType } = this.state;
 
-    if (this.state.discount > 0) {
-      if (this.state.discountType === '$' && this.state.discount < total) {
-        return total - this.state.discount;
-      } else if (this.state.discountType === '%' && this.state.discount < 100) {
-        return total * (100 - this.state.discount) / 100;
+    if (discount > 0) {
+      if (discountType === '$' && discount < total) {
+        return total - discount;
+      } else if (discountType === '%' && discount < 100) {
+        return total * (100 - discount) / 100;
       }
     }
 
@@ -77,16 +79,27 @@ class TableDetailView extends Component {
       0,
     );
 
-  getDiscountDisplayValue = () =>
-    this.state.discountType === '%'
-      ? (this.state.discount ? this.state.discount : '0') + this.state.discountType
-      : this.state.discountType + (this.state.discount ? this.state.discount.toFixed(2) : '0.00');
+  getDiscountDisplayValue = () => {
+    const discount = this.convertStringDiscountValueToDecimal();
+    const { discountType } = this.state;
+
+    return discountType === '%' ? (discount ? discount : '0') + discountType : discountType + (discount ? discount.toFixed(2) : '0.00');
+  };
+
+  convertStringDiscountValueToDecimal = () => {
+    const discount = parseFloat(this.state.discount ? this.state.discount.trim() : '');
+
+    return discount ? discount : 0;
+  };
 
   isDiscountValid = () => {
-    if (this.state.discount >= 0) {
-      if (this.state.discountType === '$' && this.state.discount <= this.getTotal()) {
+    const discount = this.convertStringDiscountValueToDecimal();
+    const { discountType } = this.state;
+
+    if (discount >= 0) {
+      if (discountType === '$' && discount <= this.getTotal()) {
         return true;
-      } else if (this.state.discountType === '%' && this.state.discount <= 100) {
+      } else if (discountType === '%' && discount <= 100) {
         return true;
       }
 
@@ -163,7 +176,7 @@ class TableDetailView extends Component {
   };
 
   updateDiscount = discount => {
-    this.setState({ discount: discount ? parseFloat(discount) : 0.0 });
+    this.setState({ discount });
   };
 
   updateIndex = selectedDiscountButtonIndex => {
@@ -419,9 +432,8 @@ class TableDetailView extends Component {
               <Input
                 placeholder={t('discount.placeholder')}
                 onChangeText={this.updateDiscount}
-                value={this.state.discount.toString()}
+                value={this.state.discount}
                 containerStyle={{ width: 100 }}
-                maxLength={3}
                 keyboardType="numeric"
               />
               <ButtonGroup
