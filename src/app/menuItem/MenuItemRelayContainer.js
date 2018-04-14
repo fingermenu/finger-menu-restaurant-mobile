@@ -9,6 +9,15 @@ export default createRefetchContainer(
     user: graphql`
       fragment MenuItemRelayContainer_user on User {
         id
+        dietaryOptions(first: 1000, after: null) {
+          edges {
+            node {
+              tag {
+                id
+              }
+            }
+          }
+        }
         menuItemPrice(menuItemPriceId: $menuItemPriceId) {
           id
           currentPrice
@@ -26,6 +35,9 @@ export default createRefetchContainer(
               description
               id
               name
+            }
+            tags {
+              id
             }
           }
         }
