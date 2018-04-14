@@ -83,4 +83,10 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  notesContainer: {
+    marginBottom: 30,
+  },
+  placeOrderContainer: {
+    marginBottom: 30,
+  },
 });

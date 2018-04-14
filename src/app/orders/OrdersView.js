@@ -125,10 +125,14 @@ class OrdersView extends Component {
             </ScrollView>
           )
         )}
-        <Input placeholder={t('notes.placeholder')} value={notes} onChangeText={onNotesChanged} />
+        <View style={Styles.notesContainer}>
+          <Input placeholder={t('notes.placeholder')} value={notes} onChangeText={onNotesChanged} />
+        </View>
         <MenuActionButtonContainer menus={menus} />
         {inMemoryOrderItems.length > 0 && (
-          <Button title={t('placeOrder.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleConfirmOrderPressed} />
+          <View style={Styles.placeOrderContainer}>
+            <Button title={t('placeOrder.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleConfirmOrderPressed} />
+          </View>
         )}
       </View>
     );
