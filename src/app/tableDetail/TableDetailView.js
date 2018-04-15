@@ -26,17 +26,21 @@ class TableDetailView extends Component {
   getBalanceToPay = () => {
     const total = this.getTotal();
     const discount = this.convertStringDiscountValueToDecimal();
-    const { discountType } = this.state;
 
-    if (discount > 0) {
-      if (discountType === '$' && discount < total) {
-        return total - discount;
-      } else if (discountType === '%' && discount < 100) {
-        return total * (100 - discount) / 100;
-      }
+    if (!discount) {
+      return total;
     }
 
-    return total;
+    switch (this.state.discountType) {
+    case '$':
+      return discount <= total ? total - discount : total;
+
+    case '%':
+      return discount <= 100 ? total * (100 - discount) / 100 : total;
+
+    default:
+      return total;
+    }
   };
 
   getCalculatedOrderItemsTotal = orderItems =>
@@ -96,17 +100,20 @@ class TableDetailView extends Component {
     const discount = this.convertStringDiscountValueToDecimal();
     const { discountType } = this.state;
 
-    if (discount >= 0) {
-      if (discountType === '$' && discount <= this.getTotal()) {
-        return true;
-      } else if (discountType === '%' && discount <= 100) {
-        return true;
-      }
-
+    if (!discount) {
       return false;
     }
 
-    return false;
+    switch (discountType) {
+    case '$':
+      return discount <= this.getTotal();
+
+    case '%':
+      return discount <= 100;
+
+    default:
+      return false;
+    }
   };
 
   handleResetTableConfirmed = () => {
