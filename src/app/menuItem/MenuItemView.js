@@ -61,7 +61,7 @@ const MenuItemView = ({
             <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
           </View>
         )}
-        {choiceItemPrices.length > 0 && (
+        {otherChoiceItemPrices.length > 0 && (
           <View style={Styles.optionsContainer}>
             <View style={Styles.choiceItemSectionHeader}>
               <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
