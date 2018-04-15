@@ -76,7 +76,20 @@ export const DefaultStyles = {
   },
 };
 
-export const PopupDialogSize = {
-  height: Sizes.screenHeight / 2,
-  width: Sizes.screenWidth - 10,
+export const getScreenSizes = () => {
+  const screen = Dimensions.get('window');
+
+  return {
+    width: screen.width,
+    height: screen.height,
+  };
+};
+
+export const getPopupDialogSizes = () => {
+  const screenSizes = getScreenSizes();
+
+  return {
+    height: screenSizes.screenHeight / 2,
+    width: screenSizes.screenWidth - 10,
+  };
 };

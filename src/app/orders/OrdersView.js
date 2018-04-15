@@ -10,7 +10,7 @@ import { translate } from 'react-i18next';
 import OrderItemRow from './OrderItemRow';
 import Styles from './Styles';
 import { ListItemSeparator } from '../../components/list';
-import { DefaultColor, DefaultStyles, PopupDialogSize } from '../../style';
+import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { MenuActionButtonContainer } from '../../components/menuActionButton';
 import { MenusProp, OrderItemDetailsProp } from './PropTypes';
 
@@ -72,12 +72,13 @@ class OrdersView extends Component {
       menus,
       onNotesChanged,
     } = this.props;
+    const popupDialogSize = getPopupDialogSizes();
 
     return (
       <View style={Styles.container}>
         <PopupDialog
-          width={PopupDialogSize.width}
-          height={PopupDialogSize.height}
+          width={popupDialogSize.width}
+          height={popupDialogSize.height}
           dialogTitle={<DialogTitle title={t('placeYourOrder.label')} />}
           dialogAnimation={slideAnimation}
           ref={this.setConfirmOrderPopupDialogRef}

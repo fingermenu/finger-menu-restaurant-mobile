@@ -9,7 +9,7 @@ import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dia
 import { translate } from 'react-i18next';
 import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
-import { DefaultColor, DefaultStyles, PopupDialogSize } from '../../style';
+import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
@@ -203,11 +203,12 @@ class TableDetailView extends Component {
 
   renderCustomPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
+    const popupDialogSize = getPopupDialogSizes();
 
     return (
       <PopupDialog
-        width={PopupDialogSize.width}
-        height={PopupDialogSize.height}
+        width={popupDialogSize.width}
+        height={popupDialogSize.height}
         dialogTitle={<DialogTitle title={t('customPayment.label') + ' ' + tableName} />}
         dialogAnimation={slideAnimation}
         ref={this.setCustomPaidPopupDialogRef}
@@ -256,11 +257,12 @@ class TableDetailView extends Component {
 
   renderResetTablePopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
+    const popupDialogSize = getPopupDialogSizes();
 
     return (
       <PopupDialog
-        width={PopupDialogSize.width}
-        height={PopupDialogSize.height}
+        width={popupDialogSize.width}
+        height={popupDialogSize.height}
         dialogTitle={<DialogTitle title={t('resetTable.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setResetPopupDialogRef}
@@ -290,11 +292,12 @@ class TableDetailView extends Component {
 
   renderFullPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
+    const popupDialogSize = getPopupDialogSizes();
 
     return (
       <PopupDialog
-        width={PopupDialogSize.width}
-        height={PopupDialogSize.height}
+        width={popupDialogSize.width}
+        height={popupDialogSize.height}
         dialogTitle={<DialogTitle title={t('fullPayment.label')} />}
         dialogAnimation={slideAnimation}
         ref={this.setPaidPopupDialogRef}
