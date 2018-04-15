@@ -13,6 +13,8 @@ import { DefaultColor, DefaultStyles, PopupDialogSize } from '../../style';
 import { TableProp } from './PropTypes';
 
 class TableDetailView extends Component {
+  static isDecimal = strValue => !isNaN(parseFloat(strValue)) && isFinite(strValue);
+
   state = {
     selectedDiscountButtonIndex: 0,
     discount: '',
@@ -26,10 +28,6 @@ class TableDetailView extends Component {
   getBalanceToPay = () => {
     const total = this.getTotal();
     const discount = this.convertStringDiscountValueToDecimal();
-
-    if (!discount) {
-      return total;
-    }
 
     switch (this.state.discountType) {
     case '$':
@@ -91,18 +89,17 @@ class TableDetailView extends Component {
   };
 
   convertStringDiscountValueToDecimal = () => {
-    const discount = parseFloat(this.state.discount ? this.state.discount.trim() : '');
+    const discountStr = this.state.discount ? this.state.discount.trim() : '';
+    if (!TableDetailView.isDecimal(discountStr)) {
+      return 0;
+    }
 
-    return discount ? discount : 0;
+    return parseFloat(discountStr);
   };
 
   isDiscountValid = () => {
     const discount = this.convertStringDiscountValueToDecimal();
     const { discountType } = this.state;
-
-    if (!discount) {
-      return false;
-    }
 
     switch (discountType) {
     case '$':
@@ -182,12 +179,18 @@ class TableDetailView extends Component {
     }
   };
 
-  updateDiscount = discount => {
-    if (!parseFloat(discount)) {
-      return;
-    }
+  handleDiscountValueChanged = discount => {
+    const discountStr = discount ? discount.trim() : '';
 
-    this.setState({ discount });
+    if (!discountStr) {
+      this.setState({ discount: '' });
+    } else {
+      if (!TableDetailView.isDecimal(discount)) {
+        return;
+      }
+
+      this.setState({ discount });
+    }
   };
 
   updateIndex = selectedDiscountButtonIndex => {
@@ -442,7 +445,7 @@ class TableDetailView extends Component {
             <View style={DefaultStyles.rowContainer}>
               <Input
                 placeholder={t('discount.placeholder')}
-                onChangeText={this.updateDiscount}
+                onChangeText={this.handleDiscountValueChanged}
                 value={this.state.discount}
                 containerStyle={{ width: 100 }}
                 keyboardType="numeric"
