@@ -48,6 +48,7 @@ class OrdersView extends Component {
         popupDialog={this.popupDialog}
         orderItemIsEditable={isInMemoryOrder}
         showRemove={isInMemoryOrder}
+        backgroundColor={isInMemoryOrder ? null : '#C7C8C9'}
       />
     );
   };

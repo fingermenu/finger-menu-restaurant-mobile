@@ -59,7 +59,7 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
-    const { t, orderItemIsEditable, orderItem, isSelected, showImage, showRemove, enableMultiSelection } = this.props;
+    const { t, orderItemIsEditable, orderItem, isSelected, showImage, showRemove, enableMultiSelection, backgroundColor } = this.props;
     const {
       orderChoiceItemPrices,
       notes,
@@ -81,7 +81,7 @@ class OrderItemRow extends Component {
 
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
-        <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer]}>
+        <View style={[DefaultStyles.rowContainer, Styles.orderRowContainer, { backgroundColor }]}>
           {showImage && imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
           {enableMultiSelection &&
             !paid && (
@@ -141,6 +141,7 @@ OrderItemRow.propTypes = {
   showRemove: PropTypes.bool.isRequired,
   orderItemIsEditable: PropTypes.bool.isRequired,
   showImage: PropTypes.bool,
+  backgroundColor: PropTypes.string,
 };
 
 OrderItemRow.defaultProps = {
@@ -150,6 +151,7 @@ OrderItemRow.defaultProps = {
   onRemoveOrderPressed: null,
   onOrderSelected: null,
   showImage: true,
+  backgroundColor: null,
 };
 
 export default translate()(OrderItemRow);
