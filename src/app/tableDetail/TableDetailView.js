@@ -183,6 +183,10 @@ class TableDetailView extends Component {
   };
 
   updateDiscount = discount => {
+    if (!parseFloat(discount)) {
+      return;
+    }
+
     this.setState({ discount });
   };
 
