@@ -1,7 +1,6 @@
 // @flow
 
 import * as userAccessActions from '@microbusiness/common-react/src/userAccess/Actions';
-import { UserAccessStatus } from '@microbusiness/common-react';
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
@@ -11,20 +10,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
-import RNRestart from 'react-native-restart';
 import PinView from './PinView';
 
 class PinContainer extends Component {
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.signOutStatus === UserAccessStatus.SUCCEEDED) {
-      RNRestart.Restart();
-    }
-
-    return null;
-  };
-
-  state = {};
-
   componentDidMount = () => {
     const {
       restaurant: { id, pin, configurations },
@@ -63,13 +51,11 @@ PinContainer.propTypes = {
   userAccessActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTables: PropTypes.func.isRequired,
-  signOutStatus: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state, props) {
   return {
     restaurant: props.user.restaurants.edges[0].node,
-    signOutStatus: state.userAccess.get('signOutStatus'),
   };
 }
 
