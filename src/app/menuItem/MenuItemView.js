@@ -31,75 +31,73 @@ const MenuItemView = ({
   choiceItemPricesOfTypeSize,
   otherChoiceItemPrices,
   onQuantityChanged,
-}) => {
-  return (
-    <View style={Styles.container}>
-      <ScrollView>
-        <View style={Styles.imageContainer}>
-          {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.stretch} source={{ uri: imageUrl }} /> : <View />}
-        </View>
-        <View style={Styles.descriptionContainer}>
-          <View style={Styles.nameContainer}>
-            <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
-            <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>
-          </View>
-          <Text style={Styles.description}>{description}</Text>
-        </View>
-        <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
-        {choiceItemPricesOfTypeSize.length > 0 && (
-          <View style={Styles.optionsContainer}>
-            <View style={Styles.choiceItemSectionHeader}>
-              <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
-              <ListItemSeparator />
-            </View>
-            <Field
-              radios={choiceItemPricesOfTypeSize.map(choiceItemPrice => ({
-                id: choiceItemPrice.id,
-                label: choiceItemPrice.choiceItem.name,
-              }))}
-              name="sizes"
-              component={RadioSet}
-            />
-          </View>
-        )}
-        {choiceItemPricesOfTypeDietaryOption.length > 0 && (
-          <View style={Styles.optionsContainer}>
-            <View style={Styles.choiceItemSectionHeader}>
-              <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
-              <ListItemSeparator />
-            </View>
-            <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
-          </View>
-        )}
-        {otherChoiceItemPrices.length > 0 && (
-          <View style={Styles.optionsContainer}>
-            <View style={Styles.choiceItemSectionHeader}>
-              <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
-              <ListItemSeparator />
-            </View>
-            <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />
-          </View>
-        )}
-      </ScrollView>
-      <View>
-        <View style={Styles.quantityContainer}>
-          <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
-          <QuantityControl value={quantity} onChange={onQuantityChanged} />
-        </View>
-
-        {isAddingOrder ? (
-          <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-            <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
-          </TouchableItem>
-        ) : (
-          <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-            <Text style={Styles.text}>{t('updateOrder.button')}</Text>
-          </TouchableItem>
-        )}
+}) => (
+  <View style={Styles.container}>
+    <ScrollView>
+      <View style={Styles.imageContainer}>
+        {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.stretch} source={{ uri: imageUrl }} /> : <View />}
       </View>
+      <View style={Styles.descriptionContainer}>
+        <View style={Styles.nameContainer}>
+          <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
+          <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>
+        </View>
+        <Text style={Styles.description}>{description}</Text>
+      </View>
+      <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
+      {choiceItemPricesOfTypeSize.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
+            <ListItemSeparator />
+          </View>
+          <Field
+            radios={choiceItemPricesOfTypeSize.map(choiceItemPrice => ({
+              id: choiceItemPrice.id,
+              label: choiceItemPrice.choiceItem.name,
+            }))}
+            name="sizes"
+            component={RadioSet}
+          />
+        </View>
+      )}
+      {choiceItemPricesOfTypeDietaryOption.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
+            <ListItemSeparator />
+          </View>
+          <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
+        </View>
+      )}
+      {otherChoiceItemPrices.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
+            <ListItemSeparator />
+          </View>
+          <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />
+        </View>
+      )}
+    </ScrollView>
+    <View>
+      <View style={Styles.quantityContainer}>
+        <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
+        <QuantityControl value={quantity} onChange={onQuantityChanged} />
+      </View>
+
+      {isAddingOrder ? (
+        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
+          <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
+        </TouchableItem>
+      ) : (
+        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
+          <Text style={Styles.text}>{t('updateOrder.button')}</Text>
+        </TouchableItem>
+      )}
     </View>
-  );
-};
+  </View>
+);
 
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
