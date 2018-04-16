@@ -13,8 +13,8 @@ class RadioButton extends Component {
     const { checked, checkedColor, label, ...rest } = this.props;
 
     return (
-      <View style={Styles.radioContainer}>
-        <View>
+      <View style={Styles.radioRowContainer}>
+        <View style={Styles.radioContainer}>
           <CheckBox
             {...rest}
             checked={checked}
@@ -26,7 +26,7 @@ class RadioButton extends Component {
             checkedColor={checkedColor}
           />
         </View>
-        <View>
+        <View style={Styles.optionContainer}>
           <Text style={Styles.optionName}>{label}</Text>
         </View>
       </View>
