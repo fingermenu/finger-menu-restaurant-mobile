@@ -1,13 +1,13 @@
 // @flow
 
-import React, { Component } from 'react'; // eslint-disable-line import/no-extraneous-dependencies
-import { CheckBox, Text } from 'react-native-elements'; // eslint-disable-line import/no-extraneous-dependencies
+import React, { Component } from 'react';
+import { CheckBox, Text } from 'react-native-elements';
 import { View } from 'react-native';
-import PropTypes from 'prop-types'; // eslint-disable-line import/no-extraneous-dependencies
+import PropTypes from 'prop-types';
 import Styles, { DefaultColors } from './Styles';
 
 class RadioButton extends Component {
-  onChange = () => this.props.onChange(this.props.value);
+  onChange = () => this.props.onChange(this.props.id);
 
   render = () => {
     const { checked, checkedColor, label, ...rest } = this.props;

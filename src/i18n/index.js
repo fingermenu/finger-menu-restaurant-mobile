@@ -128,7 +128,7 @@ i18next.init({
         payAndResetTableNow: { button: '现在支付＆重置表' },
         confirm: { button: '确认' },
         dietaryOptions: { label: '膳食选择' },
-        sizes: { label: 'Sizes' },
+        sizes: { label: '尺寸' },
       },
     },
     jp: {
@@ -191,7 +191,7 @@ i18next.init({
         payAndResetTableNow: { button: 'お支払い＆リセットテーブル今すぐ' },
         confirm: { button: '確認' },
         dietaryOptions: { label: '食事のオプション' },
-        sizes: { label: 'Sizes' },
+        sizes: { label: 'サイズ' },
       },
     },
   },

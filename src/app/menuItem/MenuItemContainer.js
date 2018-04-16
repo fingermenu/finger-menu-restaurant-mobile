@@ -36,7 +36,7 @@ class MenuItemContainer extends Component {
 
   getSelectedChoiceItemPrices = values => {
     return Immutable.fromJS(this.props.user.menuItemPrice.choiceItemPrices)
-      .filter(choiceItemPrice => values[choiceItemPrice.get('id')])
+      .filter(choiceItemPrice => values[choiceItemPrice.get('id')] || values.sizes[choiceItemPrice.get('id')])
       .map(choiceItemPrice =>
         Map({
           id: cuid(),

@@ -1,25 +1,40 @@
 // @flow
 
-import React, { Component } from 'react'; // eslint-disable-line import/no-extraneous-dependencies
+import Immutable from 'immutable';
+import React, { Component } from 'react';
 import { View } from 'react-native';
 import RadioButton from './RadioButton';
 
 class RadioSet extends Component {
-  render() {
+  handleChange = id => {
+    const {
+      input: { value, onChange },
+    } = this.props;
+
+    onChange(
+      Immutable.fromJS(value)
+        .mapEntries(([key]) => [key, false])
+        .set(id, true)
+        .toJS(),
+    );
+  };
+
+  render = () => {
     const {
       radios,
-      input: { value, onChange },
+      input: { value },
       containerStyle,
       ...rest
     } = this.props;
+
     return (
       <View style={containerStyle}>
         {radios.map(radio => (
-          <RadioButton key={radio.value} onChange={onChange} checked={radio.value === value} {...rest} label={radio.label} value={radio.value} />
+          <RadioButton key={radio.id} onChange={this.handleChange} checked={value[radio.id]} label={radio.label} id={radio.id} {...rest} />
         ))}
       </View>
     );
-  }
+  };
 }
 
 export default RadioSet;
