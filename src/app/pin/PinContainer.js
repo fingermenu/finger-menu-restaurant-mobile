@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import PinView from './PinView';
+import { eventPrefix } from '../../framework/AnalyticHelper';
 
 class PinContainer extends Component {
   componentDidMount = () => {
@@ -31,7 +32,7 @@ class PinContainer extends Component {
 
   handlePinMatched = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: 'Pin-navigate', optionalValues: Map({ label: 'Tables', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: `${eventPrefix}-Pin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
     this.props.navigateToTables();
   };

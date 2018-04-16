@@ -14,7 +14,7 @@ import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
 import { ActiveTableProp } from '../../framework/applicationState';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { screenNamePrefix } from '../../framework/AnalyticHelper';
+import { eventPrefix, screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class TableSetupContainer extends Component {
   static navigationOptions = {
@@ -31,14 +31,14 @@ class TableSetupContainer extends Component {
 
   handleResetTablePressed = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: 'TableSetup-buttonPress', optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: `${eventPrefix}-TableSetup-buttonPress`, optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
     );
     this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
             category: 'ui-waiter',
-            action: 'TableSetup-navigate',
+            action: `${eventPrefix}-TableSetup-navigate`,
             optionalValues: Map({ label: 'Going back - Reset Table', value: 0 }),
           }),
         );
@@ -60,7 +60,7 @@ class TableSetupContainer extends Component {
         );
         this.props.applicationStateActions.clearActiveOrder();
         this.props.googleAnalyticsTrackerActions.trackEvent(
-          Map({ category: 'ui-waiter', action: 'TableSetup-navigate', optionalValues: Map({ label: 'Landing', value: 0 }) }),
+          Map({ category: 'ui-waiter', action: `${eventPrefix}-TableSetup-navigate`, optionalValues: Map({ label: 'Landing', value: 0 }) }),
         );
         this.props.navigateToLanding();
       },
@@ -69,14 +69,14 @@ class TableSetupContainer extends Component {
 
   handleReserveTablePressed = value => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: 'TableSetup-buttonPress', optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: `${eventPrefix}-TableSetup-buttonPress`, optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
     );
     this.updateTable(value, 'reserved', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
             category: 'ui-waiter',
-            action: 'TableSetup-navigate',
+            action: `${eventPrefix}-TableSetup-navigate`,
             optionalValues: Map({ label: 'Going back - Reserve button', value: 0 }),
           }),
         );

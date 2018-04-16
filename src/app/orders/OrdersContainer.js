@@ -14,6 +14,7 @@ import { PlaceOrder } from '../../framework/relay/mutations';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveCustomerProp } from '../../framework/applicationState';
+import { eventPrefix } from '../../framework/AnalyticHelper';
 
 const endingDots = '.';
 const maxLineLength = 48;
@@ -219,7 +220,7 @@ class OrdersContainer extends Component {
           this.printOrder(response);
           this.props.applicationStateActions.clearActiveOrder();
           this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId }));
-          this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: 'Orders-orderPlaced' }));
+          this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: `${eventPrefix}-Orders-orderPlaced` }));
           navigateToOrderConfirmed();
         },
       },
