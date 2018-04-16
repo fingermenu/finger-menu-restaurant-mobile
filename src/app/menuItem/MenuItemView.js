@@ -1,5 +1,6 @@
 // @flow
 
+import { Common } from '@microbusiness/common-javascript';
 import { TextInput } from '@microbusiness/redux-form-react-native-elements';
 import { ListItemSeparator, TouchableItem } from '@microbusiness/common-react-native';
 import React from 'react';
@@ -30,18 +31,17 @@ const MenuItemView = ({
   sizes,
   onQuantityChanged,
 }) => {
+  const typeFilterPredicate = (choiceItemPrice, items) =>
+    !!choiceItemPrice.tags.find(tag => !!items.find(item => item.tag.id.localeCompare(tag.id) === 0));
+  const sortFunc = (choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex);
   const choiceItemPricesOfTypeDietaryOption = choiceItemPrices
-    .filter(
-      choiceItemPrice => !!choiceItemPrice.tags.find(tag => !!dietaryOptions.find(dietaryOption => dietaryOption.tag.id.localeCompare(tag.id) === 0)),
-    )
-    .sort((choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex));
-  const choiceItemPricesOfTypeSize = choiceItemPrices
-    .filter(choiceItemPrice => !!choiceItemPrice.tags.find(tag => !!sizes.find(size => size.tag.id.localeCompare(tag.id) === 0)))
-    .sort((choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex));
+    .filter(choiceItemPrice => typeFilterPredicate(choiceItemPrice, dietaryOptions))
+    .sort(sortFunc);
+  const choiceItemPricesOfTypeSize = choiceItemPrices.filter(choiceItemPrice => typeFilterPredicate(choiceItemPrice, sizes)).sort(sortFunc);
   const otherChoiceItemPrices = choiceItemPrices
-    .filter(choiceItemPrice => choiceItemPricesOfTypeDietaryOption.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0) === undefined)
-    .filter(choiceItemPrice => choiceItemPricesOfTypeSize.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0) === undefined)
-    .sort((choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex));
+    .filter(choiceItemPrice => Common.isUndefined(choiceItemPricesOfTypeDietaryOption.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0)))
+    .filter(choiceItemPrice => Common.isUndefined(choiceItemPricesOfTypeSize.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0)))
+    .sort(sortFunc);
 
   return (
     <View style={Styles.container}>

@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.4.67",
+  "version": "0.4.68",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -26,6 +26,7 @@
     "codepush:android": "code-push release-react fingermenu-restaurant-android android && code-push promote fingermenu-restaurant-android Staging Production"
   },
   "dependencies": {
+    "@microbusiness/common-javascript": "^1.2.1",
     "@microbusiness/common-react": "^1.2.1",
     "@microbusiness/common-react-native": "^1.5.2",
     "@microbusiness/google-analytics-react-native": "0.1.0",
