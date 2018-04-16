@@ -69,14 +69,14 @@ class TablesContainer extends Component {
 
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.googleAnalyticsTrackerActions.trackEvent(
-        Map({ category: 'ui-waiter', action: `${eventPrefix}-Tables-navigate`, optionalValues: Map({ label: 'Table Setup', value: 0 }) }),
+        Map({ category: 'ui-waiter', action: `${eventPrefix}Tables-navigate`, optionalValues: Map({ label: 'Table Setup', value: 0 }) }),
       );
       this.props.navigateToTableSetup();
     } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
       this.setActiveCustomer(table);
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.googleAnalyticsTrackerActions.trackEvent(
-        Map({ category: 'ui-waiter', action: `${eventPrefix}-Tables-navigate`, optionalValues: Map({ label: 'Table Detail', value: 0 }) }),
+        Map({ category: 'ui-waiter', action: `${eventPrefix}Tables-navigate`, optionalValues: Map({ label: 'Table Detail', value: 0 }) }),
       );
       this.props.navigateToTableDetail(table);
     }

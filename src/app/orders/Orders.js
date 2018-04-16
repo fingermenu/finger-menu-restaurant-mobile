@@ -23,7 +23,7 @@ class Orders extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Orders` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Orders` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

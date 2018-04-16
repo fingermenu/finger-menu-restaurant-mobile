@@ -14,7 +14,7 @@ import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Menus extends Component {
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Menus` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menus` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

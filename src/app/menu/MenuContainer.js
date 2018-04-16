@@ -16,7 +16,7 @@ import { screenNamePrefix } from '../../framework/AnalyticHelper';
 class MenuContainer extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Menu` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
   onViewMenuItemPressed = id => {

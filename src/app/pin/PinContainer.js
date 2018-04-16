@@ -32,7 +32,7 @@ class PinContainer extends Component {
 
   handlePinMatched = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
-      Map({ category: 'ui-waiter', action: `${eventPrefix}-Pin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
+      Map({ category: 'ui-waiter', action: `${eventPrefix}Pin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
     this.props.navigateToTables();
   };

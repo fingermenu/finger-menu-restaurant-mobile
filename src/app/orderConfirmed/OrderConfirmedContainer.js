@@ -16,7 +16,7 @@ class OrderConfirmedContainer extends Component {
   });
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-OrderConfirmed` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}OrderConfirmed` }));
   };
 
   render = () => <OrderConfirmedView onFingerMenuPressed={this.props.navigateToMenu} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;

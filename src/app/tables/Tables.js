@@ -28,7 +28,7 @@ class Tables extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveTable();
     this.props.applicationStateActions.clearActiveCustomer();
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Tables` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Tables` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

@@ -45,7 +45,7 @@ class Pin extends Component {
 
     this.props.i18n.changeLanguage('en_NZ');
     this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Pin` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Pin` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

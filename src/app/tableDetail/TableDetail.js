@@ -23,7 +23,7 @@ class TableDetail extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-TableDetail` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableDetail` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

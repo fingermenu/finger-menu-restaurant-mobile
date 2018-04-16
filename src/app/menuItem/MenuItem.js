@@ -23,7 +23,7 @@ class MenuItem extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-MenuItem` }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}MenuItem` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
