@@ -16,6 +16,7 @@ import Styles from './Styles';
 import { ChoiceItemPrices } from '../../components/choiceItems';
 import { QuantityControl } from '../../components/quantityControl';
 import { DefaultStyles } from '../../style';
+import RadioSet from '../../components/radioSet/RadioSet';
 
 const MenuItemView = ({
   t,
@@ -64,6 +65,22 @@ const MenuItemView = ({
               <ListItemSeparator />
             </View>
             <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
+          </View>
+        )}
+        {choiceItemPricesOfTypeSize.length > 0 && (
+          <View style={Styles.optionsContainer}>
+            <View style={Styles.choiceItemSectionHeader}>
+              <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
+              <ListItemSeparator />
+            </View>
+            <Field
+              radios={choiceItemPricesOfTypeSize.map(choiceItemPrice => ({
+                label: choiceItemPrice.choiceItem.name,
+                value: choiceItemPrice.id,
+              }))}
+              name="sizes"
+              component={RadioSet}
+            />
           </View>
         )}
         {otherChoiceItemPrices.length > 0 && (
@@ -118,6 +135,7 @@ function mapStateToProps(state) {
     });
   }
 
+  initialValues['sizes'] = 'g';
   // Set the initial values of orderChoiceItems when viewing an existing order.
   return {
     initialValues,
