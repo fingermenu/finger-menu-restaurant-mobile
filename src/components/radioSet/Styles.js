@@ -17,12 +17,17 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 0,
   },
-  radioContainer: {
+  radioRowContainer: {
     flexDirection: 'row',
     padding: 5,
   },
+  radioContainer: {
+    flex: 10,
+  },
+  optionContainer: {
+    flex: 100,
+  },
   optionName: {
     fontSize: 26,
-    paddingLeft: 10,
   },
 });

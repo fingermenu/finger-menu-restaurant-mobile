@@ -135,7 +135,6 @@ function mapStateToProps(state) {
     });
   }
 
-  initialValues['sizes'] = 'g';
   // Set the initial values of orderChoiceItems when viewing an existing order.
   return {
     initialValues,
