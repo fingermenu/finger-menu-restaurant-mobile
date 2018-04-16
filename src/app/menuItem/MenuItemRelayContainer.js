@@ -18,6 +18,15 @@ export default createRefetchContainer(
             }
           }
         }
+        sizes(first: 1000, after: null) {
+          edges {
+            node {
+              tag {
+                id
+              }
+            }
+          }
+        }
         menuItemPrice(menuItemPriceId: $menuItemPriceId) {
           id
           currentPrice

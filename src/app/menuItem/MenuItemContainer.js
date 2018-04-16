@@ -92,13 +92,14 @@ class MenuItemContainer extends Component {
   render = () => {
     const {
       activeOrderMenuItemPriceId,
-      user: { dietaryOptions, menuItemPrice },
+      user: { dietaryOptions, sizes, menuItemPrice },
     } = this.props;
 
     return (
       <MenuItemView
         menuItemPrice={menuItemPrice}
         dietaryOptions={dietaryOptions.edges.map(_ => _.node)}
+        sizes={sizes.edges.map(_ => _.node)}
         isAddingOrder={activeOrderMenuItemPriceId === null}
         onSubmit={this.handleSubmit}
         quantity={this.state.quantity}
