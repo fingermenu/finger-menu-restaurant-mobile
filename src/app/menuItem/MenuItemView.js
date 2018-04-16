@@ -108,7 +108,7 @@ MenuItemView.propTypes = {
 
 function mapStateToProps(state, { menuItemPrice: { choiceItemPrices }, dietaryOptions, sizes }) {
   const typeFilterPredicate = (choiceItemPrice, items) =>
-    !!choiceItemPrice.tags.find(tag => !!items.find(item => item.tag.id.localeCompare(tag.id) === 0));
+    !!choiceItemPrice.tags.find(tag => !!items.find(item => item.tag && item.tag.id.localeCompare(tag.id) === 0));
   const sortFunc = (choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex);
   const choiceItemPricesOfTypeDietaryOption = choiceItemPrices
     .filter(choiceItemPrice => typeFilterPredicate(choiceItemPrice, dietaryOptions))
