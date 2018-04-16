@@ -13,6 +13,7 @@ export default createRefetchContainer(
           menus {
             id
             name
+            sortOrderIndex
           }
         }
         table(tableId: $tableId) {
