@@ -1,14 +1,22 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { environment } from '../../framework/relay';
 import MenusRelayContainer from './MenusRelayContainer';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Menus extends Component {
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Menus` }));
+  };
+
   renderRelayComponent = ({ error, props, retry }) => {
     if (error) {
       return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
@@ -42,6 +50,7 @@ class Menus extends Component {
 }
 
 Menus.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
 };
 
@@ -51,4 +60,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Menus);
+function mapDispatchToProps(dispatch) {
+  return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menus);

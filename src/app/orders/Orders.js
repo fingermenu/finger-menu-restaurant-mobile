@@ -1,13 +1,17 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { graphql, QueryRenderer } from 'react-relay';
 import OrdersRelayContainer from './OrdersRelayContainer';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Orders extends Component {
   static navigationOptions = {
@@ -16,6 +20,10 @@ class Orders extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
+  };
+
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Orders` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -57,6 +65,7 @@ class Orders extends Component {
 }
 
 Orders.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
   menuItemPriceIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   choiceItemPriceIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -86,4 +95,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Orders);
+function mapDispatchToProps(dispatch) {
+  return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

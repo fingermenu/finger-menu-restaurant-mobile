@@ -1,5 +1,6 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -10,10 +11,12 @@ import int from 'int';
 import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { MenuTagsProp, ServingTimesProp } from './PropTypes';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class MenuContainer extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Menu` }));
   };
 
   onViewMenuItemPressed = id => {
@@ -52,6 +55,7 @@ class MenuContainer extends Component {
 }
 
 MenuContainer.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isRefreshing: PropTypes.bool.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
@@ -82,6 +86,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
     applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
     navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
     navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),

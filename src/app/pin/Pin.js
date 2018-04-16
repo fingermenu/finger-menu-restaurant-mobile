@@ -15,6 +15,7 @@ import PinRelayContainer from './PinRelayContainer';
 import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveRestaurantProp } from '../../framework/applicationState';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -22,7 +23,9 @@ class Pin extends Component {
   });
 
   static getDerivedStateFromProps = nextProps => {
-    const { restaurant: { id, pin, configurations } } = nextProps;
+    const {
+      restaurant: { id, pin, configurations },
+    } = nextProps;
 
     if (id && pin && configurations && id !== nextProps.activeRestaurant.id) {
       nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
@@ -42,7 +45,7 @@ class Pin extends Component {
 
     this.props.i18n.changeLanguage('en_NZ');
     this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: 'Pin' }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Pin` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

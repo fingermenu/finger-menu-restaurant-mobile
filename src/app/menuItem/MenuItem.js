@@ -1,13 +1,17 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { graphql, QueryRenderer } from 'react-relay';
 import MenuItemRelayContainer from './MenuItemRelayContainer';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class MenuItem extends Component {
   static navigationOptions = {
@@ -16,6 +20,10 @@ class MenuItem extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
+  };
+
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-MenuItem` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -51,6 +59,7 @@ class MenuItem extends Component {
 }
 
 MenuItem.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   menuItemPriceId: PropTypes.string.isRequired,
 };
 
@@ -63,4 +72,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MenuItem);
+function mapDispatchToProps(dispatch) {
+  return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);

@@ -1,14 +1,22 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import LandingView from './LandingView';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class LandingContainer extends Component {
   static navigationOptions = {
     header: null,
+  };
+
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Landing` }));
   };
 
   render = () => {
@@ -19,6 +27,7 @@ class LandingContainer extends Component {
 }
 
 LandingContainer.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToMenu: PropTypes.func.isRequired,
   backgroundImageUrl: PropTypes.string,
 };
@@ -35,6 +44,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
     navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
   };
 }

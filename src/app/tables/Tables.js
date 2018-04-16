@@ -13,6 +13,7 @@ import { DefaultColor } from '../../style';
 import TablesRelayContainer from './TablesRelayContainer';
 import { HeaderContainer } from '../../components/header/';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Tables extends Component {
   static navigationOptions = () => ({
@@ -27,7 +28,7 @@ class Tables extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveTable();
     this.props.applicationStateActions.clearActiveCustomer();
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: 'Tables' }));
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-Tables` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {

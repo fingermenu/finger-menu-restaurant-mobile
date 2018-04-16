@@ -1,12 +1,12 @@
 // @flow
 
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
-import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import TableSetupView from './TableSetupView';
 import { UpdateTable } from '../../framework/relay/mutations';
@@ -14,6 +14,7 @@ import Environment from '../../framework/relay/Environment';
 import { DefaultColor } from '../../style';
 import { ActiveTableProp } from '../../framework/applicationState';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class TableSetupContainer extends Component {
   static navigationOptions = {
@@ -22,6 +23,10 @@ class TableSetupContainer extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
+  };
+
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-TableSetup` }));
   };
 
   handleResetTablePressed = () => {

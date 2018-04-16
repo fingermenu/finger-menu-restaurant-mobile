@@ -1,13 +1,17 @@
 // @flow
 
+import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import { ErrorMessageWithRetry, LoadingInProgress } from '@microbusiness/common-react-native';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { environment } from '../../framework/relay';
 import TableDetailRelayContainer from './TableDetailRelayContainer';
 import { DefaultColor } from '../../style';
+import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class TableDetail extends Component {
   static navigationOptions = {
@@ -16,6 +20,10 @@ class TableDetail extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
     headerTintColor: DefaultColor.defaultTopHeaderFontColor,
+  };
+
+  componentDidMount = () => {
+    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}-TableDetail` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -54,6 +62,7 @@ class TableDetail extends Component {
 }
 
 TableDetail.propTypes = {
+  googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   tableId: PropTypes.string.isRequired,
   lastOrderCorrelationId: PropTypes.string,
   restaurantId: PropTypes.string.isRequired,
@@ -74,4 +83,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TableDetail);
+function mapDispatchToProps(dispatch) {
+  return {
+    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableDetail);
