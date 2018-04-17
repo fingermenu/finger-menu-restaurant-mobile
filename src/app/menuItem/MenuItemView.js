@@ -1,7 +1,7 @@
 // @flow
 
 import { Common } from '@microbusiness/common-javascript';
-import { TextInput } from '@microbusiness/redux-form-react-native-elements';
+import { RadioButtonGroup, TextInput } from '@microbusiness/redux-form-react-native-elements';
 import { ListItemSeparator, TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
@@ -16,7 +16,6 @@ import Styles from './Styles';
 import { ChoiceItemPrices } from '../../components/choiceItems';
 import { QuantityControl } from '../../components/quantityControl';
 import { DefaultStyles } from '../../style';
-import { RadioButtonGroup } from '../../components/radioButton/';
 
 class MenuItemView extends Component {
   renderSizeItem = id => {

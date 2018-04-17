@@ -26,13 +26,13 @@
     "codepush:android": "code-push release-react fingermenu-restaurant-android android && code-push promote fingermenu-restaurant-android Staging Production"
   },
   "dependencies": {
-    "@microbusiness/common-javascript": "^1.2.1",
+    "@microbusiness/common-javascript": "^1.3.0",
     "@microbusiness/common-react": "^1.2.1",
-    "@microbusiness/common-react-native": "^1.5.2",
-    "@microbusiness/google-analytics-react-native": "0.1.0",
-    "@microbusiness/parse-server-common-react-native": "^1.3.6",
+    "@microbusiness/common-react-native": "^1.6.2",
+    "@microbusiness/google-analytics-react-native": "0.1.1",
+    "@microbusiness/parse-server-common-react-native": "^1.3.7",
     "@microbusiness/printer-react-native": "0.2.2",
-    "@microbusiness/redux-form-react-native-elements": "^0.1.7",
+    "@microbusiness/redux-form-react-native-elements": "^0.2.0",
     "cuid": "^2.1.1",
     "i18next": "^11.2.2",
     "immutable": "^4.0.0-rc.9",
