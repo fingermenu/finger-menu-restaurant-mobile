@@ -10,11 +10,15 @@ import Styles from './Styles';
 
 class SizeItemPrices extends Component {
   renderItem = id => {
-    const sizeItemPrice = this.props.sizeItemPrices.find(_ => _.id.localeCompare(id) === 0);
+    const {
+      currentPrice,
+      choiceItem: { name },
+    } = this.props.sizeItemPrices.find(_ => _.id.localeCompare(id) === 0);
 
     return (
       <View style={Styles.optionContainer}>
-        <Text style={Styles.optionName}>{sizeItemPrice.choiceItem.name}</Text>
+        <Text style={Styles.optionName}>{name}</Text>
+        {currentPrice !== 0 && <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>}
       </View>
     );
   };
