@@ -1,16 +1,16 @@
 // @flow
 
 import React, { Component } from 'react';
-import { CheckBox, Text } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
-import Styles, { DefaultColors } from './Styles';
+import Styles from './Styles';
 
 class RadioButton extends Component {
-  onChange = () => this.props.onChange(this.props.id);
+  handleChange = () => this.props.onChange(this.props.id);
 
   render = () => {
-    const { checked, checkedColor, label, ...rest } = this.props;
+    const { id, checked, checkedColor, renderItem, ...rest } = this.props;
 
     return (
       <View style={Styles.radioRowContainer}>
@@ -18,7 +18,7 @@ class RadioButton extends Component {
           <CheckBox
             {...rest}
             checked={checked}
-            onIconPress={this.onChange}
+            onIconPress={this.handleChange}
             containerStyle={Styles.radio}
             size={36}
             checkedIcon="dot-circle-o"
@@ -26,20 +26,21 @@ class RadioButton extends Component {
             checkedColor={checkedColor}
           />
         </View>
-        <View style={Styles.optionContainer}>
-          <Text style={Styles.optionName}>{label}</Text>
-        </View>
+        {renderItem(id)}
       </View>
     );
   };
 }
 
 RadioButton.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  renderItem: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
   checkedColor: PropTypes.string,
 };
 
 RadioButton.defaultProps = {
-  checkedColor: DefaultColors.defaultThemeColor,
+  checkedColor: '#645953',
 };
 
 export default RadioButton;

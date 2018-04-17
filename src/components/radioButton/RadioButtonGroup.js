@@ -3,9 +3,10 @@
 import Immutable from 'immutable';
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 import RadioButton from './RadioButton';
 
-class RadioSet extends Component {
+class RadioButtonGroup extends Component {
   handleChange = id => {
     const {
       input: { value, onChange },
@@ -21,7 +22,8 @@ class RadioSet extends Component {
 
   render = () => {
     const {
-      radios,
+      ids,
+      renderItem,
       input: { value },
       containerStyle,
       ...rest
@@ -29,12 +31,15 @@ class RadioSet extends Component {
 
     return (
       <View style={containerStyle}>
-        {radios.map(radio => (
-          <RadioButton key={radio.id} onChange={this.handleChange} checked={value[radio.id]} label={radio.label} id={radio.id} {...rest} />
-        ))}
+        {ids.map(id => <RadioButton key={id} onChange={this.handleChange} checked={value[id]} id={id} renderItem={renderItem} {...rest} />)}
       </View>
     );
   };
 }
 
-export default RadioSet;
+RadioButtonGroup.propTypes = {
+  renderItem: PropTypes.func.isRequired,
+  ids: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+};
+
+export default RadioButtonGroup;

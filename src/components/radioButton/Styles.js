@@ -1,12 +1,6 @@
 // @flow
 
-import { StyleSheet } from 'react-native'; // eslint-disable-line import/no-extraneous-dependencies
-
-const DEFAULT_THEME_COLOR = '#645953';
-
-export const DefaultColors = {
-  defaultThemeColor: DEFAULT_THEME_COLOR,
-};
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   radio: {
@@ -23,11 +17,5 @@ export default StyleSheet.create({
   },
   radioContainer: {
     flex: 10,
-  },
-  optionContainer: {
-    flex: 100,
-  },
-  optionName: {
-    fontSize: 26,
   },
 });
