@@ -58,11 +58,4 @@ export default StyleSheet.create({
     fontWeight: '700',
     fontSize: 26,
   },
-
-  sizeOptionContainer: {
-    flex: 100,
-  },
-  sizeOptionName: {
-    fontSize: 26,
-  },
 });

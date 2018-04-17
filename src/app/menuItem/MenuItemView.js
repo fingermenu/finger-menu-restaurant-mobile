@@ -1,10 +1,11 @@
 // @flow
 
 import { Common } from '@microbusiness/common-javascript';
-import { RadioButtonGroup, TextInput } from '@microbusiness/redux-form-react-native-elements';
+import { TextInput } from '@microbusiness/redux-form-react-native-elements';
 import { ListItemSeparator, TouchableItem } from '@microbusiness/common-react-native';
-import React, { Component } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import React from 'react';
+import { View, ScrollView } from 'react-native';
+import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -14,103 +15,83 @@ import int from 'int';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
 import { ChoiceItemPrices } from '../../components/choiceItems';
+import { SizeItemPrices } from '../../components/sizeItems';
 import { QuantityControl } from '../../components/quantityControl';
 import { DefaultStyles } from '../../style';
 
-class MenuItemView extends Component {
-  renderSizeItem = id => {
-    const choiceItemPrice = this.props.choiceItemPricesOfTypeSize.find(_ => _.id.localeCompare(id) === 0);
-
-    return (
-      <View style={Styles.sizeOptionContainer}>
-        <Text style={Styles.sizeOptionName}>{choiceItemPrice.choiceItem.name}</Text>
+const MenuItemView = ({
+  t,
+  handleSubmit,
+  menuItemPrice: {
+    menuItem: { name, description, imageUrl },
+  },
+  isAddingOrder,
+  menuItemPrice,
+  quantity,
+  choiceItemPricesOfTypeDietaryOption,
+  choiceItemPricesOfTypeSize,
+  otherChoiceItemPrices,
+  onQuantityChanged,
+}) => (
+  <View style={Styles.container}>
+    <ScrollView>
+      <View style={Styles.imageContainer}>
+        {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.stretch} source={{ uri: imageUrl }} /> : <View />}
       </View>
-    );
-  };
-
-  render = () => {
-    const {
-      t,
-      handleSubmit,
-      menuItemPrice: {
-        menuItem: { name, description, imageUrl },
-      },
-      isAddingOrder,
-      menuItemPrice,
-      quantity,
-      choiceItemPricesOfTypeDietaryOption,
-      choiceItemPricesOfTypeSize,
-      otherChoiceItemPrices,
-      onQuantityChanged,
-    } = this.props;
-
-    return (
-      <View style={Styles.container}>
-        <ScrollView>
-          <View style={Styles.imageContainer}>
-            {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.stretch} source={{ uri: imageUrl }} /> : <View />}
-          </View>
-          <View style={Styles.descriptionContainer}>
-            <View style={Styles.nameContainer}>
-              <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
-              <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>
-            </View>
-            <Text style={Styles.description}>{description}</Text>
-          </View>
-          <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
-          {choiceItemPricesOfTypeSize.length > 0 && (
-            <View style={Styles.optionsContainer}>
-              <View style={Styles.choiceItemSectionHeader}>
-                <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
-                <ListItemSeparator />
-              </View>
-              <Field
-                ids={choiceItemPricesOfTypeSize.map(choiceItemPrice => choiceItemPrice.id)}
-                name="sizes"
-                component={RadioButtonGroup}
-                renderItem={this.renderSizeItem}
-              />
-            </View>
-          )}
-          {choiceItemPricesOfTypeDietaryOption.length > 0 && (
-            <View style={Styles.optionsContainer}>
-              <View style={Styles.choiceItemSectionHeader}>
-                <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
-                <ListItemSeparator />
-              </View>
-              <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
-            </View>
-          )}
-          {otherChoiceItemPrices.length > 0 && (
-            <View style={Styles.optionsContainer}>
-              <View style={Styles.choiceItemSectionHeader}>
-                <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
-                <ListItemSeparator />
-              </View>
-              <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />
-            </View>
-          )}
-        </ScrollView>
-        <View>
-          <View style={Styles.quantityContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
-            <QuantityControl value={quantity} onChange={onQuantityChanged} />
-          </View>
-
-          {isAddingOrder ? (
-            <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
-            </TouchableItem>
-          ) : (
-            <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-              <Text style={Styles.text}>{t('updateOrder.button')}</Text>
-            </TouchableItem>
-          )}
+      <View style={Styles.descriptionContainer}>
+        <View style={Styles.nameContainer}>
+          <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
+          <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>
         </View>
+        <Text style={Styles.description}>{description}</Text>
       </View>
-    );
-  };
-}
+      <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
+      {choiceItemPricesOfTypeSize.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
+            <ListItemSeparator />
+          </View>
+          <SizeItemPrices sizeItemPrices={choiceItemPricesOfTypeSize} />
+        </View>
+      )}
+      {choiceItemPricesOfTypeDietaryOption.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
+            <ListItemSeparator />
+          </View>
+          <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
+        </View>
+      )}
+      {otherChoiceItemPrices.length > 0 && (
+        <View style={Styles.optionsContainer}>
+          <View style={Styles.choiceItemSectionHeader}>
+            <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
+            <ListItemSeparator />
+          </View>
+          <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />
+        </View>
+      )}
+    </ScrollView>
+    <View>
+      <View style={Styles.quantityContainer}>
+        <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
+        <QuantityControl value={quantity} onChange={onQuantityChanged} />
+      </View>
+
+      {isAddingOrder ? (
+        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
+          <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
+        </TouchableItem>
+      ) : (
+        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
+          <Text style={Styles.text}>{t('updateOrder.button')}</Text>
+        </TouchableItem>
+      )}
+    </View>
+  </View>
+);
 
 MenuItemView.propTypes = {
   menuItemPrice: MenuItemPriceProp.isRequired,
@@ -156,5 +137,4 @@ function mapStateToProps(state, { menuItemPrice: { choiceItemPrices }, dietaryOp
   };
 }
 
-// export default MenuItemView;
 export default connect(mapStateToProps)(reduxForm({ form: 'menuItem' })(translate()(MenuItemView)));
