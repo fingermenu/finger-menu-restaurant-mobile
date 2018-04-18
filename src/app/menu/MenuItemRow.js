@@ -22,7 +22,14 @@ class MenuItemRow extends Component {
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
 
   render = () => {
-    const { isOrdered, menuItemPrice: { currentPrice, menuItem: { name, description, imageUrl } } } = this.props;
+    const {
+      isOrdered,
+      menuItemPrice: {
+        currentPrice,
+        menuItem: { name, description, imageUrl },
+      },
+    } = this.props;
+
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
@@ -36,7 +43,7 @@ class MenuItemRow extends Component {
               <Icon name="ios-checkmark-circle" type="ionicon" size={25} color={DefaultColor.actionButtonColor} />
             </View>
           )}
-          <Text style={DefaultStyles.primaryFont}>${currentPrice.toFixed(2)}</Text>
+          {currentPrice !== 0 && <Text style={DefaultStyles.primaryFont}>${currentPrice.toFixed(2)}</Text>}
         </View>
       </TouchableItem>
     );
