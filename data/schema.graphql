@@ -148,6 +148,29 @@ type DietaryOptionTypeEdge {
   cursor: String!
 }
 
+type DishType implements Node {
+  id: ID!
+  tag: Tag
+}
+
+# A connection to a list of items.
+type DishTypeTypeConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DishTypeTypeEdge]
+}
+
+# An edge in a connection.
+type DishTypeTypeEdge {
+  # The item at the end of the edge
+  node: DishType
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
 type DocumentTemplate {
   name: String
   template: String!
@@ -722,6 +745,8 @@ type User implements Node {
   userFeedbacks(after: String, first: Int, before: String, last: Int, userFeedbackIds: [ID!], others: String, dateRange: DateRange, sortOption: String): UserFeedbackTypeConnection
   size(sizeId: ID!): Size
   sizes(after: String, first: Int, before: String, last: Int, sizeIds: [ID!], sortOption: String): SizeTypeConnection
+  dishType(dishTypeId: ID!): DishType
+  dishTypes(after: String, first: Int, before: String, last: Int, dishTypeIds: [ID!], sortOption: String): DishTypeTypeConnection
 }
 
 type UserFeedback implements Node {
