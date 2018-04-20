@@ -49,6 +49,8 @@ type BeServedWithMenuItemPrice implements Node {
   validUntil: String
   menuItem: MenuItem
   choiceItemPrices: [ChoiceItemPrice!]
+  defaultChoiceItemPrices: [ChoiceItemPrice!]
+  rules: MenuItemPriceRules
 }
 
 input CancelOrderInput {
@@ -245,7 +247,16 @@ type MenuItemPrice implements Node {
   sortOrderIndex: Int
   toBeServedWithMenuItemPrices: [BeServedWithMenuItemPrice!]
   choiceItemPrices: [ChoiceItemPrice!]
+  defaultChoiceItemPrices: [ChoiceItemPrice!]
   tags: [Tag!]
+  rules: MenuItemPriceRules
+}
+
+type MenuItemPriceRules {
+  mustChooseSize: Boolean
+  mustChooseDietaryOption: Boolean
+  minNumberOfSideDishes: Int
+  maxNumberOfSideDishes: Int
 }
 
 # A connection to a list of items.
