@@ -91,7 +91,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query OrdersRelayContainer_user_PaginationQuery(
+    query OrdersRelayContainer_user_FragmentQuery(
       $restaurantId: ID!
       $tableId: ID!
       $choiceItemPriceIds: [ID!]

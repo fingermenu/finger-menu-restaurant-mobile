@@ -56,7 +56,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query TablesRelayContainerPaginationQuery($restaurantId: ID!) {
+    query TablesRelayContainerFragmentQuery($restaurantId: ID!) {
       user {
         ...TablesRelayContainer_user
       }

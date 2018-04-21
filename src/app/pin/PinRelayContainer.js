@@ -42,7 +42,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query PinRelayContainer_user_PaginationQuery {
+    query PinRelayContainer_user_FragmentQuery {
       user {
         ...PinRelayContainer_user
       }

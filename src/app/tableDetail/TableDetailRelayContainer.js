@@ -71,7 +71,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query TableDetailRelayContainer_user_PaginationQuery($restaurantId: ID!, $tableId: ID, $lastOrderCorrelationId: ID, $tableIdForTableQuery: ID!) {
+    query TableDetailRelayContainer_user_FragmentQuery($restaurantId: ID!, $tableId: ID, $lastOrderCorrelationId: ID, $tableIdForTableQuery: ID!) {
       user {
         ...TableDetailRelayContainer_user
       }
