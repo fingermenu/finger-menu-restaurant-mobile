@@ -1,7 +1,9 @@
 // @flow
 
 import { RadioButtonGroup } from '@microbusiness/redux-form-react-native-elements';
+import Immutable from 'immutable';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Field } from 'redux-form';
@@ -9,6 +11,14 @@ import { SizeItemPricesProp } from './PropTypes';
 import Styles from './Styles';
 
 class SizeItemPrices extends Component {
+  validateMustChooseSize = sizes => {
+    if (this.props.mustChooseSize) {
+      return Immutable.fromJS(sizes).some(size => size) ? undefined : 'Size is required';
+    }
+
+    return undefined;
+  };
+
   renderItem = id => {
     const {
       currentPrice,
@@ -29,12 +39,18 @@ class SizeItemPrices extends Component {
       name="sizes"
       component={RadioButtonGroup}
       renderItem={this.renderItem}
+      validate={this.validateMustChooseSize}
     />
   );
 }
 
 SizeItemPrices.propTypes = {
   sizeItemPrices: SizeItemPricesProp.isRequired,
+  mustChooseSize: PropTypes.bool,
+};
+
+SizeItemPrices.defaultProps = {
+  mustChooseSize: false,
 };
 
 export default SizeItemPrices;

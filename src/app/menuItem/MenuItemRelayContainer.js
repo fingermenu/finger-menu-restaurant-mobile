@@ -49,6 +49,10 @@ export default createRefetchContainer(
               id
             }
           }
+          rules {
+            mustChooseSize
+            mustChooseDietaryOption
+          }
         }
       }
     `,

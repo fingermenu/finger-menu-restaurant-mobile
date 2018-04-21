@@ -14,7 +14,8 @@ import { translate } from 'react-i18next';
 import int from 'int';
 import { MenuItemPriceProp } from './PropTypes';
 import Styles from './Styles';
-import { ChoiceItemPrices } from '../../components/choiceItems';
+import { ChoiceItemPrices } from '../../components/choiceItemPrices';
+import { DietaryOptions } from '../../components/dietaryOptions';
 import { SizeItemPrices } from '../../components/sizeItems';
 import { QuantityControl } from '../../components/quantityControl';
 import { DefaultStyles } from '../../style';
@@ -24,6 +25,7 @@ const MenuItemView = ({
   handleSubmit,
   menuItemPrice: {
     menuItem: { name, description, imageUrl },
+    rules: { mustChooseSize, mustChooseDietaryOption },
   },
   isAddingOrder,
   menuItemPrice,
@@ -32,6 +34,7 @@ const MenuItemView = ({
   choiceItemPricesOfTypeSize,
   otherChoiceItemPrices,
   onQuantityChanged,
+  valid,
 }) => (
   <View style={Styles.container}>
     <ScrollView>
@@ -52,7 +55,7 @@ const MenuItemView = ({
             <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
             <ListItemSeparator />
           </View>
-          <SizeItemPrices sizeItemPrices={choiceItemPricesOfTypeSize} />
+          <SizeItemPrices sizeItemPrices={choiceItemPricesOfTypeSize} mustChooseSize={mustChooseSize} />
         </View>
       )}
       {choiceItemPricesOfTypeDietaryOption.length > 0 && (
@@ -61,7 +64,7 @@ const MenuItemView = ({
             <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
             <ListItemSeparator />
           </View>
-          <ChoiceItemPrices choiceItemPrices={choiceItemPricesOfTypeDietaryOption} />
+          <DietaryOptions dietaryOptions={choiceItemPricesOfTypeDietaryOption} mustChooseDietaryOption={mustChooseDietaryOption} />
         </View>
       )}
       {otherChoiceItemPrices.length > 0 && (
@@ -80,11 +83,15 @@ const MenuItemView = ({
         <QuantityControl value={quantity} onChange={onQuantityChanged} />
       </View>
 
-      {isAddingOrder ? (
+      {valid &&
+        isAddingOrder && (
         <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
           <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
         </TouchableItem>
-      ) : (
+      )}
+
+      {valid &&
+        !isAddingOrder && (
         <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
           <Text style={Styles.text}>{t('updateOrder.button')}</Text>
         </TouchableItem>

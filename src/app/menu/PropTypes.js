@@ -31,3 +31,17 @@ export const ServingTimeProp = PropTypes.shape({
 });
 
 export const ServingTimesProp = PropTypes.arrayOf(ServingTimeProp.isRequired);
+
+export const TagProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+});
+
+export const TagsProp = PropTypes.arrayOf(TagProp.isRequired);
+
+export const DishTypeProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  tag: TagProp.isRequired,
+});
+
+export const DishTypesProp = PropTypes.arrayOf(DishTypeProp.isRequired);

@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import int from 'int';
 import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { MenuTagsProp, ServingTimesProp } from './PropTypes';
+import { DishTypesProp, MenuTagsProp, ServingTimesProp } from './PropTypes';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class MenuContainer extends Component {
@@ -64,6 +64,7 @@ MenuContainer.propTypes = {
   ).isRequired,
   navigateToOrders: PropTypes.func.isRequired,
   menuTags: MenuTagsProp.isRequired,
+  dishTypes: DishTypesProp.isRequired,
   servingTimes: ServingTimesProp.isRequired,
   onRefresh: PropTypes.func,
 };

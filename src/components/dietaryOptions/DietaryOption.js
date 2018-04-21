@@ -2,15 +2,23 @@
 
 import { CheckBox } from '@microbusiness/redux-form-react-native-elements';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { Field } from 'redux-form';
-import { ChoiceItemPriceProp } from './PropTypes';
+import { DietaryOptionProp } from './PropTypes';
 import Styles from './Styles';
 
-const ChoiceItemPrice = ({ choiceItemPrice: { id, currentPrice, choiceItem: { name } } }) => (
+const DietaryOption = ({
+  dietaryOption: {
+    id,
+    currentPrice,
+    choiceItem: { name },
+  },
+  validateMustChooseDietaryOption,
+}) => (
   <View style={Styles.optionRowContainer}>
     <View style={Styles.checkboxContainer}>
-      <Field name={id} component={CheckBox} />
+      <Field name={id} component={CheckBox} validate={validateMustChooseDietaryOption} />
     </View>
     <View style={Styles.optionContainer}>
       <Text style={Styles.optionName}>{name}</Text>
@@ -19,8 +27,9 @@ const ChoiceItemPrice = ({ choiceItemPrice: { id, currentPrice, choiceItem: { na
   </View>
 );
 
-ChoiceItemPrice.propTypes = {
-  choiceItemPrice: ChoiceItemPriceProp.isRequired,
+DietaryOption.propTypes = {
+  dietaryOption: DietaryOptionProp.isRequired,
+  validateMustChooseDietaryOption: PropTypes.func.isRequired,
 };
 
-export default ChoiceItemPrice;
+export default DietaryOption;

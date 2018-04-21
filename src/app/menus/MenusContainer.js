@@ -47,6 +47,7 @@ class MenusContainer extends Component {
               key={menu.id}
               menuItemPrices={menu.menuItemPrices}
               menuTags={menu.tags}
+              dishTypes={this.props.user.dishTypes.edges.map(_ => _.node)}
               servingTimes={servingTimes}
               isRefreshing={false}
             />

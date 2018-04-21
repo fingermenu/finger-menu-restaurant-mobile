@@ -19,6 +19,17 @@ export default createRefetchContainer(
             }
           }
         }
+        dishTypes(first: 1000, after: null) {
+          edges {
+            node {
+              id
+              tag {
+                id
+                name
+              }
+            }
+          }
+        }
         restaurant(restaurantId: $restaurantId) {
           menus {
             id
@@ -33,6 +44,9 @@ export default createRefetchContainer(
                 name
                 description
                 imageUrl
+              }
+              tags {
+                id
               }
             }
             tags {
