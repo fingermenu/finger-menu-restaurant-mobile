@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const MenuItemProp = PropTypes.shape({
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   imageUrl: PropTypes.string,
 });
 
