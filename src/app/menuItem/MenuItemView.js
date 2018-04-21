@@ -41,7 +41,7 @@ const MenuItemView = ({
       <View style={Styles.descriptionContainer}>
         <View style={Styles.nameContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
-          <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>
+          {menuItemPrice.currentPrice !== 0 && <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>}
         </View>
         <Text style={Styles.description}>{description}</Text>
       </View>
