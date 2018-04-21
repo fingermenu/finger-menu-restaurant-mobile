@@ -34,7 +34,7 @@ class MenuContainer extends Component {
   handleEndReached = () => true;
 
   render = () => {
-    const { menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders, isRefreshing } = this.props;
+    const { dishTypes, menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders, isRefreshing } = this.props;
 
     return (
       <MenuView
@@ -49,6 +49,7 @@ class MenuContainer extends Component {
         onRefresh={onRefresh}
         onEndReached={this.handleEndReached}
         onPlaceOrderPressed={navigateToOrders}
+        dishTypes={dishTypes}
       />
     );
   };
