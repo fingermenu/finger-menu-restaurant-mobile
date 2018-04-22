@@ -42,7 +42,7 @@ class MenuView extends Component {
 
     return (
       <ScrollView>
-        {dishTypesWithMenuItemPrices.map(
+        {dishTypesWithMenuItemPrices.sort((dishType1, dishType2) => dishType1.tag.name.localeCompare(dishType2.tag.name)).map(
           dishTypeWithMenuItemPrices =>
             dishTypeWithMenuItemPrices.menuItemPrices.length > 0 && (
               <View key={dishTypeWithMenuItemPrices.tag.id}>
