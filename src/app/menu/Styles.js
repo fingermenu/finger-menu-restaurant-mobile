@@ -49,4 +49,8 @@ export default StyleSheet.create({
     fontWeight: '500',
     fontSize: 20,
   },
+  dishTypeText: {
+    fontWeight: '700',
+    fontSize: 26,
+  },
 });
