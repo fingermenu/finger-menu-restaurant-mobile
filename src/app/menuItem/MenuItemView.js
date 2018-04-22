@@ -130,9 +130,14 @@ function mapStateToProps(state, { menuItemPrice: { choiceItemPrices }, dietaryOp
   };
 
   if (activeOrderDetail) {
-    activeOrderDetail.get('orderChoiceItemPrices').forEach(ocp => {
-      initialValues[ocp.getIn(['choiceItemPrice', 'id'])] = true;
-      initialValues.sizes[ocp.getIn(['choiceItemPrice', 'id'])] = true;
+    activeOrderDetail.get('orderChoiceItemPrices').forEach(_ => {
+      const id = _.getIn(['choiceItemPrice', 'id']);
+
+      if (choiceItemPricesOfTypeSize.find(choiceItemPrice => choiceItemPrice.id.localeCompare(id) === 0)) {
+        initialValues.sizes[id] = true;
+      } else {
+        initialValues[id] = true;
+      }
     });
   }
 
