@@ -71,7 +71,7 @@ Orders.propTypes = {
   choiceItemPriceIds: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const menuItemPriceIds = state.applicationState
     .getIn(['activeOrder', 'details'])
     .map(item => item.getIn(['menuItemPrice', 'id']))
@@ -93,12 +93,10 @@ function mapStateToProps(state) {
     choiceItemPriceIds,
     correlationId: correlationId ? correlationId : '',
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);

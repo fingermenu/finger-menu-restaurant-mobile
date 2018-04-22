@@ -378,7 +378,7 @@ OrdersContainer.defaultProps = {
   numberOfPrintCopiesForKitchen: 1,
 };
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
   const printerConfig = configurations.get('printers').isEmpty()
     ? null
@@ -433,17 +433,15 @@ function mapStateToProps(state, ownProps) {
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
     numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
-    navigateToOrderConfirmed: () =>
-      dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
+  navigateToOrderConfirmed: () =>
+    dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrdersContainer);

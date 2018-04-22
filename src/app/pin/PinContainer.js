@@ -54,19 +54,15 @@ PinContainer.propTypes = {
   navigateToTables: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    restaurant: props.user.restaurants.edges[0].node,
-  };
-}
+const mapStateToProps = (state, props) => ({
+  restaurant: props.user.restaurants.edges[0].node,
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    userAccessActions: bindActionCreators(userAccessActions, dispatch),
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
+  userAccessActions: bindActionCreators(userAccessActions, dispatch),
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PinContainer);

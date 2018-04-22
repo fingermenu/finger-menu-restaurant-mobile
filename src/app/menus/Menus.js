@@ -54,16 +54,12 @@ Menus.propTypes = {
   restaurantId: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  };
-}
+const mapStateToProps = state => ({
+  restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menus);

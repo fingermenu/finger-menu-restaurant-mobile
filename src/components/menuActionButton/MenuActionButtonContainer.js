@@ -35,15 +35,11 @@ MenuActionButtonContainer.propTypes = {
   menus: MenusProp.isRequired,
 };
 
-function mapStateToProps() {
-  return {};
-}
+const mapStateToProps = () => ({});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuActionButtonContainer);

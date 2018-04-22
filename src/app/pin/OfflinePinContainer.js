@@ -38,18 +38,14 @@ OfflinePinContainer.propTypes = {
   pin: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    pin: state.applicationState.getIn(['activeRestaurant', 'pin']),
-  };
-}
+const mapStateToProps = state => ({
+  pin: state.applicationState.getIn(['activeRestaurant', 'pin']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    userAccessActions: bindActionCreators(userAccessActions, dispatch),
-    navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  userAccessActions: bindActionCreators(userAccessActions, dispatch),
+  navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(OfflinePinContainer);

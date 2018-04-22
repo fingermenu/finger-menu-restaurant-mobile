@@ -69,17 +69,13 @@ Tables.propTypes = {
   restaurantId: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  };
-}
+const mapStateToProps = state => ({
+  restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tables);

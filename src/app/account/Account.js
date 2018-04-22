@@ -14,25 +14,21 @@ const Account = ({ t, navigateToPin }) => (
   </View>
 );
 
-function mapStateToProps() {
-  return {};
-}
+const mapStateToProps = () => ({});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    navigateToPin: () =>
-      dispatch(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'Pin',
-            }),
-          ],
-        }),
-      ),
-    goBack: () => dispatch(NavigationActions.back()),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  navigateToPin: () =>
+    dispatch(
+      NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({
+            routeName: 'Pin',
+          }),
+        ],
+      }),
+    ),
+  goBack: () => dispatch(NavigationActions.back()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(Account));

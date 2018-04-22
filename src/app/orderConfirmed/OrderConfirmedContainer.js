@@ -32,17 +32,13 @@ OrderConfirmedContainer.defaultProps = {
   restaurantLogoImageUrl: null,
 };
 
-function mapStateToProps(state) {
-  return {
-    restaurantLogoImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'logoImageUrl']),
-  };
-}
+const mapStateToProps = state => ({
+  restaurantLogoImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'logoImageUrl']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderConfirmedContainer);

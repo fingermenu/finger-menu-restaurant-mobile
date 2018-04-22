@@ -89,23 +89,19 @@ Pin.propTypes = {
   activeRestaurant: ActiveRestaurantProp.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    activeRestaurant: state.applicationState.get('activeRestaurant').toJS(),
-    restaurant: {
-      id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
-      pin: state.asyncStorage.getIn(['keyValues', 'pin']),
-      configurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
-    },
-  };
-}
+const mapStateToProps = state => ({
+  activeRestaurant: state.applicationState.get('activeRestaurant').toJS(),
+  restaurant: {
+    id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
+    pin: state.asyncStorage.getIn(['keyValues', 'pin']),
+    configurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
+  },
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(Pin));

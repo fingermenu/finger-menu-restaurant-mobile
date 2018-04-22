@@ -305,7 +305,7 @@ TableDetailContainer.propTypes = {
   restaurantId: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state, props) {
+const mapStateToProps = (state, props) => {
   const activeTable = state.applicationState.get('activeTable');
 
   return {
@@ -313,15 +313,13 @@ function mapStateToProps(state, props) {
     table: props.user.table,
     tableId: activeTable.get('id'),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
-    navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
-    goBack: () => dispatch(NavigationActions.back()),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+  navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
+  goBack: () => dispatch(NavigationActions.back()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableDetailContainer);

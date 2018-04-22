@@ -109,11 +109,9 @@ MenusContainer.defaultProps = {
   menuId: undefined,
 };
 
-function mapStateToProps(state) {
-  return {
-    menuId: state.applicationState.getIn(['activeMenu', 'id']),
-    selectedLanguage: state.applicationState.get('selectedLanguage'),
-  };
-}
+const mapStateToProps = state => ({
+  menuId: state.applicationState.getIn(['activeMenu', 'id']),
+  selectedLanguage: state.applicationState.get('selectedLanguage'),
+});
 
 export default connect(mapStateToProps)(MenusContainer);

@@ -26,16 +26,12 @@ HeaderContainer.defaultProps = {
   backgroundImageUrl: null,
 };
 
-function mapStateToProps(state) {
-  return {
-    backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryTopBannerImageUrl']),
-  };
-}
+const mapStateToProps = state => ({
+  backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryTopBannerImageUrl']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(HeaderContainer));

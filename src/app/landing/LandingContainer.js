@@ -36,17 +36,13 @@ LandingContainer.defaultProps = {
   backgroundImageUrl: null,
 };
 
-function mapStateToProps(state) {
-  return {
-    backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryLandingPageBackgroundImageUrl']),
-  };
-}
+const mapStateToProps = state => ({
+  backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryLandingPageBackgroundImageUrl']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingContainer);

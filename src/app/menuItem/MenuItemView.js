@@ -107,7 +107,7 @@ MenuItemView.propTypes = {
   onQuantityChanged: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, { menuItemPrice: { choiceItemPrices }, dietaryOptions, sizes }) {
+const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices }, dietaryOptions, sizes }) => {
   const typeFilterPredicate = (choiceItemPrice, items) =>
     !!choiceItemPrice.tags.find(tag => !!items.find(item => item.tag && item.tag.id.localeCompare(tag.id) === 0));
   const sortFunc = (choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex);
@@ -147,6 +147,6 @@ function mapStateToProps(state, { menuItemPrice: { choiceItemPrices }, dietaryOp
     choiceItemPricesOfTypeSize,
     otherChoiceItemPrices,
   };
-}
+};
 
 export default connect(mapStateToProps)(reduxForm({ form: 'menuItem' })(translate()(MenuItemView)));

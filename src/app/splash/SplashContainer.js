@@ -20,16 +20,12 @@ SplashContainer.propTypes = {
   getCurrentUserStatus: PropTypes.number.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    getCurrentUserStatus: state.userAccess.get('getCurrentUserStatus'),
-  };
-}
+const mapStateToProps = state => ({
+  getCurrentUserStatus: state.userAccess.get('getCurrentUserStatus'),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    userAccessActions: bindActionCreators(userAccessActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  userAccessActions: bindActionCreators(userAccessActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashContainer);

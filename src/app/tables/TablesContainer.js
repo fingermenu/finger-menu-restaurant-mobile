@@ -117,20 +117,16 @@ TablesContainer.propTypes = {
   navigateToTableDetail: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    selectedLanguage: state.applicationState.get('selectedLanguage'),
-  };
-}
+const mapStateToProps = state => ({
+  selectedLanguage: state.applicationState.get('selectedLanguage'),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
-    navigateToTableDetail: () => dispatch(NavigationActions.navigate({ routeName: 'TableDetail' })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
+  navigateToTableDetail: () => dispatch(NavigationActions.navigate({ routeName: 'TableDetail' })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TablesContainer);

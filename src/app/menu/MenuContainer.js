@@ -71,7 +71,7 @@ MenuContainer.defaultProps = {
   onRefresh: null,
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const inMemoryMenuItemPricesToOrder = state.applicationState
     .getIn(['activeOrder', 'details'])
     .map(item => Map({ id: item.getIn(['menuItemPrice', 'id']), quantity: item.get('quantity') }))
@@ -81,15 +81,13 @@ function mapStateToProps(state) {
   return {
     inMemoryMenuItemPricesToOrder,
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
-    navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
+  navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);

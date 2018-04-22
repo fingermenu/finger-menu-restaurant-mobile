@@ -63,19 +63,17 @@ MenuItem.propTypes = {
   menuItemPriceId: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const activeMenuItemPrice = state.applicationState.get('activeMenuItemPrice');
   const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
 
   return {
     menuItemPriceId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('menuItemPriceId') : activeMenuItemPrice.get('id'),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);

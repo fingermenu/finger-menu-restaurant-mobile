@@ -102,7 +102,7 @@ TableSetupView.propTypes = {
   table: ActiveTableProp.isRequired,
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const activeTable = state.applicationState.get('activeTable');
   const activeCustomer = state.applicationState.get('activeCustomer');
 
@@ -114,6 +114,6 @@ function mapStateToProps(state) {
       notes: activeCustomer.get('reservationNotes') || '',
     },
   };
-}
+};
 
 export default connect(mapStateToProps)(reduxForm({ form: 'setupTable', enableReinitialize: true })(translate()(TableSetupView)));

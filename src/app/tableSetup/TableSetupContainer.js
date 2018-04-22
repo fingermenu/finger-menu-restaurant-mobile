@@ -122,20 +122,16 @@ TableSetupContainer.propTypes = {
   table: ActiveTableProp.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    table: state.applicationState.get('activeTable').toJS(),
-    restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  };
-}
+const mapStateToProps = state => ({
+  table: state.applicationState.get('activeTable').toJS(),
+  restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    navigateToLanding: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
-    goBack: () => dispatch(NavigationActions.back()),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToLanding: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
+  goBack: () => dispatch(NavigationActions.back()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(TableSetupContainer));

@@ -72,7 +72,7 @@ TableDetail.defaultProps = {
   lastOrderCorrelationId: '',
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const activeTable = state.applicationState.get('activeTable');
   const lastOrderCorrelationId = activeTable.get('lastOrderCorrelationId');
 
@@ -81,12 +81,10 @@ function mapStateToProps(state) {
     tableId: activeTable.get('id'),
     lastOrderCorrelationId: lastOrderCorrelationId ? lastOrderCorrelationId : '',
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableDetail);

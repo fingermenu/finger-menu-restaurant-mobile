@@ -120,7 +120,7 @@ MenuItemContainer.defaultProps = {
   servingTimeId: null,
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
   const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
     ? null
@@ -133,13 +133,11 @@ function mapStateToProps(state) {
     quantity: activeOrderDetail ? activeOrderDetail.get('quantity') : 1,
     servingTimeId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('servingTimeId') : activeMenuItemPrice.get('servingTimeId'),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-    goBack: () => dispatch(NavigationActions.back()),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  goBack: () => dispatch(NavigationActions.back()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItemContainer);

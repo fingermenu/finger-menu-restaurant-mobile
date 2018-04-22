@@ -300,29 +300,25 @@ AppWithNavigationState.propTypes = {
   }).isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    navigation: state.navigation,
-    netInfo: state.netInfo.toJS(),
-    notifications: state.notification.get('notifications'),
-    userAccessFailedOperations: state.userAccess.get('failedOperations'),
-    asyncStorageFailedOperations: state.asyncStorage.get('failedOperations'),
-    escPosPrinterFailedOperations: state.escPosPrinter.get('failedOperations'),
-  };
-}
+const mapStateToProps = state => ({
+  navigation: state.navigation,
+  netInfo: state.netInfo.toJS(),
+  notifications: state.notification.get('notifications'),
+  userAccessFailedOperations: state.userAccess.get('failedOperations'),
+  asyncStorageFailedOperations: state.asyncStorage.get('failedOperations'),
+  escPosPrinterFailedOperations: state.escPosPrinter.get('failedOperations'),
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    netInfoActions: bindActionCreators(netInfoActions, dispatch),
-    appUpdaterActions: bindActionCreators(appUpdaterActions, dispatch),
-    asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-    dispatch,
-    notificationActions: bindActionCreators(notificationActions, dispatch),
-    userAccessActions: bindActionCreators(userAccessActions, dispatch),
-    escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
-    goBack: () => dispatch(NavigationActions.back()),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  netInfoActions: bindActionCreators(netInfoActions, dispatch),
+  appUpdaterActions: bindActionCreators(appUpdaterActions, dispatch),
+  asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
+  dispatch,
+  notificationActions: bindActionCreators(notificationActions, dispatch),
+  userAccessActions: bindActionCreators(userAccessActions, dispatch),
+  escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
+  goBack: () => dispatch(NavigationActions.back()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {
   withRef: true,
