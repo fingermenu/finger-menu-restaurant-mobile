@@ -69,6 +69,7 @@ i18next.init({
         confirm: { button: 'Confirm' },
         dietaryOptions: { label: 'Dietary Options' },
         sizes: { label: 'Sizes' },
+        others: { label: 'Others' },
       },
     },
     zh: {
@@ -129,6 +130,7 @@ i18next.init({
         confirm: { button: '确认' },
         dietaryOptions: { label: '膳食选择' },
         sizes: { label: '尺寸' },
+        others: { label: '其他' },
       },
     },
     jp: {
@@ -192,6 +194,7 @@ i18next.init({
         confirm: { button: '確認' },
         dietaryOptions: { label: '食事のオプション' },
         sizes: { label: 'サイズ' },
+        others: { label: 'その他' },
       },
     },
   },

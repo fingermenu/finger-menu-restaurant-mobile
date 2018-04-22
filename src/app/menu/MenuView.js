@@ -6,6 +6,7 @@ import { FlatList, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import int from 'int';
+import { translate } from 'react-i18next';
 import { DishTypesProp, MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 import MenuFooterView from './MenuFooterView';
@@ -26,17 +27,17 @@ class MenuView extends Component {
   );
 
   render = () => {
-    const { dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
+    const { t, dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
     const dishTypesWithMenuItemPrices = dishTypes.map(dishType => dishType.tag).map(tag => ({
       tag,
       menuItemPrices: menuItemPrices.filter(menuItemPrice => !!menuItemPrice.tags.find(_ => _.id.localeCompare(tag.id) === 0)),
     }));
     const menuItemPriceIdsWithDishType = dishTypesWithMenuItemPrices.reduce(
-      (ids, value) => ids.concat(value.menuItemPrices.map(menuItemPrice => menuItemPrice.id)),
+      (ids, value) => ids.concat(List(value.menuItemPrices.map(menuItemPrice => menuItemPrice.id))),
       List(),
     );
     const menuItemPricesWithoutDishType = menuItemPrices.filter(
-      menuItemPrice => menuItemPriceIdsWithDishType.find(_ => _ === menuItemPrice.id) === undefined,
+      menuItemPrice => !menuItemPriceIdsWithDishType.some(_ => _.localeCompare(menuItemPrice.id) === 0),
     );
 
     return (
@@ -60,6 +61,7 @@ class MenuView extends Component {
               </View>
             ),
         )}
+        {menuItemPrices.length !== menuItemPricesWithoutDishType.length && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
         <FlatList
           data={menuItemPricesWithoutDishType
             .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
@@ -96,4 +98,4 @@ MenuView.defaultProps = {
   onRefresh: null,
 };
 
-export default MenuView;
+export default translate()(MenuView);
