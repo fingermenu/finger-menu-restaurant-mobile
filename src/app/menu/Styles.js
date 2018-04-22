@@ -5,7 +5,7 @@ import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    /* flex: 1, */
   },
   rowContainer: {
     flexDirection: 'row',

@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import Immutable from 'immutable';
-import { FlatList, View } from 'react-native';
+import { List } from 'immutable';
+import { FlatList, ScrollView, View } from 'react-native';
+import { Text } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import Styles from './Styles';
 import { DishTypesProp, MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 import MenuFooterView from './MenuFooterView';
@@ -25,27 +25,50 @@ class MenuView extends Component {
 
   render = () => {
     const { dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
-    const convertedMenuItemPrices = Immutable.fromJS(menuItemPrices);
-    const tagIds = convertedMenuItemPrices.flatMap(menuItemPrice => menuItemPrice.get('tags').map(tag => tag.get('id'))).toSet();
-    const anyMenuItemTagedWithDishType = dishTypes.filter(dishType => tagIds.some(tagId => tagId.localeCompare(dishType.tag.id) === 0));
+    const dishTypesWithMenuItemPrices = dishTypes.map(dishType => dishType.tag).map(tag => ({
+      tag,
+      menuItemPrices: menuItemPrices.filter(menuItemPrice => !!menuItemPrice.tags.find(_ => _.id.localeCompare(tag.id) === 0)),
+    }));
+    const menuItemPriceIdsWithDishType = dishTypesWithMenuItemPrices.reduce(
+      (ids, value) => ids.concat(value.menuItemPrices.map(menuItemPrice => menuItemPrice.id)),
+      List(),
+    );
+    const menuItemPricesWithoutDishType = menuItemPrices.filter(
+      menuItemPrice => menuItemPriceIdsWithDishType.find(_ => _ === menuItemPrice.id) === undefined,
+    );
 
     return (
-      <View style={Styles.container}>
-        {anyMenuItemTagedWithDishType.length === 0 && (
-          <FlatList
-            data={menuItemPrices}
-            renderItem={this.renderRow}
-            keyExtractor={this.keyExtractor}
-            onEndReached={onEndReached}
-            onRefresh={onRefresh}
-            refreshing={isRefreshing}
-            ItemSeparatorComponent={this.renderItemSeparator}
-          />
+      <ScrollView>
+        {dishTypesWithMenuItemPrices.map(
+          dishTypeWithMenuItemPrices =>
+            dishTypeWithMenuItemPrices.menuItemPrices.length > 0 && (
+              <View key={dishTypeWithMenuItemPrices.tag.id}>
+                <Text>{dishTypeWithMenuItemPrices.tag.name}</Text>
+                <FlatList
+                  data={dishTypeWithMenuItemPrices.menuItemPrices}
+                  renderItem={this.renderRow}
+                  keyExtractor={this.keyExtractor}
+                  onEndReached={onEndReached}
+                  onRefresh={onRefresh}
+                  refreshing={isRefreshing}
+                  ItemSeparatorComponent={this.renderItemSeparator}
+                />
+              </View>
+            ),
         )}
+        <FlatList
+          data={menuItemPricesWithoutDishType}
+          renderItem={this.renderRow}
+          keyExtractor={this.keyExtractor}
+          onEndReached={onEndReached}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          ItemSeparatorComponent={this.renderItemSeparator}
+        />
         {inMemoryMenuItemPricesToOrder.length > 0 && (
           <MenuFooterView totalOrderQuantity={this.getTotalOrderQuantity()} onPlaceOrderPressed={onPlaceOrderPressed} />
         )}
-      </View>
+      </ScrollView>
     );
   };
 }
