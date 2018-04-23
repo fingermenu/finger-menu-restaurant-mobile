@@ -41,42 +41,44 @@ class MenuView extends Component {
     );
 
     return (
-      <ScrollView>
-        {dishTypesWithMenuItemPrices.sort((dishType1, dishType2) => dishType1.tag.name.localeCompare(dishType2.tag.name)).map(
-          dishTypeWithMenuItemPrices =>
-            dishTypeWithMenuItemPrices.menuItemPrices.length > 0 && (
-              <View key={dishTypeWithMenuItemPrices.tag.id}>
-                <Text style={Styles.dishTypeText}>{dishTypeWithMenuItemPrices.tag.name}</Text>
-                <FlatList
-                  data={dishTypeWithMenuItemPrices.menuItemPrices
-                    .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
-                    .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
-                  renderItem={this.renderRow}
-                  keyExtractor={this.keyExtractor}
-                  onEndReached={onEndReached}
-                  onRefresh={onRefresh}
-                  refreshing={isRefreshing}
-                  ItemSeparatorComponent={this.renderItemSeparator}
-                />
-              </View>
-            ),
-        )}
-        {menuItemPrices.length !== menuItemPricesWithoutDishType.length && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
-        <FlatList
-          data={menuItemPricesWithoutDishType
-            .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
-            .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
-          renderItem={this.renderRow}
-          keyExtractor={this.keyExtractor}
-          onEndReached={onEndReached}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          ItemSeparatorComponent={this.renderItemSeparator}
-        />
+      <View style={Styles.container}>
+        <ScrollView>
+          {dishTypesWithMenuItemPrices.sort((dishType1, dishType2) => dishType1.tag.name.localeCompare(dishType2.tag.name)).map(
+            dishTypeWithMenuItemPrices =>
+              dishTypeWithMenuItemPrices.menuItemPrices.length > 0 && (
+                <View key={dishTypeWithMenuItemPrices.tag.id}>
+                  <Text style={Styles.dishTypeText}>{dishTypeWithMenuItemPrices.tag.name}</Text>
+                  <FlatList
+                    data={dishTypeWithMenuItemPrices.menuItemPrices
+                      .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
+                      .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
+                    renderItem={this.renderRow}
+                    keyExtractor={this.keyExtractor}
+                    onEndReached={onEndReached}
+                    onRefresh={onRefresh}
+                    refreshing={isRefreshing}
+                    ItemSeparatorComponent={this.renderItemSeparator}
+                  />
+                </View>
+              ),
+          )}
+          {menuItemPrices.length !== menuItemPricesWithoutDishType.length && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
+          <FlatList
+            data={menuItemPricesWithoutDishType
+              .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
+              .sort((menuItemPrice1, menuItemPrice2) => int(menuItemPrice1.sortOrderIndex).cmp(menuItemPrice2.sortOrderIndex))}
+            renderItem={this.renderRow}
+            keyExtractor={this.keyExtractor}
+            onEndReached={onEndReached}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            ItemSeparatorComponent={this.renderItemSeparator}
+          />
+        </ScrollView>
         {inMemoryMenuItemPricesToOrder.length > 0 && (
           <MenuFooterView totalOrderQuantity={this.getTotalOrderQuantity()} onPlaceOrderPressed={onPlaceOrderPressed} />
         )}
-      </ScrollView>
+      </View>
     );
   };
 }
