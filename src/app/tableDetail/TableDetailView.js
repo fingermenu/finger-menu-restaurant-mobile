@@ -214,12 +214,6 @@ class TableDetailView extends Component {
         ref={this.setCustomPaidPopupDialogRef}
       >
         <View style={Styles.customPayDialogContainer}>
-          <FlatList
-            data={this.state.selectedOrders.toJS()}
-            renderItem={this.renderSelectedPayingItem}
-            keyExtractor={this.selectedOrdersKeyExtractor}
-            extraData={this.state}
-          />
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
               <Text style={DefaultStyles.primaryLabelFont}>
