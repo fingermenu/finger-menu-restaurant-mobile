@@ -1,7 +1,7 @@
 // @flow
 
 import cuid from 'cuid';
-import Immutable, { Map } from 'immutable';
+import Immutable, { Map, OrderedMap, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -58,7 +58,7 @@ class MenuItemContainer extends Component {
 
   handleSubmit = values => {
     const {
-      activeOrderMenuItemPriceId,
+      activeOrderMenuItemPriceGroupId,
       servingTimeId,
       user: {
         menuItemPrice: {
@@ -67,30 +67,37 @@ class MenuItemContainer extends Component {
         },
       },
     } = this.props;
+    const groupId = activeOrderMenuItemPriceGroupId ? activeOrderMenuItemPriceGroupId : cuid();
+    const items = Range(0, this.state.quantity).reduce(reduction => {
+      const id = cuid();
 
-    this.props.applicationStateActions.addOrUpdateItemInActiveOrder(
-      Map({
-        id: activeOrderMenuItemPriceId ? activeOrderMenuItemPriceId : cuid(),
-        quantity: this.state.quantity,
-        notes: values.notes,
-        paid: false,
-        servingTimeId,
-        menuItemPrice: Map({
-          id: menuItemPriceId,
-          menuItem: Map({
-            id: menuItemId,
+      return reduction.set(
+        id,
+        Map({
+          id,
+          groupId,
+          quantity: 1,
+          notes: values.notes,
+          paid: false,
+          servingTimeId,
+          menuItemPrice: Map({
+            id: menuItemPriceId,
+            menuItem: Map({
+              id: menuItemId,
+            }),
           }),
+          orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
         }),
-        orderChoiceItemPrices: this.getSelectedChoiceItemPrices(values),
-      }),
-    );
+      );
+    }, OrderedMap());
 
+    this.props.applicationStateActions.addOrUpdateItemsInActiveOrder(Map({ items, groupId }));
     this.props.goBack();
   };
 
   render = () => {
     const {
-      activeOrderMenuItemPriceId,
+      activeOrderMenuItemPriceGroupId,
       user: { dietaryOptions, sizes, menuItemPrice },
     } = this.props;
 
@@ -99,7 +106,7 @@ class MenuItemContainer extends Component {
         menuItemPrice={menuItemPrice}
         dietaryOptions={dietaryOptions.edges.map(_ => _.node)}
         sizes={sizes.edges.map(_ => _.node)}
-        isAddingOrder={activeOrderMenuItemPriceId === null}
+        isAddingOrder={activeOrderMenuItemPriceGroupId === null}
         onSubmit={this.handleSubmit}
         quantity={this.state.quantity}
         onQuantityChanged={this.handleQuantityChanged}
@@ -111,26 +118,28 @@ class MenuItemContainer extends Component {
 MenuItemContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
-  activeOrderMenuItemPriceId: PropTypes.string,
+  activeOrderMenuItemPriceGroupId: PropTypes.string,
   servingTimeId: PropTypes.string,
 };
 
 MenuItemContainer.defaultProps = {
-  activeOrderMenuItemPriceId: null,
+  activeOrderMenuItemPriceGroupId: null,
   servingTimeId: null,
 };
 
 const mapStateToProps = state => {
   const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
-  const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
+  const activeOrderDetails = activeOrderMenuItemPrice.isEmpty()
     ? null
-    : state.applicationState.getIn(['activeOrder', 'details', activeOrderMenuItemPrice.get('id')]);
+    : state.applicationState
+      .getIn(['activeOrder', 'details'])
+      .filter(item => item.get('groupId').localeCompare(activeOrderMenuItemPrice.get('groupId')) === 0);
   const activeMenuItemPrice = state.applicationState.get('activeMenuItemPrice');
 
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    activeOrderMenuItemPriceId: activeOrderMenuItemPrice.get('id'),
-    quantity: activeOrderDetail ? activeOrderDetail.get('quantity') : 1,
+    activeOrderMenuItemPriceGroupId: activeOrderMenuItemPrice.get('groupId'),
+    quantity: activeOrderDetails ? activeOrderDetails.count() : 1,
     servingTimeId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('servingTimeId') : activeMenuItemPrice.get('servingTimeId'),
   };
 };

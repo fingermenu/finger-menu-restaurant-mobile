@@ -184,9 +184,9 @@ class OrdersContainer extends Component {
     return padding + servingTime + padding + endOfLine + endOfLine + this.getPrintableOrderDetails(details) + endOfLine + endOfLine;
   };
 
-  handleViewOrderItemPressed = ({ id, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
+  handleViewOrderItemPressed = ({ groupId, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
-    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ id, menuItemPriceId, servingTimeId }));
+    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ groupId, menuItemPriceId, servingTimeId }));
     this.props.navigateToMenuItem();
   };
 
@@ -227,8 +227,8 @@ class OrdersContainer extends Component {
     );
   };
 
-  handleRemoveOrderPressed = ({ id }) => {
-    this.props.applicationStateActions.removeItemFromActiveOrder(Map({ id }));
+  handleRemoveOrderPressed = ({ groupId }) => {
+    this.props.applicationStateActions.removeItemsFromActiveOrder(Map({ groupId }));
   };
 
   handleRefresh = () => {
@@ -424,9 +424,16 @@ const mapStateToProps = (state, ownProps) => {
       .toList(),
   );
 
+  const groupedDetails = inMemoryOrder.get('details').groupBy(item => item.get('groupId'));
+  const details = groupedDetails.keySeq().map(key => {
+    const details = groupedDetails.get(key);
+
+    return details.first().set('quantity', details.count());
+  });
+
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    inMemoryOrder: inMemoryOrder.toJS(),
+    inMemoryOrder: inMemoryOrder.set('details', details).toJS(),
     customer: state.applicationState.get('activeCustomer').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,

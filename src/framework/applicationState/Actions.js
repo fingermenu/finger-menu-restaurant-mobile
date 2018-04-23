@@ -94,16 +94,16 @@ export function setActiveOrderTopInfo(payload) {
   };
 }
 
-export function addOrUpdateItemInActiveOrder(payload) {
+export function addOrUpdateItemsInActiveOrder(payload) {
   return {
-    type: ActionTypes.APPLICATION_STATE_ADD_OR_UPDATE_ITEM_TO_ACTIVE_ORDER,
+    type: ActionTypes.APPLICATION_STATE_ADD_OR_UPDATE_ITEMS_TO_ACTIVE_ORDER,
     payload,
   };
 }
 
-export function removeItemFromActiveOrder(payload) {
+export function removeItemsFromActiveOrder(payload) {
   return {
-    type: ActionTypes.APPLICATION_STATE_REMOVE_ITEM_FROM_ACTIVE_ORDER,
+    type: ActionTypes.APPLICATION_STATE_REMOVE_ITEMS_FROM_ACTIVE_ORDER,
     payload,
   };
 }

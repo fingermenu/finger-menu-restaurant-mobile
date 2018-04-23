@@ -122,7 +122,10 @@ const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices, defaultChoi
   const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
   const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
     ? null
-    : state.applicationState.getIn(['activeOrder', 'details', activeOrderMenuItemPrice.get('id')]);
+    : state.applicationState
+      .getIn(['activeOrder', 'details'])
+      .filter(item => item.get('groupId').localeCompare(activeOrderMenuItemPrice.get('groupId')) === 0)
+      .first();
   const initialValues = {
     notes: activeOrderDetail ? activeOrderDetail.get('notes') : null,
     sizes: {},
