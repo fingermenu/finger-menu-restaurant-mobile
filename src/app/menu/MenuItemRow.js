@@ -27,8 +27,11 @@ class MenuItemRow extends Component {
       menuItemPrice: {
         currentPrice,
         menuItem: { name, description, imageUrl },
+        defaultChoiceItemPrices,
       },
     } = this.props;
+    const priceToDisplay =
+      currentPrice + defaultChoiceItemPrices.reduce((totalPrice, choiceItemPrice) => totalPrice + choiceItemPrice.currentPrice, 0.0);
 
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
@@ -43,7 +46,7 @@ class MenuItemRow extends Component {
               <Icon name="ios-checkmark-circle" type="ionicon" size={25} color={DefaultColor.actionButtonColor} />
             </View>
           )}
-          {currentPrice !== 0 && <Text style={DefaultStyles.primaryFont}>${currentPrice.toFixed(2)}</Text>}
+          {priceToDisplay !== 0 && <Text style={DefaultStyles.primaryFont}>${priceToDisplay.toFixed(2)}</Text>}
         </View>
       </TouchableItem>
     );

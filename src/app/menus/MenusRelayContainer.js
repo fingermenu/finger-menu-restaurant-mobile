@@ -48,6 +48,9 @@ export default createRefetchContainer(
               tags {
                 id
               }
+              defaultChoiceItemPrices {
+                currentPrice
+              }
             }
             tags {
               id
