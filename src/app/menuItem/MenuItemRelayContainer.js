@@ -41,13 +41,16 @@ export default createRefetchContainer(
             currentPrice
             sortOrderIndex
             choiceItem {
-              description
               id
+              description
               name
             }
             tags {
               id
             }
+          }
+          defaultChoiceItemPrices {
+            id
           }
           rules {
             mustChooseSize

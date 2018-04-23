@@ -107,7 +107,7 @@ MenuItemView.propTypes = {
   onQuantityChanged: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices }, dietaryOptions, sizes }) => {
+const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices, defaultChoiceItemPrices }, dietaryOptions, sizes }) => {
   const typeFilterPredicate = (choiceItemPrice, items) =>
     !!choiceItemPrice.tags.find(tag => !!items.find(item => item.tag && item.tag.id.localeCompare(tag.id) === 0));
   const sortFunc = (choiceItemPrice1, choiceItemPrice2) => int(choiceItemPrice1.sortOrderIndex).cmp(choiceItemPrice2.sortOrderIndex);
@@ -119,7 +119,6 @@ const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices }, dietaryOp
     .filter(choiceItemPrice => Common.isUndefined(choiceItemPricesOfTypeDietaryOption.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0)))
     .filter(choiceItemPrice => Common.isUndefined(choiceItemPricesOfTypeSize.find(_ => _.id.localeCompare(choiceItemPrice.id) === 0)))
     .sort(sortFunc);
-
   const activeOrderMenuItemPrice = state.applicationState.get('activeOrderMenuItemPrice');
   const activeOrderDetail = activeOrderMenuItemPrice.isEmpty()
     ? null
@@ -132,6 +131,16 @@ const mapStateToProps = (state, { menuItemPrice: { choiceItemPrices }, dietaryOp
   if (activeOrderDetail) {
     activeOrderDetail.get('orderChoiceItemPrices').forEach(_ => {
       const id = _.getIn(['choiceItemPrice', 'id']);
+
+      if (choiceItemPricesOfTypeSize.find(choiceItemPrice => choiceItemPrice.id.localeCompare(id) === 0)) {
+        initialValues.sizes[id] = true;
+      } else {
+        initialValues[id] = true;
+      }
+    });
+  } else {
+    defaultChoiceItemPrices.forEach(_ => {
+      const id = _.id;
 
       if (choiceItemPricesOfTypeSize.find(choiceItemPrice => choiceItemPrice.id.localeCompare(id) === 0)) {
         initialValues.sizes[id] = true;
