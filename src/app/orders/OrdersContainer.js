@@ -339,10 +339,21 @@ class OrdersContainer extends Component {
       },
     } = this.props;
 
+    const groupedDetails = Immutable.fromJS(inMemoryOrder)
+      .get('details')
+      .groupBy(item => item.get('groupId'));
+
     return (
       <OrdersView
         orders={orders.map(_ => _.node)}
-        inMemoryOrderItems={inMemoryOrder.details}
+        inMemoryOrderItems={groupedDetails
+          .keySeq()
+          .map(key => {
+            const details = groupedDetails.get(key);
+
+            return details.first().set('quantity', details.count());
+          })
+          .toJS()}
         onViewOrderItemPressed={this.handleViewOrderItemPressed}
         onConfirmOrderPressed={this.handleConfirmOrderPressed}
         onRemoveOrderPressed={this.handleRemoveOrderPressed}
@@ -424,16 +435,9 @@ const mapStateToProps = (state, ownProps) => {
       .toList(),
   );
 
-  const groupedDetails = inMemoryOrder.get('details').groupBy(item => item.get('groupId'));
-  const details = groupedDetails.keySeq().map(key => {
-    const details = groupedDetails.get(key);
-
-    return details.first().set('quantity', details.count());
-  });
-
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    inMemoryOrder: inMemoryOrder.set('details', details).toJS(),
+    inMemoryOrder: inMemoryOrder.toJS(),
     customer: state.applicationState.get('activeCustomer').toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
