@@ -215,22 +215,13 @@ class TableDetailContainer extends Component {
 
   handleRePrintForKitchen = () => {
     const {
-      printerConfig,
+      printerConfig: { hostname, port },
       kitchenOrderTemplate,
       user: {
         table: { name: tableName },
         orders: { edges: orders },
       },
     } = this.props;
-
-    if (!kitchenOrderTemplate || !printerConfig) {
-      return;
-    }
-
-    const {
-      printerConfig: { hostname, port },
-    } = this.props;
-
     const documentContent = orders
       .map(_ => _.node)
       .map(({ details, placedAt, notes, customerName }) =>
@@ -314,6 +305,7 @@ class TableDetailContainer extends Component {
         orders: { edges: orders },
       },
       printerConfig,
+      kitchenOrderTemplate,
     } = this.props;
 
     return (
@@ -329,7 +321,7 @@ class TableDetailContainer extends Component {
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
         onRePrintForKitchen={this.handleRePrintForKitchen}
-        canPrint={printerConfig !== null}
+        canPrintKitchenOrder={kitchenOrderTemplate && printerConfig}
       />
     );
   };
