@@ -1,5 +1,6 @@
 // @flow
 
+import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -10,6 +11,7 @@ import TableDetailView from './TableDetailView';
 import { TableProp } from './PropTypes';
 import { UpdateTable, UpdateOrder } from '../../framework/relay/mutations';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import PrinterHelper, { endOfLine } from '../../framework/PrintHelper';
 
 class TableDetailContainer extends Component {
   state = {
@@ -211,7 +213,40 @@ class TableDetailContainer extends Component {
     }
   };
 
-  handleRePrintForKitchen = () => {};
+  handleRePrintForKitchen = () => {
+    const {
+      printerConfig,
+      kitchenOrderTemplate,
+      user: {
+        table: { name: tableName },
+        orders: { edges: orders },
+      },
+    } = this.props;
+
+    if (!kitchenOrderTemplate || !printerConfig) {
+      return;
+    }
+
+    const {
+      printerConfig: { hostname, port },
+    } = this.props;
+
+    const documentContent = orders
+      .map(_ => _.node)
+      .map(({ details, placedAt, notes, customerName }) =>
+        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, customerName, tableName, kitchenOrderTemplate),
+      )
+      .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
+
+    this.props.escPosPrinterActions.printDocument(
+      Map({
+        hostname,
+        port,
+        documentContent,
+        numberOfCopies: 1,
+      }),
+    );
+  };
 
   handleEndReached = () => true;
 
@@ -278,6 +313,7 @@ class TableDetailContainer extends Component {
       user: {
         orders: { edges: orders },
       },
+      printerConfig,
     } = this.props;
 
     return (
@@ -293,6 +329,7 @@ class TableDetailContainer extends Component {
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
         onRePrintForKitchen={this.handleRePrintForKitchen}
+        canPrint={printerConfig !== null}
       />
     );
   };
@@ -300,6 +337,7 @@ class TableDetailContainer extends Component {
 
 TableDetailContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToHome: PropTypes.func.isRequired,
   navigateToTableSetup: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
@@ -307,12 +345,10 @@ TableDetailContainer.propTypes = {
   tableId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
-  numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 
 TableDetailContainer.defaultProps = {
   kitchenOrderTemplate: null,
-  numberOfPrintCopiesForKitchen: 1,
 };
 
 const mapStateToProps = (state, props) => {
@@ -334,12 +370,12 @@ const mapStateToProps = (state, props) => {
     tableId: activeTable.get('id'),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
-    numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
   navigateToHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
   navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
   goBack: () => dispatch(NavigationActions.back()),

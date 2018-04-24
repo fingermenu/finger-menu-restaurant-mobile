@@ -359,7 +359,7 @@ class TableDetailView extends Component {
   };
 
   renderDefaultPaymentButtons = tableState => {
-    const { t, orders } = this.props;
+    const { t, orders, canPrint } = this.props;
 
     return (
       <View style={Styles.buttonsContainer}>
@@ -371,7 +371,7 @@ class TableDetailView extends Component {
         <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
         <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={this.onGiveToGuestPressedDebounced} />
-        <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.onRePrintForKitchenDebounced} />
+        {canPrint && <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.onRePrintForKitchenDebounced} />}
       </View>
     );
   };
@@ -480,6 +480,7 @@ TableDetailView.propTypes = {
   onRefresh: PropTypes.func.isRequired,
   onEndReached: PropTypes.func.isRequired,
   table: TableProp.isRequired,
+  canPrint: PropTypes.bool.isRequired,
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
   onSetPaidAndResetPressed: PropTypes.func.isRequired,

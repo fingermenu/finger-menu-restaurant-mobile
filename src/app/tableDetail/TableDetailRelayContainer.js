@@ -43,6 +43,7 @@ export default createRefetchContainer(
                   menuItem {
                     id
                     name
+                    nameToPrint
                     imageUrl
                   }
                 }
@@ -60,6 +61,7 @@ export default createRefetchContainer(
                     choiceItem {
                       id
                       name
+                      nameToPrint
                     }
                   }
                 }

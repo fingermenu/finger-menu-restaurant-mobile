@@ -3,9 +3,9 @@
 import Immutable, { Map, Range } from 'immutable';
 import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 
-const endingDots = '.';
-const maxLineLength = 48;
-const endOfLine = '\r\n';
+export const endingDots = '.';
+export const maxLineLength = 48;
+export const endOfLine = '\r\n';
 
 export default class PrinterHelper {
   static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
