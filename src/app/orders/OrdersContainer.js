@@ -4,8 +4,7 @@ import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/e
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Immutable, { Map, Range } from 'immutable';
-import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
+import Immutable, { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
@@ -15,46 +14,9 @@ import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveCustomerProp } from '../../framework/applicationState';
 import { eventPrefix } from '../../framework/AnalyticHelper';
-
-const endingDots = '.';
-const maxLineLength = 48;
-const endOfLine = '\r\n';
+import PrinterHelper from '../../framework/PrintHelper';
 
 class OrdersContainer extends Component {
-  static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
-    if (leftStr.length + rightStr.length <= width - 1) {
-      return leftStr + Array(width - (leftStr.length + rightStr.length)).join(padding) + rightStr;
-    }
-
-    if (rightStr.length > width - 1) {
-      throw new Error('Can\'t fit the right text.');
-    }
-
-    if (leftStr.length + rightStr.length > width - 1 && rightStr.length > width - endingDots.length) {
-      throw new Error('Can\'t fit the right text.');
-    }
-
-    return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
-  };
-
-  static splitTextIntoMultipleLines = (str, prefixText = '', trimText = true, lineLength = maxLineLength) => {
-    if (!str) {
-      return '';
-    }
-
-    const trimmedText = str.trim();
-
-    if (trimmedText.length === 0) {
-      return '';
-    }
-
-    const finalStr = prefixText + (trimText ? trimmedText : str);
-
-    return Range(0, finalStr.length / lineLength)
-      .map(idx => finalStr.substring(idx * lineLength, (idx + 1) * lineLength))
-      .reduce((reduction, value) => reduction + value + endOfLine, '');
-  };
-
   static convertOrderToOrderRequest = order =>
     order.update('details', details =>
       details.map(detail => {
@@ -132,57 +94,6 @@ class OrdersContainer extends Component {
       selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
     };
   }
-
-  getPrintableOrderDetails = details => {
-    const groupedDetails = details.groupBy(detail => {
-      const choiceItemPriceIds = detail
-        .get('orderChoiceItemPrices')
-        .map(orderChoiceItemPrice => orderChoiceItemPrice.getIn(['choiceItemPrice', 'id']))
-        .sort((id1, id2) => id1.localeCompare(id2))
-        .reduce((reduction, id) => reduction + id, '');
-      const notes = detail.get('notes') ? detail.get('notes') : '';
-
-      return detail.getIn(['menuItemPrice', 'id']) + notes + choiceItemPriceIds;
-    });
-
-    return groupedDetails
-      .keySeq()
-      .map(key =>
-        groupedDetails
-          .get(key)
-          .reduce(
-            (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
-            Map(),
-          ),
-      )
-      .reduce(
-        (menuItemsDetail, detail) =>
-          menuItemsDetail +
-          endOfLine +
-          OrdersContainer.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
-          endOfLine +
-          detail
-            .get('orderChoiceItemPrices')
-            .reduce(
-              (reduction, orderChoiceItemPrices) =>
-                reduction +
-                OrdersContainer.splitTextIntoMultipleLines(
-                  '  ' + orderChoiceItemPrices.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
-                  '',
-                  false,
-                ),
-              '',
-            ) +
-          OrdersContainer.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
-        '',
-      );
-  };
-
-  getPrintableOrderDetailsWithServingTime = (servingTime, details) => {
-    const padding = Array(Math.floor((maxLineLength - servingTime.length) / 2 + 1)).join('-');
-
-    return padding + servingTime + padding + endOfLine + endOfLine + this.getPrintableOrderDetails(details) + endOfLine + endOfLine;
-  };
 
   handleViewOrderItemPressed = ({ groupId, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
@@ -272,33 +183,6 @@ class OrdersContainer extends Component {
       return;
     }
 
-    const immutableDetails = Immutable.fromJS(details);
-    const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => !!detail.get('servingTime'));
-    const detailsWithServingTimes = immutableDetails.filter(detail => !!detail.get('servingTime'));
-    const groupedDetails = detailsWithServingTimes.groupBy(detail => detail.getIn(['servingTime', 'id']));
-    let finalOrderList = groupedDetails
-      .keySeq()
-      .map(servingTimeId =>
-        Map({
-          servingTimeNameToPrint: groupedDetails
-            .get(servingTimeId)
-            .first()
-            .getIn(['servingTime', 'tag', 'nameToPrint']),
-          details: groupedDetails.get(servingTimeId),
-        }),
-      )
-      .map(groupedDetailsWithServingTime =>
-        this.getPrintableOrderDetailsWithServingTime(
-          groupedDetailsWithServingTime.get('servingTimeNameToPrint'),
-          groupedDetailsWithServingTime.get('details'),
-        ),
-      )
-      .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
-
-    if (!detailsWithUnspecifiedServingTime.isEmpty()) {
-      finalOrderList = finalOrderList + this.getPrintableOrderDetailsWithServingTime('Unspecified', detailsWithUnspecifiedServingTime);
-    }
-
     const {
       printerConfig: { hostname, port },
       numberOfPrintCopiesForKitchen,
@@ -308,21 +192,14 @@ class OrdersContainer extends Component {
       Map({
         hostname,
         port,
-        documentContent: kitchenOrderTemplate
-          .replace('\r', '')
-          .replace('\n', '')
-          .replace(/{CR}/g, '\r')
-          .replace(/{LF}/g, '\n')
-          .replace(
-            /{OrderDateTime}/g,
-            ZonedDateTime.parse(placedAt)
-              .withZoneSameInstant(ZoneId.SYSTEM)
-              .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
-          )
-          .replace(/{Notes}/g, OrdersContainer.splitTextIntoMultipleLines(notes, 'Notes: '))
-          .replace(/{CustomerName}/g, OrdersContainer.splitTextIntoMultipleLines(customerName), 'Customer Name: ')
-          .replace(/{TableName}/g, tableName)
-          .replace(/{OrderList}/g, finalOrderList),
+        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+          details,
+          placedAt,
+          notes,
+          customerName,
+          tableName,
+          kitchenOrderTemplate,
+        ),
         numberOfCopies: numberOfPrintCopiesForKitchen,
       }),
     );

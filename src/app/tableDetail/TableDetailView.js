@@ -2,6 +2,7 @@
 
 import Immutable, { List } from 'immutable';
 import React, { Component } from 'react';
+import debounce from 'lodash.debounce';
 import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Badge, Button, ButtonGroup, Input } from 'react-native-elements';
@@ -11,9 +12,17 @@ import OrderItemRow from '../orders/OrderItemRow';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { TableProp } from './PropTypes';
+import config from '../../framework/config';
 
 class TableDetailView extends Component {
   static isDecimal = strValue => !isNaN(parseFloat(strValue)) && isFinite(strValue);
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.onGiveToGuestPressedDebounced = debounce(props.onGiveToGuestPressed, config.navigationDelay);
+    this.onRePrintForKitchenDebounced = debounce(props.onRePrintForKitchen, config.navigationDelay);
+  }
 
   state = {
     selectedDiscountButtonIndex: 0,
@@ -350,7 +359,7 @@ class TableDetailView extends Component {
   };
 
   renderDefaultPaymentButtons = tableState => {
-    const { t, orders, onGiveToGuestPressed } = this.props;
+    const { t, orders } = this.props;
 
     return (
       <View style={Styles.buttonsContainer}>
@@ -361,7 +370,8 @@ class TableDetailView extends Component {
         />
         <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
-        <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={onGiveToGuestPressed} />
+        <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={this.onGiveToGuestPressedDebounced} />
+        <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.onRePrintForKitchenDebounced} />
       </View>
     );
   };
@@ -475,6 +485,7 @@ TableDetailView.propTypes = {
   onSetPaidAndResetPressed: PropTypes.func.isRequired,
   onCustomPaidPressed: PropTypes.func.isRequired,
   onGiveToGuestPressed: PropTypes.func.isRequired,
+  onRePrintForKitchen: PropTypes.func.isRequired,
 };
 
 export default translate()(TableDetailView);

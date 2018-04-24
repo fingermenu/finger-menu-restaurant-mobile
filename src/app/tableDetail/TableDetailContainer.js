@@ -211,6 +211,8 @@ class TableDetailContainer extends Component {
     }
   };
 
+  handleRePrintForKitchen = () => {};
+
   handleEndReached = () => true;
 
   convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid) => {
@@ -290,6 +292,7 @@ class TableDetailContainer extends Component {
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
+        onRePrintForKitchen={this.handleRePrintForKitchen}
       />
     );
   };
@@ -303,15 +306,35 @@ TableDetailContainer.propTypes = {
   table: TableProp.isRequired,
   tableId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
+  kitchenOrderTemplate: PropTypes.string,
+  numberOfPrintCopiesForKitchen: PropTypes.number,
+};
+
+TableDetailContainer.defaultProps = {
+  kitchenOrderTemplate: null,
+  numberOfPrintCopiesForKitchen: 1,
 };
 
 const mapStateToProps = (state, props) => {
   const activeTable = state.applicationState.get('activeTable');
+  const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
+  const printerConfig = configurations.get('printers').isEmpty()
+    ? null
+    : configurations
+      .get('printers')
+      .first()
+      .toJS();
+  const kitchenOrderTemplate = configurations
+    .get('documentTemplates')
+    .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     table: props.user.table,
     tableId: activeTable.get('id'),
+    printerConfig,
+    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
+    numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
   };
 };
 

@@ -14,7 +14,7 @@ class TableView extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onTablePressed = debounce(this.props.onTablePressed, config.navigationDelay);
+    this.onTablePressed = debounce(props.onTablePressed, config.navigationDelay);
   }
 
   handleTablePressed = () => this.onTablePressed(this.props.table);

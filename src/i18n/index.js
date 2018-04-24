@@ -70,6 +70,7 @@ i18next.init({
         dietaryOptions: { label: 'Dietary Options' },
         sizes: { label: 'Sizes' },
         others: { label: 'Others' },
+        rePrintForKitchen: { button: 'Re-Print For Kitchen' },
       },
     },
     zh: {
@@ -131,6 +132,7 @@ i18next.init({
         dietaryOptions: { label: '膳食选择' },
         sizes: { label: '尺寸' },
         others: { label: '其他' },
+        rePrintForKitchen: { button: '重新打印厨房' },
       },
     },
     jp: {
@@ -195,6 +197,7 @@ i18next.init({
         dietaryOptions: { label: '食事のオプション' },
         sizes: { label: 'サイズ' },
         others: { label: 'その他' },
+        rePrintForKitchen: { button: 'キッチン用に再印刷' },
       },
     },
   },

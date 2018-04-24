@@ -18,16 +18,16 @@ class OrderItemRow extends Component {
     super(props, context);
 
     if (props.orderItemIsEditable) {
-      if (this.props.onRemoveOrderPressed) {
-        this.onRemoveOrderPressedDebounced = debounce(this.props.onRemoveOrderPressed, config.navigationDelay);
+      if (props.onRemoveOrderPressed) {
+        this.onRemoveOrderPressedDebounced = debounce(props.onRemoveOrderPressed, config.navigationDelay);
       }
 
-      if (this.props.onViewOrderItemPressed) {
-        this.onViewOrderItemPressedDebounced = debounce(this.props.onViewOrderItemPressed, config.navigationDelay);
+      if (props.onViewOrderItemPressed) {
+        this.onViewOrderItemPressedDebounced = debounce(props.onViewOrderItemPressed, config.navigationDelay);
       }
 
-      if (this.props.onOrderSelected) {
-        this.onOrderSelectedDebounced = debounce(this.props.onOrderSelected, config.navigationDelay);
+      if (props.onOrderSelected) {
+        this.onOrderSelectedDebounced = debounce(props.onOrderSelected, config.navigationDelay);
       }
     }
   }

@@ -16,7 +16,7 @@ class MenuItemRow extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onViewMenuItemPressedDebounced = debounce(this.props.onViewMenuItemPressed, config.navigationDelay);
+    this.onViewMenuItemPressedDebounced = debounce(props.onViewMenuItemPressed, config.navigationDelay);
   }
 
   onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
