@@ -321,7 +321,7 @@ class TableDetailContainer extends Component {
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
         onRePrintForKitchen={this.handleRePrintForKitchen}
-        canPrintKitchenOrder={kitchenOrderTemplate && printerConfig}
+        canPrintKitchenOrder={!!(kitchenOrderTemplate && printerConfig)}
       />
     );
   };
