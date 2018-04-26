@@ -70,7 +70,7 @@ const mutation = graphql`
 
 const commit = (
   environment,
-  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice, printingGroupIds },
+  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice, printingGroupId },
   menuItemPrices,
   choiceItemPrices,
   { onSuccess, onError } = {},
@@ -88,7 +88,7 @@ const commit = (
         notes,
         totalPrice,
         details,
-        printingGroupIds,
+        printingGroupId,
       },
     },
     optimisticResponse: {

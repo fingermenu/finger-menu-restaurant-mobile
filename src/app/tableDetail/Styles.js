@@ -80,10 +80,16 @@ export default StyleSheet.create({
   buttonContainer: {
     padding: 30,
   },
-  rePrintForKitchenTableDialogContainer: {
+  rePrintForKitchenDialogContainer: {
     padding: 10,
   },
-  rePrintForKitchenTableDialogText: {
+  rePrintForKitchenDialogText: {
+    justifyContent: 'center',
+  },
+  printReceiptDialogContainer: {
+    padding: 10,
+  },
+  printReceiptDialogText: {
     justifyContent: 'center',
   },
 });

@@ -706,7 +706,7 @@ input UpdateOrderInput {
   totalPrice: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
-  printingGroupIds: [ID!]
+  printingGroupId: ID
   clientMutationId: String
 }
 

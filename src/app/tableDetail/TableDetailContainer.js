@@ -1,6 +1,7 @@
 // @flow
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
+import cuid from 'cuid';
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -86,7 +87,7 @@ class TableDetailContainer extends Component {
     let totalUpdated = 0;
 
     orders.forEach(order => {
-      this.updateOrder(order, null, true, {
+      this.updateOrder(order, null, true, cuid(), {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -114,7 +115,7 @@ class TableDetailContainer extends Component {
     let totalUpdated = 0;
 
     orders.forEach(order => {
-      this.updateOrder(order, null, true, {
+      this.updateOrder(order, null, true, cuid(), {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -139,11 +140,12 @@ class TableDetailContainer extends Component {
       order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
     );
     const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
+    const printingGroupId = cuid();
     let totalUpdated = 0;
     let allPaidFlag = true;
 
     orders.forEach(order => {
-      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, {
+      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, printingGroupId, {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -239,16 +241,30 @@ class TableDetailContainer extends Component {
     );
   };
 
+  handlePrintReceipt = () => {};
+
   handleEndReached = () => true;
 
-  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid) => {
-    return order.update('details', details =>
+  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, printingGroupId) =>
+    order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
+        let id;
+
+        if (detail.get('paid')) {
+          id = detail.get('printingGroupId');
+        } else {
+          if (setAllMenuItemPricesPaid) {
+            id = printingGroupId;
+          } else {
+            id = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0) ? printingGroupId : null;
+          }
+        }
 
         return detail
           .merge(
             Map({
+              printingGroupId: id,
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
@@ -275,15 +291,14 @@ class TableDetailContainer extends Component {
           .delete('menuItemPrice');
       }),
     );
-  };
 
-  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, callbacks) => {
+  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, printingGroupId, callbacks) => {
     const order = Immutable.fromJS(orderToUpdate);
-    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid);
+    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, printingGroupId);
 
     UpdateOrder(
       this.props.relay.environment,
-      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id })).toJS(),
+      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, printingGroupId })).toJS(),
       order.get('details').map(detail => detail.get('menuItemPrice')),
       order
         .get('details')
@@ -305,6 +320,7 @@ class TableDetailContainer extends Component {
         orders: { edges: orders },
       },
       printerConfig,
+      customerReceiptTemplate,
       kitchenOrderTemplate,
     } = this.props;
 
@@ -322,6 +338,8 @@ class TableDetailContainer extends Component {
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
         onRePrintForKitchen={this.handleRePrintForKitchen}
         canPrintKitchenOrder={!!(kitchenOrderTemplate && printerConfig)}
+        onPrintReceipt={this.handlePrintReceipt}
+        canPrintReceipt={!!(customerReceiptTemplate && printerConfig)}
       />
     );
   };

@@ -72,6 +72,8 @@ i18next.init({
         others: { label: 'Others' },
         rePrintForKitchen: { label: 'Re-Print For Kitchen', button: 'Re-Print For Kitchen' },
         areYouSureToRePrintForKitchen: { message: 'Are you sure to re-print for kitchen?' },
+        printReceipt: { label: 'Print Receipt', button: 'Print Receipt' },
+        areYouSureToPrintReceipt: { message: 'Are you sure to print receipt?' },
       },
     },
     zh: {
@@ -135,6 +137,8 @@ i18next.init({
         others: { label: '其他' },
         rePrintForKitchen: { label: '重新打印厨房', button: '重新打印厨房' },
         areYouSureToRePrintForKitchen: { message: '你确定要重新打印厨房吗？' },
+        printReceipt: { label: '打印收据', button: '打印收据' },
+        areYouSureToPrintReceipt: { message: '你确定打印收据吗？' },
       },
     },
     jp: {
@@ -201,6 +205,8 @@ i18next.init({
         others: { label: 'その他' },
         rePrintForKitchen: { label: 'キッチン用に再印刷', button: 'キッチン用に再印刷' },
         areYouSureToRePrintForKitchen: { message: 'キッチン用に再印刷してもよろしいですか？' },
+        printReceipt: { label: '領収書を印刷する', button: '領収書を印刷する' },
+        areYouSureToPrintReceipt: { message: '領収書を印刷してもよろしいですか？' },
       },
     },
   },
