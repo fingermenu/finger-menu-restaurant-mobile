@@ -355,6 +355,9 @@ const mapStateToProps = (state, props) => {
   const kitchenOrderTemplate = configurations
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
+  const customerReceiptTemplate = configurations
+    .get('documentTemplates')
+    .find(documentTemplate => documentTemplate.get('name').localeCompare('CustomerReceipt') === 0);
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
@@ -362,6 +365,7 @@ const mapStateToProps = (state, props) => {
     tableId: activeTable.get('id'),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
+    customerReceiptTemplate: customerReceiptTemplate ? customerReceiptTemplate.get('template') : null,
   };
 };
 

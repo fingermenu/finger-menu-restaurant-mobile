@@ -364,6 +364,8 @@ input OrderChoiceItemPriceInput {
 type OrderMenuItemPrice {
   id: ID
   groupId: ID
+  printingGroupId: ID
+  printingDateTime: String
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
@@ -375,6 +377,8 @@ type OrderMenuItemPrice {
 input OrderMenuItemPriceInput {
   id: ID
   groupId: ID
+  printingGroupId: ID
+  printingDateTime: String
   menuItemPriceId: ID!
   quantity: Int!
   notes: String
@@ -702,6 +706,7 @@ input UpdateOrderInput {
   totalPrice: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
+  printingGroupIds: [ID!]
   clientMutationId: String
 }
 

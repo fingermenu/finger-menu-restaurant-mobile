@@ -21,7 +21,6 @@ class TableDetailView extends Component {
     super(props, context);
 
     this.onGiveToGuestPressedDebounced = debounce(props.onGiveToGuestPressed, config.navigationDelay);
-    this.onRePrintForKitchenDebounced = debounce(props.onRePrintForKitchen, config.navigationDelay);
   }
 
   state = {
@@ -74,6 +73,10 @@ class TableDetailView extends Component {
 
   setCustomPaidPopupDialogRef = popupDialog => {
     this.customPaidPopupDialog = popupDialog;
+  };
+
+  setRePrintForKitchenPopupDialogRef = popupDialog => {
+    this.rePrintForKitchenPopupDialog = popupDialog;
   };
 
   getOrderTotal = () => this.props.orders.reduce((totalPrice, order) => totalPrice + order.totalPrice, 0);
@@ -132,6 +135,17 @@ class TableDetailView extends Component {
   };
 
   handleResetTablePressed = () => this.resetPopupDialog.show();
+
+  handleRePrintForKitchenConfirmed = () => {
+    this.rePrintForKitchenPopupDialog.dismiss();
+    this.props.onRePrintForKitchen();
+  };
+
+  handleRePrintForKitchenCancelled = () => {
+    this.rePrintForKitchenPopupDialog.dismiss();
+  };
+
+  handleRePrintForKitchenPressed = () => this.rePrintForKitchenPopupDialog.show();
 
   handleSetTablePaidConfirmed = () => {
     this.paidPopupDialog.dismiss();
@@ -343,6 +357,39 @@ class TableDetailView extends Component {
     );
   };
 
+  renderRePrintForKitchenPopupDialog = slideAnimation => {
+    const { t } = this.props;
+    const popupDialogSize = getPopupDialogSizes();
+
+    return (
+      <PopupDialog
+        width={popupDialogSize.width}
+        height={popupDialogSize.height}
+        dialogTitle={<DialogTitle title={t('rePrintForKitchen.label')} />}
+        dialogAnimation={slideAnimation}
+        ref={this.setRePrintForKitchenPopupDialogRef}
+      >
+        <View style={Styles.rePrintForKitchenTableDialogContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.rePrintForKitchenTableDialogText]}>{t('areYouSureToRePrintForKitchen.message')}</Text>
+          <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
+            <Button
+              title={t('rePrintForKitchen.button')}
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.button}
+              onPress={this.handleRePrintForKitchenConfirmed}
+            />
+            <Button
+              title={t('cancel.button')}
+              containerStyle={Styles.buttonContainer}
+              buttonStyle={Styles.button}
+              onPress={this.handleRePrintForKitchenCancelled}
+            />
+          </View>
+        </View>
+      </PopupDialog>
+    );
+  };
+
   renderCustomPaymentButtons = () => {
     const { t } = this.props;
 
@@ -372,7 +419,7 @@ class TableDetailView extends Component {
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
         <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={this.onGiveToGuestPressedDebounced} />
         {canPrintKitchenOrder && (
-          <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.onRePrintForKitchenDebounced} />
+          <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.handleRePrintForKitchenPressed} />
         )}
       </View>
     );
@@ -419,6 +466,7 @@ class TableDetailView extends Component {
         {this.renderResetTablePopupDialog(slideAnimation, name)}
         {this.renderFullPaymentPopupDialog(slideAnimation, name)}
         {this.renderCustomPaymentPopupDialog(slideAnimation, name)}
+        {this.renderRePrintForKitchenPopupDialog(slideAnimation)}
 
         <View style={Styles.headerContainer}>
           <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', name)}</Text>
