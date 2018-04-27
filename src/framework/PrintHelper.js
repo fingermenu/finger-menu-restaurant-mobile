@@ -7,7 +7,7 @@ export const endingDots = '.';
 export const maxLineLength = 48;
 export const endOfLine = '\r\n';
 
-export default class PrinterHelper {
+export default class PrintHelper {
   static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
     if (leftStr.length + rightStr.length <= width - 1) {
       return leftStr + Array(width - (leftStr.length + rightStr.length)).join(padding) + rightStr;
@@ -42,6 +42,32 @@ export default class PrinterHelper {
       .reduce((reduction, value) => reduction + value + endOfLine, '');
   };
 
+  static pad = (str, maxLength, paddingChar = ' ') => {
+    if (!str || str.length === 0) {
+      return Array(maxLength + 1).join(paddingChar);
+    }
+
+    if (str.length >= maxLength) {
+      return str;
+    }
+
+    const padding = Array(Math.floor((maxLength - str.length) / 2 + 1)).join(paddingChar);
+
+    return padding + str + padding;
+  };
+
+  static padStart = (str, maxLength, paddingChar = ' ') => {
+    if (!str || str.length === 0) {
+      return Array(maxLength + 1).join(paddingChar);
+    }
+
+    if (str.length >= maxLength) {
+      return str;
+    }
+
+    return Array(maxLength - str.length + 1).join(paddingChar) + str;
+  };
+
   static getPrintableOrderDetailsForKitchen = details => {
     const groupedDetails = details.groupBy(detail => {
       const choiceItemPriceIds = detail
@@ -68,32 +94,32 @@ export default class PrinterHelper {
         (menuItemsDetail, detail) =>
           menuItemsDetail +
           endOfLine +
-          PrinterHelper.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
+          PrintHelper.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
           endOfLine +
           detail
             .get('orderChoiceItemPrices')
             .reduce(
               (reduction, orderChoiceItemPrice) =>
                 reduction +
-                PrinterHelper.splitTextIntoMultipleLines(
+                PrintHelper.splitTextIntoMultipleLines(
                   '  ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
                   '',
                   false,
                 ),
               '',
             ) +
-          PrinterHelper.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
+          PrintHelper.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
         '',
       );
   };
 
-  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details) => {
-    const padding = Array(Math.floor((maxLineLength - servingTime.length) / 2 + 1)).join('-');
-
-    return (
-      padding + servingTime + padding + endOfLine + endOfLine + PrinterHelper.getPrintableOrderDetailsForKitchen(details) + endOfLine + endOfLine
-    );
-  };
+  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details) =>
+    PrintHelper.pad(servingTime, maxLineLength, '-') +
+    endOfLine +
+    endOfLine +
+    PrintHelper.getPrintableOrderDetailsForKitchen(details) +
+    endOfLine +
+    endOfLine;
 
   static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, customerName, tableName, template) => {
     const immutableDetails = Immutable.fromJS(details);
@@ -112,7 +138,7 @@ export default class PrinterHelper {
         }),
       )
       .map(groupedDetailsWithServingTime =>
-        PrinterHelper.getPrintableOrderDetailsForKitchenWithServingTime(
+        PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime(
           groupedDetailsWithServingTime.get('servingTimeNameToPrint'),
           groupedDetailsWithServingTime.get('details'),
         ),
@@ -121,7 +147,7 @@ export default class PrinterHelper {
 
     if (!detailsWithUnspecifiedServingTime.isEmpty()) {
       finalOrderList =
-        finalOrderList + PrinterHelper.getPrintableOrderDetailsForKitchenWithServingTime('Unspecified', detailsWithUnspecifiedServingTime);
+        finalOrderList + PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime('Unspecified', detailsWithUnspecifiedServingTime);
     }
 
     return template
@@ -135,10 +161,35 @@ export default class PrinterHelper {
           .withZoneSameInstant(ZoneId.SYSTEM)
           .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
       )
-      .replace(/{Notes}/g, PrinterHelper.splitTextIntoMultipleLines(notes, 'Notes: '))
-      .replace(/{CustomerName}/g, PrinterHelper.splitTextIntoMultipleLines(customerName), 'Customer Name: ')
+      .replace(/{Notes}/g, PrintHelper.splitTextIntoMultipleLines(notes, 'Notes: '))
+      .replace(/{CustomerName}/g, PrintHelper.splitTextIntoMultipleLines(customerName), 'Customer Name: ')
       .replace(/{TableName}/g, tableName)
       .replace(/{OrderList}/g, finalOrderList);
+  };
+
+  static convertPriceAndQuantityToPrintableString = (unitPrice, quantity) => {
+    const priceAndCurrencySignMaxLength = 6;
+    const quantityMaxLength = 2;
+    const finalQuantity = quantity ? quantity : 1;
+
+    if (!unitPrice || unitPrice === 0) {
+      return (
+        PrintHelper.padStart(null, priceAndCurrencySignMaxLength) +
+        PrintHelper.padStart(finalQuantity.toString(), quantityMaxLength) +
+        PrintHelper.padStart(null, priceAndCurrencySignMaxLength)
+      );
+    }
+
+    const unitPriceToPrint = '$' + unitPrice.toFixed(2);
+    const totalPriceToPrint = '$' + (unitPrice * finalQuantity).toFixed(2);
+
+    return (
+      PrintHelper.padStart(unitPriceToPrint, priceAndCurrencySignMaxLength) +
+      ' ' +
+      PrintHelper.padStart(finalQuantity.toString(), quantityMaxLength) +
+      ' ' +
+      PrintHelper.padStart(totalPriceToPrint, priceAndCurrencySignMaxLength)
+    );
   };
 
   static getPrintableOrderDetailsForReceipt = details => {
@@ -166,9 +217,9 @@ export default class PrinterHelper {
         (menuItemsDetail, detail) =>
           menuItemsDetail +
           endOfLine +
-          PrinterHelper.alignTextsOnEachEdge(
+          PrintHelper.alignTextsOnEachEdge(
             detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']),
-            detail.get('quantity').toString() + 'x   $' + detail.getIn(['menuItemPrice', 'currentPrice']).toFixed(2),
+            PrintHelper.convertPriceAndQuantityToPrintableString(detail.getIn(['menuItemPrice', 'currentPrice']), detail.get('quantity').toString()),
           ) +
           endOfLine +
           detail
@@ -176,9 +227,12 @@ export default class PrinterHelper {
             .reduce(
               (reduction, orderChoiceItemPrice) =>
                 reduction +
-                PrinterHelper.alignTextsOnEachEdge(
-                  orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
-                  '   $' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']).toFixed(2),
+                PrintHelper.alignTextsOnEachEdge(
+                  ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                  PrintHelper.convertPriceAndQuantityToPrintableString(
+                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                    orderChoiceItemPrice.get('quantity').toString(),
+                  ),
                 ) +
                 endOfLine,
               '',
@@ -188,7 +242,7 @@ export default class PrinterHelper {
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
-    const orderList = PrinterHelper.getPrintableOrderDetailsForReceipt(details);
+    const orderList = PrintHelper.getPrintableOrderDetailsForReceipt(details);
 
     return template
       .replace('\r', '')
