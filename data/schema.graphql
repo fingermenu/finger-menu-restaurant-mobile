@@ -86,39 +86,39 @@ type ChoiceItemPrice implements Node {
   tags: [Tag!]
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type ChoiceItemPriceTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [ChoiceItemPriceTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type ChoiceItemPriceTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: ChoiceItemPrice
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type ChoiceItemTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [ChoiceItemTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type ChoiceItemTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: ChoiceItem
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -132,21 +132,21 @@ type DietaryOption implements Node {
   tag: Tag
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type DietaryOptionTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [DietaryOptionTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type DietaryOptionTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: DietaryOption
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -155,21 +155,21 @@ type DishType implements Node {
   tag: Tag
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type DishTypeTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [DishTypeTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type DishTypeTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: DishType
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -195,21 +195,21 @@ input LanguageStringTuple {
   value: String!
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type LanguageTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [LanguageTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type LanguageTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Language
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -259,57 +259,57 @@ type MenuItemPriceRules {
   maxNumberOfSideDishes: Int
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type MenuItemPriceTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [MenuItemPriceTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type MenuItemPriceTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: MenuItemPrice
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type MenuItemTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [MenuItemTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type MenuItemTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: MenuItem
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type MenuTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [MenuTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type MenuTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Menu
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -324,9 +324,9 @@ type Mutation {
   submitUserFeedback(input: SubmitUserFeedbackInput!): SubmitUserFeedbackPayload
 }
 
-# An object with an ID
+"""An object with an ID"""
 interface Node {
-  # The id of the object.
+  """The id of the object."""
   id: ID!
 }
 
@@ -387,36 +387,36 @@ input OrderMenuItemPriceInput {
   servingTimeId: ID
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type OrderTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [OrderTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type OrderTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Order
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# Information about pagination in a connection.
+"""Information about pagination in a connection."""
 type PageInfo {
-  # When paginating forwards, are there more items?
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
 
-  # When paginating backwards, are there more items?
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
 
-  # When paginating backwards, the cursor to continue.
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
 
-  # When paginating forwards, the cursor to continue.
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
@@ -482,9 +482,9 @@ type Query {
   user: User
   viewer: Viewer
 
-  # Fetches an object given its ID
+  """Fetches an object given its ID"""
   node(
-    # The ID of an object
+    """The ID of an object"""
     id: ID!
   ): Node
 }
@@ -532,21 +532,21 @@ type RestaurantImages {
   secondaryTopBannerImageUrl: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type RestaurantTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [RestaurantTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type RestaurantTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Restaurant
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -555,21 +555,21 @@ type ServingTime implements Node {
   tag: Tag
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type ServingTimeTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [ServingTimeTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type ServingTimeTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: ServingTime
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -578,21 +578,21 @@ type Size implements Node {
   tag: Tag
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type SizeTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [SizeTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type SizeTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Size
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -630,39 +630,39 @@ type TableState implements Node {
   imageUrl: String
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type TableStateTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [TableStateTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type TableStateTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: TableState
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type TableTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [TableTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type TableTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Table
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -678,21 +678,21 @@ type Tag implements Node {
   parentTag: ParentTag
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type TagTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [TagTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type TagTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: Tag
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -773,21 +773,21 @@ type UserFeedback implements Node {
   restaurant: Restaurant
 }
 
-# A connection to a list of items.
+"""A connection to a list of items."""
 type UserFeedbackTypeConnection {
-  # Information to aid in pagination.
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
 
-  # A list of edges.
+  """A list of edges."""
   edges: [UserFeedbackTypeEdge]
 }
 
-# An edge in a connection.
+"""An edge in a connection."""
 type UserFeedbackTypeEdge {
-  # The item at the end of the edge
+  """The item at the end of the edge"""
   node: UserFeedback
 
-  # A cursor for use in pagination
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
