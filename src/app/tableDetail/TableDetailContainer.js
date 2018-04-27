@@ -241,7 +241,28 @@ class TableDetailContainer extends Component {
     );
   };
 
-  handlePrintReceipt = () => {};
+  handlePrintReceipt = () => {
+    const {
+      printerConfig: { hostname, port },
+      customerReceiptTemplate,
+      user: {
+        table: { name: tableName },
+        orders: { edges: orders },
+      },
+    } = this.props;
+
+    const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
+    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
+
+    this.props.escPosPrinterActions.printDocument(
+      Map({
+        hostname,
+        port,
+        documentContent,
+        numberOfCopies: 1,
+      }),
+    );
+  };
 
   handleEndReached = () => true;
 
@@ -355,10 +376,12 @@ TableDetailContainer.propTypes = {
   tableId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
+  customerReceiptTemplate: PropTypes.string,
 };
 
 TableDetailContainer.defaultProps = {
   kitchenOrderTemplate: null,
+  customerReceiptTemplate: null,
 };
 
 const mapStateToProps = (state, props) => {
