@@ -265,7 +265,7 @@ class TableDetailView extends Component {
               </Text>
             </View>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> {t('confirmPayment.message')}</Text>
-            <View style={Styles.buttonsContainer}>
+            <View style={Styles.popupDialogButtonsContainer}>
               <Button
                 title={t('confirm.button')}
                 containerStyle={Styles.buttonContainer}
@@ -301,7 +301,7 @@ class TableDetailView extends Component {
           <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
             {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
           </Text>
-          <View style={Styles.buttonsContainer}>
+          <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('resetTable.button')}
               containerStyle={Styles.buttonContainer}
@@ -343,7 +343,7 @@ class TableDetailView extends Component {
           <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
             {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
           </Text>
-          <View style={Styles.buttonsContainer}>
+          <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('payNow.button')}
               containerStyle={Styles.buttonContainer}
@@ -382,7 +382,7 @@ class TableDetailView extends Component {
       >
         <View style={Styles.popupDialogContainer}>
           <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToRePrintForKitchen.message')}</Text>
-          <View style={Styles.buttonsContainer}>
+          <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('rePrintForKitchen.button')}
               containerStyle={Styles.buttonContainer}
@@ -415,7 +415,7 @@ class TableDetailView extends Component {
       >
         <View style={Styles.popupDialogContainer}>
           <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToPrintReceipt.message')}</Text>
-          <View style={Styles.buttonsContainer}>
+          <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('printReceipt.button')}
               containerStyle={Styles.buttonContainer}
@@ -438,7 +438,7 @@ class TableDetailView extends Component {
     const { t } = this.props;
 
     return (
-      <View style={Styles.buttonsContainer}>
+      <View style={Styles.mainScreenButtonsContainer}>
         <Button
           title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
           disabled={this.state.selectedOrders.isEmpty() || !this.isDiscountValid()}
@@ -453,7 +453,7 @@ class TableDetailView extends Component {
     const { t, orders, canPrintReceipt, canPrintKitchenOrder } = this.props;
 
     return (
-      <View style={Styles.buttonsContainer}>
+      <View style={Styles.mainScreenButtonsContainer}>
         <Button
           title={t('fullPayment.button')}
           disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}

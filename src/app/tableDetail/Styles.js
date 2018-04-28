@@ -14,7 +14,16 @@ export default StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
-  buttonsContainer: {
+  mainScreenButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    alignItems: 'flex-start',
+    padding: 10,
+    marginBottom: 100,
+  },
+  popupDialogButtonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
