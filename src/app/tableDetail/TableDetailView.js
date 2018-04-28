@@ -33,19 +33,25 @@ class TableDetailView extends Component {
 
   getTotal = () => (this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal());
 
-  getBalanceToPay = () => {
+  getBalanceToPayAndDiscount = () => {
     const total = this.getTotal();
     const discount = this.convertStringDiscountValueToDecimal();
 
     switch (this.state.discountType) {
-    case '$':
-      return discount <= total ? total - discount : total;
+    case '$': {
+      const balanceToPay = discount <= total ? total - discount : total;
 
-    case '%':
-      return discount <= 100 ? total * (100 - discount) / 100 : total;
+      return { balanceToPay, discount: total - balanceToPay };
+    }
 
-    default:
-      return total;
+    case '%': {
+      const balanceToPay = discount <= 100 ? total * (100 - discount) / 100 : total;
+      return { balanceToPay, discount: total - balanceToPay };
+    }
+
+    default: {
+      return { balanceToPay: total, discount: 0 };
+    }
     }
   };
 
@@ -261,7 +267,7 @@ class TableDetailView extends Component {
             </View>
             <View style={Styles.paymentSummaryBalanceRow}>
               <Text style={DefaultStyles.primaryTitleFont}>
-                {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}
+                {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
               </Text>
             </View>
             <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> {t('confirmPayment.message')}</Text>
@@ -338,7 +344,9 @@ class TableDetailView extends Component {
             <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>
+              {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
+            </Text>
           </View>
           <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
             {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
@@ -562,7 +570,9 @@ class TableDetailView extends Component {
             </View>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
+            </Text>
           </View>
         </View>
         {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
