@@ -140,12 +140,12 @@ class TableDetailContainer extends Component {
       order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
     );
     const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
-    const printingGroupId = cuid();
+    const paymentGroupId = cuid();
     let totalUpdated = 0;
     let allPaidFlag = true;
 
     orders.forEach(order => {
-      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, printingGroupId, {
+      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, paymentGroupId, {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -266,26 +266,26 @@ class TableDetailContainer extends Component {
 
   handleEndReached = () => true;
 
-  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, printingGroupId) =>
+  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId) =>
     order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
         let id;
 
         if (detail.get('paid')) {
-          id = detail.get('printingGroupId');
+          id = detail.get('paymentGroupId');
         } else {
           if (setAllMenuItemPricesPaid) {
-            id = printingGroupId;
+            id = paymentGroupId;
           } else {
-            id = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0) ? printingGroupId : null;
+            id = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0) ? paymentGroupId : null;
           }
         }
 
         return detail
           .merge(
             Map({
-              printingGroupId: id,
+              paymentGroupId: id,
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
@@ -313,13 +313,13 @@ class TableDetailContainer extends Component {
       }),
     );
 
-  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, printingGroupId, callbacks) => {
+  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId, callbacks) => {
     const order = Immutable.fromJS(orderToUpdate);
-    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, printingGroupId);
+    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId);
 
     UpdateOrder(
       this.props.relay.environment,
-      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, printingGroupId })).toJS(),
+      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, paymentGroupId })).toJS(),
       order.get('details').map(detail => detail.get('menuItemPrice')),
       order
         .get('details')

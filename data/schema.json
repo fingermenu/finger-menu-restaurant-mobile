@@ -5174,6 +5174,18 @@
               "deprecationReason": null
             },
             {
+              "name": "totalPriceAfterDiscount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "placedAt",
               "description": null,
               "args": [],
@@ -5291,12 +5303,24 @@
               "deprecationReason": null
             },
             {
-              "name": "printingGroupId",
+              "name": "paymentGroupId",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paymentGroupDiscount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -5365,6 +5389,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -5476,6 +5512,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -7664,6 +7712,16 @@
               "defaultValue": null
             },
             {
+              "name": "totalPriceAfterDiscount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tableId",
               "description": null,
               "type": {
@@ -7733,11 +7791,21 @@
               "defaultValue": null
             },
             {
-              "name": "printingGroupId",
+              "name": "paymentGroupId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "paymentGroupDiscount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -7827,6 +7895,16 @@
                 "ofType": null
               },
               "defaultValue": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
             }
           ],
           "interfaces": null,
@@ -7893,6 +7971,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -8022,6 +8110,16 @@
               "defaultValue": null
             },
             {
+              "name": "totalPriceAfterDiscount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "tableId",
               "description": null,
               "type": {
@@ -8050,7 +8148,7 @@
               "defaultValue": null
             },
             {
-              "name": "printingGroupId",
+              "name": "paymentGroupId",
               "description": null,
               "type": {
                 "kind": "SCALAR",

@@ -338,6 +338,7 @@ type Order implements Node {
   customerName: String
   notes: String
   totalPrice: Float
+  totalPriceAfterDiscount: Float
   placedAt: String!
   cancelledAt: String
   restaurant: Restaurant!
@@ -351,6 +352,7 @@ type OrderChoiceItemPrice {
   quantity: Int!
   notes: String
   paid: Boolean
+  discount: Float
 }
 
 input OrderChoiceItemPriceInput {
@@ -359,17 +361,20 @@ input OrderChoiceItemPriceInput {
   quantity: Int!
   notes: String
   paid: Boolean
+  discount: Float
 }
 
 type OrderMenuItemPrice {
   id: ID
   groupId: ID
-  printingGroupId: ID
+  paymentGroupId: ID
+  paymentGroupDiscount: Float
   printingDateTime: String
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
   paid: Boolean
+  discount: Float
   orderChoiceItemPrices: [OrderChoiceItemPrice!]
   servingTime: ServingTime
 }
@@ -377,7 +382,8 @@ type OrderMenuItemPrice {
 input OrderMenuItemPriceInput {
   id: ID
   groupId: ID
-  printingGroupId: ID
+  paymentGroupId: ID
+  paymentGroupDiscount: Float
   printingDateTime: String
   menuItemPriceId: ID!
   quantity: Int!
@@ -385,6 +391,7 @@ input OrderMenuItemPriceInput {
   paid: Boolean
   orderChoiceItemPrices: [OrderChoiceItemPriceInput!]
   servingTimeId: ID
+  discount: Float
 }
 
 """A connection to a list of items."""
@@ -461,6 +468,7 @@ input PlaceOrderInput {
   customerName: String
   notes: String
   totalPrice: Float
+  totalPriceAfterDiscount: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
   clientMutationId: String
@@ -704,9 +712,10 @@ input UpdateOrderInput {
   customerName: String
   notes: String
   totalPrice: Float
+  totalPriceAfterDiscount: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
-  printingGroupId: ID
+  paymentGroupId: ID
   clientMutationId: String
 }
 

@@ -37,7 +37,7 @@ export default createRefetchContainer(
               cancelledAt
               details {
                 id
-                printingGroupId
+                paymentGroupId
                 printingDateTime
                 menuItemPrice {
                   id

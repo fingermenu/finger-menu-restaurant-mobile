@@ -24,7 +24,7 @@ const mutation = graphql`
           cancelledAt
           details {
             id
-            printingGroupId
+            paymentGroupId
             printingDateTime
             menuItemPrice {
               id
@@ -70,7 +70,7 @@ const mutation = graphql`
 
 const commit = (
   environment,
-  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice, printingGroupId },
+  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice, paymentGroupId },
   menuItemPrices,
   choiceItemPrices,
   { onSuccess, onError } = {},
@@ -88,7 +88,7 @@ const commit = (
         notes,
         totalPrice,
         details,
-        printingGroupId,
+        paymentGroupId,
       },
     },
     optimisticResponse: {
