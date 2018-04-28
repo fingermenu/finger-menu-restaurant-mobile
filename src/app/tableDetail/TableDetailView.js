@@ -251,7 +251,7 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setCustomPaidPopupDialogRef}
       >
-        <View style={Styles.customPayDialogContainer}>
+        <View style={Styles.popupDialogContainer}>
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
               <Text style={DefaultStyles.primaryLabelFont}>
@@ -264,10 +264,8 @@ class TableDetailView extends Component {
                 {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}
               </Text>
             </View>
-            <View style={Styles.centeredRowContainer}>
-              <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>{t('confirmPayment.message')}</Text>
-            </View>
-            <View style={Styles.centeredRowContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> {t('confirmPayment.message')}</Text>
+            <View style={Styles.buttonsContainer}>
               <Button
                 title={t('confirm.button')}
                 containerStyle={Styles.buttonContainer}
@@ -299,11 +297,11 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setResetPopupDialogRef}
       >
-        <View style={Styles.resetTableDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
+        <View style={Styles.popupDialogContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
             {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
           </Text>
-          <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
+          <View style={Styles.buttonsContainer}>
             <Button
               title={t('resetTable.button')}
               containerStyle={Styles.buttonContainer}
@@ -334,7 +332,7 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setPaidPopupDialogRef}
       >
-        <View style={Styles.resetTableDialogContainer}>
+        <View style={Styles.popupDialogContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
             <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getRemainingTotal().toFixed(2))}</Text>
             <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
@@ -342,12 +340,10 @@ class TableDetailView extends Component {
           <View style={Styles.paymentSummaryBalanceRow}>
             <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPay().toFixed(2))}</Text>
           </View>
-          <View style={Styles.centeredRowContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.resetTableDialogText]}>
-              {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
-            </Text>
-          </View>
-          <View style={Styles.centeredRowContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
+            {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
+          </Text>
+          <View style={Styles.buttonsContainer}>
             <Button
               title={t('payNow.button')}
               containerStyle={Styles.buttonContainer}
@@ -384,9 +380,9 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setRePrintForKitchenPopupDialogRef}
       >
-        <View style={Styles.rePrintForKitchenDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.rePrintForKitchenDialogText]}>{t('areYouSureToRePrintForKitchen.message')}</Text>
-          <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
+        <View style={Styles.popupDialogContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToRePrintForKitchen.message')}</Text>
+          <View style={Styles.buttonsContainer}>
             <Button
               title={t('rePrintForKitchen.button')}
               containerStyle={Styles.buttonContainer}
@@ -417,9 +413,9 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setPrintReceiptPopupDialogRef}
       >
-        <View style={Styles.printReceiptDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.printReceiptDialogText]}>{t('areYouSureToPrintReceipt.message')}</Text>
-          <View style={[DefaultStyles.rowContainer, Styles.centeredRowContainer]}>
+        <View style={Styles.popupDialogContainer}>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToPrintReceipt.message')}</Text>
+          <View style={Styles.buttonsContainer}>
             <Button
               title={t('printReceipt.button')}
               containerStyle={Styles.buttonContainer}

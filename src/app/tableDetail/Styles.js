@@ -18,7 +18,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    backgroundColor: DefaultColor.secondaryBackgroundColor,
     alignItems: 'flex-start',
     padding: 10,
     marginBottom: 100,
@@ -29,7 +28,6 @@ export default StyleSheet.create({
     color: 'white',
   },
   rowContainer: {
-    // flex: 1,
     flexDirection: 'row',
     padding: 5,
     justifyContent: 'center',
@@ -60,18 +58,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  resetTableDialogContainer: {
+  popupDialogContainer: {
     padding: 10,
   },
-  customPayDialogContainer: {
-    padding: 10,
-    flex: 1,
-  },
-  centeredRowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  resetTableDialogText: {
+  popupDialogConfirmText: {
     justifyContent: 'center',
   },
   button: {
@@ -80,17 +70,5 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     padding: 30,
-  },
-  rePrintForKitchenDialogContainer: {
-    padding: 10,
-  },
-  rePrintForKitchenDialogText: {
-    justifyContent: 'center',
-  },
-  printReceiptDialogContainer: {
-    padding: 10,
-  },
-  printReceiptDialogText: {
-    justifyContent: 'center',
   },
 });
