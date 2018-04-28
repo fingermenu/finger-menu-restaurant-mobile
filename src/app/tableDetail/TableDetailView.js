@@ -171,13 +171,19 @@ class TableDetailView extends Component {
   handleSetTablePaidConfirmed = () => {
     this.paidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
-    this.props.onSetPaidPressed();
+
+    const { discount } = this.getBalanceToPayAndDiscount();
+
+    this.props.onSetPaidPressed(discount);
   };
 
   handleSetTablePaidAndResetConfirmed = () => {
     this.paidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
-    this.props.onSetPaidAndResetPressed();
+
+    const { discount } = this.getBalanceToPayAndDiscount();
+
+    this.props.onSetPaidAndResetPressed(discount);
   };
 
   handleSetTablePaidCancelled = () => {
@@ -208,7 +214,10 @@ class TableDetailView extends Component {
     const { selectedOrders } = this.state;
 
     this.setState({ selectedOrders: List() });
-    this.props.onCustomPaidPressed(selectedOrders);
+
+    const { discount } = this.getBalanceToPayAndDiscount();
+
+    this.props.onCustomPaidPressed(discount, selectedOrders);
   };
 
   handlePayCustomCancelled = () => {

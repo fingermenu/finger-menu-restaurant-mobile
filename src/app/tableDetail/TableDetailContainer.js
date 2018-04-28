@@ -129,7 +129,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleCustomPaidPressed = selectedOrders => {
+  handleCustomPaidPressed = (discount, selectedOrders) => {
     const {
       user: {
         orders: { edges },
