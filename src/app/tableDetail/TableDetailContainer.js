@@ -77,7 +77,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSetPaidPressed = () => {
+  handleSetPaidPressed = discount => {
     const {
       user: {
         orders: { edges },
@@ -87,7 +87,7 @@ class TableDetailContainer extends Component {
     let totalUpdated = 0;
 
     orders.forEach(order => {
-      this.updateOrder(order, null, true, cuid(), {
+      this.updateOrder(order, null, true, cuid(), discount, {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -105,7 +105,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSetPaidAndResetPressed = () => {
+  handleSetPaidAndResetPressed = discount => {
     const {
       user: {
         orders: { edges },
@@ -115,7 +115,7 @@ class TableDetailContainer extends Component {
     let totalUpdated = 0;
 
     orders.forEach(order => {
-      this.updateOrder(order, null, true, cuid(), {
+      this.updateOrder(order, null, true, cuid(), discount, {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -145,7 +145,7 @@ class TableDetailContainer extends Component {
     let allPaidFlag = true;
 
     orders.forEach(order => {
-      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, paymentGroupId, {
+      const allOrdersPaid = this.updateOrder(order, selectedOrders, false, paymentGroupId, discount, {
         onSuccess: () => {
           totalUpdated = totalUpdated + 1;
 
@@ -266,19 +266,25 @@ class TableDetailContainer extends Component {
 
   handleEndReached = () => true;
 
-  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId) =>
+  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId, paymentGroupDiscount) =>
     order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
         let id;
+        let discount;
 
         if (detail.get('paid')) {
           id = detail.get('paymentGroupId');
+          discount = detail.get('paymentGroupDiscount');
         } else {
           if (setAllMenuItemPricesPaid) {
             id = paymentGroupId;
+            discount = paymentGroupDiscount;
           } else {
-            id = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0) ? paymentGroupId : null;
+            const foundSelectedOrder = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0);
+
+            id = foundSelectedOrder ? paymentGroupId : null;
+            discount = foundSelectedOrder ? paymentGroupDiscount : null;
           }
         }
 
@@ -286,6 +292,7 @@ class TableDetailContainer extends Component {
           .merge(
             Map({
               paymentGroupId: id,
+              paymentGroupDiscount: discount,
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
@@ -313,9 +320,9 @@ class TableDetailContainer extends Component {
       }),
     );
 
-  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId, callbacks) => {
+  updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId, paymentGroupDiscount, callbacks) => {
     const order = Immutable.fromJS(orderToUpdate);
-    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId);
+    const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, paymentGroupId, paymentGroupDiscount);
 
     UpdateOrder(
       this.props.relay.environment,
