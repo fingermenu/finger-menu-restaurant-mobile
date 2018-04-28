@@ -16,9 +16,10 @@ export default StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-around',
     backgroundColor: DefaultColor.secondaryBackgroundColor,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: 10,
     marginBottom: 100,
   },
