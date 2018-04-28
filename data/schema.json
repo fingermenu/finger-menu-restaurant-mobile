@@ -5327,7 +5327,7 @@
               "deprecationReason": null
             },
             {
-              "name": "printingDateTime",
+              "name": "paymentGroupDateTime",
               "description": null,
               "args": [],
               "type": {
@@ -7811,7 +7811,7 @@
               "defaultValue": null
             },
             {
-              "name": "printingDateTime",
+              "name": "paymentGroupDateTime",
               "description": null,
               "type": {
                 "kind": "SCALAR",

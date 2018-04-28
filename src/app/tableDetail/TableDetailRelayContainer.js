@@ -33,12 +33,14 @@ export default createRefetchContainer(
               customerName
               notes
               totalPrice
+              totalPriceAfterDiscount
               placedAt
               cancelledAt
               details {
                 id
                 paymentGroupId
-                printingDateTime
+                paymentGroupDiscount
+                paymentGroupDateTime
                 menuItemPrice {
                   id
                   currentPrice

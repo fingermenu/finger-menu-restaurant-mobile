@@ -25,6 +25,12 @@ const mutation = graphql`
           cancelledAt
           details {
             id
+            paymentGroupId
+            paymentGroupDiscount
+            paymentGroupDateTime
+            quantity
+            notes
+            paid
             menuItemPrice {
               id
               currentPrice
@@ -35,9 +41,6 @@ const mutation = graphql`
                 description
               }
             }
-            quantity
-            notes
-            paid
             servingTime {
               id
               tag {

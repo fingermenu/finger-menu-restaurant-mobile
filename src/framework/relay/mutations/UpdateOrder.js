@@ -25,7 +25,11 @@ const mutation = graphql`
           details {
             id
             paymentGroupId
-            printingDateTime
+            paymentGroupDiscount
+            paymentGroupDateTime
+            quantity
+            notes
+            paid
             menuItemPrice {
               id
               currentPrice
@@ -36,9 +40,6 @@ const mutation = graphql`
                 description
               }
             }
-            quantity
-            notes
-            paid
             servingTime {
               id
               tag {

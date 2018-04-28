@@ -369,7 +369,7 @@ type OrderMenuItemPrice {
   groupId: ID
   paymentGroupId: ID
   paymentGroupDiscount: Float
-  printingDateTime: String
+  paymentGroupDateTime: String
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
@@ -384,7 +384,7 @@ input OrderMenuItemPriceInput {
   groupId: ID
   paymentGroupId: ID
   paymentGroupDiscount: Float
-  printingDateTime: String
+  paymentGroupDateTime: String
   menuItemPriceId: ID!
   quantity: Int!
   notes: String
