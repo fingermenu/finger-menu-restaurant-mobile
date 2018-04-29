@@ -312,6 +312,7 @@ class TableDetailContainer extends Component {
               paymentGroup: Map({
                 id,
                 discount,
+                paid: detail.getIn(['paymentGroup', 'paid']),
               }),
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
