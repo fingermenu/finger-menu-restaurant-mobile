@@ -231,7 +231,7 @@ export default class PrintHelper {
                   ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
                   PrintHelper.convertPriceAndQuantityToPrintableString(
                     orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
-                    orderChoiceItemPrice.get('quantity').toString(),
+                    (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
                   ),
                 ) +
                 endOfLine,
