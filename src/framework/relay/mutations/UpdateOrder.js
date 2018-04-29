@@ -23,9 +23,11 @@ const mutation = graphql`
           cancelledAt
           details {
             id
-            paymentGroupId
-            paymentGroupDiscount
-            paymentGroupDateTime
+            paymentGroup {
+              id
+              discount
+              paidAt
+            }
             quantity
             notes
             paid

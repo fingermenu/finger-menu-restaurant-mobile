@@ -8,7 +8,7 @@ export default class OrderHelper {
       return List();
     }
 
-    const groupedDetails = details.groupBy(item => item.get('paymentGroupId'));
+    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
 
     return groupedDetails.keySeq().map(paymentGroupId => {
       const menuItemPrices = groupedDetails.get(paymentGroupId);
@@ -26,10 +26,10 @@ export default class OrderHelper {
                 )),
         0,
       );
-      const paymentGroupDiscount = menuItemPrices.first().get('paymentGroupDiscount');
+      const discount = menuItemPrices.first().getIn(['paymentGroup', 'discount']);
 
-      if (paymentGroupDiscount) {
-        return Map({ paymentGroupId, totalPrice: totalPrice - paymentGroupDiscount, discount: paymentGroupDiscount });
+      if (discount) {
+        return Map({ paymentGroupId, totalPrice: totalPrice - discount, discount });
       }
 
       return Map({ paymentGroupId, totalPrice, discount: 0 });

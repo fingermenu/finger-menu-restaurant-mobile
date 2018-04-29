@@ -36,9 +36,11 @@ export default createRefetchContainer(
               cancelledAt
               details {
                 id
-                paymentGroupId
-                paymentGroupDiscount
-                paymentGroupDateTime
+                paymentGroup {
+                  id
+                  discount
+                  paidAt
+                }
                 menuItemPrice {
                   id
                   currentPrice

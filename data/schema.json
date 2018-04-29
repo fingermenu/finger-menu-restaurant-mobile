@@ -5279,36 +5279,12 @@
               "deprecationReason": null
             },
             {
-              "name": "paymentGroupId",
+              "name": "paymentGroup",
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "paymentGroupDiscount",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "paymentGroupDateTime",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "PaymentGroup",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -5409,6 +5385,53 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "ServingTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PaymentGroup",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "paidAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -7747,31 +7770,11 @@
               "defaultValue": null
             },
             {
-              "name": "paymentGroupId",
+              "name": "paymentGroup",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "paymentGroupDiscount",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "paymentGroupDateTime",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "INPUT_OBJECT",
+                "name": "PaymentGroupInput",
                 "ofType": null
               },
               "defaultValue": null
@@ -7858,6 +7861,47 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "PaymentGroupInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "discount",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "paidAt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null

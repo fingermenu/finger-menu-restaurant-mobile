@@ -365,9 +365,7 @@ input OrderChoiceItemPriceInput {
 type OrderMenuItemPrice {
   id: ID
   groupId: ID
-  paymentGroupId: ID
-  paymentGroupDiscount: Float
-  paymentGroupDateTime: String
+  paymentGroup: PaymentGroup
   menuItemPrice: MenuItemPrice!
   quantity: Int!
   notes: String
@@ -380,9 +378,7 @@ type OrderMenuItemPrice {
 input OrderMenuItemPriceInput {
   id: ID
   groupId: ID
-  paymentGroupId: ID
-  paymentGroupDiscount: Float
-  paymentGroupDateTime: String
+  paymentGroup: PaymentGroupInput
   menuItemPriceId: ID!
   quantity: Int!
   notes: String
@@ -451,6 +447,18 @@ type ParentTag implements Node {
   imageUrl: String
   level: Int
   forDisplay: Boolean
+}
+
+type PaymentGroup {
+  id: ID
+  discount: Float
+  paidAt: String
+}
+
+input PaymentGroupInput {
+  id: ID
+  discount: Float
+  paidAt: String
 }
 
 type Phone {
