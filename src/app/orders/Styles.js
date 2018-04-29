@@ -1,7 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
-import { DefaultColor } from '../../style';
+import { DefaultColor, ScreenSize } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -27,11 +27,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  quantity: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: DefaultColor.secondaryFontColor,
-  },
+
   paid: {
     fontSize: 18,
     fontWeight: '600',
@@ -47,19 +43,11 @@ export default StyleSheet.create({
   },
   image: {
     marginRight: 5,
-    width: 100,
-    height: 100,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '700',
+    width: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }),
+    height: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }),
   },
   extraOptions: {
     fontSize: 18,
-  },
-  price: {
-    fontSize: 20,
-    color: DefaultColor.secondaryFontColor,
   },
   popupDialogContainer: {
     padding: 15,
@@ -78,10 +66,6 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     padding: 30,
-  },
-  menuItemNotes: {
-    fontSize: 18,
-    fontWeight: '600',
   },
   notesContainer: {
     marginBottom: 30,

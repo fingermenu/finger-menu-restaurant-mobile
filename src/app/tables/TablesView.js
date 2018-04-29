@@ -11,6 +11,7 @@ import { ImageUtility } from '../../components/image';
 import TableView from './TableView';
 import Styles from './Styles';
 import Common from './Common';
+import { DefaultStyles, ScreenSize } from '../../style';
 
 class TablesView extends Component {
   keyExtractor = item => item.id;
@@ -19,11 +20,18 @@ class TablesView extends Component {
 
   renderBadgeSummaryItem = item => {
     const style = Common.getTableStyle(item.key);
-
+    const width = ScreenSize({ xs: 34, s: 50, l: 75, xl: 100 });
     return (
       <TouchableItem accessibilityComponentType="button" accessibilityTraits="button" delayPressIn={0} borderless>
         <View style={Styles.tableSummaryContainer}>
-          <Avatar rounded large overlayContainerStyle={style} source={ImageUtility.getImageSource(item.key)} activeOpacity={0.7} />
+          <Avatar
+            rounded
+            height={width}
+            width={width}
+            overlayContainerStyle={style}
+            source={ImageUtility.getImageSource(item.key)}
+            activeOpacity={0.7}
+          />
           <Text>{item.count}</Text>
         </View>
       </TouchableItem>
@@ -48,7 +56,7 @@ class TablesView extends Component {
     return (
       <View style={Styles.container}>
         <View>
-          <Text>{t('manageTable.label')}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>{t('manageTable.label')}</Text>
         </View>
         <FlatList
           data={this.props.tables}
