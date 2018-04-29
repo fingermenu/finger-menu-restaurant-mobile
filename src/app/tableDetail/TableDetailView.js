@@ -354,7 +354,7 @@ class TableDetailView extends Component {
   };
 
   renderFullPaymentPopupDialog = (slideAnimation, tableName) => {
-    const { t } = this.props;
+    const { t, canPrintReceipt } = this.props;
     const popupDialogSize = getPopupDialogSizes();
 
     return (
@@ -385,12 +385,14 @@ class TableDetailView extends Component {
               buttonStyle={Styles.button}
               onPress={this.handleSetTablePaidConfirmed}
             />
-            <Button
-              title={t('payAndResetTableNow.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleSetTablePaidAndResetConfirmed}
-            />
+            {canPrintReceipt && (
+              <Button
+                title={t('payAndResetTableNow.button')}
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.button}
+                onPress={this.handleSetTablePaidAndResetConfirmed}
+              />
+            )}
             <Button
               title={t('cancel.button')}
               containerStyle={Styles.buttonContainer}
