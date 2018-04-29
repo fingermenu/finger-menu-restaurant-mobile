@@ -208,7 +208,7 @@ class TableDetailView extends Component {
     this.setState({ isSplitPaymentMode: false, selectedOrders: List() });
   };
 
-  handlePayCustomConfirmed = () => {
+  handleSplitPayConfirmed = () => {
     this.splitPaidPopupDialog.dismiss();
 
     const { selectedOrders } = this.state;
@@ -218,6 +218,18 @@ class TableDetailView extends Component {
     const { discount } = this.getBalanceToPayAndDiscount();
 
     this.props.onSplitPaidPressed(discount, selectedOrders);
+  };
+
+  handleSplitPayConfirmedAndPrintReceipt = () => {
+    this.splitPaidPopupDialog.dismiss();
+
+    const { selectedOrders } = this.state;
+
+    this.setState({ selectedOrders: List() });
+
+    const { discount } = this.getBalanceToPayAndDiscount();
+
+    this.props.onSplitPaidAndPrintReceiptPressed(discount, selectedOrders);
   };
 
   handlePayCustomCancelled = () => {
@@ -285,7 +297,13 @@ class TableDetailView extends Component {
                 title={t('confirm.button')}
                 containerStyle={Styles.buttonContainer}
                 buttonStyle={Styles.button}
-                onPress={this.handlePayCustomConfirmed}
+                onPress={this.handleSplitPayConfirmed}
+              />
+              <Button
+                title={t('confirmAndPrintReceipt.button')}
+                containerStyle={Styles.buttonContainer}
+                buttonStyle={Styles.button}
+                onPress={this.handleSplitPayConfirmedAndPrintReceipt}
               />
               <Button
                 title={t('cancel.button')}
@@ -603,6 +621,7 @@ TableDetailView.propTypes = {
   onSetPaidPressed: PropTypes.func.isRequired,
   onSetPaidAndResetPressed: PropTypes.func.isRequired,
   onSplitPaidPressed: PropTypes.func.isRequired,
+  onSplitPaidAndPrintReceiptPressed: PropTypes.func.isRequired,
   onGiveToGuestPressed: PropTypes.func.isRequired,
   onRePrintForKitchen: PropTypes.func.isRequired,
   onPrintReceipt: PropTypes.func.isRequired,

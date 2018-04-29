@@ -141,7 +141,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSplitPaidPressed = (discount, selectedOrders) => {
+  handleSplitPaidPressed = (discount, selectedOrders, printCallback) => {
     const {
       user: {
         orders: { edges },
@@ -174,6 +174,14 @@ class TableDetailContainer extends Component {
               return;
             }
 
+            if (printCallback) {
+              printCallback(
+                Immutable.fromJS(orders)
+                  .flatMap(order => order.get('details'))
+                  .filter(item => selectedOrders.some(selectedOrder => selectedOrder.get('id').localeCompare(item.get('id')) === 0)),
+              );
+            }
+
             if (!allPaidFlag || excludedOrders.filter(excludedOrder => excludedOrder.details.find(_ => !_.paid)).length !== 0) {
               return;
             }
@@ -185,6 +193,28 @@ class TableDetailContainer extends Component {
             });
           },
         },
+      );
+    });
+  };
+
+  handleSplitPaidAndPrintReceiptPressed = (discount, selectedOrders) => {
+    this.handleSplitPaidPressed(discount, selectedOrders, details => {
+      const {
+        printerConfig: { hostname, port },
+        customerReceiptTemplate,
+        user: {
+          table: { name: tableName },
+        },
+      } = this.props;
+      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
+
+      this.props.escPosPrinterActions.printDocument(
+        Map({
+          hostname,
+          port,
+          documentContent,
+          numberOfCopies: 1,
+        }),
       );
     });
   };
@@ -381,6 +411,7 @@ class TableDetailContainer extends Component {
         onSetPaidPressed={this.handleSetPaidPressed}
         onSetPaidAndResetPressed={this.handleSetPaidAndResetPressed}
         onSplitPaidPressed={this.handleSplitPaidPressed}
+        onSplitPaidAndPrintReceiptPressed={this.handleSplitPaidAndPrintReceiptPressed}
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}

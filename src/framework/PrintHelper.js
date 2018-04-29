@@ -7,7 +7,7 @@ import OrderHelper from './OrderHelper';
 export const endingDots = '.';
 export const maxLineLength = 48;
 export const endOfLine = '\r\n';
-export const priceAndCurrencySignMaxLength = 6;
+export const priceAndCurrencySignMaxLength = 7;
 export const quantityMaxLength = 2;
 
 export default class PrintHelper {
@@ -276,26 +276,37 @@ export default class PrintHelper {
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
-    const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(details);
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
-    const orderList =
-      groupedDetails.map(PrintHelper.getPrintableOrderDetailsForReceipt).reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '') +
-      endOfLine +
-      PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
-      PrintHelper.convertTotalPriceToPrintableString(totalPriceAndDiscount.get('totalPrice'));
 
-    return template
-      .replace('\r', '')
-      .replace('\n', '')
-      .replace(/{CR}/g, '\r')
-      .replace(/{LF}/g, '\n')
-      .replace(
-        /{OrderDateTime}/g,
-        ZonedDateTime.now()
-          .withZoneSameInstant(ZoneId.SYSTEM)
-          .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
-      )
-      .replace(/{TableName}/g, tableName)
-      .replace(/{OrderList}/g, orderList);
+    return groupedDetails
+      .map(items => {
+        const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(items);
+        const orderList =
+          PrintHelper.getPrintableOrderDetailsForReceipt(items) +
+          endOfLine +
+          Array(maxLineLength + 1).join('-') +
+          endOfLine +
+          PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
+          PrintHelper.convertTotalPriceToPrintableString(totalPriceAndDiscount.get('totalPrice'));
+
+        const paidAt = items.first().getIn(['paymentGroup', 'paidAt']);
+
+        return template
+          .replace('\r', '')
+          .replace('\n', '')
+          .replace(/{CR}/g, '\r')
+          .replace(/{LF}/g, '\n')
+          .replace(
+            /{PaidAtDateTime}/g,
+            paidAt
+              ? ZonedDateTime.parse(paidAt)
+                .withZoneSameInstant(ZoneId.SYSTEM)
+                .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss'))
+              : '',
+          )
+          .replace(/{TableName}/g, tableName)
+          .replace(/{OrderList}/g, orderList);
+      })
+      .reduce((receipt1, receipt2) => receipt1 + endOfLine + receipt2, '');
   };
 }
