@@ -45,9 +45,9 @@ export const Sizes = {
   headerHeight: HEIGHT,
   screenWidth: screen.width,
   screenHeight: screen.height,
-  fontSize: ScreenSize({ s: 14, l: 18, xl: 20 }, 16),
-  iconHeight: ScreenSize({ s: 36, l: 40, xl: 46 }, 32),
-  iconWidth: ScreenSize({ s: 36, l: 46, xl: 46 }, 32),
+  fontSize: ScreenSize({ s: 14, l: 18, xl: 20 }, 22),
+  iconHeight: ScreenSize({ s: 36, l: 40, xl: 46 }, 50),
+  iconWidth: ScreenSize({ s: 36, l: 46, xl: 46 }, 50),
 };
 
 export const DefaultStyles = {

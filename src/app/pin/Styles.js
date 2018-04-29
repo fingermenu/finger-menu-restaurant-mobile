@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   pinContainer: {
-    height: ScreenSize({ s: 40, l: 45, xl: 50 }, 36),
+    height: ScreenSize({ s: 40, l: 45, xl: 50 }, 50),
     borderWidth: 2,
     borderColor: 'white',
   },

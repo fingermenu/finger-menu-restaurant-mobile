@@ -20,7 +20,7 @@ class TablesView extends Component {
 
   renderBadgeSummaryItem = item => {
     const style = Common.getTableStyle(item.key);
-    const width = ScreenSize({ xs: 34, s: 50, l: 75, xl: 100 });
+    const width = ScreenSize({ xs: 34, s: 50, l: 75, xl: 100 }, 100);
     return (
       <TouchableItem accessibilityComponentType="button" accessibilityTraits="button" delayPressIn={0} borderless>
         <View style={Styles.tableSummaryContainer}>

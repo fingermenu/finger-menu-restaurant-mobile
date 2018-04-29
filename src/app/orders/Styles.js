@@ -43,8 +43,8 @@ export default StyleSheet.create({
   },
   image: {
     marginRight: 5,
-    width: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }),
-    height: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }),
+    width: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }, 100),
+    height: ScreenSize({ xs: 30, s: 50, l: 75, xl: 100 }, 100),
   },
   extraOptions: {
     fontSize: 18,
