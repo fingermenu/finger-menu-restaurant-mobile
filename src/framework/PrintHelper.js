@@ -6,6 +6,8 @@ import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 export const endingDots = '.';
 export const maxLineLength = 48;
 export const endOfLine = '\r\n';
+export const priceAndCurrencySignMaxLength = 6;
+export const quantityMaxLength = 2;
 
 export default class PrintHelper {
   static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
@@ -168,8 +170,6 @@ export default class PrintHelper {
   };
 
   static convertPriceAndQuantityToPrintableString = (unitPrice, quantity) => {
-    const priceAndCurrencySignMaxLength = 6;
-    const quantityMaxLength = 2;
     const finalQuantity = quantity ? quantity : 1;
 
     if (!unitPrice || unitPrice === 0) {
@@ -192,7 +192,23 @@ export default class PrintHelper {
     );
   };
 
+  static convertDiscountToPrintableString = discount => {
+    if (!discount) {
+      return '';
+    }
+
+    return (
+      endOfLine +
+      PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, priceAndCurrencySignMaxLength)) +
+      endOfLine
+    );
+  };
+
   static getPrintableOrderDetailsForReceipt = details => {
+    if (details.isEmpty()) {
+      return '';
+    }
+
     const groupedDetails = details.groupBy(detail => {
       const choiceItemPriceIds = detail
         .get('orderChoiceItemPrices')
@@ -203,46 +219,54 @@ export default class PrintHelper {
       return detail.getIn(['menuItemPrice', 'id']) + choiceItemPriceIds;
     });
 
-    return groupedDetails
-      .keySeq()
-      .map(key =>
-        groupedDetails
-          .get(key)
-          .reduce(
-            (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
-            Map(),
-          ),
-      )
-      .reduce(
-        (menuItemsDetail, detail) =>
-          menuItemsDetail +
-          endOfLine +
-          PrintHelper.alignTextsOnEachEdge(
-            detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']),
-            PrintHelper.convertPriceAndQuantityToPrintableString(detail.getIn(['menuItemPrice', 'currentPrice']), detail.get('quantity').toString()),
-          ) +
-          endOfLine +
-          detail
-            .get('orderChoiceItemPrices')
+    return (
+      groupedDetails
+        .keySeq()
+        .map(key =>
+          groupedDetails
+            .get(key)
             .reduce(
-              (reduction, orderChoiceItemPrice) =>
-                reduction +
-                PrintHelper.alignTextsOnEachEdge(
-                  ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
-                  PrintHelper.convertPriceAndQuantityToPrintableString(
-                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
-                    (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
-                  ),
-                ) +
-                endOfLine,
-              '',
+              (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
+              Map(),
             ),
-        '',
-      );
+        )
+        .reduce(
+          (menuItemsDetail, detail) =>
+            menuItemsDetail +
+            endOfLine +
+            PrintHelper.alignTextsOnEachEdge(
+              detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']),
+              PrintHelper.convertPriceAndQuantityToPrintableString(
+                detail.getIn(['menuItemPrice', 'currentPrice']),
+                detail.get('quantity').toString(),
+              ),
+            ) +
+            endOfLine +
+            detail
+              .get('orderChoiceItemPrices')
+              .reduce(
+                (reduction, orderChoiceItemPrice) =>
+                  reduction +
+                  PrintHelper.alignTextsOnEachEdge(
+                    ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                    PrintHelper.convertPriceAndQuantityToPrintableString(
+                      orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                      (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
+                    ),
+                  ) +
+                  endOfLine,
+                '',
+              ),
+          '',
+        ) + PrintHelper.convertDiscountToPrintableString(details.first().getIn(['paymentGroup', 'discount']))
+    );
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
-    const orderList = PrintHelper.getPrintableOrderDetailsForReceipt(details);
+    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
+    const orderList = groupedDetails
+      .map(PrintHelper.getPrintableOrderDetailsForReceipt)
+      .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
 
     return template
       .replace('\r', '')
