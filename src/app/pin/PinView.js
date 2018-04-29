@@ -6,7 +6,7 @@ import Immutable, { Range } from 'immutable';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import NumberPad from '../../components/numberPad/NumberPad';
-import { DefaultColor } from '../../style';
+import { DefaultColor, DefaultStyles, ScreenSize } from '../../style';
 import Styles from './Styles';
 import packageInfo from '../../../package.json';
 
@@ -90,14 +90,24 @@ class PinView extends Component {
   render = () => {
     return (
       <View style={Styles.container}>
-        <Text style={Styles.text}>Version {packageInfo.version}</Text>
-        <Text style={Styles.text}>Enter Your Pin</Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>Version {packageInfo.version}</Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>Enter Your Pin</Text>
         <View style={Styles.pinContainer}>
           <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal keyExtractor={this.keyExtractor} />
         </View>
-        {this.state.error ? <Text style={Styles.errorText}>Invalid Pin</Text> : <Text style={Styles.text}>---</Text>}
+        {this.state.error ? (
+          <Text style={[DefaultStyles.primaryTitleFont, Styles.errorText]}>Invalid Pin</Text>
+        ) : (
+          <Text style={Styles.text}>---</Text>
+        )}
         <View style={Styles.pinPadContainer}>
-          <NumberPad numColumns={3} supportHighlight={false} supportReset onNumberPressed={this.onPinNumberPressed} numberHeight={100} />
+          <NumberPad
+            numColumns={3}
+            supportHighlight={false}
+            supportReset
+            onNumberPressed={this.onPinNumberPressed}
+            numberHeight={ScreenSize({ s: 60, l: 70, xl: 100 }, 50)}
+          />
         </View>
       </View>
     );

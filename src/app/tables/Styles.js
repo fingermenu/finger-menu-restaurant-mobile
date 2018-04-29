@@ -1,6 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { ScreenSize } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -40,7 +41,7 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
   },
   tableBadgeContainer: {
-    padding: 25,
+    padding: 5,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -66,8 +67,8 @@ export default StyleSheet.create({
     fontSize: 30,
   },
   tableButton: {
-    width: 100,
-    height: 50,
+    width: ScreenSize({ 'xs:': 35, x: 50, l: 75, xl: 100 }, 50),
+    height: ScreenSize({ 'xs:': 25, x: 30, l: 40, xl: 50 }, 30),
     margin: 5,
   },
   tableLegendsContainer: {

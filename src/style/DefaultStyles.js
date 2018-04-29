@@ -1,6 +1,7 @@
 // @flow
 
 import { Dimensions, Platform } from 'react-native';
+import ScreenSize from './ScreenSizeHelper';
 
 const screen = Dimensions.get('window');
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
@@ -40,10 +41,13 @@ export const DefaultColor = {
 };
 
 export const Sizes = {
-  searchBarHeaderWidth: screen.width - 10,
-  searchBarHeaderHeight: HEIGHT,
+  headerWidth: screen.width - 10,
+  headerHeight: HEIGHT,
   screenWidth: screen.width,
   screenHeight: screen.height,
+  fontSize: ScreenSize({ s: 14, l: 18, xl: 20 }, 16),
+  iconHeight: ScreenSize({ s: 36, l: 40, xl: 46 }, 32),
+  iconWidth: ScreenSize({ s: 36, l: 46, xl: 46 }, 32),
 };
 
 export const DefaultStyles = {
@@ -59,20 +63,20 @@ export const DefaultStyles = {
     height: HEIGHT,
   },
   primaryFont: {
-    fontSize: 20,
+    fontSize: Sizes.fontSize,
     color: DEFAULT_FONT_COLOR,
   },
   primaryTitleFont: {
-    fontSize: 26,
+    fontSize: Sizes.fontSize + 4,
     color: DEFAULT_FONT_COLOR,
   },
   primaryLabelFont: {
-    fontSize: 20,
+    fontSize: Sizes.fontSize + 2,
     color: DEFAULT_FONT_COLOR,
   },
   iconContainerStyle: {
-    height: 48,
-    width: 48,
+    height: Sizes.iconHeight,
+    width: Sizes.iconWidth,
   },
 };
 

@@ -1,7 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
-import { DefaultColor } from '../../style';
+import { DefaultColor, ScreenSize } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   pinContainer: {
-    height: 50,
+    height: ScreenSize({ s: 40, l: 45, xl: 50 }, 36),
     borderWidth: 2,
     borderColor: 'white',
   },
@@ -29,12 +29,9 @@ export default StyleSheet.create({
     height: 400,
   },
   errorText: {
-    fontSize: 25,
-    fontWeight: '700',
     color: 'red',
   },
   text: {
-    fontSize: 36,
     color: 'white',
   },
 });

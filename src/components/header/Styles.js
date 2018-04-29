@@ -1,6 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import { Sizes } from '../../style';
 
 export default StyleSheet.create({
   container: {
@@ -8,7 +9,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    height: 60,
   },
   bannerContainer: {
     flex: 10,
@@ -22,7 +22,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 100,
-    height: 30,
+    width: Sizes.iconWidth,
+    height: Sizes.iconHeight,
+    paddingRight: 5,
   },
 });

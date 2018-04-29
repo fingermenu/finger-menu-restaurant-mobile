@@ -96,13 +96,13 @@ class OrderItemRow extends Component {
             />
           )}
           <View style={Styles.quantityContainer}>
-            <Text style={Styles.quantity}>{quantity}x</Text>
+            <Text style={DefaultStyles.primaryFont}>{quantity}x</Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={Styles.title}>{name}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
             {notes &&
               notes.trim() && (
-              <Text style={Styles.menuItemNotes}>
+              <Text style={DefaultStyles.primaryFont}>
                 {t('notes.label')}: {notes}
               </Text>
             )}
@@ -110,7 +110,7 @@ class OrderItemRow extends Component {
           </View>
           <View style={DefaultStyles.rowContainer}>
             {paid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
-            <Text style={Styles.price}>${totalPrice.toFixed(2)}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>${totalPrice.toFixed(2)}</Text>
             {orderItemIsEditable && showRemove ? (
               <TouchableIcon
                 onPress={this.handleRemoveOrderPressed}
