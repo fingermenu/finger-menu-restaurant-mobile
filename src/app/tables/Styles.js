@@ -67,8 +67,8 @@ export default StyleSheet.create({
     fontSize: 30,
   },
   tableButton: {
-    width: ScreenSize({ 'xs:': 35, x: 50, l: 75, xl: 100 }, 50),
-    height: ScreenSize({ 'xs:': 25, x: 30, l: 40, xl: 50 }, 30),
+    width: ScreenSize({ 'xs:': 35, x: 50, l: 75, xl: 100 }, 100),
+    height: ScreenSize({ 'xs:': 25, x: 30, l: 40, xl: 50 }, 50),
     margin: 5,
   },
   tableLegendsContainer: {

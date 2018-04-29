@@ -106,7 +106,7 @@ class PinView extends Component {
             supportHighlight={false}
             supportReset
             onNumberPressed={this.onPinNumberPressed}
-            numberHeight={ScreenSize({ s: 60, l: 70, xl: 100 }, 50)}
+            numberHeight={ScreenSize({ s: 60, l: 70, xl: 100 }, 100)}
           />
         </View>
       </View>
