@@ -1,6 +1,5 @@
 // @flow
 
-import Immutable from 'immutable';
 import React, { Component } from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -62,7 +61,7 @@ class OrdersView extends Component {
     const {
       t,
       notes,
-      orders,
+      orderItems,
       inMemoryOrderItems,
       tableName,
       customerName,
@@ -108,11 +107,9 @@ class OrdersView extends Component {
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
-        {inMemoryOrderItems.length + orders.length > 0 ? (
+        {inMemoryOrderItems.length + orderItems.length > 0 ? (
           <FlatList
-            data={Immutable.fromJS(inMemoryOrderItems)
-              .concat(Immutable.fromJS(orders).flatMap(order => order.get('details')))
-              .toJS()}
+            data={inMemoryOrderItems.concat(orderItems)}
             renderItem={this.renderOrderItem}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
@@ -121,7 +118,7 @@ class OrdersView extends Component {
             ItemSeparatorComponent={this.renderSeparator}
           />
         ) : (
-          orders.length === 0 && (
+          orderItems.length === 0 && (
             <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
               <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
             </ScrollView>

@@ -56,6 +56,7 @@ export default createRefetchContainer(
               cancelledAt
               details {
                 id
+                groupId
                 menuItemPrice {
                   id
                   currentPrice

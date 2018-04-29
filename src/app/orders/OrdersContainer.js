@@ -197,17 +197,27 @@ class OrdersContainer extends Component {
       },
     } = this.props;
 
-    const groupedDetails = Immutable.fromJS(inMemoryOrder)
+    const groupedOrdersDetails = Immutable.fromJS(orders)
+      .flatMap(order => order.getIn(['node', 'details']))
+      .groupBy(item => item.get('groupId'));
+    const groupedInMemoryOrderDetails = Immutable.fromJS(inMemoryOrder)
       .get('details')
       .groupBy(item => item.get('groupId'));
 
     return (
       <OrdersView
-        orders={orders.map(_ => _.node)}
-        inMemoryOrderItems={groupedDetails
+        orderItems={groupedOrdersDetails
           .keySeq()
           .map(key => {
-            const details = groupedDetails.get(key);
+            const details = groupedOrdersDetails.get(key);
+
+            return details.first().set('quantity', details.count());
+          })
+          .toJS()}
+        inMemoryOrderItems={groupedInMemoryOrderDetails
+          .keySeq()
+          .map(key => {
+            const details = groupedInMemoryOrderDetails.get(key);
 
             return details.first().set('quantity', details.count());
           })
