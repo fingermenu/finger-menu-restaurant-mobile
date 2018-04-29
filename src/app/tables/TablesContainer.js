@@ -96,17 +96,15 @@ class TablesContainer extends Component {
 
   handleEndReached = () => true;
 
-  render = () => {
-    return (
-      <TablesView
-        tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
-        onTablePressed={this.handleTablePressed}
-        isRefreshing={this.state.isRefreshing}
-        onRefresh={this.handleRefresh}
-        onEndReached={this.handleEndReached}
-      />
-    );
-  };
+  render = () => (
+    <TablesView
+      tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
+      onTablePressed={this.handleTablePressed}
+      isRefreshing={this.state.isRefreshing}
+      onRefresh={this.handleRefresh}
+      onEndReached={this.handleEndReached}
+    />
+  );
 }
 
 TablesContainer.propTypes = {

@@ -4,7 +4,7 @@ import cuid from 'cuid';
 
 export default class Common {
   static createOrderOptimisticResponse = (
-    { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+    { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
     menuItemPrices,
     choiceItemPrices,
   ) => {
@@ -57,7 +57,6 @@ export default class Common {
         numberOfChildren,
         customerName,
         notes,
-        totalPrice,
         details: convertedDetails,
       },
     };
@@ -65,7 +64,7 @@ export default class Common {
 
   static createOrderNodeForOptimisticUpdater = (
     store,
-    { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+    { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
     menuItemPrices,
     choiceItemPrices,
   ) => {
@@ -78,7 +77,6 @@ export default class Common {
     node.setValue(numberOfChildren, 'numberOfChildren');
     node.setValue(customerName, 'customerName');
     node.setValue(notes, 'notes');
-    node.setValue(totalPrice, 'totalPrice');
 
     const detailItemsLinkedRecords = details.map(({ id, quantity, notes, paid, menuItemPriceId, orderChoiceItemPrices }) => {
       const detailItemLinkedRecord = store.create(cuid(), 'detailItem');

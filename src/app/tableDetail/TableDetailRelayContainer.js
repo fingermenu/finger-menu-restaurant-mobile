@@ -32,8 +32,6 @@ export default createRefetchContainer(
               numberOfChildren
               customerName
               notes
-              totalPrice
-              totalPriceAfterDiscount
               placedAt
               cancelledAt
               details {

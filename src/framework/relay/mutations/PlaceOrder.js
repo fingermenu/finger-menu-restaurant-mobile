@@ -20,7 +20,6 @@ const mutation = graphql`
           numberOfChildren
           customerName
           notes
-          totalPrice
           placedAt
           cancelledAt
           details {
@@ -92,7 +91,7 @@ const sharedUpdater = (store, user, orderLinkedRecord, connectionFilters) => {
 
 const commit = (
   environment,
-  { restaurantId, correlationId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+  { restaurantId, correlationId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
   menuItemPrices,
   choiceItemPrices,
   connectionFilters = {},
@@ -110,7 +109,6 @@ const commit = (
         numberOfChildren,
         customerName,
         notes,
-        totalPrice,
         details,
       },
     },
@@ -119,7 +117,7 @@ const commit = (
     },
     optimisticResponse: {
       placeOrder: Common.createOrderOptimisticResponse(
-        { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+        { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
         menuItemPrices,
         choiceItemPrices,
       ),
@@ -130,7 +128,7 @@ const commit = (
         user,
         Common.createOrderNodeForOptimisticUpdater(
           store,
-          { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+          { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
           menuItemPrices,
           choiceItemPrices,
         ),

@@ -50,24 +50,6 @@ class OrdersContainer extends Component {
       }),
     );
 
-  static calculateTotalPrice = order =>
-    order
-      .get('details')
-      .reduce(
-        (total, menuItemPrice) =>
-          total +
-          menuItemPrice.get('quantity') *
-            (menuItemPrice.getIn(['menuItemPrice', 'currentPrice']) +
-              menuItemPrice
-                .get('orderChoiceItemPrices')
-                .reduce(
-                  (totalChoiceItemPrice, orderChoiceItemPrice) =>
-                    totalChoiceItemPrice + orderChoiceItemPrice.get('quantity') * orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
-                  0,
-                )),
-        0,
-      );
-
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
       nextProps.relay.refetch(_ => ({
@@ -104,7 +86,6 @@ class OrdersContainer extends Component {
   handleConfirmOrderPressed = () => {
     const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
     const orderRequest = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
-    const totalPrice = OrdersContainer.calculateTotalPrice(inMemoryOrder);
     const {
       navigateToOrderConfirmed,
       restaurantId,
@@ -116,7 +97,7 @@ class OrdersContainer extends Component {
 
     PlaceOrder(
       this.props.relay.environment,
-      orderRequest.merge(Map({ totalPrice, restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS(),
+      orderRequest.merge(Map({ restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS(),
       inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
       inMemoryOrder
         .get('details')

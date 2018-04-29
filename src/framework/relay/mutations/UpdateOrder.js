@@ -19,7 +19,6 @@ const mutation = graphql`
           numberOfChildren
           customerName
           notes
-          totalPrice
           placedAt
           cancelledAt
           details {
@@ -71,7 +70,7 @@ const mutation = graphql`
 
 const commit = (
   environment,
-  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice, paymentGroupId },
+  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, paymentGroupId },
   menuItemPrices,
   choiceItemPrices,
   { onSuccess, onError } = {},
@@ -87,14 +86,13 @@ const commit = (
         numberOfChildren,
         customerName,
         notes,
-        totalPrice,
         details,
         paymentGroupId,
       },
     },
     optimisticResponse: {
       updateOrder: Common.createOrderOptimisticResponse(
-        { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, totalPrice },
+        { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
         menuItemPrices,
         choiceItemPrices,
       ),

@@ -13,6 +13,7 @@ import Styles from './Styles';
 import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { TableProp } from './PropTypes';
 import config from '../../framework/config';
+import OrderHelper from '../../framework/OrderHelper';
 
 class TableDetailView extends Component {
   static isDecimal = strValue => !isNaN(parseFloat(strValue)) && isFinite(strValue);
@@ -46,6 +47,7 @@ class TableDetailView extends Component {
 
     case '%': {
       const balanceToPay = discount <= 100 ? total * (100 - discount) / 100 : total;
+
       return { balanceToPay, discount: total - balanceToPay };
     }
 
@@ -88,8 +90,6 @@ class TableDetailView extends Component {
   setPrintReceiptPopupDialogRef = popupDialog => {
     this.printReceiptPopupDialog = popupDialog;
   };
-
-  getOrderTotal = () => this.props.orders.reduce((totalPrice, order) => totalPrice + order.totalPrice, 0);
 
   getRemainingTotal = () =>
     this.props.orders.reduce(
@@ -522,6 +522,10 @@ class TableDetailView extends Component {
     } = this.props;
     const slideAnimation = new SlideAnimation({ slideFrom: 'bottom' });
     const { selectedDiscountButtonIndex } = this.state;
+    const immutableOrders = Immutable.fromJS(orders);
+    const totalPrice = OrderHelper.calculateTotalPriceAndDiscountForMultuipleOrders(immutableOrders)
+      .get('totalPrice')
+      .toFixed(2);
 
     return (
       <View style={Styles.container}>
@@ -540,13 +544,11 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={DefaultStyles.primaryTitleFont}>${this.getOrderTotal().toFixed(2)}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>${totalPrice}</Text>
         </View>
         {orders.length > 0 ? (
           <FlatList
-            data={Immutable.fromJS(orders)
-              .flatMap(order => order.get('details'))
-              .toJS()}
+            data={immutableOrders.flatMap(order => order.get('details')).toJS()}
             renderItem={this.renderOrderItemRow}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
@@ -561,7 +563,7 @@ class TableDetailView extends Component {
         )}
         <View style={Styles.paymentSummaryContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getOrderTotal().toFixed(2))}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', totalPrice)}</Text>
             <View style={DefaultStyles.rowContainer}>
               <Input
                 placeholder={t('discount.placeholder')}

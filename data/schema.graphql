@@ -337,8 +337,6 @@ type Order implements Node {
   numberOfChildren: Int
   customerName: String
   notes: String
-  totalPrice: Float
-  totalPriceAfterDiscount: Float
   placedAt: String!
   cancelledAt: String
   restaurant: Restaurant!
@@ -467,8 +465,6 @@ input PlaceOrderInput {
   numberOfChildren: Int
   customerName: String
   notes: String
-  totalPrice: Float
-  totalPriceAfterDiscount: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
   clientMutationId: String
@@ -711,8 +707,6 @@ input UpdateOrderInput {
   numberOfChildren: Int
   customerName: String
   notes: String
-  totalPrice: Float
-  totalPriceAfterDiscount: Float
   tableId: ID
   details: [OrderMenuItemPriceInput!]
   paymentGroupId: ID
