@@ -10,7 +10,7 @@ export const endOfLine = '\r\n';
 export default class PrintHelper {
   static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
     if (leftStr.length + rightStr.length <= width - 1) {
-      return leftStr + Array(width - (leftStr.length + rightStr.length)).join(padding) + rightStr;
+      return leftStr + Array(width - (leftStr.length + rightStr.length) + 1).join(padding) + rightStr;
     }
 
     if (rightStr.length > width - 1) {
