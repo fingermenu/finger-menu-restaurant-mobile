@@ -2,6 +2,7 @@
 
 import Immutable, { Map, Range } from 'immutable';
 import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
+import OrderHelper from './OrderHelper';
 
 export const endingDots = '.';
 export const maxLineLength = 48;
@@ -192,16 +193,28 @@ export default class PrintHelper {
     );
   };
 
+  static convertTotalPriceToPrintableString = total => {
+    if (!total) {
+      return '';
+    }
+
+    return PrintHelper.alignTextsOnEachEdge('Total', PrintHelper.padStart(`$${total.toFixed(2)}`, 10)) + endOfLine;
+  };
+
+  static convertTotalDiscountToPrintableString = discount => {
+    if (!discount) {
+      return '';
+    }
+
+    return PrintHelper.alignTextsOnEachEdge('Total Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10)) + endOfLine;
+  };
+
   static convertDiscountToPrintableString = discount => {
     if (!discount) {
       return '';
     }
 
-    return (
-      endOfLine +
-      PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, priceAndCurrencySignMaxLength)) +
-      endOfLine
-    );
+    return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10));
   };
 
   static getPrintableOrderDetailsForReceipt = details => {
@@ -263,10 +276,13 @@ export default class PrintHelper {
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
+    const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(details);
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
-    const orderList = groupedDetails
-      .map(PrintHelper.getPrintableOrderDetailsForReceipt)
-      .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
+    const orderList =
+      groupedDetails.map(PrintHelper.getPrintableOrderDetailsForReceipt).reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '') +
+      endOfLine +
+      PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
+      PrintHelper.convertTotalPriceToPrintableString(totalPriceAndDiscount.get('totalPrice'));
 
     return template
       .replace('\r', '')
