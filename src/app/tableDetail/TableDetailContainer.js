@@ -141,7 +141,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleCustomPaidPressed = (discount, selectedOrders) => {
+  handleSplitPaidPressed = (discount, selectedOrders) => {
     const {
       user: {
         orders: { edges },
@@ -380,7 +380,7 @@ class TableDetailContainer extends Component {
         onResetTablePressed={this.handleResetTablePressed}
         onSetPaidPressed={this.handleSetPaidPressed}
         onSetPaidAndResetPressed={this.handleSetPaidAndResetPressed}
-        onCustomPaidPressed={this.handleCustomPaidPressed}
+        onSplitPaidPressed={this.handleSplitPaidPressed}
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}

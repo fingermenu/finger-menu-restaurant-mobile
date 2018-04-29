@@ -29,10 +29,10 @@ class TableDetailView extends Component {
     discount: '',
     discountType: '$',
     selectedOrders: List(),
-    isCustomPaymentMode: false,
+    isSplitPaymentMode: false,
   };
 
-  getTotal = () => (this.state.isCustomPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal());
+  getTotal = () => (this.state.isSplitPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal());
 
   getBalanceToPayAndDiscount = () => {
     const total = this.getTotal();
@@ -79,8 +79,8 @@ class TableDetailView extends Component {
     this.paidPopupDialog = popupDialog;
   };
 
-  setCustomPaidPopupDialogRef = popupDialog => {
-    this.customPaidPopupDialog = popupDialog;
+  setSplitPaidPopupDialogRef = popupDialog => {
+    this.splitPaidPopupDialog = popupDialog;
   };
 
   setRePrintForKitchenPopupDialogRef = popupDialog => {
@@ -197,19 +197,19 @@ class TableDetailView extends Component {
   };
 
   handleCustomPayPressed = () => {
-    this.setState({ isCustomPaymentMode: true });
+    this.setState({ isSplitPaymentMode: true });
   };
 
   handlePayCustomPayPressed = () => {
-    this.customPaidPopupDialog.show();
+    this.splitPaidPopupDialog.show();
   };
 
   handleCancelCustomPayPressed = () => {
-    this.setState({ isCustomPaymentMode: false, selectedOrders: List() });
+    this.setState({ isSplitPaymentMode: false, selectedOrders: List() });
   };
 
   handlePayCustomConfirmed = () => {
-    this.customPaidPopupDialog.dismiss();
+    this.splitPaidPopupDialog.dismiss();
 
     const { selectedOrders } = this.state;
 
@@ -217,11 +217,11 @@ class TableDetailView extends Component {
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    this.props.onCustomPaidPressed(discount, selectedOrders);
+    this.props.onSplitPaidPressed(discount, selectedOrders);
   };
 
   handlePayCustomCancelled = () => {
-    this.customPaidPopupDialog.dismiss();
+    this.splitPaidPopupDialog.dismiss();
   };
 
   handleOrderSelected = (order, isSelected) => {
@@ -254,7 +254,7 @@ class TableDetailView extends Component {
 
   selectedOrdersKeyExtractor = item => item.id;
 
-  renderCustomPaymentPopupDialog = (slideAnimation, tableName) => {
+  renderSplitPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
     const popupDialogSize = getPopupDialogSizes();
 
@@ -262,9 +262,9 @@ class TableDetailView extends Component {
       <PopupDialog
         width={popupDialogSize.width}
         height={popupDialogSize.height}
-        dialogTitle={<DialogTitle title={t('customPayment.label') + ' ' + tableName} />}
+        dialogTitle={<DialogTitle title={t('splitPayment.label') + ' ' + tableName} />}
         dialogAnimation={slideAnimation}
-        ref={this.setCustomPaidPopupDialogRef}
+        ref={this.setSplitPaidPopupDialogRef}
       >
         <View style={Styles.popupDialogContainer}>
           <View>
@@ -451,7 +451,7 @@ class TableDetailView extends Component {
     );
   };
 
-  renderCustomPaymentButtons = () => {
+  renderSplitPaymentButtons = () => {
     const { t } = this.props;
 
     return (
@@ -476,7 +476,7 @@ class TableDetailView extends Component {
           disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
           onPress={this.handleSetTablePaidPressed}
         />
-        <Button title={t('customPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
+        <Button title={t('splitPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
         <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
         <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={this.onGiveToGuestPressedDebounced} />
         {canPrintReceipt && <Button title={t('printReceipt.button')} disabled={orders.length === 0} onPress={this.handlePrintReceiptPressed} />}
@@ -492,7 +492,7 @@ class TableDetailView extends Component {
       orderItem={info.item}
       menuItem={info.item.menuItemPrice.menuItem}
       menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-      enableMultiSelection={this.state.isCustomPaymentMode}
+      enableMultiSelection={this.state.isSplitPaymentMode}
       onOrderSelected={this.handleOrderSelected}
       isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
       orderItemIsEditable
@@ -531,7 +531,7 @@ class TableDetailView extends Component {
       <View style={Styles.container}>
         {this.renderResetTablePopupDialog(slideAnimation, name)}
         {this.renderFullPaymentPopupDialog(slideAnimation, name)}
-        {this.renderCustomPaymentPopupDialog(slideAnimation, name)}
+        {this.renderSplitPaymentPopupDialog(slideAnimation, name)}
         {this.renderRePrintForKitchenPopupDialog(slideAnimation)}
         {this.renderPrintReceiptPopupDialog(slideAnimation)}
 
@@ -586,7 +586,7 @@ class TableDetailView extends Component {
             </Text>
           </View>
         </View>
-        {this.state.isCustomPaymentMode ? this.renderCustomPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
+        {this.state.isSplitPaymentMode ? this.renderSplitPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
       </View>
     );
   };
@@ -602,7 +602,7 @@ TableDetailView.propTypes = {
   onResetTablePressed: PropTypes.func.isRequired,
   onSetPaidPressed: PropTypes.func.isRequired,
   onSetPaidAndResetPressed: PropTypes.func.isRequired,
-  onCustomPaidPressed: PropTypes.func.isRequired,
+  onSplitPaidPressed: PropTypes.func.isRequired,
   onGiveToGuestPressed: PropTypes.func.isRequired,
   onRePrintForKitchen: PropTypes.func.isRequired,
   onPrintReceipt: PropTypes.func.isRequired,
