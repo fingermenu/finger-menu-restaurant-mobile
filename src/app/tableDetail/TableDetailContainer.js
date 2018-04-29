@@ -2,7 +2,7 @@
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import cuid from 'cuid';
-import Immutable, { Map } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -155,6 +155,7 @@ class TableDetailContainer extends Component {
     const paymentGroupId = cuid();
     let totalUpdated = 0;
     let allPaidFlag = true;
+    let allDetails = List();
 
     orders.forEach(order => {
       const allOrdersPaid = this.updateOrder(
@@ -163,12 +164,14 @@ class TableDetailContainer extends Component {
         false,
         { id: paymentGroupId, discount },
         {
-          onSuccess: () => {
+          onSuccess: response => {
             totalUpdated = totalUpdated + 1;
 
             if (!allOrdersPaid) {
               allPaidFlag = false;
             }
+
+            allDetails = allDetails.concat(Immutable.fromJS(response.details));
 
             if (orders.length !== totalUpdated) {
               return;
@@ -176,9 +179,7 @@ class TableDetailContainer extends Component {
 
             if (printCallback) {
               printCallback(
-                Immutable.fromJS(orders)
-                  .flatMap(order => order.get('details'))
-                  .filter(item => selectedOrders.some(selectedOrder => selectedOrder.get('id').localeCompare(item.get('id')) === 0)),
+                allDetails.filter(item => selectedOrders.some(selectedOrder => selectedOrder.get('id').localeCompare(item.get('id')) === 0)),
               );
             }
 
