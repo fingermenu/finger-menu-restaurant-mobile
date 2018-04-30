@@ -31,6 +31,7 @@ export default createRefetchContainer(
               template
             }
             numberOfPrintCopiesForKitchen
+            gstPercentage
           }
         }
         tables(first: 1000, restaurantId: $restaurantId) @connection(key: "User_tables") {

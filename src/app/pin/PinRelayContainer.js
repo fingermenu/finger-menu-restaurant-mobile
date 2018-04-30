@@ -34,6 +34,7 @@ export default createRefetchContainer(
                   template
                 }
                 numberOfPrintCopiesForKitchen
+                gstPercentage
               }
             }
           }
