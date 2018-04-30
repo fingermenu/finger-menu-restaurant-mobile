@@ -9,6 +9,7 @@ import { Text } from 'react-native-elements';
 import { Field } from 'redux-form';
 import { SizeItemPricesProp } from './PropTypes';
 import Styles from './Styles';
+import { DefaultStyles } from '../../style';
 
 class SizeItemPrices extends Component {
   validateMustChooseSize = sizes => {
@@ -27,8 +28,8 @@ class SizeItemPrices extends Component {
 
     return (
       <View style={Styles.optionContainer}>
-        <Text style={Styles.optionName}>{name}</Text>
-        {currentPrice !== 0 && <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>}
+        <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
+        {currentPrice !== 0 && <Text style={[DefaultStyles.primaryLabelFont, Styles.price]}>${currentPrice.toFixed(2)}</Text>}
       </View>
     );
   };

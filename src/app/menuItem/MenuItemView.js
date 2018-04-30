@@ -46,13 +46,13 @@ const MenuItemView = ({
           <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
           {menuItemPrice.currentPrice !== 0 && <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>}
         </View>
-        <Text style={Styles.description}>{description}</Text>
+        <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
       </View>
       <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
       {choiceItemPricesOfTypeSize.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={Styles.choiceItemSectionTitle}>{t('sizes.label')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('sizes.label')}</Text>
             <ListItemSeparator />
           </View>
           <SizeItemPrices sizeItemPrices={choiceItemPricesOfTypeSize} mustChooseSize={mustChooseSize} />
@@ -61,7 +61,7 @@ const MenuItemView = ({
       {choiceItemPricesOfTypeDietaryOption.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={Styles.choiceItemSectionTitle}>{t('dietaryOptions.label')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('dietaryOptions.label')}</Text>
             <ListItemSeparator />
           </View>
           <DietaryOptions dietaryOptions={choiceItemPricesOfTypeDietaryOption} mustChooseDietaryOption={mustChooseDietaryOption} />
@@ -70,7 +70,7 @@ const MenuItemView = ({
       {otherChoiceItemPrices.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={Styles.choiceItemSectionTitle}>{t('wouldYouLikeSomeSides.message')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('wouldYouLikeSomeSides.message')}</Text>
             <ListItemSeparator />
           </View>
           <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />

@@ -7,6 +7,7 @@ import { View, Text } from 'react-native';
 import { Field } from 'redux-form';
 import { DietaryOptionProp } from './PropTypes';
 import Styles from './Styles';
+import { DefaultStyles } from '../../style';
 
 const DietaryOption = ({
   dietaryOption: {
@@ -21,8 +22,8 @@ const DietaryOption = ({
       <Field name={id} component={CheckBox} validate={validateMustChooseDietaryOption} />
     </View>
     <View style={Styles.optionContainer}>
-      <Text style={Styles.optionName}>{name}</Text>
-      {currentPrice !== 0 && <Text style={Styles.price}>${currentPrice.toFixed(2)}</Text>}
+      <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
+      {currentPrice !== 0 && <Text style={[DefaultStyles.primaryLabelFont, Styles.price]}>${currentPrice.toFixed(2)}</Text>}
     </View>
   </View>
 );

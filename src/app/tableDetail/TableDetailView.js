@@ -490,19 +490,51 @@ class TableDetailView extends Component {
     const { t, orders, canPrintReceipt, canPrintKitchenOrder } = this.props;
 
     return (
-      <View style={Styles.mainScreenButtonsContainer}>
-        <Button
-          title={t('fullPayment.button')}
-          disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
-          onPress={this.handleSetTablePaidPressed}
-        />
-        <Button title={t('splitPayment.button')} disabled={tableState.key === 'paid' || orders.length === 0} onPress={this.handleCustomPayPressed} />
-        <Button title={t('resetTable.button')} backgroundColor={DefaultColor.defaultButtonColor} onPress={this.handleResetTablePressed} />
-        <Button title={t('giveToGuest.button')} disabled={tableState.key !== 'taken'} onPress={this.onGiveToGuestPressedDebounced} />
-        {canPrintReceipt && <Button title={t('printReceipt.button')} disabled={orders.length === 0} onPress={this.handlePrintReceiptPressed} />}
-        {canPrintKitchenOrder && (
-          <Button title={t('rePrintForKitchen.button')} disabled={orders.length === 0} onPress={this.handleRePrintForKitchenPressed} />
-        )}
+      <View>
+        <View style={Styles.mainScreenButtonsContainer}>
+          <Button
+            title={t('fullPayment.button')}
+            titleStyle={DefaultStyles.primaryButtonTitle}
+            disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
+            onPress={this.handleSetTablePaidPressed}
+          />
+          <Button
+            title={t('splitPayment.button')}
+            titleStyle={DefaultStyles.primaryButtonTitle}
+            disabled={tableState.key === 'paid' || orders.length === 0}
+            onPress={this.handleCustomPayPressed}
+          />
+          <Button
+            title={t('resetTable.button')}
+            titleStyle={DefaultStyles.primaryButtonTitle}
+            backgroundColor={DefaultColor.defaultButtonColor}
+            onPress={this.handleResetTablePressed}
+          />
+          <Button
+            title={t('giveToGuest.button')}
+            titleStyle={DefaultStyles.primaryButtonTitle}
+            disabled={tableState.key !== 'taken'}
+            onPress={this.onGiveToGuestPressedDebounced}
+          />
+        </View>
+        <View style={Styles.mainScreenButtonsContainer}>
+          {canPrintReceipt && (
+            <Button
+              title={t('printReceipt.button')}
+              titleStyle={DefaultStyles.primaryButtonTitle}
+              disabled={orders.length === 0}
+              onPress={this.handlePrintReceiptPressed}
+            />
+          )}
+          {canPrintKitchenOrder && (
+            <Button
+              title={t('rePrintForKitchen.button')}
+              titleStyle={DefaultStyles.primaryButtonTitle}
+              disabled={orders.length === 0}
+              onPress={this.handleRePrintForKitchenPressed}
+            />
+          )}
+        </View>
       </View>
     );
   };

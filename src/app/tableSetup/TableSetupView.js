@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import Styles from './Styles';
-import { DefaultColor, DefaultStyles } from '../../style';
+import { DefaultColor, DefaultStyles, Sizes } from '../../style';
 import { NumberPad } from '../../components/redux-form-components';
 import { ActiveTableProp } from '../../framework/applicationState';
 
@@ -26,12 +26,12 @@ const TableSetupView = ({
 }) => (
   <View style={Styles.container}>
     <View style={DefaultStyles.rowContainer}>
-      <Text style={Styles.headerText}>{t('table.label').replace('{tableName}', name)}</Text>
+      <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', name)}</Text>
     </View>
     <View>
       <View style={Styles.tableTextContainer}>
         <View style={Styles.labelContainer}>
-          <Icon name="human-handsdown" size={35} type="material-community" />
+          <Icon name="human-handsdown" size={Sizes.iconWidth} type="material-community" />
         </View>
         <View style={Styles.valueContainer}>
           <Field name="numberOfAdults" component={NumberPad} isHorizontal maxNumber={16} />
@@ -39,7 +39,7 @@ const TableSetupView = ({
       </View>
       <View style={Styles.tableTextContainer}>
         <View style={Styles.labelContainer}>
-          <Icon name="human-child" size={35} type="material-community" />
+          <Icon name="human-child" size={Sizes.iconWidth} type="material-community" />
         </View>
         <View style={Styles.valueContainer}>
           <Field name="numberOfChildren" component={NumberPad} isHorizontal maxNumber={10} />
@@ -66,14 +66,16 @@ const TableSetupView = ({
       <Button
         containerStyle={Styles.buttonContainer}
         title={t('giveToGuest.button')}
+        titleStyle={DefaultStyles.primaryButtonTitle}
         backgroundColor={DefaultColor.defaultButtonColor}
         icon={<Icon name="food" type="material-community" />}
         buttonStyle={Styles.button}
         onPress={handleSubmit(onSetupTablePressed)}
       />
       <Button
-        containerStyle={{ padding: 20 }}
+        containerStyle={Styles.buttonContainer}
         title={tableStateKey === 'reserved' ? t('updateReservation.button') : t('reserve.button')}
+        titleStyle={DefaultStyles.primaryButtonTitle}
         backgroundColor="orange"
         icon={<Icon name="ios-clock-outline" type="ionicon" />}
         buttonStyle={Styles.button}
@@ -83,6 +85,7 @@ const TableSetupView = ({
         <Button
           containerStyle={Styles.buttonContainer}
           title={t('resetTable.button')}
+          titleStyle={DefaultStyles.primaryButtonTitle}
           backgroundColor="red"
           icon={<Icon name="ios-clock-outline" type="ionicon" />}
           buttonStyle={Styles.button}

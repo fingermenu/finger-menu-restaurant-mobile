@@ -31,10 +31,6 @@ export default StyleSheet.create({
   title: {
     fontWeight: '700',
   },
-  description: {
-    fontSize: 20,
-    color: DefaultColor.defaultFontColor,
-  },
   price: {
     fontSize: 20,
     color: DefaultColor.secondaryFontColor,
@@ -53,9 +49,5 @@ export default StyleSheet.create({
   choiceItemSectionHeader: {
     padding: 5,
     backgroundColor: DefaultColor.secondaryBackgroundColor,
-  },
-  choiceItemSectionTitle: {
-    fontWeight: '700',
-    fontSize: 26,
   },
 });

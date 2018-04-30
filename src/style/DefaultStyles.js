@@ -18,6 +18,7 @@ const DEFAULT_BACKGROUND_COLOR = '#E4E5DF';
 const SECONDARY_BACKGROUND_COLOR = '#F2F2F2';
 const PRIMARY_BACKGROUND_COLOR = '#24232D';
 const DEFAULT_BUTTON_COLOR = '#2891F2';
+const DEFAULT_BUTTON_TITLE_COLOR = 'white';
 const DEFAULT_ICON_COLOR = '#283128';
 const ICON_PRESS_COLOR = 'rgba(100,154,89, .32)';
 const ACTION_BUTTON_COLOR = 'rgba(40,145,242, 1)';
@@ -33,6 +34,7 @@ export const DefaultColor = {
   secondaryBackgroundColor: SECONDARY_BACKGROUND_COLOR,
   secondaryFontColor: SECONDARY_FONT_COLOR,
   defaultButtonColor: DEFAULT_BUTTON_COLOR,
+  defaultButtonTitleColor: DEFAULT_BUTTON_TITLE_COLOR,
   iconColor: DEFAULT_ICON_COLOR,
   touchableIconPressColor: ICON_PRESS_COLOR,
   actionButtonColor: ACTION_BUTTON_COLOR,
@@ -77,6 +79,10 @@ export const DefaultStyles = {
   iconContainerStyle: {
     height: Sizes.iconHeight,
     width: Sizes.iconWidth,
+  },
+  primaryButtonTitle: {
+    fontSize: Sizes.fontSize,
+    color: DEFAULT_BUTTON_TITLE_COLOR,
   },
 };
 

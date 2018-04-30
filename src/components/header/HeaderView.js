@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, ImageBackground } from 'react-native';
+import { ImageBackground } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import Styles from './Styles';
@@ -12,7 +12,6 @@ import { ImageUtility } from '../image';
 
 const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
-    <View style={Styles.bannerContainer} />
     <Menu>
       <MenuTrigger>
         <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />

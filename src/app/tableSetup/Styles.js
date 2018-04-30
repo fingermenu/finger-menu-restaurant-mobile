@@ -1,6 +1,7 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
+import ScreenSize from '../../style/ScreenSizeHelper';
 
 export default StyleSheet.create({
   container: {
@@ -23,10 +24,6 @@ export default StyleSheet.create({
   },
   valueContainer: {
     flex: 50,
-  },
-  headerText: {
-    fontSize: 30,
-    fontWeight: '700',
   },
   numberText: {
     fontSize: 20,
@@ -51,6 +48,6 @@ export default StyleSheet.create({
     padding: 20,
   },
   button: {
-    width: 200,
+    width: ScreenSize({ xs: 125, s: 150, l: 175, xl: 175 }, 200),
   },
 });

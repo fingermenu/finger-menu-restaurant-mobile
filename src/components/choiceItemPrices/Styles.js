@@ -32,11 +32,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  optionName: {
-    fontSize: 26,
-  },
   price: {
-    fontSize: 26,
     color: DefaultColor.secondaryFontColor,
   },
 });

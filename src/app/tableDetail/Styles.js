@@ -21,7 +21,7 @@ export default StyleSheet.create({
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     alignItems: 'flex-start',
     padding: 10,
-    marginBottom: 100,
+    // marginBottom: 100,
   },
   popupDialogButtonsContainer: {
     flexDirection: 'row',

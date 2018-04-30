@@ -10,12 +10,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  bannerContainer: {
-    flex: 10,
-  },
-  languageContainer: {
-    flex: 1,
-  },
   touchableContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

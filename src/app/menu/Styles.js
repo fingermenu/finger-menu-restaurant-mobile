@@ -2,6 +2,7 @@
 
 import { StyleSheet } from 'react-native';
 import { DefaultColor } from '../../style';
+import ScreenSize from '../../style/ScreenSizeHelper';
 
 export default StyleSheet.create({
   container: {
@@ -21,8 +22,8 @@ export default StyleSheet.create({
     paddingLeft: 15,
   },
   image: {
-    width: 150,
-    height: 120,
+    width: ScreenSize({ xs: 50, s: 80, l: 100, xl: 150 }, 150),
+    height: ScreenSize({ xs: 35, s: 60, l: 80, xl: 120 }, 120),
   },
   title: {
     fontWeight: '700',
