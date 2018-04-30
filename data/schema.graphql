@@ -534,6 +534,7 @@ type RestaurantConfigurations {
   printers: [Printer!]
   documentTemplates: [DocumentTemplate!]
   numberOfPrintCopiesForKitchen: Int
+  gstPercentage: Float
 }
 
 type RestaurantImages {
