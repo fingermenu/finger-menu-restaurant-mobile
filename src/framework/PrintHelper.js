@@ -217,6 +217,16 @@ export default class PrintHelper {
     return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10));
   };
 
+  static convertTotalGstToPrintableString = (totalPrice, gstPercentage) => {
+    if (!gstPercentage) {
+      return '';
+    }
+
+    return (
+      PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${(totalPrice * gstPercentage / 100).toFixed(2)}`, 10)) + endOfLine
+    );
+  };
+
   static getPrintableOrderDetailsForReceipt = details => {
     if (details.isEmpty()) {
       return '';
@@ -275,19 +285,22 @@ export default class PrintHelper {
     );
   };
 
-  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
+  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, gstPercentage, template) => {
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
 
     return groupedDetails
       .map(items => {
         const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(items);
+        const totalPrice = totalPriceAndDiscount.get('totalPrice');
+
         const orderList =
           PrintHelper.getPrintableOrderDetailsForReceipt(items) +
           endOfLine +
           Array(maxLineLength + 1).join('-') +
           endOfLine +
           PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
-          PrintHelper.convertTotalPriceToPrintableString(totalPriceAndDiscount.get('totalPrice'));
+          PrintHelper.convertTotalPriceToPrintableString(totalPrice) +
+          PrintHelper.convertTotalGstToPrintableString(totalPrice, gstPercentage);
 
         const paidAt = items.first().getIn(['paymentGroup', 'paidAt']);
 
