@@ -4128,6 +4128,18 @@
               "deprecationReason": null
             },
             {
+              "name": "packageBundle",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "PackageBundle",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "parentRestaurant",
               "description": null,
               "args": [],
@@ -4713,6 +4725,41 @@
         },
         {
           "kind": "OBJECT",
+          "name": "PackageBundle",
+          "description": null,
+          "fields": [
+            {
+              "name": "url",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "checksum",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "ParentRestaurant",
           "description": null,
           "fields": [
@@ -4912,6 +4959,18 @@
                   "name": "RestaurantConfigurations",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "packageBundle",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "PackageBundle",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5291,6 +5350,18 @@
               "deprecationReason": null
             },
             {
+              "name": "customer",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Customer",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "paymentGroup",
               "description": null,
               "args": [],
@@ -5397,6 +5468,41 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "ServingTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Customer",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "name",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -5535,6 +5641,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "customer",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Customer",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -7782,6 +7900,16 @@
               "defaultValue": null
             },
             {
+              "name": "customer",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CustomerInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "paymentGroup",
               "description": null,
               "type": {
@@ -7873,6 +8001,37 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "CustomerInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null
@@ -7993,6 +8152,16 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "customer",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CustomerInput",
                 "ofType": null
               },
               "defaultValue": null
