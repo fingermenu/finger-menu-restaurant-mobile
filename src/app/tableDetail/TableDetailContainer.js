@@ -206,9 +206,8 @@ class TableDetailContainer extends Component {
         user: {
           table: { name: tableName },
         },
-        gstPercentage,
       } = this.props;
-      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, gstPercentage, customerReceiptTemplate);
+      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
 
       this.props.escPosPrinterActions.printDocument(
         Map({
@@ -299,11 +298,10 @@ class TableDetailContainer extends Component {
         table: { name: tableName },
         orders: { edges: orders },
       },
-      gstPercentage,
     } = this.props;
 
     const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, gstPercentage, customerReceiptTemplate);
+    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
 
     this.props.escPosPrinterActions.printDocument(
       Map({
@@ -439,13 +437,11 @@ TableDetailContainer.propTypes = {
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
   customerReceiptTemplate: PropTypes.string,
-  gstPercentage: PropTypes.number,
 };
 
 TableDetailContainer.defaultProps = {
   kitchenOrderTemplate: null,
   customerReceiptTemplate: null,
-  gstPercentage: null,
 };
 
 const mapStateToProps = (state, props) => {
@@ -471,7 +467,6 @@ const mapStateToProps = (state, props) => {
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
     customerReceiptTemplate: customerReceiptTemplate ? customerReceiptTemplate.get('template') : null,
-    gstPercentage: configurations.get('gstPercentage'),
   };
 };
 
