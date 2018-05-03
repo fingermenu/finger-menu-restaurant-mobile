@@ -6,6 +6,7 @@ export {
   ActiveRestaurantProp,
   TableStateProp,
   ActiveTableProp,
+  ActiveCustomersProp,
   ActiveCustomerProp,
   ActiveMenu,
   ActiveMenuItemPriceProp,

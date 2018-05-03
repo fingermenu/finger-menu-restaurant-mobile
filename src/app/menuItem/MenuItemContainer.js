@@ -80,6 +80,7 @@ class MenuItemContainer extends Component {
           notes: values.notes,
           paid: false,
           servingTimeId,
+          customerId: id, // TODO: get active customer id from app state.
           menuItemPrice: Map({
             id: menuItemPriceId,
             menuItem: Map({

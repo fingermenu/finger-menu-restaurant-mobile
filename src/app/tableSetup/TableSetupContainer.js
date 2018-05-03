@@ -1,9 +1,10 @@
 // @flow
 
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
-import { Map } from 'immutable';
+import { Map, Range, OrderedMap } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cuid from 'cuid';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
@@ -50,9 +51,16 @@ class TableSetupContainer extends Component {
   handleSetupTablePressed = values => {
     this.updateTable(values, 'taken', {
       onSuccess: () => {
+        const customers = Range(0, values.numberOfAdults + values.numberOfChildren).reduce((r, v) => {
+          const id = cuid();
+          const info = Map({ id, name: `Guest ${v + 1}` });
+          return r.set(id, info);
+        }, OrderedMap());
+
         this.props.applicationStateActions.setActiveCustomer(
           Map({
-            name: values.name,
+            customers,
+            activeCustomerId: customers.keySeq().first(),
             reservationNotes: values.notes,
             numberOfAdults: values.numberOfAdults,
             numberOfChildren: values.numberOfChildren,
@@ -93,7 +101,7 @@ class TableSetupContainer extends Component {
         tableState: tableStateKey,
         numberOfAdults: values.numberOfAdults,
         numberOfChildren: values.numberOfChildren,
-        customerName: values.name,
+        //customerName: values.name,
         notes: values.notes,
         lastOrderCorrelationId: values.lastOrderCorrelationId,
       },

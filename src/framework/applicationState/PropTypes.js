@@ -24,11 +24,18 @@ export const ActiveTableProp = PropTypes.shape({
   lastOrderCorrelationId: PropTypes.string,
 });
 
-export const ActiveCustomerProp = PropTypes.shape({
+export const ActiveCustomersProp = PropTypes.shape({
   name: PropTypes.string,
   reservationNotes: PropTypes.string,
+  customers: PropTypes.arrayOf(ActiveCustomerProp),
+  activeCustomerId: PropTypes.string,
   numberOfAdults: PropTypes.number,
   numberOfChildren: PropTypes.number,
+});
+
+export const ActiveCustomerProp = PropTypes.shape({
+  name: PropTypes.string,
+  id: PropTypes.string,
 });
 
 export const ActiveMenu = PropTypes.shape({

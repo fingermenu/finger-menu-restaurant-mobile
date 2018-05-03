@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HeaderView from './HeaderView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
+import { ActiveCustomerProp } from '../../framework/applicationState';
 
 class HeaderContainer extends Component {
   changeLanguage = language => {
@@ -14,20 +15,37 @@ class HeaderContainer extends Component {
     this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
-  render = () => <HeaderView changeLanguage={this.changeLanguage} backgroundImageUrl={this.props.backgroundImageUrl} />;
+  render = () => (
+    <HeaderView
+      changeLanguage={this.changeLanguage}
+      backgroundImageUrl={this.props.backgroundImageUrl}
+      customers={this.props.customers}
+      activeCustomerId={this.props.activeCustomerId}
+    />
+  );
 }
 
 HeaderContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   backgroundImageUrl: PropTypes.string,
+  customers: PropTypes.arrayOf(ActiveCustomerProp).isRequired,
+  activeCustomerId: PropTypes.string,
 };
 
 HeaderContainer.defaultProps = {
   backgroundImageUrl: null,
+  activeCustomerId: null,
 };
 
 const mapStateToProps = state => ({
   backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryTopBannerImageUrl']),
+  customers: state.applicationState.hasIn(['activeCustomers', 'customers'])
+    ? state.applicationState
+      .getIn(['activeCustomers', 'customers'])
+      .toOrderedSet()
+      .toJS()
+    : [],
+  activeCustomerId: state.applicationState.getIn(['activeCustomers', 'activeCustomerId']),
 });
 
 const mapDispatchToProps = dispatch => ({

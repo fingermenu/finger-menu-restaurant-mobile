@@ -21,7 +21,7 @@ class TableView extends Component {
 
   render = () => {
     const {
-      table: { name, numberOfAdults, numberOfChildren, customerName, tableState },
+      table: { name, numberOfAdults, numberOfChildren, tableState },
     } = this.props;
     const style = Common.getTableStyle(tableState ? tableState.key : 'empty');
 
@@ -41,9 +41,9 @@ class TableView extends Component {
             <Text>{numberOfChildren ? numberOfChildren : 0}</Text>
           </View>
         </View>
-        <Text numberOfLines={1} style={Styles.customerNameText}>
-          {customerName}
-        </Text>
+        {/*<Text numberOfLines={1} style={Styles.customerNameText}>*/}
+        {/*{customerName}*/}
+        {/*</Text>*/}
       </View>
     );
   };

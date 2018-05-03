@@ -2,16 +2,43 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground } from 'react-native';
+import { ImageBackground, View, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import Styles from './Styles';
 import { LangaugeSelectorMenuOption } from '../languageSelector';
+import { ActiveCustomersMenuOption } from '../customers';
 import i18n from '../../i18n';
 import { ImageUtility } from '../image';
+import { DefaultStyles } from '../../style';
 
-const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
+const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, customers, activeCustomerId }) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
+    <View />
+    <Menu>
+      <MenuTrigger>
+        <View style={DefaultStyles.rowContainer}>
+          <Icon name="person-outline" color="white" />
+          {activeCustomerId ? (
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>{customers.find(c => c.id === activeCustomerId).name}</Text>
+          ) : (
+            <View />
+          )}
+        </View>
+      </MenuTrigger>
+      <MenuOptions>
+        {customers.map(c => (
+          <ActiveCustomersMenuOption
+            key={c.id}
+            isSelected={c.id === activeCustomerId}
+            name={c.name}
+            id={c.id}
+            changeLanguage={changeActiveCustomer}
+          />
+        ))}
+      </MenuOptions>
+    </Menu>
     <Menu>
       <MenuTrigger>
         <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />
@@ -27,6 +54,8 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl }) => (
 
 HeaderView.propTypes = {
   changeLanguage: PropTypes.func.isRequired,
+  changeActiveCustomer: PropTypes.func.isRequired,
+  activeCustomerId: PropTypes.string.isRequired,
 };
 
 export default HeaderView;

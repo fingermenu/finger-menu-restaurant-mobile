@@ -6,7 +6,7 @@ export default Map({
   selectedLanguage: 'en_NZ',
   activeRestaurant: Map(),
   activeTable: Map(),
-  activeCustomer: Map(),
+  activeCustomers: Map(),
   activeMenu: Map(),
   activeMenuItemPrice: Map(),
   activeOrderMenuItemPrice: Map(),

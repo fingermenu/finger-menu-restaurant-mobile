@@ -1,13 +1,13 @@
 // @flow
 
 import { StyleSheet } from 'react-native';
-import { Sizes } from '../../style';
+import { DefaultColor, Sizes } from '../../style';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   touchableContainer: {
@@ -19,5 +19,8 @@ export default StyleSheet.create({
     width: Sizes.iconWidth,
     height: Sizes.iconHeight,
     paddingRight: 5,
+  },
+  guestName: {
+    color: DefaultColor.defaultBackgroundColor,
   },
 });

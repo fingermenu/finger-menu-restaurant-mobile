@@ -12,44 +12,11 @@ import OrdersView from './OrdersView';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { ActiveCustomerProp } from '../../framework/applicationState';
+import { ActiveCustomersProp } from '../../framework/applicationState';
 import { eventPrefix } from '../../framework/AnalyticHelper';
 import PrinterHelper from '../../framework/PrintHelper';
 
 class OrdersContainer extends Component {
-  static convertOrderToOrderRequest = order =>
-    order.update('details', details =>
-      details.map(detail => {
-        const menuItemPrice = detail.get('menuItemPrice');
-
-        return detail
-          .merge(
-            Map({
-              menuItemPriceId: menuItemPrice.get('id'),
-              quantity: detail.get('quantity'),
-              notes: detail.get('notes'),
-              paid: detail.get('paid'),
-              servingTimeId: detail.get('servingTimeId'),
-              orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
-                const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
-
-                return orderChoiceItemPrice
-                  .merge(
-                    Map({
-                      choiceItemPriceId: choiceItemPrice.get('id'),
-                      quantity: orderChoiceItemPrice.get('quantity'),
-                      notes: orderChoiceItemPrice.get('notes'),
-                      paid: orderChoiceItemPrice.get('paid'),
-                    }),
-                  )
-                  .delete('choiceItemPrice');
-              }),
-            }),
-          )
-          .delete('menuItemPrice');
-      }),
-    );
-
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
       nextProps.relay.refetch(_ => ({
@@ -76,6 +43,40 @@ class OrdersContainer extends Component {
       selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
     };
   }
+
+  convertOrderToOrderRequest = order =>
+    order.update('details', details =>
+      details.map(detail => {
+        const menuItemPrice = detail.get('menuItemPrice');
+
+        return detail
+          .merge(
+            Map({
+              menuItemPriceId: menuItemPrice.get('id'),
+              quantity: detail.get('quantity'),
+              notes: detail.get('notes'),
+              paid: detail.get('paid'),
+              servingTimeId: detail.get('servingTimeId'),
+              customer: this.props.activeCustomers.find(_ => _.id === detail.get('customerId')),
+              orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
+                const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
+
+                return orderChoiceItemPrice
+                  .merge(
+                    Map({
+                      choiceItemPriceId: choiceItemPrice.get('id'),
+                      quantity: orderChoiceItemPrice.get('quantity'),
+                      notes: orderChoiceItemPrice.get('notes'),
+                      paid: orderChoiceItemPrice.get('paid'),
+                    }),
+                  )
+                  .delete('choiceItemPrice');
+              }),
+            }),
+          )
+          .delete('menuItemPrice');
+      }),
+    );
 
   handleViewOrderItemPressed = ({ groupId, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
@@ -248,7 +249,7 @@ OrdersContainer.propTypes = {
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
-  customer: ActiveCustomerProp.isRequired,
+  customer: ActiveCustomersProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 

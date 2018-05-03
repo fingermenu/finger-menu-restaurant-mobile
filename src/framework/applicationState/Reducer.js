@@ -22,10 +22,10 @@ export default (state = initialState, action) => {
     return state.set('activeTable', Map());
 
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER:
-    return state.set('activeCustomer', action.payload);
+    return state.set('activeCustomers', action.payload);
 
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER:
-    return state.set('activeCustomer', Map());
+    return state.set('activeCustomers', Map());
 
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_MENU:
     return state.set('activeMenu', action.payload);

@@ -107,14 +107,14 @@ TableSetupView.propTypes = {
 
 const mapStateToProps = state => {
   const activeTable = state.applicationState.get('activeTable');
-  const activeCustomer = state.applicationState.get('activeCustomer');
+  const activeCustomers = state.applicationState.get('activeCustomers');
 
   return {
     initialValues: {
       numberOfAdults: activeTable.get('numberOfAdults') || 2,
       numberOfChildren: activeTable.get('numberOfChildren') || 0,
-      name: activeCustomer.get('name') || '',
-      notes: activeCustomer.get('reservationNotes') || '',
+      // name: activeCustomer.get('name') || '',
+      notes: activeCustomers.get('reservationNotes') || '',
     },
   };
 };
