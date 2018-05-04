@@ -34,7 +34,7 @@ class TableSetupContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
     );
-    this.updateTable({ name: '', notes: '', numberOfAdults: 0, numberOfChildren: 0, lastOrderCorrelationId: '' }, 'empty', {
+    this.updateTable({ name: '', notes: '', lastOrderCorrelationId: '' }, [], 'empty', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
@@ -49,27 +49,25 @@ class TableSetupContainer extends Component {
   };
 
   handleSetupTablePressed = values => {
-    this.updateTable(values, 'taken', {
+    const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
+      const id = cuid();
+
+      return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
+    }, OrderedMap());
+    const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
+      const id = cuid();
+
+      return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
+    }, OrderedMap());
+    const customers = adults.merge(children);
+
+    this.updateTable(values, customers.valueSeq().toJS(), 'taken', {
       onSuccess: () => {
-        const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
-          const id = cuid();
-
-          return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
-        }, OrderedMap());
-        const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
-          const id = cuid();
-
-          return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
-        }, OrderedMap());
-        const customers = adults.merge(children);
-
         this.props.applicationStateActions.setActiveCustomers(
           Map({
             customers,
             activeCustomerId: customers.keySeq().first(),
             reservationNotes: values.notes,
-            numberOfAdults: values.numberOfAdults,
-            numberOfChildren: values.numberOfChildren,
           }),
         );
         this.props.applicationStateActions.clearActiveOrder();
@@ -99,15 +97,13 @@ class TableSetupContainer extends Component {
     });
   };
 
-  updateTable = (values, tableStateKey, callbacks) => {
+  updateTable = (values, customers, tableStateKey, callbacks) => {
     UpdateTable(
       Environment,
       {
         id: this.props.table.id,
         tableState: tableStateKey,
-        numberOfAdults: values.numberOfAdults,
-        numberOfChildren: values.numberOfChildren,
-        //customerName: values.name,
+        customers: customers,
         notes: values.notes,
         lastOrderCorrelationId: values.lastOrderCorrelationId,
       },
