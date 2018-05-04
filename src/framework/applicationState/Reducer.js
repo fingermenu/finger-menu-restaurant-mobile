@@ -26,7 +26,10 @@ export default (state = initialState, action) => {
     const numberOfAdults = customerTypes.filter(type => type.localeCompare('A') === 0).count();
     const numberOfChildren = customerTypes.filter(type => type.localeCompare('C') === 0).count();
 
-    return state.set('activeCustomers', action.payload).merge('activeCustomers', Map({ numberOfAdults, numberOfChildren }));
+    return state
+      .set('activeCustomers', action.payload)
+      .setIn(['activeCustomers', 'numberOfAdults'], numberOfAdults)
+      .setIn(['activeCustomers', 'numberOfChildren'], numberOfChildren);
   }
 
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER:
