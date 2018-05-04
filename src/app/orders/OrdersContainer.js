@@ -91,7 +91,6 @@ class OrdersContainer extends Component {
     const {
       navigateToOrderConfirmed,
       restaurantId,
-      activeCustomers: { numberOfAdults, numberOfChildren },
       user: {
         table: { id: tableId },
       },
@@ -99,7 +98,7 @@ class OrdersContainer extends Component {
 
     PlaceOrder(
       this.props.relay.environment,
-      orderRequest.merge(Map({ restaurantId, tableId, numberOfAdults, numberOfChildren })).toJS(),
+      orderRequest.merge(Map({ restaurantId, tableId })).toJS(),
       inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
       inMemoryOrder
         .get('details')

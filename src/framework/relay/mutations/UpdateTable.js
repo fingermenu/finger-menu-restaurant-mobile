@@ -86,20 +86,6 @@ const commit = (
         lastOrderCorrelationId,
       }),
     },
-    optimisticUpdater: store => {
-      sharedUpdater(
-        store,
-        user,
-        Common.createTableNodeForOptimisticUpdater(store, {
-          id,
-          tableState,
-          customers,
-          notes,
-          lastOrderCorrelationId,
-        }),
-        connectionFilters,
-      );
-    },
     onCompleted: (response, errors) => {
       if (errors && errors.length > 0) {
         return;

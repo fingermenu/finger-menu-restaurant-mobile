@@ -3,7 +3,7 @@
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
-import Immutable, { Map } from 'immutable';
+import Immutable, { Map, OrderedMap } from 'immutable';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -50,12 +50,26 @@ class TablesContainer extends Component {
   };
 
   setActiveCustomer = table => {
+    const customers = table.customers
+      ? table.customers.redecue(
+        (reduction, customer) =>
+          reduction.set(
+            customer.id,
+            Map({
+              id: customer.id,
+              name: customer.name,
+              type: customer.type,
+            }),
+          ),
+        OrderedMap(),
+      )
+      : OrderedMap();
+
     this.props.applicationStateActions.setActiveCustomers(
       Map({
-        name: table.customerName,
         reservationNotes: table.notes,
-        numberOfAdults: table.numberOfAdults,
-        numberOfChildren: table.numberOfChildren,
+        customers,
+        activeCustomerId: customers.isEmpty() ? null : customers.first().get('id'),
       }),
     );
   };

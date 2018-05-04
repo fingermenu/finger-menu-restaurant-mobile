@@ -21,11 +21,16 @@ export default (state = initialState, action) => {
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_TABLE:
     return state.set('activeTable', Map());
 
-  case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER:
-    return state.set('activeCustomers', action.payload);
+  case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER: {
+    const customers = action.payload.customers;
+    const numberOfAdults = customers.filter(customer => customer.type.localeCompare('A') === 0).count();
+    const numberOfChildren = customers.filter(customer => customer.type.localeCompare('C') === 0).count();
+
+    return state.set('activeCustomers', action.payload).merge('activeCustomers', Map({ numberOfAdults, numberOfChildren }));
+  }
 
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER:
-    return state.set('activeCustomers', Map());
+    return state.set('activeCustomers', Map({ customers: OrderedMap(), activeCustomerId: null, numberOfAdults: 0, numberOfChildren: 0 }));
 
   case ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED:
     return state.setIn(['activeCustomers', 'activeCustomerId'], action.payload);

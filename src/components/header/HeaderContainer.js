@@ -44,12 +44,10 @@ HeaderContainer.defaultProps = {
 
 const mapStateToProps = state => ({
   backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryTopBannerImageUrl']),
-  customers: state.applicationState.hasIn(['activeCustomers', 'customers'])
-    ? state.applicationState
-      .getIn(['activeCustomers', 'customers'])
-      .toOrderedSet()
-      .toJS()
-    : [],
+  customers: state.applicationState
+    .getIn(['activeCustomers', 'customers'])
+    .valueSeq()
+    .toJS(),
   activeCustomerId: state.applicationState.getIn(['activeCustomers', 'activeCustomerId']),
 });
 

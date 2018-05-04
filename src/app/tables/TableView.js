@@ -21,9 +21,11 @@ class TableView extends Component {
 
   render = () => {
     const {
-      table: { name, numberOfAdults, numberOfChildren, tableState },
+      table: { name, customers, tableState },
     } = this.props;
     const style = Common.getTableStyle(tableState ? tableState.key : 'empty');
+    const numberOfAdults = customers ? customers.filter(customer => customer.type.localeCompare('A') === 0).length : 0;
+    const numberOfChildren = customers ? customers.filter(customer => customer.type.localeCompare('C') === 0).length : 0;
 
     return (
       <View style={Styles.tableOuterContainer}>
@@ -41,9 +43,6 @@ class TableView extends Component {
             <Text>{numberOfChildren ? numberOfChildren : 0}</Text>
           </View>
         </View>
-        {/*<Text numberOfLines={1} style={Styles.customerNameText}>*/}
-        {/*{customerName}*/}
-        {/*</Text>*/}
       </View>
     );
   };

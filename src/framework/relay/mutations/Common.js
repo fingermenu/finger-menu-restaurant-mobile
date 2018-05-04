@@ -1,7 +1,5 @@
 // @flow
 
-import cuid from 'cuid';
-
 export default class Common {
   static createOrderOptimisticResponse = ({ id, restaurantId, notes, tableId, details, customers }, menuItemPrices, choiceItemPrices) => {
     const convertedDetails = details.map(({ id, quantity, notes, paid, menuItemPriceId, orderChoiceItemPrices }) => {
@@ -56,13 +54,11 @@ export default class Common {
     };
   };
 
-  static createTableOptimisticResponse = ({ id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId }) => {
+  static createTableOptimisticResponse = ({ id, tableState, notes, customers, lastOrderCorrelationId }) => {
     return {
       node: {
         id,
-        numberOfAdults,
-        numberOfChildren,
-        customerName,
+        customers,
         notes,
         lastOrderCorrelationId,
         tableState: {
@@ -70,31 +66,5 @@ export default class Common {
         },
       },
     };
-  };
-
-  static createTableNodeForOptimisticUpdater = (
-    store,
-    { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
-  ) => {
-    const node = store.create(cuid(), 'table');
-
-    node.setValue(id, 'id');
-    node.setValue(numberOfAdults, 'numberOfAdults');
-    node.setValue(numberOfChildren, 'numberOfChildren');
-    node.setValue(customerName, 'customerName');
-    node.setValue(notes, 'notes');
-    node.setValue(lastOrderCorrelationId, 'lastOrderCorrelationId');
-
-    const tableStateLinkedRecord = store.create(cuid(), 'tableState');
-
-    tableStateLinkedRecord.setValue(tableState, 'key');
-
-    node.setLinkedRecord(tableStateLinkedRecord, 'tableState');
-
-    const tableLinkedRecord = store.create(cuid(), 'table');
-
-    tableLinkedRecord.setLinkedRecord(node, 'node');
-
-    return tableLinkedRecord;
   };
 }

@@ -6,9 +6,9 @@ export default Map({
   selectedLanguage: 'en_NZ',
   activeRestaurant: Map(),
   activeTable: Map(),
-  activeCustomers: Map(),
+  activeCustomers: Map({ customers: OrderedMap(), activeCustomerId: null, numberOfAdults: 0, numberOfChildren: 0 }),
   activeMenu: Map(),
   activeMenuItemPrice: Map(),
   activeOrderMenuItemPrice: Map(),
-  activeOrder: Map({ items: OrderedMap() }),
+  activeOrder: Map({ details: OrderedMap() }),
 });

@@ -12,33 +12,32 @@ import { ActiveCustomersMenuOption } from '../customers';
 import i18n from '../../i18n';
 import { ImageUtility } from '../image';
 import { DefaultStyles } from '../../style';
+import { ActiveCustomerProp } from '../../framework/applicationState';
 
 const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, customers, activeCustomerId }) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
     <View />
-    <Menu>
-      <MenuTrigger>
-        <View style={DefaultStyles.rowContainer}>
-          <Icon name="person-outline" color="white" />
-          {activeCustomerId ? (
+    {customers.length > 0 && (
+      <Menu>
+        <MenuTrigger>
+          <View style={DefaultStyles.rowContainer}>
+            <Icon name="person-outline" color="white" />
             <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>{customers.find(c => c.id === activeCustomerId).name}</Text>
-          ) : (
-            <View />
-          )}
-        </View>
-      </MenuTrigger>
-      <MenuOptions>
-        {customers.map(c => (
-          <ActiveCustomersMenuOption
-            key={c.id}
-            isSelected={c.id === activeCustomerId}
-            name={c.name}
-            id={c.id}
-            changeActiveCustomer={changeActiveCustomer}
-          />
-        ))}
-      </MenuOptions>
-    </Menu>
+          </View>
+        </MenuTrigger>
+        <MenuOptions>
+          {customers.map(c => (
+            <ActiveCustomersMenuOption
+              key={c.id}
+              isSelected={c.id === activeCustomerId}
+              name={c.name}
+              id={c.id}
+              changeActiveCustomer={changeActiveCustomer}
+            />
+          ))}
+        </MenuOptions>
+      </Menu>
+    )}
     <Menu>
       <MenuTrigger>
         <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />
@@ -55,7 +54,12 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, 
 HeaderView.propTypes = {
   changeLanguage: PropTypes.func.isRequired,
   changeActiveCustomer: PropTypes.func.isRequired,
-  activeCustomerId: PropTypes.string.isRequired,
+  customers: PropTypes.arrayOf(ActiveCustomerProp).isRequired,
+  activeCustomerId: PropTypes.string,
+};
+
+HeaderView.defaultProps = {
+  activeCustomerId: null,
 };
 
 export default HeaderView;

@@ -2,7 +2,7 @@
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import cuid from 'cuid';
-import Immutable, { List, Map } from 'immutable';
+import Immutable, { List, Map, OrderedMap } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -25,9 +25,7 @@ class TableDetailContainer extends Component {
       {
         id: this.props.table.id,
         tableState: 'empty',
-        numberOfAdults: 0,
-        numberOfChildren: 0,
-        customerName: '',
+        customers: [],
         notes: '',
         lastOrderCorrelationId: '',
       },
@@ -45,9 +43,7 @@ class TableDetailContainer extends Component {
       {
         id: this.props.table.id,
         tableState: 'paid',
-        numberOfAdults: 0,
-        numberOfChildren: 0,
-        customerName: '',
+        customers: [],
         notes: '',
       },
       {},
@@ -59,12 +55,26 @@ class TableDetailContainer extends Component {
   };
 
   setActiveCustomer = table => {
+    const customers = table.customers
+      ? table.customers.redecue(
+        (reduction, customer) =>
+          reduction.set(
+            customer.id,
+            Map({
+              id: customer.id,
+              name: customer.name,
+              type: customer.type,
+            }),
+          ),
+        OrderedMap(),
+      )
+      : OrderedMap();
+
     this.props.applicationStateActions.setActiveCustomers(
       Map({
-        name: table.customerName,
         reservationNotes: table.notes,
-        numberOfAdults: table.numberOfAdults,
-        numberOfChildren: table.numberOfChildren,
+        customers,
+        activeCustomerId: customers.isEmpty() ? null : customers.first().get('id'),
       }),
     );
   };
@@ -242,23 +252,17 @@ class TableDetailContainer extends Component {
   };
 
   handleGiveToGuestPressed = () => {
-    if (this.props.user.orders.edges.length > 0) {
-      const { customerName, numberOfAdults, numberOfChildren, correlationId } = this.props.user.orders.edges[0].node;
+    const { table } = this.props;
 
-      this.props.applicationStateActions.setActiveCustomers(
-        Map({
-          name: customerName,
-          numberOfAdults,
-          numberOfChildren,
-        }),
-      );
+    this.setActiveCustomer(table);
+
+    if (this.props.user.orders.edges.length > 0) {
+      const { correlationId } = this.props.user.orders.edges[0].node;
+
       this.props.applicationStateActions.clearActiveOrder();
       this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
       this.props.navigateToHome();
     } else {
-      const { table } = this.props;
-
-      this.setActiveCustomer(table);
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.navigateToTableSetup();
     }
