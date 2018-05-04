@@ -51,11 +51,19 @@ class TableSetupContainer extends Component {
   handleSetupTablePressed = values => {
     this.updateTable(values, 'taken', {
       onSuccess: () => {
-        const customers = Range(0, values.numberOfAdults + values.numberOfChildren).reduce((r, v) => {
+        const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
           const id = cuid();
-          const info = Map({ id, name: `Guest ${v + 1}` });
-          return r.set(id, info);
+          const info = Map({ id, name: `Guest ${index + 1}` });
+
+          return reduction.set(id, info);
         }, OrderedMap());
+        const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
+          const id = cuid();
+          const info = Map({ id, name: `Kid ${index + 1}` });
+
+          return reduction.set(id, info);
+        }, OrderedMap());
+        const customers = adults.merge(children);
 
         this.props.applicationStateActions.setActiveCustomers(
           Map({
