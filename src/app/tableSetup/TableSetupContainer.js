@@ -53,15 +53,13 @@ class TableSetupContainer extends Component {
       onSuccess: () => {
         const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
           const id = cuid();
-          const info = Map({ id, name: `Guest ${index + 1}` });
 
-          return reduction.set(id, info);
+          return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
         }, OrderedMap());
         const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
           const id = cuid();
-          const info = Map({ id, name: `Kid ${index + 1}` });
 
-          return reduction.set(id, info);
+          return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
         }, OrderedMap());
         const customers = adults.merge(children);
 
