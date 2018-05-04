@@ -5,6 +5,7 @@ import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
 import Common from './Common';
+import packageInfo from '../../../../package.json';
 
 const mutation = graphql`
   mutation UpdateOrderMutation($input: UpdateOrderInput!) {
@@ -81,6 +82,7 @@ const commit = (
     mutation,
     variables: {
       input: {
+        appVersion: packageInfo.version,
         id,
         restaurantId,
         tableId,

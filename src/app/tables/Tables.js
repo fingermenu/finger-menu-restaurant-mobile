@@ -14,6 +14,7 @@ import TablesRelayContainer from './TablesRelayContainer';
 import { HeaderContainer } from '../../components/header/';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
+import packageInfo from '../../../package.json';
 
 class Tables extends Component {
   static navigationOptions = () => ({
@@ -48,13 +49,14 @@ class Tables extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TablesQuery($restaurantId: ID!) {
-            user {
+          query TablesQuery($appVersion: String, $restaurantId: ID!) {
+            user(appVersion: $appVersion) {
               ...TablesRelayContainer_user
             }
           }
         `}
         variables={{
+          appVersion: packageInfo.version,
           restaurantId: this.props.restaurantId,
         }}
         render={this.renderRelayComponent}

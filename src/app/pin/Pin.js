@@ -16,6 +16,7 @@ import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveRestaurantProp } from '../../framework/applicationState';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
+import packageInfo from '../../../package.json';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -24,11 +25,13 @@ class Pin extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     const {
-      restaurant: { id, pin, configurations },
+      restaurant: { id, pin, configurations, packageBundle },
     } = nextProps;
 
-    if (id && pin && configurations && id !== nextProps.activeRestaurant.id) {
-      nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
+    if (id && pin && configurations && packageBundle && id !== nextProps.activeRestaurant.id) {
+      nextProps.applicationStateActions.setActiveRestaurant(
+        Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)), packageBundle: Immutable.fromJS(JSON.parse(packageBundle)) }),
+      );
     }
 
     return null;
@@ -41,6 +44,7 @@ class Pin extends Component {
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+      this.props.asyncStorageActions.readValue(Map({ key: 'packageBundle' }));
     }
 
     this.props.i18n.changeLanguage('en_NZ');
@@ -69,13 +73,15 @@ class Pin extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query PinQuery {
-            user {
+          query PinQuery($appVersion: String) {
+            user(appVersion: $appVersion) {
               ...PinRelayContainer_user
             }
           }
         `}
-        variables={{}}
+        variables={{
+          appVersion: packageInfo.version,
+        }}
         render={this.renderRelayComponent}
       />
     );
@@ -95,6 +101,7 @@ const mapStateToProps = state => ({
     id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
     pin: state.asyncStorage.getIn(['keyValues', 'pin']),
     configurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
+    packageBundle: state.asyncStorage.getIn(['keyValues', 'packageBundle']),
   },
 });
 

@@ -3,6 +3,8 @@ package com.fingermenurestaurant;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import io.realm.react.RealmReactPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.peel.react.TcpSocketsModule;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
@@ -48,6 +50,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNFetchBlobPackage(),
+          new RealmReactPackage(),
           new GoogleAnalyticsBridgePackage(),
           new TcpSocketsModule(),
           new ReactNativeConfigPackage(),

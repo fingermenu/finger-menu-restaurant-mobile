@@ -1,4 +1,5 @@
 input AddChoiceItemInput {
+  appVersion: String
   name: [LanguageStringTuple]!
   description: [LanguageStringTuple]
   choiceItemPageUrl: String
@@ -12,6 +13,7 @@ type AddChoiceItemPayload {
 }
 
 input AddMenuItemInput {
+  appVersion: String
   name: [LanguageStringTuple]!
   description: [LanguageStringTuple]
   menuItemPageUrl: String
@@ -25,6 +27,7 @@ type AddMenuItemPayload {
 }
 
 input AddRestaurantInput {
+  appVersion: String
   name: [LanguageStringTuple]!
   websiteUrl: String
   imageUrl: String
@@ -54,6 +57,7 @@ type BeServedWithMenuItemPrice implements Node {
 }
 
 input CancelOrderInput {
+  appVersion: String
   id: ID!
   clientMutationId: String
 }
@@ -487,6 +491,7 @@ type Phone {
 }
 
 input PlaceOrderInput {
+  appVersion: String
   correlationId: ID
   restaurantId: ID!
   numberOfAdults: Int
@@ -511,8 +516,8 @@ type Printer {
 }
 
 type Query {
-  user: User
-  viewer: Viewer
+  user(appVersion: String): User
+  viewer(appVersion: String): Viewer
 
   """Fetches an object given its ID"""
   node(
@@ -631,6 +636,7 @@ type SizeTypeEdge {
 }
 
 input SubmitUserFeedbackInput {
+  appVersion: String
   questionAndAnswers: [QuestionAndAnswerInput!]
   others: String
   restaurantId: ID
@@ -731,6 +737,7 @@ type TagTypeEdge {
 }
 
 input UpdateOrderInput {
+  appVersion: String
   id: ID!
   restaurantId: ID!
   numberOfAdults: Int
@@ -749,6 +756,7 @@ type UpdateOrderPayload {
 }
 
 input UpdateTableInput {
+  appVersion: String
   id: ID!
   name: [LanguageStringTuple]
   status: String

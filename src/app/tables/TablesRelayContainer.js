@@ -32,6 +32,10 @@ export default createRefetchContainer(
             }
             numberOfPrintCopiesForKitchen
           }
+          packageBundle {
+            url
+            checksum
+          }
         }
         tables(first: 1000, restaurantId: $restaurantId) @connection(key: "User_tables") {
           edges {

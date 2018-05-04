@@ -78,7 +78,7 @@ class NumberPad extends Component {
     return (
       <View style={Styles.container}>
         {isHorizontal ? (
-          <FlatList data={numbers} horizontal renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+          <FlatList data={numbers} numColumns={10} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
         ) : (
           <FlatList data={numbers} numColumns={numColumns} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
         )}
