@@ -9,6 +9,13 @@ export function selectedLanguageChanged(selectedLanguage) {
   };
 }
 
+export function activeCustomerIdChanged(payload) {
+  return {
+    type: ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED,
+    payload,
+  };
+}
+
 export function setActiveRestaurant(payload) {
   return {
     type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_RESTAURANT,
@@ -35,14 +42,14 @@ export function clearActiveTable() {
   };
 }
 
-export function setActiveCustomer(payload) {
+export function setActiveCustomers(payload) {
   return {
     type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER,
     payload,
   };
 }
 
-export function clearActiveCustomer() {
+export function clearActiveCustomers() {
   return {
     type: ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER,
   };

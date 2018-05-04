@@ -50,7 +50,7 @@ class TablesContainer extends Component {
   };
 
   setActiveCustomer = table => {
-    this.props.applicationStateActions.setActiveCustomer(
+    this.props.applicationStateActions.setActiveCustomers(
       Map({
         name: table.customerName,
         reservationNotes: table.notes,
@@ -65,7 +65,7 @@ class TablesContainer extends Component {
       if (table.tableState.key === 'reserved') {
         this.setActiveCustomer(table);
       } else {
-        this.props.applicationStateActions.clearActiveCustomer();
+        this.props.applicationStateActions.clearActiveCustomers();
       }
 
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));

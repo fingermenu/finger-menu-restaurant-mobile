@@ -15,9 +15,14 @@ class HeaderContainer extends Component {
     this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
+  changeActiveCustomer = activeCustomerId => {
+    this.props.applicationStateActions.activeCustomerIdChanged(activeCustomerId);
+  };
+
   render = () => (
     <HeaderView
       changeLanguage={this.changeLanguage}
+      changeActiveCustomer={this.changeActiveCustomer}
       backgroundImageUrl={this.props.backgroundImageUrl}
       customers={this.props.customers}
       activeCustomerId={this.props.activeCustomerId}

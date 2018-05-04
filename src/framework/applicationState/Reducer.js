@@ -27,6 +27,9 @@ export default (state = initialState, action) => {
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER:
     return state.set('activeCustomers', Map());
 
+  case ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED:
+    return state.setIn(['activeCustomers', 'activeCustomerId'], action.payload);
+
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_MENU:
     return state.set('activeMenu', action.payload);
 

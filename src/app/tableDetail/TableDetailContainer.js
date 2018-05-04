@@ -59,7 +59,7 @@ class TableDetailContainer extends Component {
   };
 
   setActiveCustomer = table => {
-    this.props.applicationStateActions.setActiveCustomer(
+    this.props.applicationStateActions.setActiveCustomers(
       Map({
         name: table.customerName,
         reservationNotes: table.notes,
@@ -245,7 +245,7 @@ class TableDetailContainer extends Component {
     if (this.props.user.orders.edges.length > 0) {
       const { customerName, numberOfAdults, numberOfChildren, correlationId } = this.props.user.orders.edges[0].node;
 
-      this.props.applicationStateActions.setActiveCustomer(
+      this.props.applicationStateActions.setActiveCustomers(
         Map({
           name: customerName,
           numberOfAdults,

@@ -34,7 +34,7 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, 
             isSelected={c.id === activeCustomerId}
             name={c.name}
             id={c.id}
-            changeLanguage={changeActiveCustomer}
+            changeActiveCustomer={changeActiveCustomer}
           />
         ))}
       </MenuOptions>

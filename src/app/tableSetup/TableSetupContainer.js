@@ -57,7 +57,7 @@ class TableSetupContainer extends Component {
           return r.set(id, info);
         }, OrderedMap());
 
-        this.props.applicationStateActions.setActiveCustomer(
+        this.props.applicationStateActions.setActiveCustomers(
           Map({
             customers,
             activeCustomerId: customers.keySeq().first(),
