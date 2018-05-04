@@ -63,6 +63,7 @@ class OrderItemRow extends Component {
     const {
       orderChoiceItemPrices,
       notes,
+      customer: { name: customerName },
       quantity,
       paid,
       menuItemPrice: {
@@ -99,7 +100,9 @@ class OrderItemRow extends Component {
             <Text style={DefaultStyles.primaryFont}>{quantity}x</Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {name} - {customerName}
+            </Text>
             {notes &&
               notes.trim() && (
               <Text style={DefaultStyles.primaryFont}>

@@ -31,6 +31,10 @@ const mutation = graphql`
             }
             quantity
             notes
+            customer {
+              id
+              name
+            }
             paid
             menuItemPrice {
               id

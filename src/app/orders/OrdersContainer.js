@@ -57,7 +57,7 @@ class OrdersContainer extends Component {
               notes: detail.get('notes'),
               paid: detail.get('paid'),
               servingTimeId: detail.get('servingTimeId'),
-              customer: this.props.activeCustomers.find(_ => _.id === detail.get('customerId')),
+              customer: this.props.customers.find(_ => _.id === detail.get('customerId')),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -74,7 +74,8 @@ class OrdersContainer extends Component {
               }),
             }),
           )
-          .delete('menuItemPrice');
+          .delete('menuItemPrice')
+          .delete('customerId');
       }),
     );
 
@@ -86,11 +87,11 @@ class OrdersContainer extends Component {
 
   handleConfirmOrderPressed = () => {
     const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
-    const orderRequest = OrdersContainer.convertOrderToOrderRequest(inMemoryOrder);
+    const orderRequest = this.convertOrderToOrderRequest(inMemoryOrder);
     const {
       navigateToOrderConfirmed,
       restaurantId,
-      customer: { name: customerName, numberOfAdults, numberOfChildren },
+      activeCustomers: { numberOfAdults, numberOfChildren },
       user: {
         table: { id: tableId },
       },
@@ -98,7 +99,7 @@ class OrdersContainer extends Component {
 
     PlaceOrder(
       this.props.relay.environment,
-      orderRequest.merge(Map({ restaurantId, tableId, customerName, numberOfAdults, numberOfChildren })).toJS(),
+      orderRequest.merge(Map({ restaurantId, tableId, numberOfAdults, numberOfChildren })).toJS(),
       inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
       inMemoryOrder
         .get('details')
@@ -152,7 +153,7 @@ class OrdersContainer extends Component {
     this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
   };
 
-  printOrder = ({ details, placedAt, notes, customerName }) => {
+  printOrder = ({ details, placedAt, notes }) => {
     const {
       printerConfig,
       kitchenOrderTemplate,
@@ -174,14 +175,7 @@ class OrdersContainer extends Component {
       Map({
         hostname,
         port,
-        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
-          details,
-          placedAt,
-          notes,
-          customerName,
-          tableName,
-          kitchenOrderTemplate,
-        ),
+        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, '', tableName, kitchenOrderTemplate),
         numberOfCopies: numberOfPrintCopiesForKitchen,
       }),
     );
@@ -190,7 +184,6 @@ class OrdersContainer extends Component {
   render = () => {
     const {
       inMemoryOrder,
-      customer: { name: customerName },
       user: {
         orders: { edges: orders },
         restaurant: { menus },
@@ -227,7 +220,6 @@ class OrdersContainer extends Component {
         onConfirmOrderPressed={this.handleConfirmOrderPressed}
         onRemoveOrderPressed={this.handleRemoveOrderPressed}
         tableName={tableName}
-        customerName={customerName}
         notes={inMemoryOrder.notes}
         menus={menus}
         isRefreshing={this.state.isRefreshing}
@@ -307,7 +299,14 @@ const mapStateToProps = (state, ownProps) => {
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
     inMemoryOrder: inMemoryOrder.toJS(),
-    customer: state.applicationState.get('activeCustomer').toJS(),
+    customers: state.applicationState
+      .getIn(['activeCustomers', 'customers'])
+      .valueSeq()
+      .toJS(),
+    activeCustomers: state.applicationState
+      .get('activeCustomers')
+      .delete('customers')
+      .toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,

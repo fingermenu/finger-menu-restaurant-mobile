@@ -75,7 +75,7 @@ export default class Common {
     node.setValue(restaurantId, 'restaurantId');
     node.setValue(numberOfAdults, 'numberOfAdults');
     node.setValue(numberOfChildren, 'numberOfChildren');
-    node.setValue(customerName, 'customerName');
+    node.setValue(customerName, 'customerName'); // TODO: Remove later.
     node.setValue(notes, 'notes');
 
     const detailItemsLinkedRecords = details.map(({ id, quantity, notes, paid, menuItemPriceId, orderChoiceItemPrices }) => {

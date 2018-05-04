@@ -68,6 +68,10 @@ export default createRefetchContainer(
                 }
                 quantity
                 notes
+                customer {
+                  id
+                  name
+                }
                 paid
                 orderChoiceItemPrices {
                   id

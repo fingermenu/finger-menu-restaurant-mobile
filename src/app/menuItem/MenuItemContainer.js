@@ -60,6 +60,7 @@ class MenuItemContainer extends Component {
     const {
       activeOrderMenuItemPriceGroupId,
       servingTimeId,
+      activeCustomerId,
       user: {
         menuItemPrice: {
           id: menuItemPriceId,
@@ -80,7 +81,7 @@ class MenuItemContainer extends Component {
           notes: values.notes,
           paid: false,
           servingTimeId,
-          customerId: id, // TODO: get active customer id from app state.
+          customerId: activeCustomerId,
           menuItemPrice: Map({
             id: menuItemPriceId,
             menuItem: Map({
@@ -139,6 +140,7 @@ const mapStateToProps = state => {
 
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
+    activeCustomerId: state.applicationState.getIn(['activeCustomers', 'activeCustomerId']),
     activeOrderMenuItemPriceGroupId: activeOrderMenuItemPrice.get('groupId'),
     quantity: activeOrderDetails ? activeOrderDetails.count() : 1,
     servingTimeId: activeMenuItemPrice.isEmpty() ? activeOrderMenuItemPrice.get('servingTimeId') : activeMenuItemPrice.get('servingTimeId'),

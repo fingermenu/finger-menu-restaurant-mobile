@@ -58,19 +58,7 @@ class OrdersView extends Component {
     const slideAnimation = new SlideAnimation({
       slideFrom: 'bottom',
     });
-    const {
-      t,
-      notes,
-      orderItems,
-      inMemoryOrderItems,
-      tableName,
-      customerName,
-      onEndReached,
-      onRefresh,
-      isRefreshing,
-      menus,
-      onNotesChanged,
-    } = this.props;
+    const { t, notes, orderItems, inMemoryOrderItems, tableName, onEndReached, onRefresh, isRefreshing, menus, onNotesChanged } = this.props;
     const popupDialogSize = getPopupDialogSizes();
 
     return (
@@ -101,9 +89,7 @@ class OrdersView extends Component {
           </View>
         </PopupDialog>
         <View style={Styles.headerContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>
-            {t('table.label').replace('{tableName}', tableName) + (customerName ? ',' + customerName : '')}
-          </Text>
+          <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', tableName)}</Text>
           <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
         </View>
 
@@ -149,12 +135,10 @@ OrdersView.propTypes = {
   onNotesChanged: PropTypes.func.isRequired,
   tableName: PropTypes.string.isRequired,
   menus: MenusProp.isRequired,
-  customerName: PropTypes.string,
   notes: PropTypes.string,
 };
 
 OrdersView.defaultProps = {
-  customerName: null,
   notes: null,
 };
 
