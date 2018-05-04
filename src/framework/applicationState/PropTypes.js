@@ -31,7 +31,6 @@ export const ActiveCustomerProp = PropTypes.shape({
 });
 
 export const ActiveCustomersProp = PropTypes.shape({
-  name: PropTypes.string,
   reservationNotes: PropTypes.string,
   customers: PropTypes.arrayOf(ActiveCustomerProp),
   activeCustomerId: PropTypes.string,
