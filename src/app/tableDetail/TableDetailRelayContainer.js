@@ -13,10 +13,12 @@ export default createRefetchContainer(
           id
           lastOrderCorrelationId
           name
-          customerName
+          customers {
+            id
+            name
+            type
+          }
           notes
-          numberOfAdults
-          numberOfChildren
           tableState {
             key
             name
@@ -28,9 +30,6 @@ export default createRefetchContainer(
             node {
               id
               correlationId
-              numberOfAdults
-              numberOfChildren
-              customerName
               notes
               placedAt
               cancelledAt
@@ -56,6 +55,7 @@ export default createRefetchContainer(
                 customer {
                   id
                   name
+                  type
                 }
                 paid
                 orderChoiceItemPrices {

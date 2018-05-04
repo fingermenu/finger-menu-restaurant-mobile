@@ -17,9 +17,11 @@ const mutation = graphql`
         node {
           id
           name
-          numberOfAdults
-          numberOfChildren
-          customerName
+          customers {
+            id
+            name
+            type
+          }
           notes
           lastOrderCorrelationId
           tableState {
@@ -55,7 +57,7 @@ const sharedUpdater = (store, user, tableLinkedRecord, connectionFilters) => {
 
 const commit = (
   environment,
-  { id, tableState, numberOfAdults, numberOfChildren, customerName, notes, lastOrderCorrelationId },
+  { id, tableState, customers, notes, lastOrderCorrelationId },
   connectionFilters = {},
   { user } = {},
   { onSuccess, onError } = {},
@@ -67,9 +69,7 @@ const commit = (
         appVersion: packageInfo.version,
         id,
         tableState,
-        numberOfAdults,
-        numberOfChildren,
-        customerName,
+        customers,
         notes,
         lastOrderCorrelationId,
       },
@@ -81,9 +81,7 @@ const commit = (
       updateTable: Common.createTableOptimisticResponse({
         id,
         tableState,
-        numberOfAdults,
-        numberOfChildren,
-        customerName,
+        customers,
         notes,
         lastOrderCorrelationId,
       }),
@@ -95,9 +93,7 @@ const commit = (
         Common.createTableNodeForOptimisticUpdater(store, {
           id,
           tableState,
-          numberOfAdults,
-          numberOfChildren,
-          customerName,
+          customers,
           notes,
           lastOrderCorrelationId,
         }),

@@ -48,9 +48,11 @@ export default createRefetchContainer(
                 key
                 name
               }
-              numberOfAdults
-              numberOfChildren
-              customerName
+              customers {
+                id
+                name
+                type
+              }
               notes
               sortOrderIndex
             }

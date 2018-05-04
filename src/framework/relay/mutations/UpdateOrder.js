@@ -16,9 +16,11 @@ const mutation = graphql`
         node {
           id
           correlationId
-          numberOfAdults
-          numberOfChildren
-          customerName
+          customers {
+            id
+            name
+            type
+          }
           notes
           placedAt
           cancelledAt
@@ -34,6 +36,7 @@ const mutation = graphql`
             customer {
               id
               name
+              type
             }
             paid
             menuItemPrice {
@@ -77,7 +80,7 @@ const mutation = graphql`
 
 const commit = (
   environment,
-  { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details, paymentGroupId },
+  { id, restaurantId, notes, tableId, details, customers, paymentGroupId },
   menuItemPrices,
   choiceItemPrices,
   { onSuccess, onError } = {},
@@ -90,20 +93,14 @@ const commit = (
         id,
         restaurantId,
         tableId,
-        numberOfAdults,
-        numberOfChildren,
-        customerName,
         notes,
         details,
+        customers,
         paymentGroupId,
       },
     },
     optimisticResponse: {
-      updateOrder: Common.createOrderOptimisticResponse(
-        { id, restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
-        menuItemPrices,
-        choiceItemPrices,
-      ),
+      updateOrder: Common.createOrderOptimisticResponse({ id, restaurantId, notes, tableId, details, customers }, menuItemPrices, choiceItemPrices),
     },
     onCompleted: (response, errors) => {
       if (errors && errors.length > 0) {

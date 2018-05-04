@@ -129,11 +129,13 @@ type ChoiceItemTypeEdge {
 type Customer {
   id: ID
   name: String
+  type: String
 }
 
 input CustomerInput {
   id: ID
   name: String
+  type: String
 }
 
 input DateRange {
@@ -347,9 +349,7 @@ interface Node {
 type Order implements Node {
   id: ID!
   correlationId: ID
-  numberOfAdults: Int
-  numberOfChildren: Int
-  customerName: String
+  customers: [Customer!]
   notes: String
   placedAt: String!
   cancelledAt: String
@@ -494,9 +494,7 @@ input PlaceOrderInput {
   appVersion: String
   correlationId: ID
   restaurantId: ID!
-  numberOfAdults: Int
-  numberOfChildren: Int
-  customerName: String
+  customers: [CustomerInput!]
   notes: String
   tableId: ID
   details: [OrderMenuItemPriceInput!]
@@ -650,12 +648,10 @@ type SubmitUserFeedbackPayload {
 
 type Table implements Node {
   id: ID!
+  customers: [Customer!]
   name: String
   nameToPrint: String
   status: String
-  numberOfAdults: Int
-  numberOfChildren: Int
-  customerName: String
   notes: String
   sortOrderIndex: Int
   lastOrderCorrelationId: ID
@@ -740,9 +736,7 @@ input UpdateOrderInput {
   appVersion: String
   id: ID!
   restaurantId: ID!
-  numberOfAdults: Int
-  numberOfChildren: Int
-  customerName: String
+  customers: [CustomerInput!]
   notes: String
   tableId: ID
   details: [OrderMenuItemPriceInput!]
@@ -759,11 +753,9 @@ input UpdateTableInput {
   appVersion: String
   id: ID!
   name: [LanguageStringTuple]
+  customers: [CustomerInput!]
   status: String
   tableState: String
-  numberOfAdults: Int
-  numberOfChildren: Int
-  customerName: String
   notes: String
   lastOrderCorrelationId: ID
   clientMutationId: String
@@ -791,9 +783,9 @@ type User implements Node {
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   table(tableId: ID!): Table
-  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, customerName: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
+  tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, customerName: String, notes: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, notes: String, sortOption: String): OrderTypeConnection
   servingTime(servingTimeId: ID!): ServingTime
   servingTimes(after: String, first: Int, before: String, last: Int, servingTimeIds: [ID!], sortOption: String): ServingTimeTypeConnection
   dietaryOption(dietaryOptionId: ID!): DietaryOption

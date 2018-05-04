@@ -48,9 +48,11 @@ export default createRefetchContainer(
           edges {
             node {
               id
-              numberOfAdults
-              numberOfChildren
-              customerName
+              customers {
+                id
+                name
+                type
+              }
               notes
               placedAt
               cancelledAt
@@ -71,6 +73,7 @@ export default createRefetchContainer(
                 customer {
                   id
                   name
+                  type
                 }
                 paid
                 orderChoiceItemPrices {

@@ -17,9 +17,11 @@ const mutation = graphql`
         node {
           id
           correlationId
-          numberOfAdults
-          numberOfChildren
-          customerName
+          customers {
+            id
+            name
+            type
+          }
           notes
           placedAt
           cancelledAt
@@ -35,6 +37,7 @@ const mutation = graphql`
             customer {
               id
               name
+              type
             }
             paid
             menuItemPrice {
@@ -98,7 +101,7 @@ const sharedUpdater = (store, user, orderLinkedRecord, connectionFilters) => {
 
 const commit = (
   environment,
-  { restaurantId, correlationId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
+  { restaurantId, correlationId, notes, tableId, details, customers },
   menuItemPrices,
   choiceItemPrices,
   connectionFilters = {},
@@ -113,35 +116,16 @@ const commit = (
         restaurantId,
         correlationId,
         tableId,
-        numberOfAdults,
-        numberOfChildren,
-        customerName,
         notes,
         details,
+        customers,
       },
     },
     updater: store => {
       sharedUpdater(store, user, store.getRootField('placeOrder').getLinkedRecord('order'), connectionFilters);
     },
     optimisticResponse: {
-      placeOrder: Common.createOrderOptimisticResponse(
-        { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
-        menuItemPrices,
-        choiceItemPrices,
-      ),
-    },
-    optimisticUpdater: store => {
-      sharedUpdater(
-        store,
-        user,
-        Common.createOrderNodeForOptimisticUpdater(
-          store,
-          { restaurantId, numberOfAdults, numberOfChildren, customerName, notes, tableId, details },
-          menuItemPrices,
-          choiceItemPrices,
-        ),
-        connectionFilters,
-      );
+      placeOrder: Common.createOrderOptimisticResponse({ restaurantId, notes, tableId, details, customers }, menuItemPrices, choiceItemPrices),
     },
     onCompleted: (response, errors) => {
       if (errors && errors.length > 0) {
