@@ -24,6 +24,12 @@ export const ActiveTableProp = PropTypes.shape({
   lastOrderCorrelationId: PropTypes.string,
 });
 
+export const ActiveCustomerProp = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  type: PropTypes.string.isRequired,
+});
+
 export const ActiveCustomersProp = PropTypes.shape({
   name: PropTypes.string,
   reservationNotes: PropTypes.string,
@@ -31,11 +37,6 @@ export const ActiveCustomersProp = PropTypes.shape({
   activeCustomerId: PropTypes.string,
   numberOfAdults: PropTypes.number,
   numberOfChildren: PropTypes.number,
-});
-
-export const ActiveCustomerProp = PropTypes.shape({
-  name: PropTypes.string,
-  id: PropTypes.string,
 });
 
 export const ActiveMenu = PropTypes.shape({
