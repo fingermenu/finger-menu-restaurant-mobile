@@ -71,9 +71,7 @@ export default createRefetchContainer(
                 quantity
                 notes
                 customer {
-                  id
                   name
-                  type
                 }
                 paid
                 orderChoiceItemPrices {
