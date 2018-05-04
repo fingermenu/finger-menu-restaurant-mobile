@@ -22,9 +22,9 @@ export default (state = initialState, action) => {
     return state.set('activeTable', Map());
 
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER: {
-    const customers = action.payload.customers;
-    const numberOfAdults = customers.filter(customer => customer.type.localeCompare('A') === 0).count();
-    const numberOfChildren = customers.filter(customer => customer.type.localeCompare('C') === 0).count();
+    const customerTypes = action.payload.get('customers').map(customer => customer.get('type'));
+    const numberOfAdults = customerTypes.filter(type => type.localeCompare('A') === 0).count();
+    const numberOfChildren = customerTypes.filter(type => type.localeCompare('C') === 0).count();
 
     return state.set('activeCustomers', action.payload).merge('activeCustomers', Map({ numberOfAdults, numberOfChildren }));
   }
