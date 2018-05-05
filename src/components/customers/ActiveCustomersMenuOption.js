@@ -35,8 +35,8 @@ class ActiveCustomersMenuOption extends Component {
 }
 
 ActiveCustomersMenuOption.propTypes = {
-  name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onActiveCustomerChanged: PropTypes.func.isRequired,
 };
