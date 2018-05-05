@@ -86,13 +86,13 @@ class OrdersContainer extends Component {
       navigateToOrderConfirmed,
       restaurantId,
       user: {
-        table: { id: tableId },
+        table: { id: tableId, customers },
       },
     } = this.props;
 
     PlaceOrder(
       this.props.relay.environment,
-      orderRequest.merge(Map({ restaurantId, tableId })).toJS(),
+      orderRequest.merge(Map({ customers, restaurantId, tableId })).toJS(),
       inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
       inMemoryOrder
         .get('details')
