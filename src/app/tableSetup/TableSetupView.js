@@ -47,14 +47,6 @@ const TableSetupView = ({
       </View>
       <View style={Styles.tableTextContainer}>
         <Field
-          name="name"
-          placeholder={t('customerName.placeholder')}
-          component={TextInput}
-          leftIcon={<Icon name="user" type="simple-line-icon" size={24} />}
-        />
-      </View>
-      <View style={Styles.tableTextContainer}>
-        <Field
           name="notes"
           placeholder={t('reservationNotes.placeholder')}
           component={TextInput}
@@ -113,7 +105,6 @@ const mapStateToProps = state => {
     initialValues: {
       numberOfAdults: activeTable.get('numberOfAdults') || 2,
       numberOfChildren: activeTable.get('numberOfChildren') || 0,
-      // name: activeCustomer.get('name') || '',
       notes: activeCustomers.get('reservationNotes') || '',
     },
   };
