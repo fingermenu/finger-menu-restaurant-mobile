@@ -168,6 +168,7 @@ class OrdersContainer extends Component {
   render = () => {
     const {
       inMemoryOrder,
+      customers,
       user: {
         orders: { edges: orders },
         restaurant: { menus },
@@ -206,6 +207,7 @@ class OrdersContainer extends Component {
         tableName={tableName}
         notes={inMemoryOrder.notes}
         menus={menus}
+        customers={customers}
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
@@ -225,7 +227,7 @@ OrdersContainer.propTypes = {
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
-  customer: ActiveCustomersProp.isRequired,
+  customers: ActiveCustomersProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 

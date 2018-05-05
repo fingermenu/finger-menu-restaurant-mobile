@@ -12,6 +12,7 @@ import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { MenuActionButtonContainer } from '../../components/menuActionButton';
 import { MenusProp, OrderItemDetailsProp } from './PropTypes';
+import { ActiveCustomersProp } from '../../framework/applicationState';
 
 class OrdersView extends Component {
   setConfirmOrderPopupDialogRef = popupDialog => {
@@ -48,6 +49,7 @@ class OrdersView extends Component {
         orderItemIsEditable={isInMemoryOrder}
         showRemove={isInMemoryOrder}
         backgroundColor={isInMemoryOrder ? null : '#C7C8C9'}
+        customers={this.props.customers}
       />
     );
   };
@@ -136,10 +138,12 @@ OrdersView.propTypes = {
   tableName: PropTypes.string.isRequired,
   menus: MenusProp.isRequired,
   notes: PropTypes.string,
+  customers: ActiveCustomersProp,
 };
 
 OrdersView.defaultProps = {
   notes: null,
+  customers: null,
 };
 
 export default translate()(OrdersView);
