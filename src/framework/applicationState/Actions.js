@@ -9,7 +9,7 @@ export function selectedLanguageChanged(selectedLanguage) {
   };
 }
 
-export function activeCustomerIdChanged(payload) {
+export function activeCustomerChanged(payload) {
   return {
     type: ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED,
     payload,

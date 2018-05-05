@@ -1,5 +1,6 @@
 // @flow
 
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
@@ -15,8 +16,8 @@ class HeaderContainer extends Component {
     this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
-  handleActiveCustomerChanged = activeCustomerId => {
-    this.props.applicationStateActions.activeCustomerIdChanged(activeCustomerId);
+  handleActiveCustomerChanged = id => {
+    this.props.applicationStateActions.activeCustomerChanged(Map({ id }));
   };
 
   render = () => (

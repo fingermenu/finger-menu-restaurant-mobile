@@ -119,6 +119,7 @@ MenuItemContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   goBack: PropTypes.func.isRequired,
   activeOrderMenuItemPriceGroupId: PropTypes.string,
+  activeCustomerId: PropTypes.string.isRequired,
   servingTimeId: PropTypes.string,
 };
 
