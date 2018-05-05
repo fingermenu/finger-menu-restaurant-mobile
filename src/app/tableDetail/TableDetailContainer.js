@@ -237,18 +237,9 @@ class TableDetailContainer extends Component {
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(
-      _ => ({
-        restaurant: _.restaurantId,
-        tableId: _.tableId,
-        lastOrderCorrelationId: _.lastOrderCorrelationId,
-        tableIdForTableQuery: _.tableIdForTableQuery,
-      }),
-      null,
-      () => {
-        this.setState({ isRefreshing: false });
-      },
-    );
+    this.props.relay.refetch(_ => _, null, () => {
+      this.setState({ isRefreshing: false });
+    });
   };
 
   handleGiveToGuestPressed = () => {

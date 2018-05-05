@@ -16,7 +16,7 @@ import { eventPrefix } from '../../framework/AnalyticHelper';
 class TablesContainer extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+      nextProps.relay.refetch(_ => _);
 
       return {
         selectedLanguage: nextProps.selectedLanguage,
@@ -104,7 +104,7 @@ class TablesContainer extends Component {
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(_ => ({ restaurant: _.restaurantId }), null, () => {
+    this.props.relay.refetch(_ => _, null, () => {
       this.setState({ isRefreshing: false });
     });
   };

@@ -19,13 +19,7 @@ import PrinterHelper from '../../framework/PrintHelper';
 class OrdersContainer extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => ({
-        restaurant: _.restaurantId,
-        tableId: _.tableId,
-        choiceItemPriceIds: _.choiceItemPriceIds,
-        menuItemPriceIds: _.menuItemPriceIds,
-        correlationId: _.correlationId,
-      }));
+      nextProps.relay.refetch(_ => _);
 
       return {
         selectedLanguage: nextProps.selectedLanguage,
@@ -131,19 +125,9 @@ class OrdersContainer extends Component {
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(
-      _ => ({
-        restaurant: _.restaurantId,
-        tableId: _.tableId,
-        choiceItemPriceIds: _.choiceItemPriceIds,
-        menuItemPriceIds: _.menuItemPriceIds,
-        correlationId: _.correlationId,
-      }),
-      null,
-      () => {
-        this.setState({ isRefreshing: false });
-      },
-    );
+    this.props.relay.refetch(_ => _, null, () => {
+      this.setState({ isRefreshing: false });
+    });
   };
 
   handleEndReached = () => true;

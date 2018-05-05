@@ -13,9 +13,7 @@ import MenuItemView from './MenuItemView';
 class MenuItemContainer extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => ({
-        menuItemPriceId: _.menuItemPriceId,
-      }));
+      nextProps.relay.refetch(_ => _);
 
       return {
         selectedLanguage: nextProps.selectedLanguage,

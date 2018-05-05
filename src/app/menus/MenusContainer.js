@@ -15,7 +15,7 @@ class MenusContainer extends Component {
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => ({ restaurant: _.restaurantId }));
+      nextProps.relay.refetch(_ => _);
 
       return {
         selectedLanguage: nextProps.selectedLanguage,
