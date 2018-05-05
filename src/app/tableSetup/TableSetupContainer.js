@@ -30,6 +30,21 @@ class TableSetupContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableSetup` }));
   };
 
+  createCustomerList = values => {
+    const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
+      const id = cuid();
+
+      return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
+    }, OrderedMap());
+    const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
+      const id = cuid();
+
+      return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
+    }, OrderedMap());
+
+    return adults.merge(children);
+  };
+
   handleResetTablePressed = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
@@ -49,17 +64,7 @@ class TableSetupContainer extends Component {
   };
 
   handleSetupTablePressed = values => {
-    const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
-      const id = cuid();
-
-      return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
-    }, OrderedMap());
-    const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
-      const id = cuid();
-
-      return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
-    }, OrderedMap());
-    const customers = adults.merge(children);
+    const customers = this.createCustomerList();
 
     this.updateTable(values, customers.valueSeq().toJS(), 'taken', {
       onSuccess: () => {
@@ -83,7 +88,12 @@ class TableSetupContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
     );
-    this.updateTable(value, [], 'reserved', {
+
+    const customers = this.createCustomerList()
+      .valueSeq()
+      .toJS();
+
+    this.updateTable(value, customers, 'reserved', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
