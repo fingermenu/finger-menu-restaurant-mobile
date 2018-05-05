@@ -12,7 +12,7 @@ import { ListItemSeparator } from '../../components/list';
 import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { MenuActionButtonContainer } from '../../components/menuActionButton';
 import { MenusProp, OrderItemDetailsProp } from './PropTypes';
-import { ActiveCustomersProp } from '../../framework/applicationState';
+import { CustomersProp } from '../../framework/applicationState';
 
 class OrdersView extends Component {
   setConfirmOrderPopupDialogRef = popupDialog => {
@@ -138,7 +138,7 @@ OrdersView.propTypes = {
   tableName: PropTypes.string.isRequired,
   menus: MenusProp.isRequired,
   notes: PropTypes.string,
-  customers: ActiveCustomersProp,
+  customers: CustomersProp,
 };
 
 OrdersView.defaultProps = {

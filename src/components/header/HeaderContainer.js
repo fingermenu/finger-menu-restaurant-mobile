@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HeaderView from './HeaderView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { ActiveCustomerProp } from '../../framework/applicationState';
+import { CustomerProp } from '../../framework/applicationState';
 
 class HeaderContainer extends Component {
   changeLanguage = language => {
@@ -33,7 +33,7 @@ class HeaderContainer extends Component {
 HeaderContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   backgroundImageUrl: PropTypes.string,
-  customers: PropTypes.arrayOf(ActiveCustomerProp).isRequired,
+  customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
 };
 

@@ -12,7 +12,7 @@ import { ActiveCustomersMenuOption } from '../customers';
 import i18n from '../../i18n';
 import { ImageUtility } from '../image';
 import { DefaultStyles } from '../../style';
-import { ActiveCustomerProp } from '../../framework/applicationState';
+import { CustomerProp } from '../../framework/applicationState';
 
 const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, customers, activeCustomerId }) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
@@ -54,7 +54,7 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, 
 HeaderView.propTypes = {
   changeLanguage: PropTypes.func.isRequired,
   changeActiveCustomer: PropTypes.func.isRequired,
-  customers: PropTypes.arrayOf(ActiveCustomerProp).isRequired,
+  customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
 };
 

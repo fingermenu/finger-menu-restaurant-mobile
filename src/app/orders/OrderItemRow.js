@@ -12,7 +12,7 @@ import { OrderItemDetailProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { ActiveCustomersProp } from '../../framework/applicationState';
+import { CustomersProp } from '../../framework/applicationState';
 
 class OrderItemRow extends Component {
   constructor(props, context) {
@@ -155,7 +155,7 @@ OrderItemRow.propTypes = {
   orderItemIsEditable: PropTypes.bool.isRequired,
   showImage: PropTypes.bool,
   backgroundColor: PropTypes.string,
-  customers: ActiveCustomersProp,
+  customers: CustomersProp,
 };
 
 OrderItemRow.defaultProps = {
