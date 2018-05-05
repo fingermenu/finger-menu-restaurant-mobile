@@ -50,7 +50,7 @@ class TablesContainer extends Component {
   };
 
   setActiveCustomer = table => {
-    const customers = table.customers.redecue(
+    const customers = table.customers.reduce(
       (reduction, customer) =>
         reduction.set(
           customer.id,
