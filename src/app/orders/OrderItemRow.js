@@ -85,7 +85,7 @@ class OrderItemRow extends Component {
     if (orderItem.customer && orderItem.customer.name) {
       customerName = orderItem.customer.name;
     } else {
-      customerName = customers ? customers.find(customer => customer.id.localeCompare(orderItem.customerId)).name : '';
+      customerName = customers ? customers.find(customer => customer.id.localeCompare(orderItem.customerId) === 0).name : '';
     }
 
     return (
