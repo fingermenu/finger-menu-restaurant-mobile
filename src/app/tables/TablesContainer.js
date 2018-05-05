@@ -50,20 +50,18 @@ class TablesContainer extends Component {
   };
 
   setActiveCustomer = table => {
-    const customers = table.customers
-      ? table.customers.redecue(
-        (reduction, customer) =>
-          reduction.set(
-            customer.id,
-            Map({
-              id: customer.id,
-              name: customer.name,
-              type: customer.type,
-            }),
-          ),
-        OrderedMap(),
-      )
-      : OrderedMap();
+    const customers = table.customers.redecue(
+      (reduction, customer) =>
+        reduction.set(
+          customer.id,
+          Map({
+            id: customer.id,
+            name: customer.name,
+            type: customer.type,
+          }),
+        ),
+      OrderedMap(),
+    );
 
     this.props.applicationStateActions.setActiveCustomers(
       Map({
