@@ -10,19 +10,19 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 import { CustomerProp } from '../../framework/applicationState';
 
 class HeaderContainer extends Component {
-  changeLanguage = language => {
+  handleLanguageChanged = language => {
     this.props.i18n.changeLanguage(language);
     this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
-  changeActiveCustomer = activeCustomerId => {
+  handleActiveCustomerChanged = activeCustomerId => {
     this.props.applicationStateActions.activeCustomerIdChanged(activeCustomerId);
   };
 
   render = () => (
     <HeaderView
-      changeLanguage={this.changeLanguage}
-      changeActiveCustomer={this.changeActiveCustomer}
+      onLanguageChanged={this.handleLanguageChanged}
+      onActiveCustomerChanged={this.handleActiveCustomerChanged}
       backgroundImageUrl={this.props.backgroundImageUrl}
       customers={this.props.customers}
       activeCustomerId={this.props.activeCustomerId}

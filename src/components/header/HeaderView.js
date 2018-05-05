@@ -14,7 +14,7 @@ import { ImageUtility } from '../image';
 import { DefaultStyles } from '../../style';
 import { CustomerProp } from '../../framework/applicationState';
 
-const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, customers, activeCustomerId }) => (
+const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerChanged, customers, activeCustomerId }) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
     <View />
     {customers.length > 0 && (
@@ -26,13 +26,13 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, 
           </View>
         </MenuTrigger>
         <MenuOptions>
-          {customers.map(c => (
+          {customers.map(customer => (
             <ActiveCustomersMenuOption
-              key={c.id}
-              isSelected={c.id === activeCustomerId}
-              name={c.name}
-              id={c.id}
-              changeActiveCustomer={changeActiveCustomer}
+              key={customer.id}
+              isSelected={customer.id === activeCustomerId}
+              name={customer.name}
+              id={customer.id}
+              onActiveCustomerChanged={onActiveCustomerChanged}
             />
           ))}
         </MenuOptions>
@@ -43,17 +43,17 @@ const HeaderView = ({ changeLanguage, backgroundImageUrl, changeActiveCustomer, 
         <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />
       </MenuTrigger>
       <MenuOptions>
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" changeLanguage={changeLanguage} />
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" changeLanguage={changeLanguage} />
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" changeLanguage={changeLanguage} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" onLanguageChanged={onLanguageChanged} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" onLanguageChanged={onLanguageChanged} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" onLanguageChanged={onLanguageChanged} />
       </MenuOptions>
     </Menu>
   </ImageBackground>
 );
 
 HeaderView.propTypes = {
-  changeLanguage: PropTypes.func.isRequired,
-  changeActiveCustomer: PropTypes.func.isRequired,
+  onLanguageChanged: PropTypes.func.isRequired,
+  onActiveCustomerChanged: PropTypes.func.isRequired,
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
 };

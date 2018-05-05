@@ -9,15 +9,15 @@ import Styles from './Styles';
 import { DefaultColor } from '../../style';
 
 class ActiveCustomersMenuOption extends Component {
-  changeActiveCustomer = () => {
-    this.props.changeActiveCustomer(this.props.id);
+  handleActiveCustomerChanged = () => {
+    this.props.onActiveCustomerChanged(this.props.id);
   };
 
   render = () => {
     const { isSelected, name } = this.props;
 
     return (
-      <MenuOption onSelect={this.changeActiveCustomer}>
+      <MenuOption onSelect={this.handleActiveCustomerChanged}>
         <View style={[Styles.menuOptionContainer, isSelected ? Styles.selectedIconContainer : Styles.iconContainer]}>
           <Avatar
             rounded
@@ -38,7 +38,7 @@ ActiveCustomersMenuOption.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  changeActiveCustomer: PropTypes.func.isRequired,
+  onActiveCustomerChanged: PropTypes.func.isRequired,
 };
 
 export default ActiveCustomersMenuOption;

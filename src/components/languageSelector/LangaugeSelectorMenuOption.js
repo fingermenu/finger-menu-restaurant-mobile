@@ -9,15 +9,15 @@ import { ImageUtility } from '../image';
 import Styles from './Styles';
 
 class LanguageSelectorMenuOption extends Component {
-  changeLanguage = () => {
-    this.props.changeLanguage(this.props.language);
+  handleLanguageChanged = () => {
+    this.props.onLanguageChanged(this.props.language);
   };
 
   render = () => {
     const { isSelected, language } = this.props;
 
     return (
-      <MenuOption onSelect={this.changeLanguage}>
+      <MenuOption onSelect={this.handleLanguageChanged}>
         <View style={[Styles.menuOptionContainer, isSelected ? Styles.selectedIconContainer : Styles.iconContainer]}>
           <Avatar
             rounded
@@ -37,7 +37,7 @@ class LanguageSelectorMenuOption extends Component {
 LanguageSelectorMenuOption.propTypes = {
   language: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  changeLanguage: PropTypes.func.isRequired,
+  onLanguageChanged: PropTypes.func.isRequired,
 };
 
 export default LanguageSelectorMenuOption;
