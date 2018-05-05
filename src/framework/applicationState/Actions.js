@@ -44,14 +44,14 @@ export function clearActiveTable() {
 
 export function setActiveCustomers(payload) {
   return {
-    type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER,
+    type: ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMERS,
     payload,
   };
 }
 
 export function clearActiveCustomers() {
   return {
-    type: ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER,
+    type: ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMERS,
   };
 }
 

@@ -54,7 +54,7 @@ class TableDetailContainer extends Component {
     );
   };
 
-  setActiveCustomer = table => {
+  setActiveCustomers = table => {
     const customers = table.customers.reduce(
       (reduction, customer) =>
         reduction.set(
@@ -243,7 +243,7 @@ class TableDetailContainer extends Component {
   handleGiveToGuestPressed = () => {
     const { table } = this.props;
 
-    this.setActiveCustomer(table);
+    this.setActiveCustomers(table);
 
     if (this.props.user.orders.edges.length > 0) {
       const { correlationId } = this.props.user.orders.edges[0].node;

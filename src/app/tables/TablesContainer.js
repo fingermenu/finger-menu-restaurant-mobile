@@ -49,7 +49,7 @@ class TablesContainer extends Component {
     this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
   };
 
-  setActiveCustomer = table => {
+  setActiveCustomers = table => {
     const customers = table.customers.reduce(
       (reduction, customer) =>
         reduction.set(
@@ -75,7 +75,7 @@ class TablesContainer extends Component {
   handleTablePressed = table => {
     if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
       if (table.tableState.key === 'reserved') {
-        this.setActiveCustomer(table);
+        this.setActiveCustomers(table);
       } else {
         this.props.applicationStateActions.clearActiveCustomers();
       }
@@ -86,7 +86,7 @@ class TablesContainer extends Component {
       );
       this.props.navigateToTableSetup();
     } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
-      this.setActiveCustomer(table);
+      this.setActiveCustomers(table);
       this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
       this.props.googleAnalyticsTrackerActions.trackEvent(
         Map({ category: 'ui-waiter', action: `${eventPrefix}Tables-navigate`, optionalValues: Map({ label: 'Table Detail', value: 0 }) }),

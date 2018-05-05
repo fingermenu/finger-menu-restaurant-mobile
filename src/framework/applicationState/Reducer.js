@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
   case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_TABLE:
     return state.set('activeTable', Map());
 
-  case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMER: {
+  case ActionTypes.APPLICATION_STATE_SET_ACTIVE_CUSTOMERS: {
     const customerTypes = action.payload.get('customers').map(customer => customer.get('type'));
     const numberOfAdults = customerTypes.filter(type => type.localeCompare('A') === 0).count();
     const numberOfChildren = customerTypes.filter(type => type.localeCompare('C') === 0).count();
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
       .setIn(['activeCustomers', 'numberOfChildren'], numberOfChildren);
   }
 
-  case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMER:
+  case ActionTypes.APPLICATION_STATE_CLEAR_ACTIVE_CUSTOMERS:
     return state.set('activeCustomers', Map({ customers: OrderedMap(), activeCustomerId: null, numberOfAdults: 0, numberOfChildren: 0 }));
 
   case ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED:

@@ -58,6 +58,7 @@ class TableSetupContainer extends Component {
             optionalValues: Map({ label: 'Going back - Reset Table', value: 0 }),
           }),
         );
+        this.props.applicationStateActions.clearActiveCustomers();
         this.props.goBack();
       },
     });
@@ -99,6 +100,7 @@ class TableSetupContainer extends Component {
             optionalValues: Map({ label: 'Going back - Reserve button', value: 0 }),
           }),
         );
+        this.props.applicationStateActions.clearActiveCustomers();
         this.props.goBack();
       },
     });
