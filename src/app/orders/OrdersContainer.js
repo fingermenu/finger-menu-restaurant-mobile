@@ -12,7 +12,7 @@ import OrdersView from './OrdersView';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import { OrderProp } from './PropTypes';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { ActiveCustomersProp } from '../../framework/applicationState';
+import { CustomersProp } from '../../framework/applicationState';
 import { eventPrefix } from '../../framework/AnalyticHelper';
 import PrinterHelper from '../../framework/PrintHelper';
 
@@ -227,7 +227,7 @@ OrdersContainer.propTypes = {
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
-  customers: ActiveCustomersProp.isRequired,
+  customers: CustomersProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
 };
 
