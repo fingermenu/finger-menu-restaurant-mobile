@@ -1,5 +1,7 @@
 // @flow
 
+import { NotificationType } from '@microbusiness/common-react';
+import * as notificationActions from '@microbusiness/common-react/src/notification/Actions';
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
@@ -9,6 +11,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
+import RNFS from 'react-native-fs';
+import RNFetchBlob from 'react-native-fetch-blob';
+import { unzip } from 'react-native-zip-archive';
 import TablesView from './TablesView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { eventPrefix } from '../../framework/AnalyticHelper';
@@ -40,13 +45,17 @@ class TablesContainer extends Component {
       user: {
         restaurant: { id, pin, configurations, packageBundle },
       },
+      installedPackageBundleChecksum,
     } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'packageBundle', value: JSON.stringify(packageBundle) }));
     this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
+
+    if (packageBundle.checksum.localeCompare(installedPackageBundleChecksum) !== 0) {
+      this.installLatestPackageBundle(packageBundle);
+    }
   };
 
   setActiveCustomers = table => {
@@ -70,6 +79,28 @@ class TablesContainer extends Component {
         activeCustomerId: customers.isEmpty() ? null : customers.first().get('id'),
       }),
     );
+  };
+
+  installLatestPackageBundle = async packageBundle => {
+    try {
+      const jsonFilePath = RNFS.TemporaryDirectoryPath + '/finger-menu-package-bundle';
+      const exists = await RNFS.exists(jsonFilePath + '/data.json');
+
+      if (exists) {
+        await RNFS.unlink(jsonFilePath);
+      }
+
+      const zipFile = await RNFetchBlob.config({ fileCache: true }).fetch('GET', packageBundle.url);
+      const extractedDirectory = await unzip(zipFile.path(), jsonFilePath);
+      const content = await RNFS.readFile(extractedDirectory + '/data.json');
+      const jsonContent = JSON.parse(content);
+
+      if (!jsonContent) {
+        return;
+      }
+    } catch (ex) {
+      this.props.notificationActions.add(ex.message, NotificationType.ERROR);
+    }
   };
 
   handleTablePressed = table => {
@@ -124,12 +155,19 @@ TablesContainer.propTypes = {
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  notificationActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTableSetup: PropTypes.func.isRequired,
   navigateToTableDetail: PropTypes.func.isRequired,
+  installedPackageBundleChecksum: PropTypes.string,
+};
+
+TablesContainer.defaultProps = {
+  installedPackageBundleChecksum: null,
 };
 
 const mapStateToProps = state => ({
   selectedLanguage: state.applicationState.get('selectedLanguage'),
+  installedPackageBundleChecksum: state.asyncStorage.getIn(['keyValues', 'installedPackageBundleChecksum']),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -138,6 +176,7 @@ const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
   navigateToTableDetail: () => dispatch(NavigationActions.navigate({ routeName: 'TableDetail' })),
+  notificationActions: bindActionCreators(notificationActions, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TablesContainer);

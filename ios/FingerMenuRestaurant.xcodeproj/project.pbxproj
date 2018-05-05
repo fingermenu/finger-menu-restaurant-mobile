@@ -66,6 +66,8 @@
 		23B58AA1B59F4DEDB9D9B301 /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD090B99165424993C089EE /* libRealmReact.a */; };
 		3458FAD252AD477A82ECCB0B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E730E23C106E4BD7A3968231 /* libc++.tbd */; };
 		ECE187DA66A94926ABB1FEEE /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9EB04A1D1040378D8FBB4B /* libRNFetchBlob.a */; };
+		DBFF6AF5DC9145958986786F /* libRNZipArchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8136DBDFE1A46AFA92B2146 /* libRNZipArchive.a */; };
+		87AC3788D1A947608BE770A0 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 328506B981C245D1AE9830AA /* libRNFS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -467,6 +469,10 @@
 		E730E23C106E4BD7A3968231 /* libc++.tbd */ = {isa = PBXFileReference; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
 		24E211E58F2947CCBA7D7431 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		AD9EB04A1D1040378D8FBB4B /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5EF689ACE8C1485EA0C9615D /* RNZipArchive.xcodeproj */ = {isa = PBXFileReference; name = "RNZipArchive.xcodeproj"; path = "../node_modules/react-native-zip-archive/ios/RNZipArchive.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		C8136DBDFE1A46AFA92B2146 /* libRNZipArchive.a */ = {isa = PBXFileReference; name = "libRNZipArchive.a"; path = "libRNZipArchive.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C95831F495084AA6AC05EC5E /* RNFS.xcodeproj */ = {isa = PBXFileReference; name = "RNFS.xcodeproj"; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		328506B981C245D1AE9830AA /* libRNFS.a */ = {isa = PBXFileReference; name = "libRNFS.a"; path = "libRNFS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -513,6 +519,8 @@
 				23B58AA1B59F4DEDB9D9B301 /* libRealmReact.a in Frameworks */,
 				3458FAD252AD477A82ECCB0B /* libc++.tbd in Frameworks */,
 				ECE187DA66A94926ABB1FEEE /* libRNFetchBlob.a in Frameworks */,
+				DBFF6AF5DC9145958986786F /* libRNZipArchive.a in Frameworks */,
+				87AC3788D1A947608BE770A0 /* libRNFS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +732,8 @@
 				B64C9D37BD21444792DE3DBA /* RCTGoogleAnalyticsBridge.xcodeproj */,
 				11AC57819B9D4D998AABE583 /* RealmReact.xcodeproj */,
 				24E211E58F2947CCBA7D7431 /* RNFetchBlob.xcodeproj */,
+				5EF689ACE8C1485EA0C9615D /* RNZipArchive.xcodeproj */,
+				C95831F495084AA6AC05EC5E /* RNFS.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1548,12 +1558,16 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FingerMenuRestaurantTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1586,12 +1600,16 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FingerMenuRestaurantTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1633,6 +1651,8 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FingerMenuRestaurant/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1678,6 +1698,8 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FingerMenuRestaurant/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1721,11 +1743,15 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = "FingerMenuRestaurant-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1767,11 +1793,15 @@
 					"$(SRCROOT)/../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-zip-archive/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = "FingerMenuRestaurant-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1806,6 +1836,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.FingerMenuRestaurant-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1830,6 +1862,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

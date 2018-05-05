@@ -100,7 +100,7 @@ def enableProguardInReleaseBuilds = false
 
 ext.versionMajor = 0
 ext.versionMinor = 5
-ext.versionPatch = 0
+ext.versionPatch = 2
 ext.isSnapshot = false
 ext.minimumSdkVersion = 16
 
@@ -112,8 +112,8 @@ android {
         applicationId "com.fingermenurestaurant"
         targetSdkVersion 26
         minSdkVersion project.ext.minimumSdkVersion
-        versionCode 1600000500
-        versionName "0.5.0"
+        versionCode 1600000502
+        versionName "0.5.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -175,6 +175,8 @@ private String generateVersionName() {
 }
 
 dependencies {
+    compile project(':react-native-fs')
+    compile project(':react-native-zip-archive')
     compile project(':react-native-fetch-blob')
     compile project(':realm')
     compile project(':react-native-google-analytics-bridge')

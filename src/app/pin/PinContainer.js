@@ -16,13 +16,12 @@ import { eventPrefix } from '../../framework/AnalyticHelper';
 class PinContainer extends Component {
   componentDidMount = () => {
     const {
-      restaurant: { id, pin, configurations, packageBundle },
+      restaurant: { id, pin, configurations },
     } = this.props;
 
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'packageBundle', value: JSON.stringify(packageBundle) }));
   };
 
   handleSecretPinMatched = () => {

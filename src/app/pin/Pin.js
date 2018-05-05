@@ -25,13 +25,11 @@ class Pin extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     const {
-      restaurant: { id, pin, configurations, packageBundle },
+      restaurant: { id, pin, configurations },
     } = nextProps;
 
-    if (id && pin && configurations && packageBundle && id !== nextProps.activeRestaurant.id) {
-      nextProps.applicationStateActions.setActiveRestaurant(
-        Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)), packageBundle: Immutable.fromJS(JSON.parse(packageBundle)) }),
-      );
+    if (id && pin && configurations && id !== nextProps.activeRestaurant.id) {
+      nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
     }
 
     return null;
@@ -44,7 +42,7 @@ class Pin extends Component {
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
       this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
-      this.props.asyncStorageActions.readValue(Map({ key: 'packageBundle' }));
+      this.props.asyncStorageActions.readValue(Map({ key: 'installedPackageBundleChecksum' }));
     }
 
     this.props.i18n.changeLanguage('en_NZ');
@@ -101,7 +99,6 @@ const mapStateToProps = state => ({
     id: state.asyncStorage.getIn(['keyValues', 'restaurantId']),
     pin: state.asyncStorage.getIn(['keyValues', 'pin']),
     configurations: state.asyncStorage.getIn(['keyValues', 'restaurantConfigurations']),
-    packageBundle: state.asyncStorage.getIn(['keyValues', 'packageBundle']),
   },
 });
 

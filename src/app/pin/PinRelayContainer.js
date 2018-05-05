@@ -35,10 +35,6 @@ export default createRefetchContainer(
                 }
                 numberOfPrintCopiesForKitchen
               }
-              packageBundle {
-                url
-                checksum
-              }
             }
           }
         }
