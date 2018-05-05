@@ -19,11 +19,6 @@ export default createRefetchContainer(
         table(tableId: $tableId) {
           id
           name
-          customers {
-            id
-            name
-            type
-          }
         }
         menuItemPrices(menuItemPriceIds: $menuItemPriceIds, first: 1000, after: null) {
           edges {

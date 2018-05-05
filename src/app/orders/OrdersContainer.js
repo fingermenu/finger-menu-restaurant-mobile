@@ -86,8 +86,9 @@ class OrdersContainer extends Component {
       navigateToOrderConfirmed,
       restaurantId,
       user: {
-        table: { id: tableId, customers },
+        table: { id: tableId },
       },
+      customers,
     } = this.props;
 
     PlaceOrder(
@@ -285,10 +286,6 @@ const mapStateToProps = (state, ownProps) => {
     customers: state.applicationState
       .getIn(['activeCustomers', 'customers'])
       .valueSeq()
-      .toJS(),
-    activeCustomers: state.applicationState
-      .get('activeCustomers')
-      .delete('customers')
       .toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
