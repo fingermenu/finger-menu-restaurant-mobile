@@ -1,9 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { FlatList, ScrollView, Text, View } from 'react-native';
+import Immutable from 'immutable';
+import { ScrollView, SectionList, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, Input } from 'react-native-elements';
+import { Button, Input, Icon } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { translate } from 'react-i18next';
 import OrderItemRow from './OrderItemRow';
@@ -19,13 +20,29 @@ class OrdersView extends Component {
     this.confirmOrderPopupDialogRef = popupDialog;
   };
 
-  handleOrderConfirmedCancelled = () => {
-    this.confirmOrderPopupDialogRef.dismiss();
+  getOrderItems = orderItems => {
+    return Immutable.fromJS(orderItems)
+      .groupBy(item => item.getIn(['customer', 'id']))
+      .mapEntries(([key, value]) => [
+        key,
+        {
+          data: value.toJS(),
+          categoryTitle: this.props.customers.find(_ => _.id === key).name,
+          categoryKey: key,
+        },
+      ])
+      .sortBy(_ => _.categoryTitle)
+      .valueSeq()
+      .toJS();
   };
 
   handleOrderConfirmed = () => {
     this.confirmOrderPopupDialogRef.dismiss();
     this.props.onConfirmOrderPressed();
+  };
+
+  handleOrderConfirmedCancelled = () => {
+    this.confirmOrderPopupDialogRef.dismiss();
   };
 
   handleConfirmOrderPressed = () => {
@@ -55,6 +72,15 @@ class OrdersView extends Component {
   };
 
   renderSeparator = () => <ListItemSeparator />;
+
+  renderSectionHeader = ({ section }) => {
+    return (
+      <View style={Styles.sectionHeader}>
+        <Icon name="person-outline" color={DefaultColor.iconColor} />
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>{section.categoryTitle}</Text>
+      </View>
+    );
+  };
 
   render = () => {
     const slideAnimation = new SlideAnimation({
@@ -96,9 +122,10 @@ class OrdersView extends Component {
         </View>
 
         {inMemoryOrderItems.length + orderItems.length > 0 ? (
-          <FlatList
-            data={inMemoryOrderItems.concat(orderItems)}
+          <SectionList
             renderItem={this.renderOrderItem}
+            renderSectionHeader={this.renderSectionHeader}
+            sections={this.getOrderItems(inMemoryOrderItems.concat(orderItems))}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}

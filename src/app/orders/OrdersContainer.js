@@ -51,7 +51,7 @@ class OrdersContainer extends Component {
               notes: detail.get('notes'),
               paid: detail.get('paid'),
               servingTimeId: detail.get('servingTimeId'),
-              customer: this.props.customers.find(_ => _.id === detail.get('customerId')),
+              customer: this.props.customers.find(_ => _.id === detail.getIn(['customer', 'id'])),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -68,8 +68,7 @@ class OrdersContainer extends Component {
               }),
             }),
           )
-          .delete('menuItemPrice')
-          .delete('customerId');
+          .delete('menuItemPrice');
       }),
     );
 

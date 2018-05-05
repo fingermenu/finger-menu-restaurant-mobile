@@ -79,7 +79,7 @@ class MenuItemContainer extends Component {
           notes: values.notes,
           paid: false,
           servingTimeId,
-          customerId: activeCustomerId,
+          customer: Map({ id: activeCustomerId }),
           menuItemPrice: Map({
             id: menuItemPriceId,
             menuItem: Map({

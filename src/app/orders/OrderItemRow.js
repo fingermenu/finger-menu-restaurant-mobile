@@ -12,7 +12,6 @@ import { OrderItemDetailProp } from './PropTypes';
 import config from '../../framework/config';
 import Styles from './Styles';
 import { DefaultColor, DefaultStyles } from '../../style';
-import { CustomersProp } from '../../framework/applicationState';
 
 class OrderItemRow extends Component {
   constructor(props, context) {
@@ -60,7 +59,7 @@ class OrderItemRow extends Component {
     ));
 
   render = () => {
-    const { t, orderItemIsEditable, orderItem, isSelected, showImage, showRemove, enableMultiSelection, backgroundColor, customers } = this.props;
+    const { t, orderItemIsEditable, orderItem, isSelected, showImage, showRemove, enableMultiSelection, backgroundColor } = this.props;
     const {
       orderChoiceItemPrices,
       notes,
@@ -79,14 +78,6 @@ class OrderItemRow extends Component {
             totalChoiceItemPrices + orderChoiceItemPrice.quantity * orderChoiceItemPrice.choiceItemPrice.currentPrice,
           0.0,
         );
-
-    let customerName;
-
-    if (orderItem.customer && orderItem.customer.name) {
-      customerName = orderItem.customer.name;
-    } else {
-      customerName = customers ? customers.find(customer => customer.id.localeCompare(orderItem.customerId) === 0).name : '';
-    }
 
     return (
       <TouchableItem onPress={this.handleViewOrderItemPressed}>
@@ -109,7 +100,6 @@ class OrderItemRow extends Component {
           </View>
           <View style={Styles.titleContainer}>
             <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
-            {customerName && customerName.trim() && <Text style={DefaultStyles.primaryFont}>{customerName}</Text>}
             {notes &&
               notes.trim() && (
               <Text style={DefaultStyles.primaryFont}>
@@ -152,7 +142,6 @@ OrderItemRow.propTypes = {
   orderItemIsEditable: PropTypes.bool.isRequired,
   showImage: PropTypes.bool,
   backgroundColor: PropTypes.string,
-  customers: CustomersProp,
 };
 
 OrderItemRow.defaultProps = {
@@ -163,7 +152,6 @@ OrderItemRow.defaultProps = {
   onOrderSelected: null,
   showImage: true,
   backgroundColor: null,
-  customers: null,
 };
 
 export default translate()(OrderItemRow);

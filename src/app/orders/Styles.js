@@ -73,4 +73,15 @@ export default StyleSheet.create({
   placeOrderContainer: {
     marginBottom: 5,
   },
+  sectionHeader: {
+    // width: Sizes.screenWidth,
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontWeight: '700',
+  },
 });
