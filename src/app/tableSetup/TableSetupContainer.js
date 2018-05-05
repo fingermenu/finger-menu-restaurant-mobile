@@ -30,13 +30,13 @@ class TableSetupContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableSetup` }));
   };
 
-  createCustomerList = values => {
-    const adults = Range(0, values.numberOfAdults).reduce((reduction, index) => {
+  createCustomerList = (numberOfAdults, numberOfChildren) => {
+    const adults = Range(0, numberOfAdults).reduce((reduction, index) => {
       const id = cuid();
 
       return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
     }, OrderedMap());
-    const children = Range(0, values.numberOfChildren).reduce((reduction, index) => {
+    const children = Range(0, numberOfChildren).reduce((reduction, index) => {
       const id = cuid();
 
       return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
@@ -64,7 +64,7 @@ class TableSetupContainer extends Component {
   };
 
   handleSetupTablePressed = values => {
-    const customers = this.createCustomerList();
+    const customers = this.createCustomerList(values.numberOfAdults, values.numberOfChildren);
 
     this.updateTable(values, customers.valueSeq().toJS(), 'taken', {
       onSuccess: () => {
@@ -84,16 +84,13 @@ class TableSetupContainer extends Component {
     });
   };
 
-  handleReserveTablePressed = value => {
+  handleReserveTablePressed = values => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
     );
+    const customers = this.createCustomerList(values.numberOfAdults, values.numberOfChildren);
 
-    const customers = this.createCustomerList()
-      .valueSeq()
-      .toJS();
-
-    this.updateTable(value, customers, 'reserved', {
+    this.updateTable(values, customers, 'reserved', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
