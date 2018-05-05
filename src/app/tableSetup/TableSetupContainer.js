@@ -90,7 +90,7 @@ class TableSetupContainer extends Component {
     );
     const customers = this.createCustomerList(values.numberOfAdults, values.numberOfChildren);
 
-    this.updateTable(values, customers, 'reserved', {
+    this.updateTable(values, customers.valueSeq().toJS(), 'reserved', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
