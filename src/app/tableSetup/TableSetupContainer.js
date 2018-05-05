@@ -83,7 +83,7 @@ class TableSetupContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
     );
-    this.updateTable(value, 'reserved', {
+    this.updateTable(value, [], 'reserved', {
       onSuccess: () => {
         this.props.googleAnalyticsTrackerActions.trackEvent(
           Map({
