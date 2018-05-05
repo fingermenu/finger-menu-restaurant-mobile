@@ -108,11 +108,8 @@ class OrderItemRow extends Component {
             <Text style={DefaultStyles.primaryFont}>{quantity}x</Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>
-              {' '}
-              {name}
-              {customerName ? ` - ${customerName}` : ''}
-            </Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
+            {customerName && customerName.trim() && <Text style={DefaultStyles.primaryFont}>{customerName}</Text>}
             {notes &&
               notes.trim() && (
               <Text style={DefaultStyles.primaryFont}>
