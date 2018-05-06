@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -34,6 +34,10 @@
     "@microbusiness/printer-react-native": "0.2.2",
     "@microbusiness/redux-form-react-native-elements": "^0.2.1",
     "cuid": "^2.1.1",
+    "dataloader": "^1.4.0",
+    "graphql": "^0.13.2",
+    "graphql-fields": "^1.0.2",
+    "graphql-relay": "^0.5.5",
     "i18next": "^11.2.3",
     "immutable": "^4.0.0-rc.9",
     "int": "^0.2.0",
@@ -96,7 +100,6 @@
     "eslint-plugin-react": "7.7.0",
     "eslint-plugin-react-native": "3.2.1",
     "flow-bin": "0.71.0",
-    "graphql": "^0.13.2",
     "graphql-compiler": "^1.6.0",
     "husky": "^0.14.3",
     "jest": "22.4.3",
