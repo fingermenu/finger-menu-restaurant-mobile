@@ -1,6 +1,6 @@
 // @flow
 
-import Immutable from 'immutable';
+import Immutable, { Map } from 'immutable';
 import BluebirdPromise from 'bluebird';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -69,7 +69,7 @@ export default class PackageBundleHelper {
   };
 
   cleanOldItems = async service => {
-    const items = await service.search();
+    const items = await service.search(Map({ conditions: Map({ packageBundleChecksum: this.oldPackageBundle.checksum }) }));
 
     await BluebirdPromise.each(items.toArray(), item => service.delete(item.get('realmId')));
   };
