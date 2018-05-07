@@ -5,4 +5,4 @@ import { Language } from './schema';
 
 export { LanguageService } from './services';
 
-export const realm = new Realm({ schema: [Language] });
+export const realm = new Realm({ schema: [Language.getSchema()] });

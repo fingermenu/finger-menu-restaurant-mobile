@@ -11,12 +11,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import int from 'int';
-import RNFS from 'react-native-fs';
-import RNFetchBlob from 'react-native-fetch-blob';
-import { unzip } from 'react-native-zip-archive';
 import TablesView from './TablesView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { eventPrefix } from '../../framework/AnalyticHelper';
+import PackageBundleHelper from '../../framework/PackageBundleHelper';
 
 class TablesContainer extends Component {
   static getDerivedStateFromProps = (nextProps, prevState) => {
@@ -83,21 +81,7 @@ class TablesContainer extends Component {
 
   installLatestPackageBundle = async packageBundle => {
     try {
-      const jsonFilePath = RNFS.TemporaryDirectoryPath + '/finger-menu-package-bundle';
-      const exists = await RNFS.exists(jsonFilePath + '/data.json');
-
-      if (exists) {
-        await RNFS.unlink(jsonFilePath);
-      }
-
-      const zipFile = await RNFetchBlob.config({ fileCache: true }).fetch('GET', packageBundle.url);
-      const extractedDirectory = await unzip(zipFile.path(), jsonFilePath);
-      const content = await RNFS.readFile(extractedDirectory + '/data.json');
-      const jsonContent = JSON.parse(content);
-
-      if (!jsonContent) {
-        return;
-      }
+      await new PackageBundleHelper(packageBundle, packageBundle).installPackageBundle();
     } catch (ex) {
       this.props.notificationActions.add(ex.message, NotificationType.ERROR);
     }
