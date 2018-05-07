@@ -2,8 +2,35 @@
 
 import Immutable from 'immutable';
 import cuid from 'cuid';
+import Query from './Query';
 
 export default class ServiceBase {
+  static addStandardCriteriaToQuery = (query, criteria) => {
+    if (criteria.has('id')) {
+      if (!criteria) {
+        return query;
+      }
+
+      const objectId = criteria.get('id');
+
+      if (objectId) {
+        query.addAndQuery(`id = "${objectId}"`);
+      }
+    }
+
+    if (criteria.has('ids')) {
+      const objectIds = criteria.get('ids');
+
+      if (objectIds && !objectIds.isEmpty()) {
+        const innerQuery = objectIds.reduce((reduction, objectId) => reduction.addOrQuery(`id = "${objectId}"`), new Query()).getQuery();
+
+        query.addAndQuery(`(${innerQuery})`);
+      }
+    }
+
+    return query;
+  };
+
   constructor(realm, Schema, objectFriendlyName) {
     this.realm = realm;
     this.Schema = Schema;
