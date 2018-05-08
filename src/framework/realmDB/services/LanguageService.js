@@ -22,6 +22,6 @@ export default class LanguageService extends ServiceBase {
   };
 
   constructor(realm) {
-    super(realm, Language, Language.buildSearchQuery, 'language');
+    super(realm, Language, LanguageService.buildSearchQuery, 'language');
   }
 }
