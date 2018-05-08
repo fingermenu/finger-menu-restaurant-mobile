@@ -276,6 +276,43 @@ export default class ServiceBase {
         objects = objects.filtered(query.getQueryStr(), ...params.toArray());
       }
 
+      if (criteria.has('limit') && criteria.has('skip')) {
+        const limit = criteria.get('limit');
+        const skip = criteria.get('skip');
+
+        objects = objects.slice(skip, skip + limit);
+      }
+
+      if (criteria.has('topMost')) {
+        const topMost = criteria.get('topMost');
+
+        if (topMost) {
+          if (criteria.has('skip')) {
+            const skip = criteria.get('skip');
+
+            objects = objects.slice(skip, skip + 1);
+          } else {
+            objects = objects.slice(0, 1);
+          }
+        }
+      }
+
+      if (criteria.has('orderByFieldAscending')) {
+        const value = criteria.get('orderByFieldAscending');
+
+        if (value) {
+          objects = objects.sorted(value, false);
+        }
+      }
+
+      if (criteria.has('orderByFieldDescending')) {
+        const value = criteria.get('orderByFieldDescending');
+
+        if (value) {
+          objects = objects.sorted(value, true);
+        }
+      }
+
       resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
     });
 
