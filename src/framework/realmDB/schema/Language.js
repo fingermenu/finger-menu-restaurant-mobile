@@ -40,7 +40,7 @@ export default class Language extends BaseObject {
   };
 
   updateInfo = info => {
-    Language.updateInfoInternal(this.getObject(), info);
+    this.updateInfoInternal(this.getObject(), info);
 
     return this;
   };
