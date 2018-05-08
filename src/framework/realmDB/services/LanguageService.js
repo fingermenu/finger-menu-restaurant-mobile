@@ -2,23 +2,21 @@
 
 import ServiceBase from './ServiceBase';
 import { Language } from '../schema';
-import Query from './Query';
 
 export default class LanguageService extends ServiceBase {
-  static buildSearchQuery = criteria => {
-    const query = new Query();
-
+  static buildSearchQuery = (criteria, queryAndParams) => {
     if (!criteria.has('conditions')) {
-      return query;
+      return queryAndParams;
     }
 
     const conditions = criteria.get('conditions');
+    let newQueryAndParams = queryAndParams;
 
-    ServiceBase.addStringQuery(conditions, query, 'key', 'key');
-    ServiceBase.addStringQuery(conditions, query, 'name', 'nameLowerCase');
-    ServiceBase.addStringQuery(conditions, query, 'imageUrl', 'imageUrl');
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'key', 'key');
+    newQueryAndParams = ServiceBase.addStringQuery(conditions, newQueryAndParams, 'name', 'nameLowerCase');
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'imageUrl', 'imageUrl');
 
-    return query;
+    return newQueryAndParams;
   };
 
   constructor(realm) {

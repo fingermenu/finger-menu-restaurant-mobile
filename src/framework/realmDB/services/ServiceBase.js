@@ -6,7 +6,9 @@ import cuid from 'cuid';
 import Query from './Query';
 
 export default class ServiceBase {
-  static addStandardCriteriaToQuery = (query, criteria) => {
+  static addStandardCriteriaToQuery = ({ query, params }, criteria) => {
+    let newParams = params;
+
     if (criteria.has('id')) {
       if (!criteria) {
         return query;
@@ -15,7 +17,8 @@ export default class ServiceBase {
       const objectId = criteria.get('id');
 
       if (objectId) {
-        query.addAndQuery(`id = "${objectId}"`);
+        query.addAndQuery(`id = $${newParams.count()}`);
+        newParams = newParams.push(objectId);
       }
     }
 
@@ -23,21 +26,32 @@ export default class ServiceBase {
       const objectIds = criteria.get('ids');
 
       if (objectIds && !objectIds.isEmpty()) {
-        const innerQuery = objectIds.reduce((reduction, objectId) => reduction.addOrQuery(`id = "${objectId}"`), new Query()).getQuery();
+        const innerQuery = objectIds
+          .reduce((reduction, objectId) => {
+            const resultQuery = reduction.addOrQuery(`id = $${newParams.count()}`);
+
+            newParams = newParams.push(objectId);
+
+            return resultQuery;
+          }, new Query())
+          .getQuery();
 
         query.addAndQuery(`(${innerQuery})`);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addStringQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addStringQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(conditionPropKey)) {
       const value = conditions.get(conditionPropKey);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} = "${value}"`);
+        query.addAndQuery(`${columnName} = $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
@@ -45,7 +59,8 @@ export default class ServiceBase {
       const value = conditions.get(`startsWith_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} BEGINSWITH "${value}"`);
+        query.addAndQuery(`${columnName} BEGINSWITH $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
@@ -53,7 +68,8 @@ export default class ServiceBase {
       const value = conditions.get(`endsWith_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} ENDSWITH "${value}"`);
+        query.addAndQuery(`${columnName} ENDSWITH $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
@@ -61,7 +77,8 @@ export default class ServiceBase {
       const value = conditions.get(`contains_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} CONTAINS "${value}"`);
+        query.addAndQuery(`${columnName} CONTAINS $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
@@ -69,102 +86,130 @@ export default class ServiceBase {
       const values = conditions.get(`contains_${conditionPropKey}s`);
 
       if (Common.isNotUndefined(values) && !values.isEmpty()) {
-        const innerQuery = values.reduce((reduction, value) => reduction.addAndQuery(`${columnName} = "${value}"`), new Query()).getQuery();
+        const innerQuery = values
+          .reduce((reduction, value) => {
+            const resultQuery = reduction.addAndQuery(`${columnName} = $${newParams.count()}`);
+
+            newParams = newParams.push(value);
+
+            return resultQuery;
+          }, new Query())
+          .getQuery();
 
         query.addAndQuery(`(${innerQuery})`);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addDateTimeQuery = (conditions, query, conditionPropKey, columnName) =>
-    ServiceBase.addEqualityQuery(conditions, query, conditionPropKey, columnName);
+  static addDateTimeQuery = (conditions, queryAndParams, conditionPropKey, columnName) =>
+    ServiceBase.addEqualityQuery(conditions, queryAndParams, conditionPropKey, columnName);
 
-  static addNumberQuery = (conditions, query, conditionPropKey, columnName) =>
-    ServiceBase.addEqualityQuery(conditions, query, conditionPropKey, columnName);
+  static addNumberQuery = (conditions, queryAndParams, conditionPropKey, columnName) =>
+    ServiceBase.addEqualityQuery(conditions, queryAndParams, conditionPropKey, columnName);
 
-  static addEqualityQuery = (conditions, query, conditionPropKey, columnName) => {
-    ServiceBase.addEqualToQuery(conditions, query, conditionPropKey, columnName);
-    ServiceBase.addNotEqualToQuery(conditions, query, conditionPropKey, columnName);
-    ServiceBase.addLessThanToQuery(conditions, query, conditionPropKey, columnName);
-    ServiceBase.addLessThanOrEqualToQuery(conditions, query, conditionPropKey, columnName);
-    ServiceBase.addGreaterThanToQuery(conditions, query, conditionPropKey, columnName);
-    ServiceBase.addGreaterThanOrEqualToQuery(conditions, query, conditionPropKey, columnName);
+  static addEqualityQuery = (conditions, queryAndParams, conditionPropKey, columnName) => {
+    let newQueryAndParams = queryAndParams;
 
-    return query;
+    newQueryAndParams = ServiceBase.addEqualToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+    newQueryAndParams = ServiceBase.addNotEqualToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+    newQueryAndParams = ServiceBase.addLessThanToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+    newQueryAndParams = ServiceBase.addLessThanOrEqualToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+    newQueryAndParams = ServiceBase.addGreaterThanToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+    newQueryAndParams = ServiceBase.addGreaterThanOrEqualToQuery(conditions, newQueryAndParams, conditionPropKey, columnName);
+
+    return newQueryAndParams;
   };
 
-  static addEqualToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addEqualToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(conditionPropKey)) {
       const value = conditions.get(conditionPropKey);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} = ${value}`);
+        query.addAndQuery(`${columnName} = $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addNotEqualToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addNotEqualToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(`notEqual_${conditionPropKey}`)) {
       const value = conditions.get(`notEqual_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} <> ${value}`);
+        query.addAndQuery(`${columnName} <> $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addLessThanToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addLessThanToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(`lessThan_${conditionPropKey}`)) {
       const value = conditions.get(`lessThan_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} < ${value}`);
+        query.addAndQuery(`${columnName} < $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addLessThanOrEqualToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addLessThanOrEqualToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(`lessThanOrEqualTo_${conditionPropKey}`)) {
       const value = conditions.get(`lessThanOrEqualTo_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} <= ${value}`);
+        query.addAndQuery(`${columnName} <= $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addGreaterThanToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addGreaterThanToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(`greaterThan_${conditionPropKey}`)) {
       const value = conditions.get(`greaterThan_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} > ${value}`);
+        query.addAndQuery(`${columnName} > $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
-  static addGreaterThanOrEqualToQuery = (conditions, query, conditionPropKey, columnName) => {
+  static addGreaterThanOrEqualToQuery = (conditions, { query, params }, conditionPropKey, columnName) => {
+    let newParams = params;
+
     if (conditions.has(`greaterThanOrEqualTo_${conditionPropKey}`)) {
       const value = conditions.get(`greaterThanOrEqualTo_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} >= ${value}`);
+        query.addAndQuery(`${columnName} >= $${newParams.count()}`);
+        newParams = newParams.push(value);
       }
     }
 
-    return query;
+    return { query, params: newParams };
   };
 
   constructor(realm, Schema, buildSearchQueryFunc, objectFriendlyName) {
@@ -224,19 +269,20 @@ export default class ServiceBase {
         return;
       }
 
-      const query = this.buildSearchQueryFunc(criteria);
+      let queryAndParams = { query: new Query(), params: List() };
 
       if (criteria.has('conditions')) {
         const conditions = criteria.get('conditions');
 
-        ServiceBase.addStringQuery(conditions, query, 'realmId', 'realmId');
-        ServiceBase.addStringQuery(conditions, query, 'packageBundleChecksum', 'packageBundleChecksum');
+        queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'realmId', 'realmId');
+        queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'packageBundleChecksum', 'packageBundleChecksum');
       }
 
+      const { query, params } = this.buildSearchQueryFunc(criteria, queryAndParams);
       let objects = this.realm.objects(this.SchemaName);
 
       if (!query.isQueryEmpty()) {
-        objects = objects.filtered(query.getQueryStr());
+        objects = objects.filtered(query.getQueryStr(), ...params.toArray());
       }
 
       resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
