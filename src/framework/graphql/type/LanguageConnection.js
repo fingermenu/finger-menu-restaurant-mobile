@@ -3,7 +3,7 @@
 import { ImmutableEx, RelayHelper, StringHelper } from '@microbusiness/common-javascript';
 import { Map } from 'immutable';
 import { connectionDefinitions } from 'graphql-relay';
-import { LanguageService } from '../../realmDB';
+import { realm, LanguageService } from '../../realmDB';
 import Language from './Language';
 import Common from './Common';
 
@@ -36,10 +36,10 @@ const addSortOptionToCriteria = (criteria, sortOption) => {
 };
 
 const getLanguagesCountMatchCriteria = async searchArgs =>
-  new LanguageService().count(addSortOptionToCriteria(getCriteria(searchArgs), searchArgs.get('sortOption')));
+  new LanguageService(realm).count(addSortOptionToCriteria(getCriteria(searchArgs), searchArgs.get('sortOption')));
 
 const getLanguagesMatchCriteria = async (searchArgs, limit, skip) =>
-  new LanguageService().search(addSortOptionToCriteria(getCriteria(searchArgs), searchArgs.get('sortOption')).merge(Map({ limit, skip })));
+  new LanguageService(realm).search(addSortOptionToCriteria(getCriteria(searchArgs), searchArgs.get('sortOption')).merge(Map({ limit, skip })));
 
 export const getLanguages = async searchArgs => {
   const count = await getLanguagesCountMatchCriteria(searchArgs);

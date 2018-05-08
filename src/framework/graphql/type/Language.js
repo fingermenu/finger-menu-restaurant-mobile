@@ -1,10 +1,10 @@
 // @flow
 
 import { GraphQLID, GraphQLObjectType, GraphQLString, GraphQLNonNull } from 'graphql';
-import { LanguageService } from '../../realmDB';
+import { realm, LanguageService } from '../../realmDB';
 import { NodeInterface } from '../interface';
 
-export const getLanguage = async languageId => new LanguageService().read(languageId);
+export const getLanguage = async languageId => new LanguageService(realm).read(languageId);
 
 export default new GraphQLObjectType({
   name: 'Language',

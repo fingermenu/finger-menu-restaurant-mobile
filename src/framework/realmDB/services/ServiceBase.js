@@ -269,16 +269,7 @@ export default class ServiceBase {
         return;
       }
 
-      let queryAndParams = { query: new Query(), params: List() };
-
-      if (criteria.has('conditions')) {
-        const conditions = criteria.get('conditions');
-
-        queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'realmId', 'realmId');
-        queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'packageBundleChecksum', 'packageBundleChecksum');
-      }
-
-      const { query, params } = this.buildSearchQueryFunc(criteria, queryAndParams);
+      const { query, params } = this.getQueryAndParams(criteria);
       let objects = this.realm.objects(this.SchemaName);
 
       if (!query.isQueryEmpty()) {
@@ -287,6 +278,39 @@ export default class ServiceBase {
 
       resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
     });
+
+  count = async criteria =>
+    new Promise(resolve => {
+      if (this.shouldReturnEmptyResultSet(criteria)) {
+        resolve(List());
+
+        return;
+      }
+
+      const { query, params } = this.getQueryAndParams(criteria);
+      let objects = this.realm.objects(this.SchemaName);
+
+      if (!query.isQueryEmpty()) {
+        objects = objects.filtered(query.getQueryStr(), ...params.toArray());
+      }
+
+      resolve(objects.length);
+    });
+
+  exists = async criteria => (await this.count(criteria)) > 0;
+
+  getQueryAndParams = criteria => {
+    let queryAndParams = { query: new Query(), params: List() };
+
+    if (criteria.has('conditions')) {
+      const conditions = criteria.get('conditions');
+
+      queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'realmId', 'realmId');
+      queryAndParams = ServiceBase.addEqualityQuery(conditions, queryAndParams, 'packageBundleChecksum', 'packageBundleChecksum');
+    }
+
+    return this.buildSearchQueryFunc(criteria, queryAndParams);
+  };
 
   shouldReturnEmptyResultSet = criteria => {
     if (criteria && criteria.has('ids')) {
