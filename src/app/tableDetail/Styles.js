@@ -80,4 +80,14 @@ export default StyleSheet.create({
   buttonContainer: {
     padding: 30,
   },
+  sectionHeader: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontWeight: '700',
+  },
 });

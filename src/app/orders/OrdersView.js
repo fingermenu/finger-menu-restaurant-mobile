@@ -20,6 +20,16 @@ class OrdersView extends Component {
     this.confirmOrderPopupDialogRef = popupDialog;
   };
 
+  getCustomerName = (customers, id) => {
+    const customer = customers.find(_ => _.id === id);
+
+    if (customer) {
+      return customer.name;
+    }
+
+    return 'unknown guest';
+  };
+
   getOrderItems = orderItems => {
     return Immutable.fromJS(orderItems)
       .groupBy(item => item.getIn(['customer', 'id']))
@@ -27,7 +37,7 @@ class OrdersView extends Component {
         key,
         {
           data: value.toJS(),
-          categoryTitle: this.props.customers.find(_ => _.id === key).name,
+          categoryTitle: this.getCustomerName(this.props.customers, key),
           categoryKey: key,
         },
       ])
