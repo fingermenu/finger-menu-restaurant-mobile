@@ -226,7 +226,13 @@ export default class ServiceBase {
         this.realm.write(() => {
           const realmId = cuid();
 
-          this.realm.create(this.SchemaName, info.set('realmId', realmId).toJS(), true);
+          this.realm.create(
+            this.SchemaName,
+            this.Schema.spawn(info.set('realmId', realmId))
+              .getInfo()
+              .toJS(),
+            true,
+          );
 
           resolve(realmId);
         });

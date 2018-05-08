@@ -17,5 +17,5 @@ export default class MultiLanguagesString {
     this.object = Map({ language, value });
   }
 
-  getObject = () => this.object;
+  getInfo = () => this.object;
 }

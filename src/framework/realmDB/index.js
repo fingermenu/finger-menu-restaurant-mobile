@@ -1,8 +1,8 @@
 // @flow
 
 import Realm from 'realm';
-import { Language, MultiLanguagesString } from './schema';
+import { Language, MultiLanguagesString, Tag } from './schema';
 
-export { LanguageService } from './services';
+export { LanguageService, TagService } from './services';
 
-export const realm = new Realm({ schema: [MultiLanguagesString.getSchema(), Language.getSchema()] });
+export const realm = new Realm({ schema: [MultiLanguagesString.getSchema(), Language.getSchema(), Tag.getSchema()] });

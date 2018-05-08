@@ -26,6 +26,10 @@ export default class Tag extends BaseObject {
   constructor(object) {
     super(object);
 
+    if (!object) {
+      return;
+    }
+
     /* this.set('key', object.key); */
   }
 
@@ -35,7 +39,7 @@ export default class Tag extends BaseObject {
     const name = info.get('name');
 
     if (name && !name.isEmpty()) {
-      this.set('name', name.keySeq().map(language => new MultiLanguagesString(language, name.get(language))));
+      this.set('name', name.keySeq().map(language => new MultiLanguagesString(language, name.get(language)).getInfo()));
     } else if (name && name.isEmpty()) {
       this.set('name', List());
     }
@@ -43,7 +47,7 @@ export default class Tag extends BaseObject {
     const description = info.get('description');
 
     if (description && !description.isEmpty()) {
-      this.set('description', description.keySeq().map(language => new MultiLanguagesString(language, description.get(language))));
+      this.set('description', description.keySeq().map(language => new MultiLanguagesString(language, description.get(language)).getInfo()));
     } else if (description && description.isEmpty()) {
       this.set('description', List());
     }

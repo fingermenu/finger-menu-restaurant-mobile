@@ -5,7 +5,7 @@ import BluebirdPromise from 'bluebird';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { unzip } from 'react-native-zip-archive';
-import { realm, LanguageService } from './realmDB';
+import { realm, LanguageService, TagService } from './realmDB';
 
 export default class PackageBundleHelper {
   constructor(oldPackageBundle, newPackageBundle) {
@@ -46,10 +46,15 @@ export default class PackageBundleHelper {
 
   extractInfoToLocalDatabase = async packageBundleContent => {
     await this.extractLanguagesToLocalDatabase(packageBundleContent.languages);
+    await this.extractTagsToLocalDatabase(packageBundleContent.tags);
   };
 
   extractLanguagesToLocalDatabase = async items => {
     await this.extractItemsToLocalDatabase(items, new LanguageService(realm));
+  };
+
+  extractTagsToLocalDatabase = async items => {
+    await this.extractItemsToLocalDatabase(items, new TagService(realm));
   };
 
   extractItemsToLocalDatabase = async (items, service) => {
@@ -62,10 +67,15 @@ export default class PackageBundleHelper {
 
   cleanOldData = async () => {
     await this.cleanOldLanguages();
+    await this.cleanOldTags();
   };
 
   cleanOldLanguages = async () => {
     await this.cleanOldItems(new LanguageService(realm));
+  };
+
+  cleanOldTags = async () => {
+    await this.cleanOldItems(new TagService(realm));
   };
 
   cleanOldItems = async service => {

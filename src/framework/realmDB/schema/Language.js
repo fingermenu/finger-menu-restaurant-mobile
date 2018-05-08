@@ -26,6 +26,10 @@ export default class Language extends BaseObject {
   constructor(object) {
     super(object);
 
+    if (!object) {
+      return;
+    }
+
     this.set('key', object.key);
     this.set('name', object.name);
     this.set('imageUrl', object.imageUrl);

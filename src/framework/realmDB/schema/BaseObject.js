@@ -6,6 +6,12 @@ export default class BaseObject {
   static getBaseSchema = () => Map({ realmId: 'string', packageBundleChecksum: 'string', id: 'string', createdAt: 'date', updatedAt: 'date' });
 
   constructor(object) {
+    if (!object) {
+      this.object = Map();
+
+      return;
+    }
+
     this.object = Map({
       realmId: object.realmId,
       packageBundleChecksum: object.packageBundleChecksum,
