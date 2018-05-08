@@ -226,6 +226,13 @@ export default class ServiceBase {
 
       const query = this.buildSearchQueryFunc(criteria);
 
+      if (criteria.has('conditions')) {
+        const conditions = criteria.get('conditions');
+
+        ServiceBase.addEqualityQuery(conditions, query, 'realmId', 'realmId');
+        ServiceBase.addEqualityQuery(conditions, query, 'packageBundleChecksum', 'packageBundleChecksum');
+      }
+
       const objects = this.realm
         .objects(this.SchemaName)
         .filtered(query.getQueryStr())
