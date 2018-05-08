@@ -1,7 +1,7 @@
 // @flow
 
 import { Common } from '@microbusiness/common-javascript';
-import Immutable from 'immutable';
+import Immutable, { List } from 'immutable';
 import cuid from 'cuid';
 import Query from './Query';
 
@@ -78,12 +78,29 @@ export default class ServiceBase {
     return query;
   };
 
+  static addDateTimeQuery = (conditions, query, conditionPropKey, columnName) =>
+    ServiceBase.addEqualityQuery(conditions, query, conditionPropKey, columnName);
+
+  static addNumberQuery = (conditions, query, conditionPropKey, columnName) =>
+    ServiceBase.addEqualityQuery(conditions, query, conditionPropKey, columnName);
+
+  static addEqualityQuery = (conditions, query, conditionPropKey, columnName) => {
+    ServiceBase.addEqualToQuery(conditions, query, conditionPropKey, columnName);
+    ServiceBase.addNotEqualToQuery(conditions, query, conditionPropKey, columnName);
+    ServiceBase.addLessThanToQuery(conditions, query, conditionPropKey, columnName);
+    ServiceBase.addLessThanOrEqualToQuery(conditions, query, conditionPropKey, columnName);
+    ServiceBase.addGreaterThanToQuery(conditions, query, conditionPropKey, columnName);
+    ServiceBase.addGreaterThanOrEqualToQuery(conditions, query, conditionPropKey, columnName);
+
+    return query;
+  };
+
   static addEqualToQuery = (conditions, query, conditionPropKey, columnName) => {
     if (conditions.has(conditionPropKey)) {
       const value = conditions.get(conditionPropKey);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} = "${value}"`);
+        query.addAndQuery(`${columnName} = ${value}`);
       }
     }
 
@@ -95,7 +112,7 @@ export default class ServiceBase {
       const value = conditions.get(`notEqual_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.addAndQuery(`${columnName} <> "${value}"`);
+        query.addAndQuery(`${columnName} <> ${value}`);
       }
     }
 
@@ -107,7 +124,7 @@ export default class ServiceBase {
       const value = conditions.get(`lessThan_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.lessThan(columnName, value);
+        query.addAndQuery(`${columnName} < ${value}`);
       }
     }
 
@@ -119,7 +136,7 @@ export default class ServiceBase {
       const value = conditions.get(`lessThanOrEqualTo_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.lessThanOrEqualTo(columnName, value);
+        query.addAndQuery(`${columnName} <= ${value}`);
       }
     }
 
@@ -131,7 +148,7 @@ export default class ServiceBase {
       const value = conditions.get(`greaterThan_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.greaterThan(columnName, value);
+        query.addAndQuery(`${columnName} > ${value}`);
       }
     }
 
@@ -143,17 +160,18 @@ export default class ServiceBase {
       const value = conditions.get(`greaterThanOrEqualTo_${conditionPropKey}`);
 
       if (Common.isNotUndefined(value)) {
-        query.greaterThanOrEqualTo(columnName, value);
+        query.addAndQuery(`${columnName} >= ${value}`);
       }
     }
 
     return query;
   };
 
-  constructor(realm, Schema, objectFriendlyName) {
+  constructor(realm, Schema, buildSearchQueryFunc, objectFriendlyName) {
     this.realm = realm;
     this.Schema = Schema;
     this.SchemaName = this.Schema.getSchema().name;
+    this.buildSearchQueryFunc = buildSearchQueryFunc;
     this.messagePrefix = `No ${objectFriendlyName} found with realmId: `;
   }
 
@@ -198,10 +216,33 @@ export default class ServiceBase {
       }
     });
 
-  search = async () =>
+  search = async criteria =>
     new Promise(resolve => {
-      const objects = this.realm.objects(this.SchemaName).map(item => new this.Schema(item).getInfo());
+      if (this.shouldReturnEmptyResultSet(criteria)) {
+        resolve(List());
+
+        return;
+      }
+
+      const query = this.buildSearchQueryFunc(criteria);
+
+      const objects = this.realm
+        .objects(this.SchemaName)
+        .filtered(query.getQueryStr())
+        .map(item => new this.Schema(item).getInfo());
 
       resolve(Immutable.fromJS(objects));
     });
+
+  shouldReturnEmptyResultSet = criteria => {
+    if (criteria && criteria.has('ids')) {
+      const objectIds = criteria.get('ids');
+
+      if (objectIds && objectIds.isEmpty()) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 }

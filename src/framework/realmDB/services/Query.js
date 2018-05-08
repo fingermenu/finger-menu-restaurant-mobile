@@ -17,7 +17,7 @@ export default class Query {
     return this;
   };
 
-  getQuery = () => this.queryStr;
+  getQueryStr = () => this.queryStr;
 
-  isQueryEmpty = () => !this.getQuery() || this.getQuery().trim().length === 0;
+  isQueryEmpty = () => !this.getQueryStr() || this.getQueryStr().trim().length === 0;
 }
