@@ -2,10 +2,11 @@
 
 import Immutable, { List } from 'immutable';
 import React, { Component } from 'react';
+import { convert, ZonedDateTime } from 'js-joda';
 import debounce from 'lodash.debounce';
-import { FlatList, ScrollView, Text, TouchableNative, View } from 'react-native';
+import { ScrollView, SectionList, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Badge, Button, ButtonGroup, Input } from 'react-native-elements';
+import { Badge, Button, ButtonGroup, Icon, Input } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { translate } from 'react-i18next';
 import OrderItemRow from '../orders/OrderItemRow';
@@ -14,6 +15,7 @@ import { DefaultColor, DefaultStyles, getPopupDialogSizes } from '../../style';
 import { TableProp } from './PropTypes';
 import config from '../../framework/config';
 import OrderHelper from '../../framework/OrderHelper';
+import { ListItemSeparator } from '../../components/list';
 
 class TableDetailView extends Component {
   static isDecimal = strValue => !isNaN(parseFloat(strValue)) && isFinite(strValue);
@@ -55,6 +57,23 @@ class TableDetailView extends Component {
       return { balanceToPay: total, discount: 0 };
     }
     }
+  };
+
+  getCustomerName = (table, orders, customerId) => {
+    const immutableOrders = Immutable.fromJS(orders);
+    if (!immutableOrders.isEmpty()) {
+      return immutableOrders
+        .sortBy(order => convert(ZonedDateTime.parse(order.get('placedAt'))).toDate())
+        .first()
+        .get('details')
+        .find(detail => detail.getIn(['customer', 'id']) === customerId)
+        .getIn(['customer', 'name']);
+    }
+
+    // Get from table if no order,
+    const customer = table.customers.find(customerId);
+
+    return customer ? customer.name : '';
   };
 
   getCalculatedOrderItemsTotal = orderItems =>
@@ -108,6 +127,22 @@ class TableDetailView extends Component {
     const { discountType } = this.state;
 
     return discountType === '%' ? (discount ? discount : '0') + discountType : discountType + (discount ? discount.toFixed(2) : '0.00');
+  };
+
+  getOrderItems = orderItems => {
+    return Immutable.fromJS(orderItems)
+      .groupBy(item => item.getIn(['customer', 'id']))
+      .mapEntries(([key, value]) => [
+        key,
+        {
+          data: value.toJS(),
+          categoryTitle: this.getCustomerName(this.props.table, this.props.orders, key),
+          categoryKey: key,
+        },
+      ])
+      .sortBy(_ => _.categoryTitle)
+      .valueSeq()
+      .toJS();
   };
 
   convertStringDiscountValueToDecimal = () => {
@@ -563,6 +598,17 @@ class TableDetailView extends Component {
     />
   );
 
+  renderSectionHeader = ({ section }) => {
+    return (
+      <View style={Styles.sectionHeader}>
+        <Icon name="person-outline" color={DefaultColor.iconColor} />
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>{section.categoryTitle}</Text>
+      </View>
+    );
+  };
+
+  renderSeparator = () => <ListItemSeparator />;
+
   render = () => {
     const {
       t,
@@ -599,13 +645,15 @@ class TableDetailView extends Component {
           <Text style={DefaultStyles.primaryTitleFont}>${totalPrice}</Text>
         </View>
         {orders.length > 0 ? (
-          <FlatList
-            data={immutableOrders.flatMap(order => order.get('details')).toJS()}
+          <SectionList
             renderItem={this.renderOrderItemRow}
+            renderSectionHeader={this.renderSectionHeader}
+            sections={this.getOrderItems(immutableOrders.flatMap(order => order.get('details')).toJS())}
             keyExtractor={this.keyExtractor}
             onEndReached={onEndReached}
             onRefresh={onRefresh}
             refreshing={isRefreshing}
+            ItemSeparatorComponent={this.renderSeparator}
             extraData={this.state}
           />
         ) : (
