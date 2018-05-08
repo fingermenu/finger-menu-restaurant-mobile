@@ -229,16 +229,17 @@ export default class ServiceBase {
       if (criteria.has('conditions')) {
         const conditions = criteria.get('conditions');
 
-        ServiceBase.addEqualityQuery(conditions, query, 'realmId', 'realmId');
-        ServiceBase.addEqualityQuery(conditions, query, 'packageBundleChecksum', 'packageBundleChecksum');
+        ServiceBase.addStringQuery(conditions, query, 'realmId', 'realmId');
+        ServiceBase.addStringQuery(conditions, query, 'packageBundleChecksum', 'packageBundleChecksum');
       }
 
-      const objects = this.realm
-        .objects(this.SchemaName)
-        .filtered(query.getQueryStr())
-        .map(item => new this.Schema(item).getInfo());
+      let objects = this.realm.objects(this.SchemaName);
 
-      resolve(Immutable.fromJS(objects));
+      if (!query.isQueryEmpty()) {
+        objects = objects.filtered(query.getQueryStr());
+      }
+
+      resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
     });
 
   shouldReturnEmptyResultSet = criteria => {

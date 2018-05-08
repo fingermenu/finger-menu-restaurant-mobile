@@ -14,9 +14,9 @@ export default class LanguageService extends ServiceBase {
 
     const conditions = criteria.get('conditions');
 
-    ServiceBase.addEqualityQuery(conditions, query, 'key', 'key');
+    ServiceBase.addStringQuery(conditions, query, 'key', 'key');
     ServiceBase.addStringQuery(conditions, query, 'name', 'nameLowerCase');
-    ServiceBase.addEqualityQuery(conditions, query, 'imageUrl', 'imageUrl');
+    ServiceBase.addStringQuery(conditions, query, 'imageUrl', 'imageUrl');
 
     return query;
   };
