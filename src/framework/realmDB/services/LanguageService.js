@@ -13,7 +13,7 @@ export default class LanguageService extends ServiceBase {
     let newQueryAndParams = queryAndParams;
 
     newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'key', 'key');
-    newQueryAndParams = ServiceBase.addStringQuery(conditions, newQueryAndParams, 'name', 'nameLowerCase');
+    newQueryAndParams = ServiceBase.addStringQuery(conditions, newQueryAndParams, 'name', 'name');
     newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'imageUrl', 'imageUrl');
 
     return newQueryAndParams;

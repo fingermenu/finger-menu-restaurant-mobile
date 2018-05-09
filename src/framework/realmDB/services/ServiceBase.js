@@ -1,7 +1,7 @@
 // @flow
 
 import { Common } from '@microbusiness/common-javascript';
-import Immutable, { List } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import cuid from 'cuid';
 import Query from './Query';
 
@@ -101,6 +101,15 @@ export default class ServiceBase {
     }
 
     return { query, params: newParams };
+  };
+
+  static addMultiLanguagesStringQuery = (conditions, queryAndParams, conditionPropKey, columnName, language) => {
+    let newQueryAndParams = queryAndParams;
+
+    newQueryAndParams = ServiceBase.addStringQuery(conditions, newQueryAndParams, conditionPropKey, `${columnName}.value`);
+    newQueryAndParams = ServiceBase.addStringQuery(Map().set(columnName, language), newQueryAndParams, conditionPropKey, `${columnName}.language`);
+
+    return newQueryAndParams;
   };
 
   static addDateTimeQuery = (conditions, queryAndParams, conditionPropKey, columnName) =>

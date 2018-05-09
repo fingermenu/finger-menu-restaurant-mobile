@@ -9,7 +9,11 @@ export default class TagService extends ServiceBase {
       return queryAndParams;
     }
 
+    const conditions = criteria.get('conditions');
     let newQueryAndParams = queryAndParams;
+
+    newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'name', 'name');
+    newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'description', 'description');
 
     return newQueryAndParams;
   };
