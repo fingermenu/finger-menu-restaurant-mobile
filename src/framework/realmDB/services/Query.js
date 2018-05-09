@@ -6,13 +6,13 @@ export default class Query {
   }
 
   addAndQuery = newQueryStr => {
-    this.queryStr = this.queryStr + (this.isQueryEmpty ? newQueryStr : ` AND (${newQueryStr})`);
+    this.queryStr = this.queryStr + (this.isQueryEmpty() ? `(${newQueryStr})` : ` AND (${newQueryStr})`);
 
     return this;
   };
 
   addOrQuery = newQueryStr => {
-    this.queryStr = this.queryStr + (this.isQueryEmpty() ? newQueryStr : ` OR (${newQueryStr})`);
+    this.queryStr = this.queryStr + (this.isQueryEmpty() ? `(${newQueryStr})` : ` OR (${newQueryStr})`);
 
     return this;
   };

@@ -104,12 +104,14 @@ export default class ServiceBase {
   };
 
   static addMultiLanguagesStringQuery = (conditions, queryAndParams, conditionPropKey, columnName, language) => {
-    let newQueryAndParams = queryAndParams;
+    const queryStr = queryAndParams.query.getQueryStr();
+    const queryAndParamsAfterAddingValue = ServiceBase.addStringQuery(conditions, queryAndParams, conditionPropKey, `${columnName}.value`);
 
-    newQueryAndParams = ServiceBase.addStringQuery(conditions, newQueryAndParams, conditionPropKey, `${columnName}.value`);
-    newQueryAndParams = ServiceBase.addStringQuery(Map().set(columnName, language), newQueryAndParams, conditionPropKey, `${columnName}.language`);
+    if (queryAndParamsAfterAddingValue.query.getQueryStr().localeCompare(queryStr) === 0) {
+      return queryAndParamsAfterAddingValue;
+    }
 
-    return newQueryAndParams;
+    return ServiceBase.addStringQuery(Map().set(columnName, language), queryAndParamsAfterAddingValue, conditionPropKey, `${columnName}.language`);
   };
 
   static addDateTimeQuery = (conditions, queryAndParams, conditionPropKey, columnName) =>
