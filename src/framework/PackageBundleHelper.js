@@ -79,8 +79,6 @@ export default class PackageBundleHelper {
   };
 
   cleanOldItems = async service => {
-    const items = await service.search(Map({ conditions: Map({ packageBundleChecksum: this.oldPackageBundle.checksum }) }));
-
-    await BluebirdPromise.each(items.toArray(), item => service.delete(item.get('realmId')));
+    await service.bulkDelete(Map({ conditions: Map({ packageBundleChecksum: this.oldPackageBundle.checksum }) }));
   };
 }

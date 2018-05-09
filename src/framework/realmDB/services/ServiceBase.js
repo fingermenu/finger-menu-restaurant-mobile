@@ -237,12 +237,16 @@ export default class ServiceBase {
 
   read = async realmId =>
     new Promise((resolve, reject) => {
-      const objects = this.realm.objects(this.SchemaName).filtered(`realmId = "${realmId}"`);
+      try {
+        const objects = this.realm.objects(this.SchemaName).filtered(`realmId = "${realmId}"`);
 
-      if (objects.length === 0) {
-        reject(this.messagePrefix + realmId);
-      } else {
-        resolve(new this.Schema(objects[0]).getInfo());
+        if (objects.length === 0) {
+          reject(this.messagePrefix + realmId);
+        } else {
+          resolve(new this.Schema(objects[0]).getInfo());
+        }
+      } catch (error) {
+        reject(error);
       }
     });
 
@@ -261,77 +265,94 @@ export default class ServiceBase {
       }
     });
 
+  bulkDelete = async criteria =>
+    new Promise((resolve, reject) => {
+      try {
+        if (this.shouldReturnEmptyResultSet(criteria)) {
+          resolve();
+
+          return;
+        }
+
+        this.realm.write(() => {
+          const { query, params } = this.getQueryAndParams(criteria);
+          let objects = this.realm.objects(this.SchemaName);
+
+          if (!query.isQueryEmpty()) {
+            objects = objects.filtered(query.getQueryStr(), ...params.toArray());
+          }
+
+          objects = this.addLimitCriteriaToQuery(criteria, objects);
+
+          this.realm.delete(objects);
+
+          resolve();
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+
   search = async criteria =>
-    new Promise(resolve => {
-      if (this.shouldReturnEmptyResultSet(criteria)) {
-        resolve(List());
+    new Promise((resolve, reject) => {
+      try {
+        if (this.shouldReturnEmptyResultSet(criteria)) {
+          resolve(List());
 
-        return;
-      }
+          return;
+        }
 
-      const { query, params } = this.getQueryAndParams(criteria);
-      let objects = this.realm.objects(this.SchemaName);
+        const { query, params } = this.getQueryAndParams(criteria);
+        let objects = this.realm.objects(this.SchemaName);
 
-      if (!query.isQueryEmpty()) {
-        objects = objects.filtered(query.getQueryStr(), ...params.toArray());
-      }
+        if (!query.isQueryEmpty()) {
+          objects = objects.filtered(query.getQueryStr(), ...params.toArray());
+        }
 
-      if (criteria.has('limit') && criteria.has('skip')) {
-        const limit = criteria.get('limit');
-        const skip = criteria.get('skip');
+        objects = this.addLimitCriteriaToQuery(criteria, objects);
 
-        objects = objects.slice(skip, skip + limit);
-      }
+        if (criteria.has('orderByFieldAscending')) {
+          const value = criteria.get('orderByFieldAscending');
 
-      if (criteria.has('topMost')) {
-        const topMost = criteria.get('topMost');
-
-        if (topMost) {
-          if (criteria.has('skip')) {
-            const skip = criteria.get('skip');
-
-            objects = objects.slice(skip, skip + 1);
-          } else {
-            objects = objects.slice(0, 1);
+          if (value) {
+            objects = objects.sorted(value, false);
           }
         }
-      }
 
-      if (criteria.has('orderByFieldAscending')) {
-        const value = criteria.get('orderByFieldAscending');
+        if (criteria.has('orderByFieldDescending')) {
+          const value = criteria.get('orderByFieldDescending');
 
-        if (value) {
-          objects = objects.sorted(value, false);
+          if (value) {
+            objects = objects.sorted(value, true);
+          }
         }
+
+        resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
+      } catch (error) {
+        reject(error);
       }
-
-      if (criteria.has('orderByFieldDescending')) {
-        const value = criteria.get('orderByFieldDescending');
-
-        if (value) {
-          objects = objects.sorted(value, true);
-        }
-      }
-
-      resolve(Immutable.fromJS(objects.map(item => new this.Schema(item).getInfo())));
     });
 
   count = async criteria =>
-    new Promise(resolve => {
-      if (this.shouldReturnEmptyResultSet(criteria)) {
-        resolve(List());
+    new Promise((resolve, reject) => {
+      try {
+        if (this.shouldReturnEmptyResultSet(criteria)) {
+          resolve(0);
 
-        return;
+          return;
+        }
+
+        const { query, params } = this.getQueryAndParams(criteria);
+        let objects = this.realm.objects(this.SchemaName);
+
+        if (!query.isQueryEmpty()) {
+          objects = objects.filtered(query.getQueryStr(), ...params.toArray());
+        }
+
+        resolve(objects.length);
+      } catch (error) {
+        reject(error);
       }
-
-      const { query, params } = this.getQueryAndParams(criteria);
-      let objects = this.realm.objects(this.SchemaName);
-
-      if (!query.isQueryEmpty()) {
-        objects = objects.filtered(query.getQueryStr(), ...params.toArray());
-      }
-
-      resolve(objects.length);
     });
 
   exists = async criteria => (await this.count(criteria)) > 0;
@@ -359,5 +380,32 @@ export default class ServiceBase {
     }
 
     return false;
+  };
+
+  addLimitCriteriaToQuery = (criteria, objects) => {
+    let newObjects = objects;
+
+    if (criteria.has('limit') && criteria.has('skip')) {
+      const limit = criteria.get('limit');
+      const skip = criteria.get('skip');
+
+      newObjects = newObjects.slice(skip, skip + limit);
+    }
+
+    if (criteria.has('topMost')) {
+      const topMost = criteria.get('topMost');
+
+      if (topMost) {
+        if (criteria.has('skip')) {
+          const skip = criteria.get('skip');
+
+          newObjects = newObjects.slice(skip, skip + 1);
+        } else {
+          newObjects = newObjects.slice(0, 1);
+        }
+      }
+    }
+
+    return newObjects;
   };
 }
