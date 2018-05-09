@@ -1,8 +1,7 @@
 // @flow
 
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 import BaseObject from './BaseObject';
-import MultiLanguagesString from './MultiLanguagesString';
 
 const schema = Map({
   name: 'Tag',
@@ -18,7 +17,7 @@ export default class Tag extends BaseObject {
   static spawn = info => {
     const object = new Tag();
 
-    object.updateInfoInternal(info);
+    object.updateInfo(info);
 
     return object;
   };
@@ -30,36 +29,16 @@ export default class Tag extends BaseObject {
       return;
     }
 
-    /* this.set('key', object.key); */
+    this.addMultiLanguagesStringValueFromObject(object, 'name');
+    this.addMultiLanguagesStringValueFromObject(object, 'description');
   }
 
-  updateInfoInternal = info => {
-    this.updateInfoInternalBase(info);
-
-    const name = info.get('name');
-
-    if (name && !name.isEmpty()) {
-      this.set('name', name.keySeq().map(language => new MultiLanguagesString(language, name.get(language)).getInfo()));
-    } else if (name && name.isEmpty()) {
-      this.set('name', List());
-    }
-
-    const description = info.get('description');
-
-    if (description && !description.isEmpty()) {
-      this.set('description', description.keySeq().map(language => new MultiLanguagesString(language, description.get(language)).getInfo()));
-    } else if (description && description.isEmpty()) {
-      this.set('description', List());
-    }
-
-    this.set('key', info.get('key'));
-  };
-
   updateInfo = info => {
-    this.updateInfoInternal(this.getObject(), info);
+    this.updateInfoBase(info);
 
-    return this;
+    this.addMultiLanguagesStringValueFromImmutableInfo(info, 'name');
+    this.addMultiLanguagesStringValueFromImmutableInfo(info, 'description');
   };
 
-  getInfo = () => this.object;
+  getInfo = () => this.object.update('name', this.reduceMultiLanguagesStringList).update('description', this.reduceMultiLanguagesStringList);
 }

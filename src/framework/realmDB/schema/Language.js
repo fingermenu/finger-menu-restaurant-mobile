@@ -18,7 +18,7 @@ export default class Language extends BaseObject {
   static spawn = info => {
     const object = new Language();
 
-    object.updateInfoInternal(info);
+    object.updateInfo(info);
 
     return object;
   };
@@ -35,18 +35,12 @@ export default class Language extends BaseObject {
     this.set('imageUrl', object.imageUrl);
   }
 
-  updateInfoInternal = info => {
-    this.updateInfoInternalBase(info);
+  updateInfo = info => {
+    this.updateInfoBase(info);
 
     this.set('key', info.get('key'));
     this.set('name', info.get('name'));
     this.set('imageUrl', info.get('imageUrl'));
-  };
-
-  updateInfo = info => {
-    this.updateInfoInternal(this.getObject(), info);
-
-    return this;
   };
 
   getInfo = () => this.object;
