@@ -4,7 +4,7 @@ import { List, Map } from 'immutable';
 import MultiLanguagesString from './MultiLanguagesString';
 
 export default class BaseObject {
-  static getBaseSchema = () => Map({ realmId: 'string', packageBundleChecksum: 'string', id: 'string', createdAt: 'date' });
+  static getBaseSchema = () => Map({ realmId: 'string', packageBundleChecksum: 'string', id: 'string' });
 
   constructor(object) {
     if (!object) {
@@ -17,7 +17,6 @@ export default class BaseObject {
       realmId: object.realmId,
       packageBundleChecksum: object.packageBundleChecksum,
       id: object.id,
-      createdAt: object.createdAt,
     });
   }
 
@@ -25,7 +24,6 @@ export default class BaseObject {
     this.set('realmId', info.get('realmId'));
     this.set('packageBundleChecksum', info.get('packageBundleChecksum'));
     this.set('id', info.get('id'));
-    this.set('createdAt', info.get('createdAt'));
   };
 
   set = (key, value) => {
