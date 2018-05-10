@@ -10,6 +10,7 @@ import { LandingContainer } from '../landing';
 import { TableDetail } from '../tableDetail';
 import { OrderConfirmedContainer } from '../orderConfirmed';
 import { Pin } from '../pin/';
+import { CustomersContainer } from '../customers';
 
 export default StackNavigator(
   {
@@ -39,6 +40,9 @@ export default StackNavigator(
     },
     OrderConfirmed: {
       screen: OrderConfirmedContainer,
+    },
+    Customers: {
+      screen: CustomersContainer,
     },
   },
   {

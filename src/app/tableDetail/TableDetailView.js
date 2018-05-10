@@ -2,7 +2,6 @@
 
 import Immutable, { List } from 'immutable';
 import React, { Component } from 'react';
-import { convert, ZonedDateTime } from 'js-joda';
 import debounce from 'lodash.debounce';
 import { ScrollView, SectionList, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -59,19 +58,8 @@ class TableDetailView extends Component {
     }
   };
 
-  getCustomerName = (table, orders, customerId) => {
-    const immutableOrders = Immutable.fromJS(orders);
-    if (!immutableOrders.isEmpty()) {
-      return immutableOrders
-        .sortBy(order => convert(ZonedDateTime.parse(order.get('placedAt'))).toDate())
-        .first()
-        .get('details')
-        .find(detail => detail.getIn(['customer', 'id']) === customerId)
-        .getIn(['customer', 'name']);
-    }
-
-    // Get from table if no order,
-    const customer = table.customers.find(customerId);
+  getCustomerName = (table, customerId) => {
+    const customer = table.customers.find(_ => _.id === customerId);
 
     return customer ? customer.name : '';
   };
@@ -136,7 +124,7 @@ class TableDetailView extends Component {
         key,
         {
           data: value.toJS(),
-          categoryTitle: this.getCustomerName(this.props.table, this.props.orders, key),
+          categoryTitle: this.getCustomerName(this.props.table, key),
           categoryKey: key,
         },
       ])
