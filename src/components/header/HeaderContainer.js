@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { NavigationActions } from 'react-navigation';
 import HeaderView from './HeaderView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { CustomerProp } from '../../framework/applicationState';
@@ -20,6 +21,10 @@ class HeaderContainer extends Component {
     this.props.applicationStateActions.activeCustomerChanged(Map({ id }));
   };
 
+  handleEditCustomerNamePressed = () => {
+    this.props.navigateToCustomers();
+  };
+
   render = () => (
     <HeaderView
       onLanguageChanged={this.handleLanguageChanged}
@@ -27,6 +32,7 @@ class HeaderContainer extends Component {
       backgroundImageUrl={this.props.backgroundImageUrl}
       customers={this.props.customers}
       activeCustomerId={this.props.activeCustomerId}
+      onEditCustomerNamePressed={this.handleEditCustomerNamePressed}
     />
   );
 }
@@ -36,6 +42,7 @@ HeaderContainer.propTypes = {
   backgroundImageUrl: PropTypes.string,
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
+  navigateToCustomers: PropTypes.func.isRequired,
 };
 
 HeaderContainer.defaultProps = {
@@ -54,6 +61,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
+  navigateToCustomers: () => dispatch(NavigationActions.navigate({ routeName: 'Customers' })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(HeaderContainer));
