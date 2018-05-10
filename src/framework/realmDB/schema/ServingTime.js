@@ -4,17 +4,17 @@ import { Map } from 'immutable';
 import BaseObject from './BaseObject';
 
 const schema = Map({
-  name: 'DishType',
+  name: 'ServingTime',
   properties: Map({
     tagId: 'string',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
 
-export default class DishType extends BaseObject {
+export default class ServingTime extends BaseObject {
   static getSchema = () => schema;
 
   static spawn = info => {
-    const object = new DishType();
+    const object = new ServingTime();
 
     object.updateInfo(info);
 
