@@ -5,7 +5,7 @@ import BluebirdPromise from 'bluebird';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { unzip } from 'react-native-zip-archive';
-import { realm, LanguageService, TagService } from './realmDB';
+import { realm, DietaryOptionService, DishTypeService, LanguageService, ServingTimeService, SizeService, TagService } from './realmDB';
 
 export default class PackageBundleHelper {
   constructor(oldPackageBundle, newPackageBundle) {
@@ -45,16 +45,21 @@ export default class PackageBundleHelper {
   };
 
   extractInfoToLocalDatabase = async packageBundleContent => {
-    await this.extractLanguagesToLocalDatabase(packageBundleContent.languages);
-    await this.extractTagsToLocalDatabase(packageBundleContent.tags);
+    await this.extractItemsToLocalDatabase(packageBundleContent.dietaryOptions, new DietaryOptionService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.dishTypes, new DishTypeService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.languages, new LanguageService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.servingTimes, new ServingTimeService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.sizes, new SizeService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.tags, new TagService(realm));
   };
 
-  extractLanguagesToLocalDatabase = async items => {
-    await this.extractItemsToLocalDatabase(items, new LanguageService(realm));
-  };
-
-  extractTagsToLocalDatabase = async items => {
-    await this.extractItemsToLocalDatabase(items, new TagService(realm));
+  cleanOldData = async () => {
+    await this.cleanOldItems(new DietaryOptionService(realm));
+    await this.cleanOldItems(new DishTypeService(realm));
+    await this.cleanOldItems(new LanguageService(realm));
+    await this.cleanOldItems(new ServingTimeService(realm));
+    await this.cleanOldItems(new SizeService(realm));
+    await this.cleanOldItems(new TagService(realm));
   };
 
   extractItemsToLocalDatabase = async (items, service) => {
@@ -63,19 +68,6 @@ export default class PackageBundleHelper {
     }
 
     await BluebirdPromise.each(items, item => service.create(Immutable.fromJS(item).set('packageBundleChecksum', this.newPackageBundle.checksum)));
-  };
-
-  cleanOldData = async () => {
-    await this.cleanOldLanguages();
-    await this.cleanOldTags();
-  };
-
-  cleanOldLanguages = async () => {
-    await this.cleanOldItems(new LanguageService(realm));
-  };
-
-  cleanOldTags = async () => {
-    await this.cleanOldItems(new TagService(realm));
   };
 
   cleanOldItems = async service => {

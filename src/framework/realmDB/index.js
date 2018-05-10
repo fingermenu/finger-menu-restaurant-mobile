@@ -3,7 +3,7 @@
 import Realm from 'realm';
 import { DietaryOption, DishType, Language, MultiLanguagesString, ServingTime, Size, Tag } from './schema';
 
-export { LanguageService, TagService } from './services';
+export { DietaryOptionService, DishTypeService, LanguageService, ServingTimeService, SizeService, TagService } from './services';
 
 export const realm = new Realm({
   schema: [
