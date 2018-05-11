@@ -10,6 +10,7 @@ import {
   MenuItem,
   MenuItemPrice,
   MultiLanguagesString,
+  Rules,
   ServingTime,
   Size,
   Tag,
@@ -30,7 +31,6 @@ export {
 
 export const realm = new Realm({
   schema: [
-    MultiLanguagesString.getSchema(),
     ChoiceItem.getSchema(),
     ChoiceItemPrice.getSchema(),
     DietaryOption.getSchema(),
@@ -38,6 +38,8 @@ export const realm = new Realm({
     Language.getSchema(),
     MenuItem.getSchema(),
     MenuItemPrice.getSchema(),
+    MultiLanguagesString.getSchema(),
+    Rules.getSchema(),
     ServingTime.getSchema(),
     Size.getSchema(),
     Tag.getSchema(),

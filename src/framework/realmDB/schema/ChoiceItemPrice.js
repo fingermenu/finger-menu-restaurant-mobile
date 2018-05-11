@@ -1,6 +1,6 @@
 // @flow
 
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import BaseObject from './BaseObject';
 
 const schema = Map({
@@ -38,7 +38,7 @@ export default class ChoiceItemPrice extends BaseObject {
     this.set('validFrom', object.validFrom);
     this.set('validUntil', object.validUntil);
     this.set('choiceItemId', object.choiceItemId);
-    this.set('tagIds', object.tagIds);
+    this.set('tagIds', Immutable.fromJS(object.tagIds));
   }
 
   updateInfo = info => {

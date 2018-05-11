@@ -1,6 +1,6 @@
 // @flow
 
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import BaseObject from './BaseObject';
 
 const schema = Map({
@@ -15,6 +15,7 @@ const schema = Map({
     toBeServedWithMenuItemPriceIds: 'string[]',
     choiceItemPriceIds: 'string[]',
     defaultChoiceItemPriceIds: 'string[]',
+    rules: 'Rules?',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
 
@@ -41,10 +42,11 @@ export default class MenuItemPrice extends BaseObject {
     this.set('validFrom', object.validFrom);
     this.set('validUntil', object.validUntil);
     this.set('menuItemId', object.menuItemId);
-    this.set('tagIds', object.tagIds);
-    this.set('toBeServedWithMenuItemPriceIds', object.toBeServedWithMenuItemPriceIds);
-    this.set('choiceItemPriceIds', object.choiceItemPriceIds);
-    this.set('defaultChoiceItemPriceIds', object.defaultChoiceItemPriceIds);
+    this.set('tagIds', Immutable.fromJS(object.tagIds));
+    this.set('toBeServedWithMenuItemPriceIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds));
+    this.set('choiceItemPriceIds', Immutable.fromJS(object.choiceItemPriceIds));
+    this.set('defaultChoiceItemPriceIds', Immutable.fromJS(object.defaultChoiceItemPriceIds));
+    this.set('rules', Immutable.fromJS(object.rules));
   }
 
   updateInfo = info => {
@@ -59,6 +61,7 @@ export default class MenuItemPrice extends BaseObject {
     this.set('toBeServedWithMenuItemPriceIds', info.get('toBeServedWithMenuItemPriceIds'));
     this.set('choiceItemPriceIds', info.get('choiceItemPriceIds'));
     this.set('defaultChoiceItemPriceIds', info.get('defaultChoiceItemPriceIds'));
+    this.set('rules', info.get('rules'));
   };
 
   getInfo = () => this.object;

@@ -1,6 +1,6 @@
 // @flow
 
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 import BaseObject from './BaseObject';
 
 const schema = Map({
@@ -36,7 +36,7 @@ export default class MenuItem extends BaseObject {
     this.addMultiLanguagesStringValueFromObject(object, 'description');
     this.set('menuItemPageUrl', object.menuItemPageUrl);
     this.set('imageUrl', object.imageUrl);
-    this.set('tagIds', object.tagIds);
+    this.set('tagIds', Immutable.fromJS(object.tagIds));
   }
 
   updateInfo = info => {
