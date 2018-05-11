@@ -1,5 +1,6 @@
 // @flow
 
+export ChoiceItem from './ChoiceItem';
 export DietaryOption from './DietaryOption';
 export DishType from './DishType';
 export Language from './Language';

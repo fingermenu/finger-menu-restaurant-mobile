@@ -5,7 +5,16 @@ import BluebirdPromise from 'bluebird';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'react-native-fetch-blob';
 import { unzip } from 'react-native-zip-archive';
-import { realm, DietaryOptionService, DishTypeService, LanguageService, ServingTimeService, SizeService, TagService } from './realmDB';
+import {
+  realm,
+  ChoiceItemService,
+  DietaryOptionService,
+  DishTypeService,
+  LanguageService,
+  ServingTimeService,
+  SizeService,
+  TagService,
+} from './realmDB';
 
 export default class PackageBundleHelper {
   constructor(oldPackageBundle, newPackageBundle) {
@@ -45,6 +54,7 @@ export default class PackageBundleHelper {
   };
 
   extractInfoToLocalDatabase = async packageBundleContent => {
+    await this.extractItemsToLocalDatabase(packageBundleContent.choiceItems, new ChoiceItemService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.dietaryOptions, new DietaryOptionService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.dishTypes, new DishTypeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.languages, new LanguageService(realm));
@@ -54,6 +64,7 @@ export default class PackageBundleHelper {
   };
 
   cleanOldData = async () => {
+    await this.cleanOldItems(new ChoiceItemService(realm));
     await this.cleanOldItems(new DietaryOptionService(realm));
     await this.cleanOldItems(new DishTypeService(realm));
     await this.cleanOldItems(new LanguageService(realm));

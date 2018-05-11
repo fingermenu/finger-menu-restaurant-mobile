@@ -1,13 +1,14 @@
 // @flow
 
 import Realm from 'realm';
-import { DietaryOption, DishType, Language, MultiLanguagesString, ServingTime, Size, Tag } from './schema';
+import { ChoiceItem, DietaryOption, DishType, Language, MultiLanguagesString, ServingTime, Size, Tag } from './schema';
 
-export { DietaryOptionService, DishTypeService, LanguageService, ServingTimeService, SizeService, TagService } from './services';
+export { ChoiceItemService, DietaryOptionService, DishTypeService, LanguageService, ServingTimeService, SizeService, TagService } from './services';
 
 export const realm = new Realm({
   schema: [
     MultiLanguagesString.getSchema(),
+    ChoiceItem.getSchema(),
     DietaryOption.getSchema(),
     DishType.getSchema(),
     Language.getSchema(),
