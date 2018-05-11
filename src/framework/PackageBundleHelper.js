@@ -13,6 +13,7 @@ import {
   DishTypeService,
   LanguageService,
   MenuItemService,
+  MenuItemPriceService,
   ServingTimeService,
   SizeService,
   TagService,
@@ -62,6 +63,7 @@ export default class PackageBundleHelper {
     await this.extractItemsToLocalDatabase(packageBundleContent.dishTypes, new DishTypeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.languages, new LanguageService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.menuItems, new MenuItemService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.menuItemPrices, new MenuItemPriceService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.servingTimes, new ServingTimeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.sizes, new SizeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.tags, new TagService(realm));
@@ -74,6 +76,7 @@ export default class PackageBundleHelper {
     await this.cleanOldItems(new DishTypeService(realm));
     await this.cleanOldItems(new LanguageService(realm));
     await this.cleanOldItems(new MenuItemService(realm));
+    await this.cleanOldItems(new MenuItemPriceService(realm));
     await this.cleanOldItems(new ServingTimeService(realm));
     await this.cleanOldItems(new SizeService(realm));
     await this.cleanOldItems(new TagService(realm));
