@@ -1,6 +1,7 @@
 // @flow
 
 export ChoiceItemService from './ChoiceItemService';
+export ChoiceItemPriceService from './ChoiceItemPriceService';
 export DietaryOptionService from './DietaryOptionService';
 export DishTypeService from './DishTypeService';
 export LanguageService from './LanguageService';

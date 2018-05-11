@@ -22,6 +22,6 @@ export default class ChoiceItemService extends ServiceBase {
   };
 
   constructor(realm) {
-    super(realm, ChoiceItem, ChoiceItemService.buildSearchQuery, 'tag');
+    super(realm, ChoiceItem, ChoiceItemService.buildSearchQuery, 'choice item');
   }
 }

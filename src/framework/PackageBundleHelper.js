@@ -8,6 +8,7 @@ import { unzip } from 'react-native-zip-archive';
 import {
   realm,
   ChoiceItemService,
+  ChoiceItemPriceService,
   DietaryOptionService,
   DishTypeService,
   LanguageService,
@@ -55,6 +56,7 @@ export default class PackageBundleHelper {
 
   extractInfoToLocalDatabase = async packageBundleContent => {
     await this.extractItemsToLocalDatabase(packageBundleContent.choiceItems, new ChoiceItemService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.choiceItemPrices, new ChoiceItemPriceService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.dietaryOptions, new DietaryOptionService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.dishTypes, new DishTypeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.languages, new LanguageService(realm));
@@ -65,6 +67,7 @@ export default class PackageBundleHelper {
 
   cleanOldData = async () => {
     await this.cleanOldItems(new ChoiceItemService(realm));
+    await this.cleanOldItems(new ChoiceItemPriceService(realm));
     await this.cleanOldItems(new DietaryOptionService(realm));
     await this.cleanOldItems(new DishTypeService(realm));
     await this.cleanOldItems(new LanguageService(realm));
