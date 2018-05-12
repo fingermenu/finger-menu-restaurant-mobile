@@ -36,7 +36,7 @@ export default class ChoiceItem extends BaseObject {
     this.addMultiLanguagesStringValueFromObject(object, 'description');
     this.set('choiceItemPageUrl', object.choiceItemPageUrl);
     this.set('imageUrl', object.imageUrl);
-    this.set('tagIds', Immutable.fromJS(object.tagIds));
+    this.set('tagIds', Immutable.fromJS(object.tagIds.map(_ => _)));
   }
 
   updateInfo = info => {

@@ -16,6 +16,8 @@ const schema = Map({
     toBeServedWithMenuItemPriceIds: 'string[]',
     choiceItemPriceIds: 'string[]',
     defaultChoiceItemPriceIds: 'string[]',
+    toBeServedWithMenuItemPriceSortOrderIndices: 'SortOrderIndex[]',
+    choiceItemPriceSortOrderIndices: 'SortOrderIndex[]',
     rules: 'Rules?',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
@@ -43,13 +45,16 @@ export default class MenuItemPrice extends BaseObject {
     this.set('validFrom', object.validFrom);
     this.set('validUntil', object.validUntil);
     this.set('menuItemId', object.menuItemId);
-    this.set('tagIds', Immutable.fromJS(object.tagIds));
-    this.set('toBeServedWithMenuItemPriceIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds));
-    this.set('choiceItemPriceIds', Immutable.fromJS(object.choiceItemPriceIds));
-    this.set('defaultChoiceItemPriceIds', Immutable.fromJS(object.defaultChoiceItemPriceIds));
-    this.set('rules', new Rules(object.rules).getInfo());
+    this.set('tagIds', Immutable.fromJS(object.tagIds.map(_ => _)));
+    this.set('toBeServedWithMenuItemPriceIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds.map(_ => _)));
+    this.set('choiceItemPriceIds', Immutable.fromJS(object.choiceItemPriceIds.map(_ => _)));
+    this.set('defaultChoiceItemPriceIds', Immutable.fromJS(object.defaultChoiceItemPriceIds.map(_ => _)));
     this.addSortOrderIndexValueFromObject(object, 'toBeServedWithMenuItemPriceSortOrderIndices');
     this.addSortOrderIndexValueFromObject(object, 'choiceItemPriceSortOrderIndices');
+
+    const rules = object.rules;
+
+    this.set('rules', new Rules(rules ? rules : {}).getInfo());
   }
 
   updateInfo = info => {
@@ -64,9 +69,9 @@ export default class MenuItemPrice extends BaseObject {
     this.set('toBeServedWithMenuItemPriceIds', info.get('toBeServedWithMenuItemPriceIds'));
     this.set('choiceItemPriceIds', info.get('choiceItemPriceIds'));
     this.set('defaultChoiceItemPriceIds', info.get('defaultChoiceItemPriceIds'));
-    this.set('rules', info.get('rules'));
     this.addSortOrderIndexValueFromImmutableInfo(info, 'toBeServedWithMenuItemPriceSortOrderIndices');
     this.addSortOrderIndexValueFromImmutableInfo(info, 'choiceItemPriceSortOrderIndices');
+    this.set('rules', info.get('rules'));
   };
 
   getInfo = () =>

@@ -51,7 +51,7 @@ export default class BaseObject {
     }
   };
 
-  addMultiLanguagesStringValueFromObject = (object, columnName) => {
+  addSortOrderIndexValueFromObject = (object, columnName) => {
     this.set(columnName, object[columnName].map(_ => new SortOrderIndex(_).getInfo()));
   };
 
@@ -66,7 +66,7 @@ export default class BaseObject {
   };
 
   reduceSortOrderIndexList = list =>
-    list.reduce((reduction, languageAndValue) => reduction.set(languageAndValue.get('language'), languageAndValue.get('value')));
+    list.reduce((reduction, languageAndValue) => reduction.set(languageAndValue.get('language'), languageAndValue.get('value')), Map());
 
-  reduceSortOrderIndexList = list => list.reduce((reduction, idAndIndex) => reduction.set(idAndIndex.get('id'), idAndIndex.get('index')));
+  reduceSortOrderIndexList = list => list.reduce((reduction, idAndIndex) => reduction.set(idAndIndex.get('id'), idAndIndex.get('index')), Map());
 }
