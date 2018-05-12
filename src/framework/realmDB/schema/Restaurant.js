@@ -11,6 +11,10 @@ const schema = Map({
     pin: 'string',
     menuIds: 'string[]',
     menuSortOrderIndices: 'SortOrderIndex[]',
+    address: 'string?',
+    googleMapUrl: 'string?',
+    inheritParentRestaurantMenus: 'bool?',
+    parentRestaurantId: 'string?',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
 
@@ -37,6 +41,10 @@ export default class Restaurant extends BaseObject {
     this.set('pin', object.pin);
     this.set('menuIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds.map(_ => _)));
     this.addSortOrderIndexValueFromObject(object, 'menuSortOrderIndices');
+    this.set('address', object.address);
+    this.set('googleMapUrl', object.googleMapUrl);
+    this.set('inheritParentRestaurantMenus', object.inheritParentRestaurantMenus);
+    this.set('parentRestaurantId', object.parentRestaurantId);
   }
 
   updateInfo = info => {
@@ -47,6 +55,10 @@ export default class Restaurant extends BaseObject {
     this.set('pin', info.get('pin'));
     this.set('menuIds', info.get('menuIds'));
     this.addSortOrderIndexValueFromImmutableInfo(info, 'menuSortOrderIndices');
+    this.set('address', info.get('address'));
+    this.set('googleMapUrl', info.get('googleMapUrl'));
+    this.set('inheritParentRestaurantMenus', info.get('inheritParentRestaurantMenus'));
+    this.set('parentRestaurantId', info.get('parentRestaurantId'));
   };
 
   getInfo = () => this.object.update('name', this.reduceMultiLanguagesStringList).update('menuSortOrderIndices', this.reduceSortOrderIndexList);

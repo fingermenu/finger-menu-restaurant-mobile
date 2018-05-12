@@ -18,6 +18,8 @@ import Menu from './Menu';
 import MenuConnection, { getMenus } from './MenuConnection';
 import Table from './Table';
 import TableConnection, { getTables } from './TableConnection';
+import Restaurant from './Restaurant';
+import RestaurantConnection, { getRestaurants } from './RestaurantConnection';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -155,6 +157,26 @@ export default new GraphQLObjectType({
         sortOption: { type: GraphQLString },
       },
       resolve: async (_, args, { language }) => getTables(Immutable.fromJS(args), language),
+    },
+    restaurant: {
+      type: Restaurant,
+      args: {
+        restaurantId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { restaurantId }, { dataLoaders: { restaurantLoaderById } }) =>
+        restaurantId ? restaurantLoaderById.load(restaurantId) : null,
+    },
+    restaurants: {
+      type: RestaurantConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        restaurantIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        name: { type: GraphQLString },
+        status: { type: GraphQLBoolean },
+        inheritParentRestaurantMenus: { type: GraphQLBoolean },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args, { language }) => getRestaurants(Immutable.fromJS(args), language),
     },
   },
   interfaces: [NodeInterface],
