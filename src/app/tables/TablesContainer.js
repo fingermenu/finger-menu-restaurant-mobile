@@ -52,7 +52,7 @@ class TablesContainer extends Component {
     this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
 
     if (packageBundle.checksum.localeCompare(installedPackageBundleChecksum) !== 0) {
-      this.installLatestPackageBundle(packageBundle);
+      this.installLatestPackageBundle(installedPackageBundleChecksum, packageBundle);
     }
   };
 
@@ -79,9 +79,9 @@ class TablesContainer extends Component {
     );
   };
 
-  installLatestPackageBundle = async packageBundle => {
+  installLatestPackageBundle = async (installedPackageBundleChecksum, packageBundle) => {
     try {
-      await new PackageBundleHelper(this.props.installedPackageBundleChecksum, packageBundle).installPackageBundle();
+      await new PackageBundleHelper(installedPackageBundleChecksum, packageBundle).installPackageBundle();
 
       this.props.asyncStorageActions.writeValue(Map({ key: 'installedPackageBundleChecksum', value: packageBundle.checksum }));
     } catch (ex) {
