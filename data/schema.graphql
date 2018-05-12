@@ -73,7 +73,7 @@ type ChoiceItem implements Node {
   nameToPrint: String
   description: String
   descriptionToPrint: String
-  menuItemPageUrl: String
+  choiceItemPageUrl: String
   imageUrl: String
   tags: [Tag!]
 }
@@ -85,7 +85,6 @@ type ChoiceItemPrice implements Node {
   validFrom: String
   validUntil: String
   choiceItem: ChoiceItem
-  size: Size
   sortOrderIndex: Int
   tags: [Tag!]
 }
@@ -349,13 +348,13 @@ interface Node {
 type Order implements Node {
   id: ID!
   correlationId: ID
-  customers: [Customer!]
   notes: String
   placedAt: String!
   cancelledAt: String
   restaurant: Restaurant!
   table: Table
   details: [OrderMenuItemPrice!]
+  customers: [Customer!]
 }
 
 type OrderChoiceItemPrice {
@@ -770,8 +769,6 @@ type User implements Node {
   id: ID!
   tag(tagId: ID!): Tag
   tags(after: String, first: Int, before: String, last: Int, tagIds: [ID!], name: String, description: String, level: Int, forDisplay: Boolean, sortOption: String): TagTypeConnection
-  menu(menuId: ID!): Menu
-  menus(after: String, first: Int, before: String, last: Int, menuIds: [ID!], restaurantId: ID, name: String, description: String, sortOption: String): MenuTypeConnection
   choiceItem(choiceItemId: ID!): ChoiceItem
   choiceItems(after: String, first: Int, before: String, last: Int, choiceItemIds: [ID!], name: String, description: String, sortOption: String): ChoiceItemTypeConnection
   choiceItemPrice(choiceItemPriceId: ID!): ChoiceItemPrice
@@ -780,10 +777,12 @@ type User implements Node {
   menuItems(after: String, first: Int, before: String, last: Int, menuItemIds: [ID!], name: String, description: String, sortOption: String): MenuItemTypeConnection
   menuItemPrice(menuItemPriceId: ID!): MenuItemPrice
   menuItemPrices(after: String, first: Int, before: String, last: Int, menuItemPriceIds: [ID!], menuId: ID, sortOption: String): MenuItemPriceTypeConnection
-  restaurant(restaurantId: ID!): Restaurant
-  restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
+  menu(menuId: ID!): Menu
+  menus(after: String, first: Int, before: String, last: Int, menuIds: [ID!], restaurantId: ID, name: String, description: String, sortOption: String): MenuTypeConnection
   table(tableId: ID!): Table
   tables(after: String, first: Int, before: String, last: Int, tableIds: [ID!], restaurantId: ID!, lastOrderCorrelationId: ID, name: String, notes: String, tableState: String, sortOption: String): TableTypeConnection
+  restaurant(restaurantId: ID!): Restaurant
+  restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   order(orderId: ID!): Order
   orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, notes: String, sortOption: String): OrderTypeConnection
   servingTime(servingTimeId: ID!): ServingTime
