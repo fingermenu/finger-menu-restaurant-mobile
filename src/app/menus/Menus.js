@@ -8,7 +8,7 @@ import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { environment } from '../../framework/relay';
+import { offlineEnvironment as environment } from '../../framework/relay';
 import MenusRelayContainer from './MenusRelayContainer';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 import packageInfo from '../../../package.json';

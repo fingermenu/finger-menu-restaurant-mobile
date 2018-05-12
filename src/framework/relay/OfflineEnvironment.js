@@ -2,13 +2,59 @@
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { graphql } from 'graphql';
-import { getRootSchema } from '../graphql';
+import {
+  getRootSchema,
+  configLoaderByKey,
+  choiceItemLoaderById,
+  choiceItemPriceLoaderById,
+  dietaryOptionLoaderById,
+  dishTypeLoaderById,
+  languageLoaderByKey,
+  languageLoaderById,
+  menuLoaderById,
+  menuItemLoaderById,
+  menuItemPriceLoaderById,
+  restaurantLoaderById,
+  servingTimeLoaderById,
+  sizeLoaderById,
+  tableLoaderById,
+  tableStateLoaderByKey,
+  tableStateLoaderById,
+  tagLoaderById,
+} from '../graphql';
 import i18n from '../../i18n';
 
 const rootSchema = getRootSchema();
 
 const fetchOfflineQuery = async (operation, variables) => {
-  const result = await graphql(rootSchema, operation.text, undefined, { language: i18n.language }, variables);
+  const result = await graphql(
+    rootSchema,
+    operation.text,
+    undefined,
+    {
+      language: i18n.language,
+      dataLoaders: {
+        configLoaderByKey,
+        choiceItemLoaderById,
+        choiceItemPriceLoaderById,
+        dietaryOptionLoaderById,
+        dishTypeLoaderById,
+        languageLoaderByKey,
+        languageLoaderById,
+        menuLoaderById,
+        menuItemLoaderById,
+        menuItemPriceLoaderById,
+        restaurantLoaderById,
+        servingTimeLoaderById,
+        sizeLoaderById,
+        tableLoaderById,
+        tableStateLoaderByKey,
+        tableStateLoaderById,
+        tagLoaderById,
+      },
+    },
+    variables,
+  );
 
   if (result.errors && result.errors.length > 0) {
     throw new Error(result.errors.map(error => error.message).reduce((reduction, message) => `${reduction}\n${message}`));
