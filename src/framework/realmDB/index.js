@@ -15,6 +15,7 @@ import {
   ServingTime,
   SortOrderIndex,
   Size,
+  Table,
   Tag,
 } from './schema';
 
@@ -29,6 +30,7 @@ export {
   MenuItemPriceService,
   ServingTimeService,
   SizeService,
+  TableService,
   TagService,
 } from './services';
 
@@ -47,6 +49,7 @@ export const realm = new Realm({
     ServingTime.getSchema(),
     SortOrderIndex.getSchema(),
     Size.getSchema(),
+    Table.getSchema(),
     Tag.getSchema(),
   ],
   deleteRealmIfMigrationNeeded: true,

@@ -13,4 +13,5 @@ export Rules from './Rules';
 export ServingTime from './ServingTime';
 export SortOrderIndex from './SortOrderIndex';
 export Size from './Size';
+export Table from './Table';
 export Tag from './Tag';

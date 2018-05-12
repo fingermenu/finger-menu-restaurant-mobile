@@ -10,4 +10,5 @@ export MenuItemService from './MenuItemService';
 export MenuItemPriceService from './MenuItemPriceService';
 export ServingTimeService from './ServingTimeService';
 export SizeService from './SizeService';
+export TableService from './TableService';
 export TagService from './TagService';
