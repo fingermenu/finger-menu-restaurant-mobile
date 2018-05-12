@@ -24,8 +24,8 @@ import {
 } from './realmDB';
 
 export default class PackageBundleHelper {
-  constructor(oldPackageBundle, newPackageBundle) {
-    this.oldPackageBundle = oldPackageBundle;
+  constructor(oldPackageBundleChecksum, newPackageBundle) {
+    this.oldPackageBundleChecksum = oldPackageBundleChecksum;
     this.newPackageBundle = newPackageBundle;
   }
 
@@ -49,7 +49,7 @@ export default class PackageBundleHelper {
 
       await this.extractInfoToLocalDatabase(JSON.parse(await RNFS.readFile(extractedDirectory + '/data.json')));
 
-      if (this.oldPackageBundle && this.oldPackageBundle.checksum) {
+      if (this.oldPackageBundleChecksum) {
         await this.cleanOldData();
       }
     } finally {
@@ -106,6 +106,6 @@ export default class PackageBundleHelper {
   };
 
   cleanOldItems = async service => {
-    await service.bulkDelete(Map({ conditions: Map({ packageBundleChecksum: this.oldPackageBundle.checksum }) }));
+    await service.bulkDelete(Map({ conditions: Map({ packageBundleChecksum: this.oldPackageBundleChecksum }) }));
   };
 }

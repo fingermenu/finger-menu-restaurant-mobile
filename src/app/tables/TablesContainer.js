@@ -81,7 +81,9 @@ class TablesContainer extends Component {
 
   installLatestPackageBundle = async packageBundle => {
     try {
-      await new PackageBundleHelper(packageBundle, packageBundle).installPackageBundle();
+      await new PackageBundleHelper(this.props.installedPackageBundleChecksum, packageBundle).installPackageBundle();
+
+      this.props.asyncStorageActions.writeValue(Map({ key: 'installedPackageBundleChecksum', value: packageBundle.checksum }));
     } catch (ex) {
       this.props.notificationActions.add(ex.message, NotificationType.ERROR);
     }
