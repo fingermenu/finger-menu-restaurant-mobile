@@ -134,7 +134,6 @@ export default new GraphQLObjectType({
         description: { type: GraphQLString },
         sortOption: { type: GraphQLString },
       },
-
       resolve: async (_, args, { dataLoaders, language }) => getMenus(Immutable.fromJS(args), dataLoaders, language),
     },
   },
