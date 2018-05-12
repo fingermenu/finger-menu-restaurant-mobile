@@ -20,6 +20,14 @@ import Table from './Table';
 import TableConnection, { getTables } from './TableConnection';
 import Restaurant from './Restaurant';
 import RestaurantConnection, { getRestaurants } from './RestaurantConnection';
+import ServingTime from './ServingTime';
+import ServingTimeConnection, { getServingTimes } from './ServingTimeConnection';
+import DietaryOption from './DietaryOption';
+import DietaryOptionConnection, { getDietaryOptions } from './DietaryOptionConnection';
+import Size from './Size';
+import SizeConnection, { getSizes } from './SizeConnection';
+import DishType from './DishType';
+import DishTypeConnection, { getDishTypes } from './DishTypeConnection';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -177,6 +185,72 @@ export default new GraphQLObjectType({
         sortOption: { type: GraphQLString },
       },
       resolve: async (_, args, { language }) => getRestaurants(Immutable.fromJS(args), language),
+    },
+    servingTime: {
+      type: ServingTime,
+      args: {
+        servingTimeId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { servingTimeId }, { dataLoaders: { servingTimeLoaderById } }) =>
+        servingTimeId ? servingTimeLoaderById.load(servingTimeId) : null,
+    },
+    servingTimes: {
+      type: ServingTimeConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        servingTimeIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args) => getServingTimes(Immutable.fromJS(args)),
+    },
+    dietaryOption: {
+      type: DietaryOption,
+      args: {
+        dietaryOptionId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { dietaryOptionId }, { dataLoaders: { dietaryOptionLoaderById } }) =>
+        dietaryOptionId ? dietaryOptionLoaderById.load(dietaryOptionId) : null,
+    },
+    dietaryOptions: {
+      type: DietaryOptionConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        dietaryOptionIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args) => getDietaryOptions(Immutable.fromJS(args)),
+    },
+    size: {
+      type: Size,
+      args: {
+        sizeId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { sizeId }, { dataLoaders: { sizeLoaderById } }) => (sizeId ? sizeLoaderById.load(sizeId) : null),
+    },
+    sizes: {
+      type: SizeConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        sizeIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args) => getSizes(Immutable.fromJS(args)),
+    },
+    dishType: {
+      type: DishType,
+      args: {
+        dishTypeId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { dishTypeId }, { dataLoaders: { dishTypeLoaderById } }) => (dishTypeId ? dishTypeLoaderById.load(dishTypeId) : null),
+    },
+    dishTypes: {
+      type: DishTypeConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        dishTypeIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args) => getDishTypes(Immutable.fromJS(args)),
     },
   },
   interfaces: [NodeInterface],
