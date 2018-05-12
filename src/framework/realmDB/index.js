@@ -12,6 +12,7 @@ import {
   MultiLanguagesString,
   Rules,
   ServingTime,
+  SortOrderIndex,
   Size,
   Tag,
 } from './schema';
@@ -41,6 +42,7 @@ export const realm = new Realm({
     MultiLanguagesString.getSchema(),
     Rules.getSchema(),
     ServingTime.getSchema(),
+    SortOrderIndex.getSchema(),
     Size.getSchema(),
     Tag.getSchema(),
   ],

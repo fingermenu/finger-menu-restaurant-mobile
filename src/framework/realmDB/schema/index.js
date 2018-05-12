@@ -10,5 +10,6 @@ export MenuItemPrice from './MenuItemPrice';
 export MultiLanguagesString from './MultiLanguagesString';
 export Rules from './Rules';
 export ServingTime from './ServingTime';
+export SortOrderIndex from './SortOrderIndex';
 export Size from './Size';
 export Tag from './Tag';
