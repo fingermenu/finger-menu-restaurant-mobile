@@ -48,7 +48,10 @@ export default class PackageBundleHelper {
       jsonFileExtracted = true;
 
       await this.extractInfoToLocalDatabase(JSON.parse(await RNFS.readFile(extractedDirectory + '/data.json')));
-      await this.cleanOldData();
+
+      if (this.oldPackageBundle && this.oldPackageBundle.checksum) {
+        await this.cleanOldData();
+      }
     } finally {
       if (zipFile) {
         await RNFS.unlink(zipFile.path());
