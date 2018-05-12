@@ -12,6 +12,8 @@ import ChoiceItemPrice from './ChoiceItemPrice';
 import ChoiceItemPriceConnection, { getChoiceItemPrices } from './ChoiceItemPriceConnection';
 import MenuItem from './MenuItem';
 import MenuItemConnection, { getMenuItems } from './MenuItemConnection';
+import MenuItemPrice from './MenuItemPrice';
+import MenuItemPriceConnection, { getMenuItemPrices } from './MenuItemPriceConnection';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -94,6 +96,24 @@ export default new GraphQLObjectType({
         sortOption: { type: GraphQLString },
       },
       resolve: async (_, args, { language }) => getMenuItems(Immutable.fromJS(args), language),
+    },
+    menuItemPrice: {
+      type: MenuItemPrice,
+      args: {
+        menuItemPriceId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { menuItemPriceId }, { dataLoaders: { menuItemPriceLoaderById } }) =>
+        menuItemPriceId ? menuItemPriceLoaderById.load(menuItemPriceId) : null,
+    },
+    menuItemPrices: {
+      type: MenuItemPriceConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        menuItemPriceIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        menuId: { type: GraphQLID },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args, { dataLoaders }) => getMenuItemPrices(Immutable.fromJS(args), dataLoaders),
     },
   },
   interfaces: [NodeInterface],
