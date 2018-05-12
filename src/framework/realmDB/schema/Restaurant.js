@@ -5,6 +5,7 @@ import BaseObject from './BaseObject';
 import RestaurantImages from './RestaurantImages';
 import Printer from './Printer';
 import DocumentTemplate from './DocumentTemplate';
+import Phone from './Phone';
 
 const schema = Map({
   name: 'Restaurant',
@@ -19,6 +20,7 @@ const schema = Map({
     inheritParentRestaurantMenus: 'bool?',
     parentRestaurantId: 'string?',
     configurations: 'RestaurantConfigurations',
+    phones: 'Phone[]',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
 
@@ -43,7 +45,7 @@ export default class Restaurant extends BaseObject {
     this.addMultiLanguagesStringValueFromObject(object, 'name');
     this.set('websiteUrl', object.websiteUrl);
     this.set('pin', object.pin);
-    this.set('menuIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds.map(_ => _)));
+    this.set('menuIds', Immutable.fromJS(object.menuIds.map(_ => _)));
     this.addSortOrderIndexValueFromObject(object, 'menuSortOrderIndices');
     this.set('address', object.address);
     this.set('googleMapUrl', object.googleMapUrl);
@@ -70,6 +72,10 @@ export default class Restaurant extends BaseObject {
         }),
       );
     }
+
+    const phones = object.phones;
+
+    this.set('phones', phones ? Immutable.fromJS(phones.map(_ => new Phone(_).getInfo())) : List());
   }
 
   updateInfo = info => {
@@ -85,6 +91,7 @@ export default class Restaurant extends BaseObject {
     this.set('inheritParentRestaurantMenus', info.get('inheritParentRestaurantMenus'));
     this.set('parentRestaurantId', info.get('parentRestaurantId'));
     this.set('configurations', info.get('configurations'));
+    this.set('phones', info.get('phones') ? info.get('phones') : List());
   };
 
   getInfo = () => this.object.update('name', this.reduceMultiLanguagesStringList).update('menuSortOrderIndices', this.reduceSortOrderIndexList);
