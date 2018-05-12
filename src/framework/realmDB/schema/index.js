@@ -15,4 +15,5 @@ export ServingTime from './ServingTime';
 export SortOrderIndex from './SortOrderIndex';
 export Size from './Size';
 export Table from './Table';
+export TableState from './TableState';
 export Tag from './Tag';

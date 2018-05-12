@@ -19,6 +19,7 @@ import {
   ServingTimeService,
   SizeService,
   TableService,
+  TableStateService,
   TagService,
 } from './realmDB';
 
@@ -72,6 +73,7 @@ export default class PackageBundleHelper {
     await this.extractItemsToLocalDatabase(packageBundleContent.servingTimes, new ServingTimeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.sizes, new SizeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.tables, new TableService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.tableStates, new TableStateService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.tags, new TagService(realm));
   };
 
@@ -88,6 +90,7 @@ export default class PackageBundleHelper {
     await this.cleanOldItems(new ServingTimeService(realm));
     await this.cleanOldItems(new SizeService(realm));
     await this.cleanOldItems(new TableService(realm));
+    await this.cleanOldItems(new TableStateService(realm));
     await this.cleanOldItems(new TagService(realm));
   };
 

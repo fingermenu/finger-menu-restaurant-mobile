@@ -12,4 +12,5 @@ export RestaurantService from './RestaurantService';
 export ServingTimeService from './ServingTimeService';
 export SizeService from './SizeService';
 export TableService from './TableService';
+export TableStateService from './TableStateService';
 export TagService from './TagService';

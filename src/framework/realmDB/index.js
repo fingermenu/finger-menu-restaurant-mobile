@@ -17,6 +17,7 @@ import {
   SortOrderIndex,
   Size,
   Table,
+  TableState,
   Tag,
 } from './schema';
 
@@ -33,6 +34,7 @@ export {
   ServingTimeService,
   SizeService,
   TableService,
+  TableStateService,
   TagService,
 } from './services';
 
@@ -52,6 +54,7 @@ export const realm = new Realm({
     ServingTime.getSchema(),
     SortOrderIndex.getSchema(),
     Size.getSchema(),
+    TableState.getSchema(),
     Table.getSchema(),
     Tag.getSchema(),
   ],
