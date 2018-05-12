@@ -22,6 +22,6 @@ export default class MenuItemPriceService extends ServiceBase {
   };
 
   constructor(realm) {
-    super(realm, MenuItemPrice, MenuItemPriceService.buildSearchQuery, 'choice item price');
+    super(realm, MenuItemPrice, MenuItemPriceService.buildSearchQuery, 'menu item price');
   }
 }

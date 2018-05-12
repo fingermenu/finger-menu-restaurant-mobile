@@ -1,9 +1,9 @@
 // @flow
 
 import ServiceBase from './ServiceBase';
-import { MenuItem } from '../schema';
+import { Menu } from '../schema';
 
-export default class MenuItemService extends ServiceBase {
+export default class MenuService extends ServiceBase {
   static buildSearchQuery = (criteria, queryAndParams) => {
     if (!criteria.has('conditions')) {
       return queryAndParams;
@@ -15,13 +15,13 @@ export default class MenuItemService extends ServiceBase {
 
     newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'name', 'name', language);
     newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'description', 'description', language);
-    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'menuItemPageUrl', 'menuItemPageUrl');
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'menuPageUrl', 'menuPageUrl');
     newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'imageUrl', 'imageUrl');
 
     return newQueryAndParams;
   };
 
   constructor(realm) {
-    super(realm, MenuItem, MenuItemService.buildSearchQuery, 'menu item');
+    super(realm, Menu, MenuService.buildSearchQuery, 'menu');
   }
 }
