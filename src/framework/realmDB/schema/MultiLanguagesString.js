@@ -13,7 +13,7 @@ const schema = {
 export default class MultiLanguagesString {
   static getSchema = () => schema;
 
-  constructor(language, value) {
+  constructor({ language, value }) {
     this.object = Map({ language, value });
   }
 

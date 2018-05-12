@@ -2,6 +2,7 @@
 
 import Immutable, { Map } from 'immutable';
 import BaseObject from './BaseObject';
+import Rules from './Rules';
 
 const schema = Map({
   name: 'MenuItemPrice',
@@ -46,7 +47,9 @@ export default class MenuItemPrice extends BaseObject {
     this.set('toBeServedWithMenuItemPriceIds', Immutable.fromJS(object.toBeServedWithMenuItemPriceIds));
     this.set('choiceItemPriceIds', Immutable.fromJS(object.choiceItemPriceIds));
     this.set('defaultChoiceItemPriceIds', Immutable.fromJS(object.defaultChoiceItemPriceIds));
-    this.set('rules', Immutable.fromJS(object.rules));
+    this.set('rules', new Rules(object.rules).getInfo());
+    this.addSortOrderIndexValueFromObject(object, 'toBeServedWithMenuItemPriceSortOrderIndices');
+    this.addSortOrderIndexValueFromObject(object, 'choiceItemPriceSortOrderIndices');
   }
 
   updateInfo = info => {
@@ -62,7 +65,12 @@ export default class MenuItemPrice extends BaseObject {
     this.set('choiceItemPriceIds', info.get('choiceItemPriceIds'));
     this.set('defaultChoiceItemPriceIds', info.get('defaultChoiceItemPriceIds'));
     this.set('rules', info.get('rules'));
+    this.addSortOrderIndexValueFromImmutableInfo(info, 'toBeServedWithMenuItemPriceSortOrderIndices');
+    this.addSortOrderIndexValueFromImmutableInfo(info, 'choiceItemPriceSortOrderIndices');
   };
 
-  getInfo = () => this.object;
+  getInfo = () =>
+    this.object
+      .update('toBeServedWithMenuItemPriceSortOrderIndices', this.reduceSortOrderIndexList)
+      .update('choiceItemPriceSortOrderIndices', this.reduceSortOrderIndexList);
 }
