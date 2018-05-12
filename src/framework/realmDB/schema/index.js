@@ -9,6 +9,7 @@ export Menu from './Menu';
 export MenuItem from './MenuItem';
 export MenuItemPrice from './MenuItemPrice';
 export MultiLanguagesString from './MultiLanguagesString';
+export Restaurant from './Restaurant';
 export Rules from './Rules';
 export ServingTime from './ServingTime';
 export SortOrderIndex from './SortOrderIndex';

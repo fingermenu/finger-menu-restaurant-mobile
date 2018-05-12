@@ -15,6 +15,7 @@ import {
   MenuService,
   MenuItemService,
   MenuItemPriceService,
+  RestaurantService,
   ServingTimeService,
   SizeService,
   TableService,
@@ -67,6 +68,7 @@ export default class PackageBundleHelper {
     await this.extractItemsToLocalDatabase(packageBundleContent.menus, new MenuService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.menuItems, new MenuItemService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.menuItemPrices, new MenuItemPriceService(realm));
+    await this.extractItemsToLocalDatabase(packageBundleContent.restaurants, new RestaurantService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.servingTimes, new ServingTimeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.sizes, new SizeService(realm));
     await this.extractItemsToLocalDatabase(packageBundleContent.tables, new TableService(realm));
@@ -82,6 +84,7 @@ export default class PackageBundleHelper {
     await this.cleanOldItems(new MenuService(realm));
     await this.cleanOldItems(new MenuItemService(realm));
     await this.cleanOldItems(new MenuItemPriceService(realm));
+    await this.cleanOldItems(new RestaurantService(realm));
     await this.cleanOldItems(new ServingTimeService(realm));
     await this.cleanOldItems(new SizeService(realm));
     await this.cleanOldItems(new TableService(realm));

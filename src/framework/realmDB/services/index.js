@@ -8,6 +8,7 @@ export LanguageService from './LanguageService';
 export MenuService from './MenuService';
 export MenuItemService from './MenuItemService';
 export MenuItemPriceService from './MenuItemPriceService';
+export RestaurantService from './RestaurantService';
 export ServingTimeService from './ServingTimeService';
 export SizeService from './SizeService';
 export TableService from './TableService';
