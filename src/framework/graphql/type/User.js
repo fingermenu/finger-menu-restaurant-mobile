@@ -14,6 +14,8 @@ import MenuItem from './MenuItem';
 import MenuItemConnection, { getMenuItems } from './MenuItemConnection';
 import MenuItemPrice from './MenuItemPrice';
 import MenuItemPriceConnection, { getMenuItemPrices } from './MenuItemPriceConnection';
+import Menu from './Menu';
+import MenuConnection, { getMenus } from './MenuConnection';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -114,6 +116,26 @@ export default new GraphQLObjectType({
         sortOption: { type: GraphQLString },
       },
       resolve: async (_, args, { dataLoaders }) => getMenuItemPrices(Immutable.fromJS(args), dataLoaders),
+    },
+    menu: {
+      type: Menu,
+      args: {
+        menuId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { menuId }, { dataLoaders: { menuLoaderById } }) => (menuId ? menuLoaderById.load(menuId) : null),
+    },
+    menus: {
+      type: MenuConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        menuIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        restaurantId: { type: GraphQLID },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        sortOption: { type: GraphQLString },
+      },
+
+      resolve: async (_, args, { dataLoaders, language }) => getMenus(Immutable.fromJS(args), dataLoaders, language),
     },
   },
   interfaces: [NodeInterface],
