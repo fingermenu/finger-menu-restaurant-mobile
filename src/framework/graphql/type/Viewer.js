@@ -50,7 +50,7 @@ export default new GraphQLObjectType({
         name: { type: GraphQLString },
         sortOption: { type: GraphQLString },
       },
-      resolve: async (_, args, { sessionToken, language }) => getTableStates(Immutable.fromJS(args), sessionToken, language),
+      resolve: async (_, args, { language }) => getTableStates(Immutable.fromJS(args), language),
     },
   },
   interfaces: [NodeInterface],

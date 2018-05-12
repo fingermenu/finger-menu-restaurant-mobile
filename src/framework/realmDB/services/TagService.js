@@ -15,6 +15,9 @@ export default class TagService extends ServiceBase {
 
     newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'name', 'name', language);
     newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'description', 'description', language);
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'level', 'level');
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'forDisplay', 'forDisplay');
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'parentTagId', 'parentTagId');
 
     return newQueryAndParams;
   };

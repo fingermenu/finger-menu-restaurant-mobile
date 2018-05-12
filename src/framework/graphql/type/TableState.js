@@ -5,7 +5,7 @@ import { realm, TableStateService } from '../../realmDB';
 import { NodeInterface } from '../interface';
 import Common from './Common';
 
-export const getTableState = async (tableStateId, sessionToken) => new TableStateService(realm).read(tableStateId, null, sessionToken);
+export const getTableState = async tableStateId => new TableStateService(realm).read(tableStateId);
 
 export default new GraphQLObjectType({
   name: 'TableState',
