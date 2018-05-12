@@ -36,7 +36,7 @@ export default class Common {
     };
   };
 
-  static getTranslation = async (info, columnName, language, configLoader) => {
+  static getTranslation = async (info, columnName, language, configLoaderByKey) => {
     const allValues = info.get(columnName);
 
     if (!allValues) {
@@ -47,16 +47,16 @@ export default class Common {
       return allValues.get(language);
     }
 
-    return allValues.get(await configLoader.load('fallbackLanguage'));
+    return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
 
-  static getTranslationToPrint = async (info, columnName, configLoader) => {
+  static getTranslationToPrint = async (info, columnName, configLoaderByKey) => {
     const allValues = info.get(columnName);
 
     if (!allValues) {
       return null;
     }
 
-    return allValues.get(await configLoader.load('fallbackLanguage'));
+    return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
 }

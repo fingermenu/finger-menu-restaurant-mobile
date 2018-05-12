@@ -13,7 +13,9 @@ export default class TableStateService extends ServiceBase {
     const language = criteria.get('language');
     let newQueryAndParams = queryAndParams;
 
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'key', 'key');
     newQueryAndParams = ServiceBase.addMultiLanguagesStringQuery(conditions, newQueryAndParams, 'name', 'name', language);
+    newQueryAndParams = ServiceBase.addEqualityQuery(conditions, newQueryAndParams, 'imageUrl', 'imageUrl');
 
     return newQueryAndParams;
   };
