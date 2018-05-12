@@ -32,9 +32,9 @@ export default new GraphQLObjectType({
       type: GraphQLString,
       resolve: async (_, args, { dataLoaders: { configLoaderByKey } }) => Common.getTranslationToPrint(_, 'description', configLoaderByKey),
     },
-    menuItemPageUrl: {
+    choiceItemPageUrl: {
       type: GraphQLString,
-      resolve: async _ => _.get('menuItemPageUrl'),
+      resolve: async _ => _.get('choiceItemPageUrl'),
     },
     imageUrl: {
       type: GraphQLString,
