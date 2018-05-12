@@ -1,7 +1,10 @@
 // @flow
 
-import Immutable, { Map } from 'immutable';
+import Immutable, { List, Map } from 'immutable';
 import BaseObject from './BaseObject';
+import RestaurantImages from './RestaurantImages';
+import Printer from './Printer';
+import DocumentTemplate from './DocumentTemplate';
 
 const schema = Map({
   name: 'Restaurant',
@@ -15,6 +18,7 @@ const schema = Map({
     googleMapUrl: 'string?',
     inheritParentRestaurantMenus: 'bool?',
     parentRestaurantId: 'string?',
+    configurations: 'RestaurantConfigurations',
   }).merge(BaseObject.getBaseSchema()),
 }).toJS();
 
@@ -45,6 +49,27 @@ export default class Restaurant extends BaseObject {
     this.set('googleMapUrl', object.googleMapUrl);
     this.set('inheritParentRestaurantMenus', object.inheritParentRestaurantMenus);
     this.set('parentRestaurantId', object.parentRestaurantId);
+
+    const configurations = object.configurations;
+
+    if (configurations) {
+      const images = configurations.images ? new RestaurantImages(configurations.images).getInfo() : Map();
+      const printers = configurations.printers ? Immutable.fromJS(configurations.printers.map(_ => new Printer(_).getInfo())) : List();
+      const documentTemplates = configurations.documentTemplates
+        ? Immutable.fromJS(configurations.documentTemplates.map(_ => new DocumentTemplate(_).getInfo()))
+        : List();
+
+      this.set(
+        'configurations',
+        Map({
+          images,
+          printers,
+          documentTemplates,
+          numberOfPrintCopiesForKitchen: configurations.numberOfPrintCopiesForKitchen,
+          gstPercentage: configurations.gstPercentage,
+        }),
+      );
+    }
   }
 
   updateInfo = info => {
@@ -59,6 +84,7 @@ export default class Restaurant extends BaseObject {
     this.set('googleMapUrl', info.get('googleMapUrl'));
     this.set('inheritParentRestaurantMenus', info.get('inheritParentRestaurantMenus'));
     this.set('parentRestaurantId', info.get('parentRestaurantId'));
+    this.set('configurations', info.get('configurations'));
   };
 
   getInfo = () => this.object.update('name', this.reduceMultiLanguagesStringList).update('menuSortOrderIndices', this.reduceSortOrderIndexList);
