@@ -8,6 +8,10 @@ import Tag from './Tag';
 import TagConnection, { getTags } from './TagConnection';
 import ChoiceItem from './ChoiceItem';
 import ChoiceItemConnection, { getChoiceItems } from './ChoiceItemConnection';
+import ChoiceItemPrice from './ChoiceItemPrice';
+import ChoiceItemPriceConnection, { getChoiceItemPrices } from './ChoiceItemPriceConnection';
+import MenuItem from './MenuItem';
+import MenuItemConnection, { getMenuItems } from './MenuItemConnection';
 
 export default new GraphQLObjectType({
   name: 'User',
@@ -54,6 +58,42 @@ export default new GraphQLObjectType({
         sortOption: { type: GraphQLString },
       },
       resolve: async (_, args, { language }) => getChoiceItems(Immutable.fromJS(args), language),
+    },
+    choiceItemPrice: {
+      type: ChoiceItemPrice,
+      args: {
+        choiceItemPriceId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { choiceItemPriceId }, { dataLoaders: { choiceItemPriceLoaderById } }) =>
+        choiceItemPriceId ? choiceItemPriceLoaderById.load(choiceItemPriceId) : null,
+    },
+    choiceItemPrices: {
+      type: ChoiceItemPriceConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        choiceItemPriceIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        menuItemPriceId: { type: GraphQLID },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args, { dataLoaders }) => getChoiceItemPrices(Immutable.fromJS(args), dataLoaders),
+    },
+    menuItem: {
+      type: MenuItem,
+      args: {
+        menuItemId: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (_, { menuItemId }, { dataLoaders: { menuItemLoaderById } }) => (menuItemId ? menuItemLoaderById.load(menuItemId) : null),
+    },
+    menuItems: {
+      type: MenuItemConnection.connectionType,
+      args: {
+        ...connectionArgs,
+        menuItemIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLID)) },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        sortOption: { type: GraphQLString },
+      },
+      resolve: async (_, args, { language }) => getMenuItems(Immutable.fromJS(args), language),
     },
   },
   interfaces: [NodeInterface],
