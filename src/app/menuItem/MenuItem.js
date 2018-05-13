@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { graphql, QueryRenderer } from 'react-relay';
 import MenuItemRelayContainer from './MenuItemRelayContainer';
-import { environment } from '../../framework/relay';
+import { offlineEnvironment as environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 import packageInfo from '../../../package.json';
