@@ -53,7 +53,6 @@ export default createRefetchContainer(
                 quantity
                 notes
                 customer {
-                  name
                   id
                 }
                 paid
