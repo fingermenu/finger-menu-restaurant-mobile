@@ -24,6 +24,27 @@ import {
 } from './realmDB';
 
 export default class PackageBundleHelper {
+  static cleanAllData = async () => {
+    await PackageBundleHelper.cleanAllItems(new ChoiceItemService(realm));
+    await PackageBundleHelper.cleanAllItems(new ChoiceItemPriceService(realm));
+    await PackageBundleHelper.cleanAllItems(new DietaryOptionService(realm));
+    await PackageBundleHelper.cleanAllItems(new DishTypeService(realm));
+    await PackageBundleHelper.cleanAllItems(new LanguageService(realm));
+    await PackageBundleHelper.cleanAllItems(new MenuService(realm));
+    await PackageBundleHelper.cleanAllItems(new MenuItemService(realm));
+    await PackageBundleHelper.cleanAllItems(new MenuItemPriceService(realm));
+    await PackageBundleHelper.cleanAllItems(new RestaurantService(realm));
+    await PackageBundleHelper.cleanAllItems(new ServingTimeService(realm));
+    await PackageBundleHelper.cleanAllItems(new SizeService(realm));
+    await PackageBundleHelper.cleanAllItems(new TableService(realm));
+    await PackageBundleHelper.cleanAllItems(new TableStateService(realm));
+    await PackageBundleHelper.cleanAllItems(new TagService(realm));
+  };
+
+  static cleanAllItems = async service => {
+    await service.bulkDelete(Map({ conditions: Map({}) }));
+  };
+
   constructor(oldPackageBundleChecksum, newPackageBundle) {
     this.oldPackageBundleChecksum = oldPackageBundleChecksum;
     this.newPackageBundle = newPackageBundle;
