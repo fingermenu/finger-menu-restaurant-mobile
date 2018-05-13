@@ -14,9 +14,6 @@ export default createRefetchContainer(
             id
             name
             sortOrderIndex
-            tags {
-              id
-            }
           }
         }
       }
