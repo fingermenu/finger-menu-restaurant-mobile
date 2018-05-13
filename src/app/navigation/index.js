@@ -11,7 +11,7 @@ import { SignUpSignInContainer } from '@microbusiness/common-react-native';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addNavigationHelpers, NavigationActions, StackNavigator } from 'react-navigation';
+import { NavigationActions, StackNavigator } from 'react-navigation';
 import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { bindActionCreators } from 'redux';
 import { Alert, BackHandler, Platform, View } from 'react-native';
@@ -269,11 +269,11 @@ class AppWithNavigationState extends Component {
         <View />
       </PopupDialog>
       <AppNavigator
-        navigation={addNavigationHelpers({
+        navigation={{
           dispatch: this.props.dispatch,
           state: this.props.navigation,
           addListener,
-        })}
+        }}
       />
     </View>
   );
