@@ -53,7 +53,7 @@ class MenusContainer extends Component {
 
   getMenusTabConfig = () => {
     const MenusTabConfig = {
-      lazy: true,
+      lazy: false,
       tabBarPosition: 'top',
       ...TabNavigator.Presets.AndroidTopTabs,
       initialRouteName: this.props.menuId,
