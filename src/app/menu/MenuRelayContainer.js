@@ -31,9 +31,6 @@ export default createRefetchContainer(
           }
         }
         menu(menuId: $menuId) {
-          id
-          name
-          sortOrderIndex
           menuItemPrices {
             id
             currentPrice
