@@ -27,7 +27,7 @@ class MenuView extends Component {
   );
 
   render = () => {
-    const { t, dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onPlaceOrderPressed } = this.props;
+    const { t, dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onViewOrderPressed } = this.props;
     const dishTypesWithMenuItemPrices = dishTypes.map(dishType => dishType.tag).map(tag => ({
       tag,
       menuItemPrices: menuItemPrices.filter(menuItemPrice => !!menuItemPrice.tags.find(_ => _.id.localeCompare(tag.id) === 0)),
@@ -62,7 +62,8 @@ class MenuView extends Component {
                 </View>
               ),
           )}
-          {menuItemPrices.length !== menuItemPricesWithoutDishType.length && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
+          {menuItemPrices.length !== menuItemPricesWithoutDishType.length &&
+            menuItemPricesWithoutDishType.length > 0 && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
           <FlatList
             data={menuItemPricesWithoutDishType
               .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
@@ -76,7 +77,7 @@ class MenuView extends Component {
           />
         </ScrollView>
         {inMemoryMenuItemPricesToOrder.length > 0 && (
-          <MenuFooterView totalOrderQuantity={this.getTotalOrderQuantity()} onPlaceOrderPressed={onPlaceOrderPressed} />
+          <MenuFooterView totalOrderQuantity={this.getTotalOrderQuantity()} onViewOrderPressed={onViewOrderPressed} />
         )}
       </View>
     );
@@ -86,7 +87,7 @@ class MenuView extends Component {
 MenuView.propTypes = {
   isRefreshing: PropTypes.bool.isRequired,
   onEndReached: PropTypes.func.isRequired,
-  onPlaceOrderPressed: PropTypes.func.isRequired,
+  onViewOrderPressed: PropTypes.func.isRequired,
   menuItemPrices: MenuItemPricesProp.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,

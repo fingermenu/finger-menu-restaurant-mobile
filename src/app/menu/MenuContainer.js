@@ -91,7 +91,7 @@ class MenuContainer extends Component {
         isRefreshing={this.state.isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
-        onPlaceOrderPressed={navigateToOrders}
+        onViewOrderPressed={navigateToOrders}
         dishTypes={dishTypes}
       />
     );
