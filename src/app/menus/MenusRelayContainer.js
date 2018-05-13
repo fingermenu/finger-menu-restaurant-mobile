@@ -9,49 +9,11 @@ export default createRefetchContainer(
     user: graphql`
       fragment MenusRelayContainer_user on User {
         id
-        servingTimes(first: 1000, after: null) {
-          edges {
-            node {
-              id
-              tag {
-                id
-              }
-            }
-          }
-        }
-        dishTypes(first: 1000, after: null) {
-          edges {
-            node {
-              id
-              tag {
-                id
-                name
-              }
-            }
-          }
-        }
         restaurant(restaurantId: $restaurantId) {
           menus {
             id
             name
             sortOrderIndex
-            menuItemPrices {
-              id
-              currentPrice
-              sortOrderIndex
-              menuItem {
-                id
-                name
-                description
-                imageUrl
-              }
-              tags {
-                id
-              }
-              defaultChoiceItemPrices {
-                currentPrice
-              }
-            }
             tags {
               id
             }

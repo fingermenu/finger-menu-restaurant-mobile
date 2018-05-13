@@ -9,10 +9,30 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
-import { DishTypesProp, MenuTagsProp, ServingTimesProp } from './PropTypes';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class MenuContainer extends Component {
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
+      nextProps.relay.refetch(_ => _);
+
+      return {
+        selectedLanguage: nextProps.selectedLanguage,
+      };
+    }
+
+    return null;
+  };
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
+
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
@@ -21,7 +41,13 @@ class MenuContainer extends Component {
   onViewMenuItemPressed = id => {
     this.props.applicationStateActions.clearActiveOrderMenuItemPrice();
 
-    const { servingTimes, menuTags } = this.props;
+    const {
+      user: {
+        servingTimes: { edges: servingTimesEdges },
+        menu: { tags: menuTags },
+      },
+    } = this.props;
+    const servingTimes = servingTimesEdges.map(_ => _.node);
     const filteredServingTime = servingTimes.filter(servingTime => menuTags.find(menuTag => menuTag.id.localeCompare(servingTime.tag.id) === 0));
 
     this.props.applicationStateActions.setActiveMenuItemPrice(
@@ -30,10 +56,30 @@ class MenuContainer extends Component {
     this.props.navigateToMenuItem();
   };
 
+  handleRefresh = () => {
+    if (this.state.isRefreshing) {
+      return;
+    }
+
+    this.setState({ isRefreshing: true });
+
+    this.props.relay.refetch(_ => _, null, () => {
+      this.setState({ isRefreshing: false });
+    });
+  };
+
   handleEndReached = () => true;
 
   render = () => {
-    const { dishTypes, menuItemPrices, onRefresh, inMemoryMenuItemPricesToOrder, navigateToOrders, isRefreshing } = this.props;
+    const {
+      user: {
+        dishTypes: { edges: dishTypesEdges },
+        menu: { menuItemPrices },
+      },
+      inMemoryMenuItemPricesToOrder,
+      navigateToOrders,
+    } = this.props;
+    const dishTypes = dishTypesEdges.map(_ => _.node);
 
     return (
       <MenuView
@@ -42,8 +88,8 @@ class MenuContainer extends Component {
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
-        isRefreshing={isRefreshing}
-        onRefresh={onRefresh}
+        isRefreshing={this.state.isRefreshing}
+        onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onPlaceOrderPressed={navigateToOrders}
         dishTypes={dishTypes}
@@ -55,20 +101,11 @@ class MenuContainer extends Component {
 MenuContainer.propTypes = {
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  isRefreshing: PropTypes.bool.isRequired,
   navigateToMenuItem: PropTypes.func.isRequired,
   inMemoryMenuItemPricesToOrder: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired }).isRequired,
   ).isRequired,
   navigateToOrders: PropTypes.func.isRequired,
-  menuTags: MenuTagsProp.isRequired,
-  dishTypes: DishTypesProp.isRequired,
-  servingTimes: ServingTimesProp.isRequired,
-  onRefresh: PropTypes.func,
-};
-
-MenuContainer.defaultProps = {
-  onRefresh: null,
 };
 
 const mapStateToProps = state => {
@@ -80,6 +117,7 @@ const mapStateToProps = state => {
 
   return {
     inMemoryMenuItemPricesToOrder,
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
   };
 };
 

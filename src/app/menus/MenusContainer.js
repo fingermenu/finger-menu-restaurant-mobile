@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { TabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import int from 'int';
-import { MenuContainer } from '../menu';
+import { Menu } from '../menu';
 import { DefaultColor } from '../../style';
 
 class MenusContainer extends Component {
@@ -34,24 +34,12 @@ class MenusContainer extends Component {
   }
 
   getMenusScreens = () => {
-    const servingTimes = this.props.user.servingTimes.edges.map(_ => _.node);
-
     return this.props.user.restaurant.menus
       .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
       .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))
       .reduce((reduction, menu) => {
         reduction[menu.id] = {
-          screen: props => (
-            <MenuContainer
-              {...props}
-              key={menu.id}
-              menuItemPrices={menu.menuItemPrices}
-              menuTags={menu.tags}
-              dishTypes={this.props.user.dishTypes.edges.map(_ => _.node)}
-              servingTimes={servingTimes}
-              isRefreshing={false}
-            />
-          ),
+          screen: props => <Menu {...props} key={menu.id} menuId={menu.id} />,
           navigationOptions: {
             tabBarLabel: menu.name,
             headerStyle: {
