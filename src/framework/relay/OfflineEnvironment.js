@@ -29,6 +29,12 @@ import packageInfo from '../../../package.json';
 const rootSchema = getRootSchema();
 let restaurantId;
 
+AsyncStorage.getItem('restaurantId')
+  .then(id => {
+    restaurantId = id;
+  })
+  .catch(() => {});
+
 const fetchOfflineQuery = async (operation, variables) => {
   if (!restaurantId) {
     restaurantId = await AsyncStorage.getItem('restaurantId');
