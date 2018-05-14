@@ -97,7 +97,10 @@ export default class PrintHelper {
         (menuItemsDetail, detail) =>
           menuItemsDetail +
           endOfLine +
-          PrintHelper.alignTextsOnEachEdge(detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']), detail.get('quantity').toString()) +
+          PrintHelper.alignTextsOnEachEdge(
+            detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnKitchenReceipt']),
+            detail.get('quantity').toString(),
+          ) +
           endOfLine +
           detail
             .get('orderChoiceItemPrices')
@@ -105,7 +108,7 @@ export default class PrintHelper {
               (reduction, orderChoiceItemPrice) =>
                 reduction +
                 PrintHelper.splitTextIntoMultipleLines(
-                  '  ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                  '  ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnKitchenReceipt']),
                   '',
                   false,
                 ),
@@ -136,7 +139,7 @@ export default class PrintHelper {
           servingTimeNameToPrint: groupedDetails
             .get(servingTimeId)
             .first()
-            .getIn(['servingTime', 'tag', 'nameToPrint']),
+            .getIn(['servingTime', 'tag', 'nameToPrintOnKitchenReceipt']),
           details: groupedDetails.get(servingTimeId),
         }),
       )
@@ -251,7 +254,7 @@ export default class PrintHelper {
             menuItemsDetail +
             endOfLine +
             PrintHelper.alignTextsOnEachEdge(
-              detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrint']),
+              detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnCustomerReceipt']),
               PrintHelper.convertPriceAndQuantityToPrintableString(
                 detail.getIn(['menuItemPrice', 'currentPrice']),
                 detail.get('quantity').toString(),
@@ -264,7 +267,7 @@ export default class PrintHelper {
                 (reduction, orderChoiceItemPrice) =>
                   reduction +
                   PrintHelper.alignTextsOnEachEdge(
-                    ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrint']),
+                    ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnCustomerReceipt']),
                     PrintHelper.convertPriceAndQuantityToPrintableString(
                       orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
                       (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),

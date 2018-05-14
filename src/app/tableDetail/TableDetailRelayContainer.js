@@ -46,7 +46,8 @@ export default createRefetchContainer(
                   menuItem {
                     id
                     name
-                    nameToPrint
+                    nameToPrintOnCustomerReceipt
+                    nameToPrintOnKitchenReceipt
                     imageUrl
                   }
                 }
@@ -67,7 +68,8 @@ export default createRefetchContainer(
                     choiceItem {
                       id
                       name
-                      nameToPrint
+                      nameToPrintOnCustomerReceipt
+                      nameToPrintOnKitchenReceipt
                     }
                   }
                 }

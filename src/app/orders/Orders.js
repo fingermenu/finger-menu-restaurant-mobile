@@ -12,7 +12,6 @@ import OrdersRelayContainer from './OrdersRelayContainer';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class Orders extends Component {
   static navigationOptions = {
@@ -46,21 +45,13 @@ class Orders extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query OrdersQuery(
-            $appVersion: String
-            $restaurantId: ID!
-            $tableId: ID!
-            $choiceItemPriceIds: [ID!]
-            $menuItemPriceIds: [ID!]
-            $correlationId: ID
-          ) {
-            user(appVersion: $appVersion) {
+          query OrdersQuery($restaurantId: ID!, $tableId: ID!, $choiceItemPriceIds: [ID!], $menuItemPriceIds: [ID!], $correlationId: ID) {
+            user {
               ...OrdersRelayContainer_user
             }
           }
         `}
         variables={{
-          appVersion: packageInfo.version,
           restaurantId: this.props.restaurantId,
           tableId: this.props.tableId,
           menuItemPriceIds: this.props.menuItemPriceIds,

@@ -16,7 +16,6 @@ import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveRestaurantProp } from '../../framework/applicationState';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -71,15 +70,13 @@ class Pin extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query PinQuery($appVersion: String) {
-            user(appVersion: $appVersion) {
+          query PinQuery {
+            user {
               ...PinRelayContainer_user
             }
           }
         `}
-        variables={{
-          appVersion: packageInfo.version,
-        }}
+        variables={{}}
         render={this.renderRelayComponent}
       />
     );

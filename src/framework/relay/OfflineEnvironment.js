@@ -2,6 +2,7 @@
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { graphql } from 'graphql';
+import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import {
   getRootSchema,
   configLoaderByKey,
@@ -23,16 +24,24 @@ import {
   tagLoaderById,
 } from '../graphql';
 import i18n from '../../i18n';
+import packageInfo from '../../../package.json';
 
 const rootSchema = getRootSchema();
+let restaurantId;
 
 const fetchOfflineQuery = async (operation, variables) => {
+  if (!restaurantId) {
+    restaurantId = await AsyncStorage.getItem('restaurantId');
+  }
+
+  const fingerMenuContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
   const result = await graphql(
     rootSchema,
     operation.text,
     undefined,
     {
       language: i18n.language,
+      fingerMenuContext,
       dataLoaders: {
         configLoaderByKey,
         choiceItemLoaderById,

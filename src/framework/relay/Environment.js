@@ -5,9 +5,12 @@ import { UserService } from '@microbusiness/parse-server-common-react-native';
 import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import i18n from '../../i18n';
+import packageInfo from '../../../package.json';
 
 const fetchQuery = async (operation, variables) => {
   const environment = await AsyncStorage.getItem('@global:environment');
+  const restaurantId = await AsyncStorage.getItem('restaurantId');
+  const fingerMenuAdditionalContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
   const configReader = new ConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
   const sessionToken = await UserService.getCurrentUserSession();
   const response = await fetch(configReader.getGraphQLEndpointUrl(), {
@@ -17,6 +20,7 @@ const fetchQuery = async (operation, variables) => {
       'Content-Type': 'application/json',
       authorization: sessionToken,
       'Accept-Language': i18n.language,
+      'finger-menu-additional-context': fingerMenuAdditionalContext,
     },
     body: JSON.stringify({
       query: operation.text,

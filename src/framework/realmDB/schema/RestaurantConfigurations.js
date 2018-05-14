@@ -7,6 +7,7 @@ const schema = {
   name: 'RestaurantConfigurations',
   properties: {
     images: 'RestaurantImages?',
+    languages: 'RestaurantLanguages?',
     printers: 'Printer[]',
     documentTemplates: 'DocumentTemplate[]',
     numberOfPrintCopiesForKitchen: 'int?',

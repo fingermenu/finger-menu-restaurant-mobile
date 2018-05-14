@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { offlineEnvironment as environment } from '../../framework/relay';
 import MenuRelayContainer from './MenuRelayContainer';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class Menu extends Component {
   componentDidMount = () => {
@@ -35,14 +34,13 @@ class Menu extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query MenuQuery($appVersion: String, $menuId: ID!) {
-            user(appVersion: $appVersion) {
+          query MenuQuery($menuId: ID!) {
+            user {
               ...MenuRelayContainer_user
             }
           }
         `}
         variables={{
-          appVersion: packageInfo.version,
           menuId: this.props.menuId,
         }}
         render={this.renderRelayComponent}

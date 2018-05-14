@@ -3,6 +3,7 @@
 import Immutable, { List, Map } from 'immutable';
 import BaseObject from './BaseObject';
 import RestaurantImages from './RestaurantImages';
+import RestaurantLanguages from './RestaurantLanguages';
 import Printer from './Printer';
 import DocumentTemplate from './DocumentTemplate';
 import Phone from './Phone';
@@ -56,6 +57,7 @@ export default class Restaurant extends BaseObject {
 
     if (configurations) {
       const images = configurations.images ? new RestaurantImages(configurations.images).getInfo() : Map();
+      const languages = configurations.languages ? new RestaurantLanguages(configurations.languages).getInfo() : Map();
       const printers = configurations.printers ? Immutable.fromJS(configurations.printers.map(_ => new Printer(_).getInfo())) : List();
       const documentTemplates = configurations.documentTemplates
         ? Immutable.fromJS(configurations.documentTemplates.map(_ => new DocumentTemplate(_).getInfo()))
@@ -65,6 +67,7 @@ export default class Restaurant extends BaseObject {
         'configurations',
         Map({
           images,
+          languages,
           printers,
           documentTemplates,
           numberOfPrintCopiesForKitchen: configurations.numberOfPrintCopiesForKitchen,
