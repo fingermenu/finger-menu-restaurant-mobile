@@ -47,9 +47,15 @@ export default class Common {
       return allValues.get(language);
     }
 
-    return restaurantId
-      ? allValues.get((await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', 'defaultDisplay']))
-      : allValues.get(await configLoaderByKey.load('fallbackLanguage'));
+    if (restaurantId) {
+      const defaultDisplay = (await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', 'defaultDisplay']);
+
+      if (defaultDisplay && allValues.has(defaultDisplay)) {
+        return allValues.get(defaultDisplay);
+      }
+    }
+
+    return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
 
   static getTranslationToPrintOnKitchenReceipt = async (info, columnName, dataLoaders, fingerMenuContext) =>
@@ -65,8 +71,14 @@ export default class Common {
       return null;
     }
 
-    return restaurantId
-      ? allValues.get((await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', languageKey]))
-      : allValues.get(await configLoaderByKey.load('fallbackLanguage'));
+    if (restaurantId) {
+      const languageToPrint = (await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', languageKey]);
+
+      if (languageToPrint && allValues.has(languageToPrint)) {
+        return allValues.get(languageToPrint);
+      }
+    }
+
+    return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
 }
