@@ -29,6 +29,9 @@ export default createRefetchContainer(
                   primaryTopBannerImageUrl
                   secondaryTopBannerImageUrl
                 }
+                languages {
+                  defaultDisplay
+                }
                 documentTemplates {
                   name
                   template
