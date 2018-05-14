@@ -7,9 +7,30 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import i18n from '../../i18n';
 import packageInfo from '../../../package.json';
 
+let environment;
+let restaurantId;
+
+AsyncStorage.getItem('@global:environment')
+  .then(id => {
+    restaurantId = id;
+  })
+  .catch(() => {});
+
+AsyncStorage.getItem('restaurantId')
+  .then(id => {
+    restaurantId = id;
+  })
+  .catch(() => {});
+
 const fetchQuery = async (operation, variables) => {
-  const environment = await AsyncStorage.getItem('@global:environment');
-  const restaurantId = await AsyncStorage.getItem('restaurantId');
+  if (!environment) {
+    environment = await AsyncStorage.getItem('@global:environment');
+  }
+
+  if (!restaurantId) {
+    restaurantId = await AsyncStorage.getItem('restaurantId');
+  }
+
   const fingerMenuAdditionalContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
   const configReader = new ConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
   const sessionToken = await UserService.getCurrentUserSession();
@@ -40,9 +61,9 @@ const fetchQuery = async (operation, variables) => {
 // Create a network layer from the fetch function
 const network = Network.create(fetchQuery);
 const store = new Store(new RecordSource());
-const environment = new Environment({
+const relayEnvironment = new Environment({
   network,
   store,
 });
 
-export default environment;
+export default relayEnvironment;

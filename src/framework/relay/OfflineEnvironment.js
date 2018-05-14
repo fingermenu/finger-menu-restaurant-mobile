@@ -81,9 +81,9 @@ const fetchOfflineQuery = async (operation, variables) => {
 // Create a network layer from the fetch function
 const network = Network.create(fetchOfflineQuery);
 const store = new Store(new RecordSource());
-const environment = new Environment({
+const relayEnvironemnt = new Environment({
   network,
   store,
 });
 
-export default environment;
+export default relayEnvironemnt;
