@@ -31,7 +31,7 @@ const fetchQuery = async (operation, variables) => {
     restaurantId = await AsyncStorage.getItem('restaurantId');
   }
 
-  const fingerMenuAdditionalContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
+  const fingerMenuContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
   const configReader = new ConfigReader(environment ? environment : ConfigReader.getDefaultEnvironment());
   const sessionToken = await UserService.getCurrentUserSession();
   const response = await fetch(configReader.getGraphQLEndpointUrl(), {
@@ -41,7 +41,7 @@ const fetchQuery = async (operation, variables) => {
       'Content-Type': 'application/json',
       authorization: sessionToken,
       'Accept-Language': i18n.language,
-      'finger-menu-additional-context': fingerMenuAdditionalContext,
+      'finger-menu-context': fingerMenuContext,
     },
     body: JSON.stringify({
       query: operation.text,

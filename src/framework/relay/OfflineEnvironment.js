@@ -40,14 +40,13 @@ const fetchOfflineQuery = async (operation, variables) => {
     restaurantId = await AsyncStorage.getItem('restaurantId');
   }
 
-  const fingerMenuContext = JSON.stringify({ restaurantId, appVersion: packageInfo.version });
   const result = await graphql(
     rootSchema,
     operation.text,
     undefined,
     {
       language: i18n.language,
-      fingerMenuContext,
+      fingerMenuContext: JSON.stringify({ restaurantId, appVersion: packageInfo.version }),
       dataLoaders: {
         configLoaderByKey,
         choiceItemLoaderById,
