@@ -4120,7 +4120,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "customerId",
               "description": null,
               "args": [],
               "type": {
@@ -5491,7 +5491,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "orderMenuItemPriceId",
               "description": null,
               "args": [],
               "type": {
@@ -5650,7 +5650,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "paymentGroupId",
               "description": null,
               "args": [],
               "type": {
@@ -5697,7 +5697,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "orderChoiceItemPriceId",
               "description": null,
               "args": [],
               "type": {
@@ -7895,7 +7895,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "customerId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8072,7 +8072,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "orderMenuItemPriceId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8209,7 +8209,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "paymentGroupId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8250,7 +8250,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "orderChoiceItemPriceId",
               "description": null,
               "type": {
                 "kind": "SCALAR",

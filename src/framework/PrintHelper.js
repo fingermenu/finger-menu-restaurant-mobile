@@ -282,7 +282,7 @@ export default class PrintHelper {
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
-    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
+    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'paymentGroupId']));
 
     return groupedDetails
       .map(items => {

@@ -124,13 +124,13 @@ type ChoiceItemTypeEdge {
 }
 
 type Customer {
-  id: ID
+  customerId: ID
   name: String
   type: String
 }
 
 input CustomerInput {
-  id: ID
+  customerId: ID
   name: String
   type: String
 }
@@ -360,7 +360,7 @@ type Order implements Node {
 }
 
 type OrderChoiceItemPrice {
-  id: ID
+  orderChoiceItemPriceId: ID
   choiceItemPrice: ChoiceItemPrice!
   quantity: Int!
   notes: String
@@ -370,7 +370,7 @@ type OrderChoiceItemPrice {
 }
 
 input OrderChoiceItemPriceInput {
-  id: ID
+  orderChoiceItemPriceId: ID
   choiceItemPriceId: ID!
   quantity: Int!
   notes: String
@@ -380,7 +380,7 @@ input OrderChoiceItemPriceInput {
 }
 
 type OrderMenuItemPrice {
-  id: ID
+  orderMenuItemPriceId: ID
   groupId: ID
   customer: Customer
   paymentGroup: PaymentGroup
@@ -394,7 +394,7 @@ type OrderMenuItemPrice {
 }
 
 input OrderMenuItemPriceInput {
-  id: ID
+  orderMenuItemPriceId: ID
   groupId: ID
   customer: CustomerInput
   paymentGroup: PaymentGroupInput
@@ -478,13 +478,13 @@ type ParentTag implements Node {
 }
 
 type PaymentGroup {
-  id: ID
+  paymentGroupId: ID
   discount: Float
   paidAt: String
 }
 
 input PaymentGroupInput {
-  id: ID
+  paymentGroupId: ID
   discount: Float
   paidAt: String
 }

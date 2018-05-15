@@ -43,8 +43,6 @@ class TableDetailContainer extends Component {
       {
         id: this.props.table.id,
         tableState: 'paid',
-        customers: [],
-        notes: '',
       },
       {},
       {
@@ -58,9 +56,9 @@ class TableDetailContainer extends Component {
     const customers = table.customers.reduce(
       (reduction, customer) =>
         reduction.set(
-          customer.id,
+          customer.customerId,
           Map({
-            id: customer.id,
+            customerId: customer.customerId,
             name: customer.name,
             type: customer.type,
           }),
@@ -72,7 +70,7 @@ class TableDetailContainer extends Component {
       Map({
         reservationNotes: table.notes,
         customers,
-        activeCustomerId: customers.isEmpty() ? null : customers.first().get('id'),
+        activeCustomerId: customers.isEmpty() ? null : customers.first().get('customerId'),
       }),
     );
   };
@@ -99,7 +97,7 @@ class TableDetailContainer extends Component {
         order,
         null,
         true,
-        { id: cuid(), discount },
+        { paymentGroupId: cuid(), discount },
         {
           onSuccess: () => {
             totalUpdated = totalUpdated + 1;
@@ -133,7 +131,7 @@ class TableDetailContainer extends Component {
         order,
         null,
         true,
-        { id: cuid(), discount },
+        { paymentGroupId: cuid(), discount },
         {
           onSuccess: () => {
             totalUpdated = totalUpdated + 1;
@@ -157,7 +155,9 @@ class TableDetailContainer extends Component {
     } = this.props;
     const allOrders = edges.map(_ => _.node);
     const orders = allOrders.filter(order =>
-      order.details.map(_ => _.id).find(id => selectedOrders.find(order => order.get('id').localeCompare(id) === 0)),
+      order.details
+        .map(_ => _.orderMenuItemPriceId)
+        .find(orderMenuItemPriceId => selectedOrders.find(order => order.get('orderMenuItemPriceId').localeCompare(orderMenuItemPriceId) === 0)),
     );
     const excludedOrders = allOrders.filter(order => !orders.find(_ => _.id.localeCompare(order.id) === 0));
     const paymentGroupId = cuid();
@@ -170,7 +170,7 @@ class TableDetailContainer extends Component {
         order,
         selectedOrders,
         false,
-        { id: paymentGroupId, discount },
+        { paymentGroupId, discount },
         {
           onSuccess: response => {
             totalUpdated = totalUpdated + 1;
@@ -187,7 +187,11 @@ class TableDetailContainer extends Component {
 
             if (printCallback) {
               printCallback(
-                allDetails.filter(item => selectedOrders.some(selectedOrder => selectedOrder.get('id').localeCompare(item.get('id')) === 0)),
+                allDetails.filter(item =>
+                  selectedOrders.some(
+                    selectedOrder => selectedOrder.get('orderMenuItemPriceId').localeCompare(item.get('orderMenuItemPriceId')) === 0,
+                  ),
+                ),
               );
             }
 
@@ -308,7 +312,7 @@ class TableDetailContainer extends Component {
 
   handleEndReached = () => true;
 
-  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, { id: paymentGroupId, discount: paymentGroupDiscount }) =>
+  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, { paymentGroupId, discount: paymentGroupDiscount }) =>
     order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
@@ -316,14 +320,16 @@ class TableDetailContainer extends Component {
         let discount;
 
         if (detail.get('paid')) {
-          id = detail.getIn(['paymentGroup', 'id']);
+          id = detail.getIn(['paymentGroup', 'paymentGroupId']);
           discount = detail.getIn(['paymentGroup', 'discount']);
         } else {
           if (setAllMenuItemPricesPaid) {
             id = paymentGroupId;
             discount = paymentGroupDiscount;
           } else {
-            const foundSelectedOrder = selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0);
+            const foundSelectedOrder = selectedOrders.find(
+              order => order.get('orderMenuItemPriceId').localeCompare(detail.get('orderMenuItemPriceId')) === 0,
+            );
 
             id = foundSelectedOrder ? paymentGroupId : null;
             discount = foundSelectedOrder ? paymentGroupDiscount : null;
@@ -334,7 +340,7 @@ class TableDetailContainer extends Component {
           .merge(
             Map({
               paymentGroup: Map({
-                id,
+                paymentGroupId: id,
                 discount,
                 paidAt: detail.getIn(['paymentGroup', 'paidAt']),
               }),
@@ -344,7 +350,7 @@ class TableDetailContainer extends Component {
               paid:
                 setAllMenuItemPricesPaid ||
                 detail.get('paid') ||
-                !!selectedOrders.find(order => order.get('id').localeCompare(detail.get('id')) === 0),
+                !!selectedOrders.find(order => order.get('orderMenuItemPriceId').localeCompare(detail.get('orderMenuItemPriceId')) === 0),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -371,7 +377,9 @@ class TableDetailContainer extends Component {
 
     UpdateOrder(
       this.props.relay.environment,
-      orderUpdateRequest.merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, paymentGroupId: paymentGroup.id })).toJS(),
+      orderUpdateRequest
+        .merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, paymentGroupId: paymentGroup.paymentGroupId }))
+        .toJS(),
       order.get('details').map(detail => detail.get('menuItemPrice')),
       order
         .get('details')

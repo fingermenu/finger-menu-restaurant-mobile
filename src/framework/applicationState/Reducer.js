@@ -36,7 +36,7 @@ export default (state = initialState, action) => {
     return state.set('activeCustomers', Map({ customers: OrderedMap(), activeCustomerId: null, numberOfAdults: 0, numberOfChildren: 0 }));
 
   case ActionTypes.APPLICATION_STATE_ACTIVE_CUSTOMER_CHANGED:
-    return state.setIn(['activeCustomers', 'activeCustomerId'], action.payload.get('id'));
+    return state.setIn(['activeCustomers', 'activeCustomerId'], action.payload.get('customerId'));
 
   case ActionTypes.APPLICATION_STATE_SET_ACTIVE_MENU:
     return state.set('activeMenu', action.payload);

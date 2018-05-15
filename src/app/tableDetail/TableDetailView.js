@@ -59,7 +59,7 @@ class TableDetailView extends Component {
   };
 
   getCustomerName = (table, customerId) => {
-    const customer = table.customers.find(_ => _.id === customerId);
+    const customer = table.customers.find(customer => customer.customerId === customerId);
 
     return customer ? customer.name : '';
   };
@@ -117,9 +117,9 @@ class TableDetailView extends Component {
     return discountType === '%' ? (discount ? discount : '0') + discountType : discountType + (discount ? discount.toFixed(2) : '0.00');
   };
 
-  getOrderItems = orderItems => {
-    return Immutable.fromJS(orderItems)
-      .groupBy(item => item.getIn(['customer', 'id']))
+  getOrderItems = orderItems =>
+    Immutable.fromJS(orderItems)
+      .groupBy(item => item.getIn(['customer', 'customerId']))
       .mapEntries(([key, value]) => [
         key,
         {
@@ -131,7 +131,6 @@ class TableDetailView extends Component {
       .sortBy(_ => _.categoryTitle)
       .valueSeq()
       .toJS();
-  };
 
   convertStringDiscountValueToDecimal = () => {
     const discountStr = this.state.discount ? this.state.discount.trim() : '';
@@ -263,7 +262,7 @@ class TableDetailView extends Component {
     if (isSelected) {
       this.setState({ selectedOrders: this.state.selectedOrders.push(Immutable.fromJS(order)) });
     } else {
-      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.get('id') === order.id) });
+      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) });
     }
   };
 
@@ -287,7 +286,7 @@ class TableDetailView extends Component {
 
   keyExtractor = item => item.id;
 
-  selectedOrdersKeyExtractor = item => item.id;
+  selectedOrdersKeyExtractor = item => item.orderMenuItemPriceId;
 
   renderSplitPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
@@ -569,7 +568,7 @@ class TableDetailView extends Component {
       menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
       enableMultiSelection={this.state.isSplitPaymentMode}
       onOrderSelected={this.handleOrderSelected}
-      isSelected={!!this.state.selectedOrders.find(_ => _.get('id') === info.item.id)}
+      isSelected={!!this.state.selectedOrders.find(_ => _.get('orderMenuItemPriceId') === info.item.orderMenuItemPriceId)}
       orderItemIsEditable
       showRemove={false}
     />

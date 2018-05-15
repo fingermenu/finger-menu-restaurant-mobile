@@ -25,7 +25,7 @@ export const ActiveTableProp = PropTypes.shape({
 });
 
 export const CustomerProp = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  customerId: PropTypes.string.isRequired,
   name: PropTypes.string,
   type: PropTypes.string.isRequired,
 });

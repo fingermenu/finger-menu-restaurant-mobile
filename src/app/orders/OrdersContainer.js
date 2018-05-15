@@ -51,7 +51,7 @@ class OrdersContainer extends Component {
               notes: detail.get('notes'),
               paid: detail.get('paid'),
               servingTimeId: detail.get('servingTimeId'),
-              customer: this.props.customers.find(_ => _.id === detail.getIn(['customer', 'id'])),
+              customer: this.props.customers.find(_ => _.customerId === detail.getIn(['customer', 'customerId'])),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 

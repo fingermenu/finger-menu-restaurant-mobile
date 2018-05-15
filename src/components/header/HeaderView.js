@@ -24,16 +24,18 @@ const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerCha
           <MenuTrigger>
             <View style={DefaultStyles.rowContainer}>
               <Icon name="person-outline" color="white" />
-              <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>{customers.find(c => c.id === activeCustomerId).name}</Text>
+              <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>
+                {customers.find(customer => customer.customerId === activeCustomerId).name}
+              </Text>
             </View>
           </MenuTrigger>
           <MenuOptions>
             {customers.map(customer => (
               <ActiveCustomersMenuOption
-                key={customer.id}
-                isSelected={customer.id === activeCustomerId}
+                key={customer.customerId}
+                isSelected={customer.customerId === activeCustomerId}
                 name={customer.name}
-                id={customer.id}
+                customerId={customer.customerId}
                 onActiveCustomerChanged={onActiveCustomerChanged}
               />
             ))}

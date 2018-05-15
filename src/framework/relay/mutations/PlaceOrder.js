@@ -17,7 +17,7 @@ const mutation = graphql`
           id
           correlationId
           customers {
-            id
+            customerId
             name
             type
           }
@@ -25,16 +25,16 @@ const mutation = graphql`
           placedAt
           cancelledAt
           details {
-            id
+            orderMenuItemPriceId
             paymentGroup {
-              id
+              paymentGroupId
               discount
               paidAt
             }
             quantity
             notes
             customer {
-              id
+              customerId
               name
               type
             }
@@ -58,7 +58,7 @@ const mutation = graphql`
               }
             }
             orderChoiceItemPrices {
-              id
+              orderChoiceItemPriceId
               notes
               quantity
               paid

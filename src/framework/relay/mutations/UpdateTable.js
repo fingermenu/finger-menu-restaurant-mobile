@@ -17,7 +17,7 @@ const mutation = graphql`
           id
           name
           customers {
-            id
+            customerId
             name
             type
           }

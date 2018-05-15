@@ -23,7 +23,7 @@ class CustomersContainer extends Component {
   };
 
   handleSubmit = values => {
-    const customers = Immutable.fromJS(this.props.customers).map(customer => customer.set('name', values[customer.get('id')]));
+    const customers = Immutable.fromJS(this.props.customers).map(customer => customer.set('name', values[customer.get('customerId')]));
 
     this.updateTable(customers.toJS(), {
       onSuccess: () => {

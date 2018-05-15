@@ -8,7 +8,7 @@ export default class OrderHelper {
       return List();
     }
 
-    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'id']));
+    const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'paymentGroupId']));
 
     return groupedDetails.keySeq().map(paymentGroupId => {
       const menuItemPrices = groupedDetails.get(paymentGroupId);

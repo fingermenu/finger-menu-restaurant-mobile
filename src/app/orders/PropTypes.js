@@ -15,7 +15,7 @@ export const ChoiceItemPriceProp = PropTypes.shape({
 });
 
 export const OrderChoiceItemPrice = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  orderChoiceItemPriceId: PropTypes.string.isRequired,
   choiceItemPrice: ChoiceItemPriceProp.isRequired,
   quantity: PropTypes.number,
   notes: PropTypes.number,
@@ -35,7 +35,7 @@ export const MenuItemPriceProp = PropTypes.shape({
 });
 
 export const OrderItemDetailProp = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  orderMenuItemPriceId: PropTypes.string.isRequired,
   menuItemPrice: MenuItemPriceProp.isRequired,
   orderChoiceItemPrices: PropTypes.arrayOf(OrderChoiceItemPrice),
   notes: PropTypes.string,

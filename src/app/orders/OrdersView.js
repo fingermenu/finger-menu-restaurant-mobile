@@ -20,8 +20,8 @@ class OrdersView extends Component {
     this.confirmOrderPopupDialogRef = popupDialog;
   };
 
-  getCustomerName = (customers, id) => {
-    const customer = customers.find(_ => _.id === id);
+  getCustomerName = (customers, customerId) => {
+    const customer = customers.find(_ => _.customerId === customerId);
 
     if (customer) {
       return customer.name;
@@ -32,7 +32,7 @@ class OrdersView extends Component {
 
   getOrderItems = orderItems => {
     return Immutable.fromJS(orderItems)
-      .groupBy(item => item.getIn(['customer', 'id']))
+      .groupBy(item => item.getIn(['customer', 'customerId']))
       .mapEntries(([key, value]) => [
         key,
         {
@@ -61,10 +61,12 @@ class OrdersView extends Component {
     }
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => item.orderMenuItemPriceId;
 
   renderOrderItem = info => {
-    const isInMemoryOrder = !!this.props.inMemoryOrderItems.find(item => item.id.localeCompare(info.item.id) === 0);
+    const isInMemoryOrder = !!this.props.inMemoryOrderItems.find(
+      item => item.orderMenuItemPriceId.localeCompare(info.item.orderMenuItemPriceId) === 0,
+    );
 
     return (
       <OrderItemRow

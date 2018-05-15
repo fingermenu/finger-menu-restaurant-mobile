@@ -52,7 +52,7 @@ export default createRefetchContainer(
                 name
               }
               customers {
-                id
+                customerId
                 name
                 type
               }

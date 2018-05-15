@@ -60,9 +60,9 @@ class TablesContainer extends Component {
     const customers = table.customers.reduce(
       (reduction, customer) =>
         reduction.set(
-          customer.id,
+          customer.customerId,
           Map({
-            id: customer.id,
+            customerId: customer.customerId,
             name: customer.name,
             type: customer.type,
           }),
@@ -74,7 +74,7 @@ class TablesContainer extends Component {
       Map({
         reservationNotes: table.notes,
         customers,
-        activeCustomerId: customers.isEmpty() ? null : customers.first().get('id'),
+        activeCustomerId: customers.isEmpty() ? null : customers.first().get('customerId'),
       }),
     );
   };
