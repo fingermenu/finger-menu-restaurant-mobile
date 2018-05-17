@@ -299,6 +299,7 @@ class TableDetailContainer extends Component {
         table: { name: tableName },
         orders: { edges: orders },
       },
+      printOnCustomerReceiptLanguage,
     } = this.props;
 
     const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
@@ -310,6 +311,7 @@ class TableDetailContainer extends Component {
         port,
         documentContent,
         numberOfCopies: 1,
+        language: printOnCustomerReceiptLanguage,
       }),
     );
   };
