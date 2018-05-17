@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { ScrollView, SectionList, Text, TouchableNative, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { Badge, Button, ButtonGroup, Icon, Input } from 'react-native-elements';
+import { Badge, Button, ButtonGroup, Icon, Input, CheckBox } from 'react-native-elements';
 import PopupDialog, { DialogTitle, SlideAnimation } from 'react-native-popup-dialog';
 import { translate } from 'react-i18next';
 import OrderItemRow from '../orders/OrderItemRow';
@@ -263,6 +263,18 @@ class TableDetailView extends Component {
       this.setState({ selectedOrders: this.state.selectedOrders.push(Immutable.fromJS(order)) });
     } else {
       this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) });
+    }
+  };
+
+  handleSectionHeaderSelected = (section, isSelected) => {
+    if (isSelected) {
+      this.setState({ selectedOrders: this.state.selectedOrders.merge(Immutable.fromJS(section.data).filterNot(_ => _.get('paid'))) });
+    } else {
+      this.setState({
+        selectedOrders: this.state.selectedOrders.filterNot(
+          _ => section.data.find(order => order.orderMenuItemPriceId === _.get('orderMenuItemPriceId')) !== undefined,
+        ),
+      });
     }
   };
 
@@ -586,8 +598,25 @@ class TableDetailView extends Component {
   );
 
   renderSectionHeader = ({ section }) => {
+    const isSectionSelected = section.data.every(
+      order => !!this.state.selectedOrders.find(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) || order.paid,
+    );
+    const isAllSectionOrdersPaid = section.data.every(order => order.paid);
     return (
       <View style={Styles.sectionHeader}>
+        {!isAllSectionOrdersPaid && this.state.isSplitPaymentMode ? (
+          <CheckBox
+            center
+            size={28}
+            iconType="material-community"
+            checkedIcon="check-circle-outline"
+            uncheckedIcon="checkbox-blank-circle-outline"
+            checked={isSectionSelected}
+            onPress={() => this.handleSectionHeaderSelected(section, !isSectionSelected)}
+          />
+        ) : (
+          <View />
+        )}
         <Icon name="person-outline" color={DefaultColor.iconColor} />
         <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>{section.categoryTitle}</Text>
       </View>
