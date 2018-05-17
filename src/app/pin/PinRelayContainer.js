@@ -31,6 +31,8 @@ export default createRefetchContainer(
                 }
                 languages {
                   defaultDisplay
+                  printOnCustomerReceipt
+                  printOnKitchenReceipt
                 }
                 documentTemplates {
                   name

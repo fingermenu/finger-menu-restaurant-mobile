@@ -218,6 +218,7 @@ class TableDetailContainer extends Component {
         user: {
           table: { name: tableName },
         },
+        printOnCustomerReceiptLanguage,
       } = this.props;
       const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
 
@@ -227,6 +228,7 @@ class TableDetailContainer extends Component {
           port,
           documentContent,
           numberOfCopies: 1,
+          language: printOnCustomerReceiptLanguage,
         }),
       );
     });
@@ -269,6 +271,7 @@ class TableDetailContainer extends Component {
         table: { name: tableName },
         orders: { edges: orders },
       },
+      printOnKitchenReceiptLanguage,
     } = this.props;
     const documentContent = orders
       .map(_ => _.node)
@@ -283,6 +286,7 @@ class TableDetailContainer extends Component {
         port,
         documentContent,
         numberOfCopies: 1,
+        language: printOnKitchenReceiptLanguage,
       }),
     );
   };
@@ -438,11 +442,15 @@ TableDetailContainer.propTypes = {
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
   customerReceiptTemplate: PropTypes.string,
+  printOnKitchenReceiptLanguage: PropTypes.string,
+  printOnCustomerReceiptLanguage: PropTypes.string,
 };
 
 TableDetailContainer.defaultProps = {
   kitchenOrderTemplate: null,
   customerReceiptTemplate: null,
+  printOnKitchenReceiptLanguage: null,
+  printOnCustomerReceiptLanguage: null,
 };
 
 const mapStateToProps = (state, props) => {
@@ -468,6 +476,8 @@ const mapStateToProps = (state, props) => {
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
     customerReceiptTemplate: customerReceiptTemplate ? customerReceiptTemplate.get('template') : null,
+    printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
+    printOnCustomerReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnCustomerReceipt']),
   };
 };
 
