@@ -10,14 +10,15 @@ const schema = {
     type: 'string?',
     hostname: 'string',
     port: 'int',
+    maxLineWidth: 'int',
   },
 };
 
 export default class Printer {
   static getSchema = () => schema;
 
-  constructor({ name, type, hostname, port }) {
-    this.object = ImmutableEx.removeUndefinedProps(Map({ name, type, hostname, port }));
+  constructor({ name, type, hostname, port, maxLineWidth }) {
+    this.object = ImmutableEx.removeUndefinedProps(Map({ name, type, hostname, port, maxLineWidth }));
   }
 
   getInfo = () => this.object;

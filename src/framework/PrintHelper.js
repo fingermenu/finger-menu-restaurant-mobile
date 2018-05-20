@@ -5,29 +5,28 @@ import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 import OrderHelper from './OrderHelper';
 
 export const endingDots = '.';
-export const maxLineLength = 48;
 export const endOfLine = '\r\n';
 export const priceAndCurrencySignMaxLength = 7;
 export const quantityMaxLength = 2;
 
 export default class PrintHelper {
-  static alignTextsOnEachEdge = (leftStr, rightStr, width = maxLineLength, padding = ' ') => {
-    if (leftStr.length + rightStr.length <= width - 1) {
-      return leftStr + Array(width - (leftStr.length + rightStr.length) + 1).join(padding) + rightStr;
+  static alignTextsOnEachEdge = (leftStr, rightStr, lineWidth, padding = ' ') => {
+    if (leftStr.length + rightStr.length <= lineWidth - 1) {
+      return leftStr + Array(lineWidth - (leftStr.length + rightStr.length) + 1).join(padding) + rightStr;
     }
 
-    if (rightStr.length > width - 1) {
+    if (rightStr.length > lineWidth - 1) {
       throw new Error('Can\'t fit the right text.');
     }
 
-    if (leftStr.length + rightStr.length > width - 1 && rightStr.length > width - endingDots.length) {
+    if (leftStr.length + rightStr.length > lineWidth - 1 && rightStr.length > lineWidth - endingDots.length) {
       throw new Error('Can\'t fit the right text.');
     }
 
-    return leftStr.substring(0, width - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
+    return leftStr.substring(0, lineWidth - (1 + endingDots.length + rightStr.length)) + endingDots + padding + rightStr;
   };
 
-  static splitTextIntoMultipleLines = (str, prefixText = '', trimText = true, lineLength = maxLineLength) => {
+  static splitTextIntoMultipleLines = (str, lineWidth, prefixText = '', trimText = true) => {
     if (!str) {
       return '';
     }
@@ -40,8 +39,8 @@ export default class PrintHelper {
 
     const finalStr = prefixText + (trimText ? trimmedText : str);
 
-    return Range(0, finalStr.length / lineLength)
-      .map(idx => finalStr.substring(idx * lineLength, (idx + 1) * lineLength))
+    return Range(0, finalStr.length / lineWidth)
+      .map(idx => finalStr.substring(idx * lineWidth, (idx + 1) * lineWidth))
       .reduce((reduction, value) => reduction + value + endOfLine, '');
   };
 
@@ -71,7 +70,7 @@ export default class PrintHelper {
     return Array(maxLength - str.length + 1).join(paddingChar) + str;
   };
 
-  static getPrintableOrderDetailsForKitchen = details => {
+  static getPrintableOrderDetailsForKitchen = (details, maxLineWidth) => {
     const groupedDetails = details.groupBy(detail => {
       const choiceItemPriceIds = detail
         .get('orderChoiceItemPrices')
@@ -100,6 +99,7 @@ export default class PrintHelper {
           PrintHelper.alignTextsOnEachEdge(
             detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnKitchenReceipt']),
             detail.get('quantity').toString(),
+            maxLineWidth,
           ) +
           endOfLine +
           detail
@@ -109,25 +109,26 @@ export default class PrintHelper {
                 reduction +
                 PrintHelper.splitTextIntoMultipleLines(
                   '  ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnKitchenReceipt']),
+                  maxLineWidth,
                   '',
                   false,
                 ),
               '',
             ) +
-          PrintHelper.splitTextIntoMultipleLines(detail.get('notes'), 'Notes: '),
+          PrintHelper.splitTextIntoMultipleLines(detail.get('notes'), maxLineWidth, 'Notes: '),
         '',
       );
   };
 
-  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details) =>
-    PrintHelper.pad(servingTime, maxLineLength, '-') +
+  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details, maxLineWidth) =>
+    PrintHelper.pad(servingTime, maxLineWidth, '-') +
     endOfLine +
     endOfLine +
-    PrintHelper.getPrintableOrderDetailsForKitchen(details) +
+    PrintHelper.getPrintableOrderDetailsForKitchen(details, maxLineWidth) +
     endOfLine +
     endOfLine;
 
-  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, customerName, tableName, template) => {
+  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, customerName, tableName, template, maxLineWidth) => {
     const immutableDetails = Immutable.fromJS(details);
     const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => !!detail.get('servingTime'));
     const detailsWithServingTimes = immutableDetails.filter(detail => !!detail.get('servingTime'));
@@ -147,13 +148,15 @@ export default class PrintHelper {
         PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime(
           groupedDetailsWithServingTime.get('servingTimeNameToPrint'),
           groupedDetailsWithServingTime.get('details'),
+          maxLineWidth,
         ),
       )
       .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
 
     if (!detailsWithUnspecifiedServingTime.isEmpty()) {
       finalOrderList =
-        finalOrderList + PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime('Unspecified', detailsWithUnspecifiedServingTime);
+        finalOrderList +
+        PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime('Unspecified', detailsWithUnspecifiedServingTime, maxLineWidth);
     }
 
     return template
@@ -167,8 +170,8 @@ export default class PrintHelper {
           .withZoneSameInstant(ZoneId.SYSTEM)
           .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
       )
-      .replace(/{Notes}/g, PrintHelper.splitTextIntoMultipleLines(notes, 'Notes: '))
-      .replace(/{CustomerName}/g, PrintHelper.splitTextIntoMultipleLines(customerName), 'Customer Name: ')
+      .replace(/{Notes}/g, PrintHelper.splitTextIntoMultipleLines(notes, maxLineWidth, 'Notes: '))
+      .replace(/{CustomerName}/g, PrintHelper.splitTextIntoMultipleLines(customerName, maxLineWidth), 'Customer Name: ')
       .replace(/{TableName}/g, tableName)
       .replace(/{OrderList}/g, finalOrderList);
   };
@@ -196,34 +199,34 @@ export default class PrintHelper {
     );
   };
 
-  static convertTotalPriceToPrintableString = total => {
+  static convertTotalPriceToPrintableString = (total, maxLineWidth) => {
     if (!total) {
       return '';
     }
 
-    return PrintHelper.alignTextsOnEachEdge('Total', PrintHelper.padStart(`$${total.toFixed(2)}`, 10)) + endOfLine;
+    return PrintHelper.alignTextsOnEachEdge('Total', PrintHelper.padStart(`$${total.toFixed(2)}`, 10), maxLineWidth) + endOfLine;
   };
 
-  static convertTotalDiscountToPrintableString = discount => {
+  static convertTotalDiscountToPrintableString = (discount, maxLineWidth) => {
     if (!discount) {
       return '';
     }
 
-    return PrintHelper.alignTextsOnEachEdge('Total Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10)) + endOfLine;
+    return PrintHelper.alignTextsOnEachEdge('Total Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10), maxLineWidth) + endOfLine;
   };
 
-  static convertDiscountToPrintableString = discount => {
+  static convertDiscountToPrintableString = (discount, maxLineWidth) => {
     if (!discount) {
       return '';
     }
 
-    return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10));
+    return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10), maxLineWidth);
   };
 
-  static convertTotalGstToPrintableString = totalPrice =>
-    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${(totalPrice * 3 / 23).toFixed(2)}`, 10)) + endOfLine;
+  static convertTotalGstToPrintableString = (totalPrice, maxLineWidth) =>
+    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${(totalPrice * 3 / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
 
-  static getPrintableOrderDetailsForReceipt = details => {
+  static getPrintableOrderDetailsForReceipt = (details, maxLineWidth) => {
     if (details.isEmpty()) {
       return '';
     }
@@ -259,6 +262,7 @@ export default class PrintHelper {
                 detail.getIn(['menuItemPrice', 'currentPrice']),
                 detail.get('quantity').toString(),
               ),
+              maxLineWidth,
             ) +
             endOfLine +
             detail
@@ -272,6 +276,7 @@ export default class PrintHelper {
                       orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
                       (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
                     ),
+                    maxLineWidth,
                   ) +
                   endOfLine,
                 '',
@@ -281,7 +286,7 @@ export default class PrintHelper {
     );
   };
 
-  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template) => {
+  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template, maxLineWidth) => {
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'paymentGroupId']));
 
     return groupedDetails
@@ -292,7 +297,7 @@ export default class PrintHelper {
         const orderList =
           PrintHelper.getPrintableOrderDetailsForReceipt(items) +
           endOfLine +
-          Array(maxLineLength + 1).join('-') +
+          Array(maxLineWidth + 1).join('-') +
           endOfLine +
           PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
           PrintHelper.convertTotalPriceToPrintableString(totalPrice) +

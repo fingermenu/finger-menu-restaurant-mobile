@@ -213,14 +213,14 @@ class TableDetailContainer extends Component {
   handleSplitPaidAndPrintReceiptPressed = (discount, selectedOrders) => {
     this.handleSplitPaidPressed(discount, selectedOrders, details => {
       const {
-        printerConfig: { hostname, port },
+        printerConfig: { hostname, port, maxLineWidth },
         customerReceiptTemplate,
         user: {
           table: { name: tableName },
         },
         printOnCustomerReceiptLanguage,
       } = this.props;
-      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
+      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
 
       this.props.escPosPrinterActions.printDocument(
         Map({
@@ -265,7 +265,7 @@ class TableDetailContainer extends Component {
 
   handleRePrintForKitchen = () => {
     const {
-      printerConfig: { hostname, port },
+      printerConfig: { hostname, port, maxLineWidth },
       kitchenOrderTemplate,
       user: {
         table: { name: tableName },
@@ -276,7 +276,15 @@ class TableDetailContainer extends Component {
     const documentContent = orders
       .map(_ => _.node)
       .map(({ details, placedAt, notes, customerName }) =>
-        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, customerName, tableName, kitchenOrderTemplate),
+        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+          details,
+          placedAt,
+          notes,
+          customerName,
+          tableName,
+          kitchenOrderTemplate,
+          maxLineWidth,
+        ),
       )
       .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
 
@@ -293,7 +301,7 @@ class TableDetailContainer extends Component {
 
   handlePrintReceipt = () => {
     const {
-      printerConfig: { hostname, port },
+      printerConfig: { hostname, port, maxLineWidth },
       customerReceiptTemplate,
       user: {
         table: { name: tableName },
@@ -303,7 +311,7 @@ class TableDetailContainer extends Component {
     } = this.props;
 
     const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate);
+    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
 
     this.props.escPosPrinterActions.printDocument(
       Map({

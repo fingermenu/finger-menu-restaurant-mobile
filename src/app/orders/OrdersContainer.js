@@ -151,7 +151,7 @@ class OrdersContainer extends Component {
     }
 
     const {
-      printerConfig: { hostname, port },
+      printerConfig: { hostname, port, maxLineWidth },
       numberOfPrintCopiesForKitchen,
     } = this.props;
 
@@ -159,7 +159,15 @@ class OrdersContainer extends Component {
       Map({
         hostname,
         port,
-        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, '', tableName, kitchenOrderTemplate),
+        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+          details,
+          placedAt,
+          notes,
+          '',
+          tableName,
+          kitchenOrderTemplate,
+          maxLineWidth,
+        ),
         numberOfCopies: numberOfPrintCopiesForKitchen,
         language: printOnKitchenReceiptLanguage,
       }),
