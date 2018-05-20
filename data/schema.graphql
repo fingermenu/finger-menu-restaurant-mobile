@@ -512,8 +512,9 @@ type PlaceOrderPayload {
 type Printer {
   name: String
   type: String
-  hostname: String
-  port: Int
+  hostname: String!
+  port: Int!
+  maxLineWidth: Int!
 }
 
 type Query {

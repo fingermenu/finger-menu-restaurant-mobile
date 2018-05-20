@@ -21,6 +21,7 @@ export default createRefetchContainer(
                   name
                   hostname
                   port
+                  maxLineWidth
                 }
                 images {
                   logoImageUrl
