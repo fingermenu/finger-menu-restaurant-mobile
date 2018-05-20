@@ -128,7 +128,7 @@ export default class PrintHelper {
     endOfLine +
     endOfLine;
 
-  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, customerName, tableName, template, maxLineWidth) => {
+  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, tableName, template, maxLineWidth) => {
     const immutableDetails = Immutable.fromJS(details);
     const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => !!detail.get('servingTime'));
     const detailsWithServingTimes = immutableDetails.filter(detail => !!detail.get('servingTime'));
@@ -171,7 +171,6 @@ export default class PrintHelper {
           .format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')),
       )
       .replace(/{Notes}/g, PrintHelper.splitTextIntoMultipleLines(notes, maxLineWidth, 'Notes: '))
-      .replace(/{CustomerName}/g, PrintHelper.splitTextIntoMultipleLines(customerName, maxLineWidth), 'Customer Name: ')
       .replace(/{TableName}/g, tableName)
       .replace(/{OrderList}/g, finalOrderList);
   };

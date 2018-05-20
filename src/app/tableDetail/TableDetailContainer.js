@@ -275,16 +275,8 @@ class TableDetailContainer extends Component {
     } = this.props;
     const documentContent = orders
       .map(_ => _.node)
-      .map(({ details, placedAt, notes, customerName }) =>
-        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
-          details,
-          placedAt,
-          notes,
-          customerName,
-          tableName,
-          kitchenOrderTemplate,
-          maxLineWidth,
-        ),
+      .map(({ details, placedAt, notes }) =>
+        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, tableName, kitchenOrderTemplate, maxLineWidth),
       )
       .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
 
