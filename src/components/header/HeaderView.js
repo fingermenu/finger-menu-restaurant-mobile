@@ -59,7 +59,7 @@ const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerCha
       <MenuOptions>
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" onLanguageChanged={onLanguageChanged} />
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" onLanguageChanged={onLanguageChanged} />
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" onLanguageChanged={onLanguageChanged} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('ja') === 0} language="ja" onLanguageChanged={onLanguageChanged} />
       </MenuOptions>
     </Menu>
   </ImageBackground>
