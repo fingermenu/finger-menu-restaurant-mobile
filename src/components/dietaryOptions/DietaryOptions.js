@@ -25,14 +25,7 @@ class DietaryOptions extends Component {
 
   renderItem = ({ item }) => <DietaryOption dietaryOption={item} validateMustChooseDietaryOption={this.validateMustChooseDietaryOption} />;
 
-  render = () => (
-    <FlatList
-      data={this.props.dietaryOptions}
-      keyExtractor={this.keyExtractor}
-      renderItem={this.renderItem}
-      mustChooseDietaryOption={this.props.mustChooseDietaryOption}
-    />
-  );
+  render = () => <FlatList data={this.props.dietaryOptions} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
 }
 
 DietaryOptions.propTypes = {
