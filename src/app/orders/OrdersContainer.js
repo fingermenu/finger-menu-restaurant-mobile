@@ -163,7 +163,6 @@ class OrdersContainer extends Component {
           details,
           placedAt,
           notes,
-          '',
           tableName,
           kitchenOrderTemplate,
           maxLineWidth,

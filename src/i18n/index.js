@@ -151,7 +151,7 @@ i18next.init({
         updateCustomers: { button: '更新客户' },
       },
     },
-    jp: {
+    ja: {
       translation: {
         englishLanguage: { menuItem: 'English' },
         chineseLanguage: { menuItem: '中国' },

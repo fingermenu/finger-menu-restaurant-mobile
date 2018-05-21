@@ -56,6 +56,12 @@ export default createRefetchContainer(
                 customer {
                   customerId
                 }
+                servingTime {
+                  id
+                  tag {
+                    nameToPrintOnKitchenReceipt
+                  }
+                }
                 paid
                 orderChoiceItemPrices {
                   orderChoiceItemPriceId
