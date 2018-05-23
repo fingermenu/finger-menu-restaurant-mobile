@@ -294,13 +294,13 @@ export default class PrintHelper {
         const totalPrice = totalPriceAndDiscount.get('totalPrice');
 
         const orderList =
-          PrintHelper.getPrintableOrderDetailsForReceipt(items) +
+          PrintHelper.getPrintableOrderDetailsForReceipt(items, maxLineWidth) +
           endOfLine +
           Array(maxLineWidth + 1).join('-') +
           endOfLine +
-          PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount')) +
-          PrintHelper.convertTotalPriceToPrintableString(totalPrice) +
-          PrintHelper.convertTotalGstToPrintableString(totalPrice);
+          PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount'), maxLineWidth) +
+          PrintHelper.convertTotalPriceToPrintableString(totalPrice, maxLineWidth) +
+          PrintHelper.convertTotalGstToPrintableString(totalPrice, maxLineWidth);
 
         const paidAt = items.first().getIn(['paymentGroup', 'paidAt']);
 
