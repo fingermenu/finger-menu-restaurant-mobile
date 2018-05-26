@@ -5,7 +5,7 @@ import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 import OrderHelper from './OrderHelper';
 
 export const endingDots = '.';
-export const endOfLine = '\r\n';
+export const endOfLine = '\n';
 export const priceAndCurrencySignMaxLength = 7;
 export const quantityMaxLength = 2;
 
@@ -96,12 +96,10 @@ export default class PrintHelper {
         (menuItemsDetail, detail) =>
           menuItemsDetail +
           endOfLine +
-          PrintHelper.alignTextsOnEachEdge(
-            detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnKitchenReceipt']),
-            detail.get('quantity').toString(),
+          PrintHelper.splitTextIntoMultipleLines(
+            detail.get('quantity').toString() + '  ' + detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnKitchenReceipt']),
             maxLineWidth,
           ) +
-          endOfLine +
           detail
             .get('orderChoiceItemPrices')
             .reduce(
@@ -162,7 +160,7 @@ export default class PrintHelper {
     return template
       .replace('\r', '')
       .replace('\n', '')
-      .replace(/{CR}/g, '\r')
+      .replace(/{CR}/g, '')
       .replace(/{LF}/g, '\n')
       .replace(
         /{OrderDateTime}/g,
@@ -307,7 +305,7 @@ export default class PrintHelper {
         return template
           .replace('\r', '')
           .replace('\n', '')
-          .replace(/{CR}/g, '\r')
+          .replace(/{CR}/g, '')
           .replace(/{LF}/g, '\n')
           .replace(
             /{PaidAtDateTime}/g,
