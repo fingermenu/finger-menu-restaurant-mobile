@@ -12,7 +12,6 @@ import MenuItemRelayContainer from './MenuItemRelayContainer';
 import { offlineEnvironment as environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class MenuItem extends Component {
   static navigationOptions = {
@@ -44,14 +43,13 @@ class MenuItem extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query MenuItemQuery($appVersion: String, $menuItemPriceId: ID!) {
-            user(appVersion: $appVersion) {
+          query MenuItemQuery($menuItemPriceId: ID!) {
+            user {
               ...MenuItemRelayContainer_user
             }
           }
         `}
         variables={{
-          appVersion: packageInfo.version,
           menuItemPriceId: this.props.menuItemPriceId,
         }}
         render={this.renderRelayComponent}

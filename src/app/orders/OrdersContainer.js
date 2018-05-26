@@ -51,7 +51,7 @@ class OrdersContainer extends Component {
               notes: detail.get('notes'),
               paid: detail.get('paid'),
               servingTimeId: detail.get('servingTimeId'),
-              customer: this.props.customers.find(_ => _.id === detail.getIn(['customer', 'id'])),
+              customer: this.props.customers.find(_ => _.customerId === detail.getIn(['customer', 'customerId'])),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -143,6 +143,7 @@ class OrdersContainer extends Component {
       user: {
         table: { name: tableName },
       },
+      printOnKitchenReceiptLanguage,
     } = this.props;
 
     if (!kitchenOrderTemplate || !printerConfig) {
@@ -150,7 +151,7 @@ class OrdersContainer extends Component {
     }
 
     const {
-      printerConfig: { hostname, port },
+      printerConfig: { hostname, port, maxLineWidth },
       numberOfPrintCopiesForKitchen,
     } = this.props;
 
@@ -158,8 +159,16 @@ class OrdersContainer extends Component {
       Map({
         hostname,
         port,
-        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, '', tableName, kitchenOrderTemplate),
+        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+          details,
+          placedAt,
+          notes,
+          tableName,
+          kitchenOrderTemplate,
+          maxLineWidth,
+        ),
         numberOfCopies: numberOfPrintCopiesForKitchen,
+        language: printOnKitchenReceiptLanguage,
       }),
     );
   };
@@ -228,11 +237,13 @@ OrdersContainer.propTypes = {
   kitchenOrderTemplate: PropTypes.string,
   customers: CustomersProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
+  printOnKitchenReceiptLanguage: PropTypes.string,
 };
 
 OrdersContainer.defaultProps = {
   kitchenOrderTemplate: null,
   numberOfPrintCopiesForKitchen: 1,
+  printOnKitchenReceiptLanguage: null,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -292,6 +303,7 @@ const mapStateToProps = (state, ownProps) => {
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
     numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
+    printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
   };
 };
 

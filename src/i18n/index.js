@@ -55,7 +55,11 @@ i18next.init({
         addToOrder: { button: 'Add {quantity} to Order' },
         updateOrder: { button: 'Update Order' },
         quantity: { label: 'Quantity' },
-        wouldYouLikeSomeSides: { message: 'Would you like some sides?' },
+        sides: {
+          message: 'Sides',
+          minSidesMessage: 'At least {minNumberOfSideDishes} sides ',
+          maxSidesMessage: 'Up to {maxNumberOfSideDishes} sides',
+        },
         viewOrder: { label: 'View Order' },
         numberOfItems: { label: '{numberOfItems} Items' },
         thankYouForPlacingOrder: {
@@ -124,7 +128,11 @@ i18next.init({
         addToOrder: { button: '添加 {quantity} 来订购' },
         updateOrder: { button: '更新订单' },
         quantity: { label: '数量' },
-        wouldYouLikeSomeSides: { message: '你想要双方？' },
+        sides: {
+          message: '你想要配菜？',
+          minSidesMessage: '至少{minNumberOfSideDishes} 配菜 ',
+          maxSidesMessage: '最多 {maxNumberOfSideDishes} 配菜',
+        },
         viewOrder: { label: '查看订单' },
         numberOfItems: { label: '{numberOfItems} 项目' },
         thankYouForPlacingOrder: { message: '谢谢！厨房工作人员已经收到您的订单，现在正忙着制作您的美食。等候的工作人员很快就会收集您的平板电脑。' },
@@ -143,7 +151,7 @@ i18next.init({
         updateCustomers: { button: '更新客户' },
       },
     },
-    jp: {
+    ja: {
       translation: {
         englishLanguage: { menuItem: 'English' },
         chineseLanguage: { menuItem: '中国' },
@@ -190,7 +198,11 @@ i18next.init({
         addToOrder: { button: 'オーダーに {quantity} を追加' },
         updateOrder: { button: '注文の更新' },
         quantity: { label: '量' },
-        wouldYouLikeSomeSides: { message: 'あなたはいくつかの側面が欲しいですか？' },
+        sides: {
+          message: 'あなたはいくつかの側面が欲しいですか？',
+          minSidesMessage: 'At least {minNumberOfSideDishes} sides ',
+          maxSidesMessage: 'Up to {maxNumberOfSideDishes} sides',
+        },
         viewOrder: { label: '表示の順序' },
         numberOfItems: { label: '{numberOfItems} アイテム' },
         thankYouForPlacingOrder: {

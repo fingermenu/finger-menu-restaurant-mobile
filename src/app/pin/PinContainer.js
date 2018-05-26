@@ -12,6 +12,7 @@ import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import PinView from './PinView';
 import { eventPrefix } from '../../framework/AnalyticHelper';
+import PackageBundleHelper from '../../framework/PackageBundleHelper';
 
 class PinContainer extends Component {
   componentDidMount = () => {
@@ -24,9 +25,15 @@ class PinContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
   };
 
+  cleanDevice = async () => {
+    await PackageBundleHelper.cleanAllData();
+
+    this.props.userAccessActions.signOut();
+  };
+
   handleSecretPinMatched = () => {
     AsyncStorage.clear(() => {
-      this.props.userAccessActions.signOut();
+      this.cleanDevice();
     });
   };
 

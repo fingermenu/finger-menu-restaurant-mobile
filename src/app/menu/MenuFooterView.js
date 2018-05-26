@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-const MenuFooterView = ({ t, onPlaceOrderPressed, totalOrderQuantity }) => (
-  <TouchableItem onPress={onPlaceOrderPressed} style={Styles.footerContainer}>
+const MenuFooterView = ({ t, onViewOrderPressed, totalOrderQuantity }) => (
+  <TouchableItem onPress={onViewOrderPressed} style={Styles.footerContainer}>
     <View style={Styles.footerTextContainer}>
       <Text style={Styles.footerText}>{t('viewOrder.label')}</Text>
       <Text style={Styles.footerText}>{t('numberOfItems.label').replace('{numberOfItems}', totalOrderQuantity)}</Text>
@@ -17,7 +17,7 @@ const MenuFooterView = ({ t, onPlaceOrderPressed, totalOrderQuantity }) => (
 );
 
 MenuFooterView.propTypes = {
-  onPlaceOrderPressed: PropTypes.func.isRequired,
+  onViewOrderPressed: PropTypes.func.isRequired,
   totalOrderQuantity: PropTypes.number.isRequired,
 };
 

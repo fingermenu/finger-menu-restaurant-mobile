@@ -36,7 +36,7 @@ export default class Common {
     };
   };
 
-  static getTranslation = async (info, columnName, language, configLoaderByKey) => {
+  static getTranslationToDisplay = async (info, columnName, language, { restaurantLoaderById, configLoaderByKey }, { restaurantId }) => {
     const allValues = info.get(columnName);
 
     if (!allValues) {
@@ -47,16 +47,62 @@ export default class Common {
       return allValues.get(language);
     }
 
+    if (restaurantId) {
+      const defaultDisplay = (await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', 'defaultDisplay']);
+
+      if (defaultDisplay && allValues.has(defaultDisplay)) {
+        return allValues.get(defaultDisplay);
+      }
+    }
+
     return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
 
-  static getTranslationToPrint = async (info, columnName, configLoaderByKey) => {
+  static getTranslationToPrintOnKitchenReceipt = async (info, columnName, dataLoaders, fingerMenuContext) =>
+    Common.replaceDiacriticCharacters(Common.getTranslationToPrint(info, columnName, dataLoaders, fingerMenuContext, 'printOnKitchenReceipt'));
+
+  static getTranslationToPrintOnCustomerReceipt = async (info, columnName, dataLoaders, fingerMenuContext) =>
+    Common.replaceDiacriticCharacters(Common.getTranslationToPrint(info, columnName, dataLoaders, fingerMenuContext, 'printOnCustomerReceipt'));
+
+  static getTranslationToPrint = async (info, columnName, { restaurantLoaderById, configLoaderByKey }, { restaurantId }, languageKey) => {
     const allValues = info.get(columnName);
 
     if (!allValues) {
       return null;
     }
 
+    if (restaurantId) {
+      const languageToPrint = (await restaurantLoaderById.load(restaurantId)).getIn(['configurations', 'languages', languageKey]);
+
+      if (languageToPrint && allValues.has(languageToPrint)) {
+        return allValues.get(languageToPrint);
+      }
+    }
+
     return allValues.get(await configLoaderByKey.load('fallbackLanguage'));
   };
+
+  static replaceDiacriticCharacters = text =>
+    text
+      ? text
+        .replace('á', 'a')
+        .replace('à', 'a')
+        .replace('â', 'a')
+        .replace('ä', 'a')
+        .replace('ç', 'c')
+        .replace('é', 'e')
+        .replace('è', 'e')
+        .replace('ê', 'e')
+        .replace('í', 'i')
+        .replace('ì', 'i')
+        .replace('î', 'i')
+        .replace('ó', 'o')
+        .replace('ò', 'o')
+        .replace('ô', 'o')
+        .replace('ö', 'o')
+        .replace('ú', 'u')
+        .replace('ù', 'u')
+        .replace('û', 'u')
+        .replace('ü', 'u')
+      : text;
 }

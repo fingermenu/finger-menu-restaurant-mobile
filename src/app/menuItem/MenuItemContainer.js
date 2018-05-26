@@ -37,7 +37,7 @@ class MenuItemContainer extends Component {
       .filter(choiceItemPrice => values[choiceItemPrice.get('id')] || values.sizes[choiceItemPrice.get('id')])
       .map(choiceItemPrice =>
         Map({
-          id: cuid(),
+          orderChoiceItemPriceId: cuid(),
           quantity: 1,
           notes: null,
           paid: false,
@@ -68,18 +68,18 @@ class MenuItemContainer extends Component {
     } = this.props;
     const groupId = activeOrderMenuItemPriceGroupId ? activeOrderMenuItemPriceGroupId : cuid();
     const items = Range(0, this.state.quantity).reduce(reduction => {
-      const id = cuid();
+      const orderMenuItemPriceId = cuid();
 
       return reduction.set(
-        id,
+        orderMenuItemPriceId,
         Map({
-          id,
+          orderMenuItemPriceId,
           groupId,
           quantity: 1,
           notes: values.notes,
           paid: false,
           servingTimeId,
-          customer: Map({ id: activeCustomerId }),
+          customer: Map({ customerId: activeCustomerId }),
           menuItemPrice: Map({
             id: menuItemPriceId,
             menuItem: Map({

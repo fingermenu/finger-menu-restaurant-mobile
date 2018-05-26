@@ -24,16 +24,18 @@ const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerCha
           <MenuTrigger>
             <View style={DefaultStyles.rowContainer}>
               <Icon name="person-outline" color="white" />
-              <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>{customers.find(c => c.id === activeCustomerId).name}</Text>
+              <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>
+                {customers.find(customer => customer.customerId === activeCustomerId).name}
+              </Text>
             </View>
           </MenuTrigger>
           <MenuOptions>
             {customers.map(customer => (
               <ActiveCustomersMenuOption
-                key={customer.id}
-                isSelected={customer.id === activeCustomerId}
+                key={customer.customerId}
+                isSelected={customer.customerId === activeCustomerId}
                 name={customer.name}
-                id={customer.id}
+                customerId={customer.customerId}
                 onActiveCustomerChanged={onActiveCustomerChanged}
               />
             ))}
@@ -57,7 +59,7 @@ const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerCha
       <MenuOptions>
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('en_NZ') === 0} language="en_NZ" onLanguageChanged={onLanguageChanged} />
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('zh') === 0} language="zh" onLanguageChanged={onLanguageChanged} />
-        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('jp') === 0} language="jp" onLanguageChanged={onLanguageChanged} />
+        <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('ja') === 0} language="ja" onLanguageChanged={onLanguageChanged} />
       </MenuOptions>
     </Menu>
   </ImageBackground>

@@ -1,6 +1,6 @@
 // @flow
 
-import { GraphQLInt, GraphQLString, GraphQLObjectType } from 'graphql';
+import { GraphQLInt, GraphQLString, GraphQLObjectType, GraphQLNonNull } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'Printer',
@@ -14,12 +14,16 @@ export default new GraphQLObjectType({
       resolve: _ => _.get('type'),
     },
     hostname: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       resolve: _ => _.get('hostname'),
     },
     port: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       resolve: _ => _.get('port'),
+    },
+    maxLineWidth: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: _ => _.get('maxLineWidth'),
     },
   },
 });

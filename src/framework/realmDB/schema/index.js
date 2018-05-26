@@ -15,6 +15,7 @@ export Printer from './Printer';
 export Restaurant from './Restaurant';
 export RestaurantConfigurations from './RestaurantConfigurations';
 export RestaurantImages from './RestaurantImages';
+export RestaurantLanguages from './RestaurantLanguages';
 export Rules from './Rules';
 export ServingTime from './ServingTime';
 export SortOrderIndex from './SortOrderIndex';

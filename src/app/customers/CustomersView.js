@@ -14,11 +14,11 @@ import Styles from './Styles';
 
 const CustomersView = ({ customers, t, handleSubmit }) => (
   <View>
-    {customers.map(_ => (
-      <View key={_.id}>
+    {customers.map(customer => (
+      <View key={customer.cutomerId}>
         <View style={[DefaultStyles.rowContainer, Styles.customerRow]}>
           <Avatar size="large" rounded icon={{ name: 'person-outline', color: DefaultColor.iconColor }} activeOpacity={0.7} />
-          <Field name={_.id} component={TextInput} placeholder={t('notes.placeholder')} />
+          <Field name={customer.customerId} component={TextInput} placeholder={t('notes.placeholder')} />
         </View>
       </View>
     ))}
@@ -34,8 +34,8 @@ CustomersView.propTypes = {
 const mapStateToProps = (state, props) => {
   const initialValues = {};
 
-  props.customers.map(c => {
-    initialValues[c.id] = c.name;
+  props.customers.map(customer => {
+    initialValues[customer.customerId] = customer.name;
   });
 
   return {

@@ -17,8 +17,8 @@ class HeaderContainer extends Component {
     this.props.applicationStateActions.selectedLanguageChanged(language);
   };
 
-  handleActiveCustomerChanged = id => {
-    this.props.applicationStateActions.activeCustomerChanged(Map({ id }));
+  handleActiveCustomerChanged = customerId => {
+    this.props.applicationStateActions.activeCustomerChanged(Map({ customerId }));
   };
 
   handleEditCustomerNamePressed = () => {

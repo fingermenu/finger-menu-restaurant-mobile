@@ -6,6 +6,7 @@ import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
 import PropTypes from 'prop-types';
+import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { environment } from '../../framework/relay';
@@ -14,7 +15,6 @@ import TablesRelayContainer from './TablesRelayContainer';
 import { HeaderContainer } from '../../components/header/';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class Tables extends Component {
   static navigationOptions = () => ({
@@ -29,6 +29,12 @@ class Tables extends Component {
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveTable();
     this.props.applicationStateActions.clearActiveCustomers();
+
+    const language = this.props.defaultDisplayLanguage ? this.props.defaultDisplayLanguage : 'en_NZ';
+
+    this.props.i18n.changeLanguage(language);
+    this.props.applicationStateActions.selectedLanguageChanged(language);
+
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Tables` }));
   };
 
@@ -49,14 +55,13 @@ class Tables extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TablesQuery($appVersion: String, $restaurantId: ID!) {
-            user(appVersion: $appVersion) {
+          query TablesQuery($restaurantId: ID!) {
+            user {
               ...TablesRelayContainer_user
             }
           }
         `}
         variables={{
-          appVersion: packageInfo.version,
           restaurantId: this.props.restaurantId,
         }}
         render={this.renderRelayComponent}
@@ -69,10 +74,16 @@ Tables.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
+  defaultDisplayLanguage: PropTypes.string,
+};
+
+Tables.defaultProps = {
+  defaultDisplayLanguage: null,
 };
 
 const mapStateToProps = state => ({
   restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+  defaultDisplayLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'defaultDisplay']),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -80,4 +91,4 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tables);
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(Tables));

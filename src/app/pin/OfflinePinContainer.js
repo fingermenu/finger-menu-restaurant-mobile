@@ -11,11 +11,18 @@ import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import PinView from './PinView';
 import { eventPrefix } from '../../framework/AnalyticHelper';
+import PackageBundleHelper from '../../framework/PackageBundleHelper';
 
 class OfflinePinContainer extends Component {
+  cleanDevice = async () => {
+    await PackageBundleHelper.cleanAllData();
+
+    this.props.userAccessActions.signOut();
+  };
+
   handleSecretPinMatched = () => {
     AsyncStorage.clear(() => {
-      this.props.userAccessActions.signOut();
+      this.cleanDevice();
     });
   };
 

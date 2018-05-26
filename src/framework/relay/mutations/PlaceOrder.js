@@ -6,7 +6,6 @@ import { NotificationType } from '@microbusiness/common-react';
 import * as messageBarActions from '@microbusiness/common-react/src/notification/Actions';
 import { reduxStore } from '../../../app/navigation';
 import Common from './Common';
-import packageInfo from '../../../../package.json';
 
 const mutation = graphql`
   mutation PlaceOrderMutation($input: PlaceOrderInput!) {
@@ -18,7 +17,7 @@ const mutation = graphql`
           id
           correlationId
           customers {
-            id
+            customerId
             name
             type
           }
@@ -26,16 +25,16 @@ const mutation = graphql`
           placedAt
           cancelledAt
           details {
-            id
+            orderMenuItemPriceId
             paymentGroup {
-              id
+              paymentGroupId
               discount
               paidAt
             }
             quantity
             notes
             customer {
-              id
+              customerId
               name
               type
             }
@@ -46,18 +45,20 @@ const mutation = graphql`
               menuItem {
                 id
                 name
-                nameToPrint
+                nameToPrintOnCustomerReceipt
+                nameToPrintOnKitchenReceipt
                 description
               }
             }
             servingTime {
               id
               tag {
-                nameToPrint
+                nameToPrintOnCustomerReceipt
+                nameToPrintOnKitchenReceipt
               }
             }
             orderChoiceItemPrices {
-              id
+              orderChoiceItemPriceId
               notes
               quantity
               paid
@@ -67,7 +68,8 @@ const mutation = graphql`
                 choiceItem {
                   id
                   name
-                  nameToPrint
+                  nameToPrintOnCustomerReceipt
+                  nameToPrintOnKitchenReceipt
                   description
                 }
               }
@@ -112,7 +114,6 @@ const commit = (
     mutation,
     variables: {
       input: {
-        appVersion: packageInfo.version,
         restaurantId,
         correlationId,
         tableId,

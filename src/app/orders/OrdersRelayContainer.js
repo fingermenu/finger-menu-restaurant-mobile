@@ -52,7 +52,7 @@ export default createRefetchContainer(
               placedAt
               cancelledAt
               details {
-                id
+                orderMenuItemPriceId
                 groupId
                 menuItemPrice {
                   id
@@ -66,12 +66,12 @@ export default createRefetchContainer(
                 quantity
                 notes
                 customer {
+                  customerId
                   name
-                  id
                 }
                 paid
                 orderChoiceItemPrices {
-                  id
+                  orderChoiceItemPriceId
                   notes
                   quantity
                   paid

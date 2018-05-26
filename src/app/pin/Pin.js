@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import Immutable, { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
 import { environment } from '../../framework/relay';
@@ -16,7 +15,6 @@ import OfflinePinContainer from './OfflinePinContainer';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { ActiveRestaurantProp } from '../../framework/applicationState';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class Pin extends Component {
   static navigationOptions = () => ({
@@ -45,8 +43,6 @@ class Pin extends Component {
       this.props.asyncStorageActions.readValue(Map({ key: 'installedPackageBundleChecksum' }));
     }
 
-    this.props.i18n.changeLanguage('en_NZ');
-    this.props.applicationStateActions.selectedLanguageChanged('en_NZ');
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Pin` }));
   };
 
@@ -71,15 +67,13 @@ class Pin extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query PinQuery($appVersion: String) {
-            user(appVersion: $appVersion) {
+          query PinQuery {
+            user {
               ...PinRelayContainer_user
             }
           }
         `}
-        variables={{
-          appVersion: packageInfo.version,
-        }}
+        variables={{}}
         render={this.renderRelayComponent}
       />
     );
@@ -108,4 +102,4 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(Pin));
+export default connect(mapStateToProps, mapDispatchToProps)(Pin);

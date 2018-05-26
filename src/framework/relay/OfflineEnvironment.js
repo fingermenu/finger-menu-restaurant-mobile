@@ -2,6 +2,7 @@
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { graphql } from 'graphql';
+import AsyncStorage from 'react-native/Libraries/Storage/AsyncStorage';
 import {
   getRootSchema,
   configLoaderByKey,
@@ -23,16 +24,29 @@ import {
   tagLoaderById,
 } from '../graphql';
 import i18n from '../../i18n';
+import packageInfo from '../../../package.json';
 
 const rootSchema = getRootSchema();
+let restaurantId;
+
+AsyncStorage.getItem('restaurantId')
+  .then(id => {
+    restaurantId = id;
+  })
+  .catch(() => {});
 
 const fetchOfflineQuery = async (operation, variables) => {
+  if (!restaurantId) {
+    restaurantId = await AsyncStorage.getItem('restaurantId');
+  }
+
   const result = await graphql(
     rootSchema,
     operation.text,
     undefined,
     {
       language: i18n.language,
+      fingerMenuContext: JSON.stringify({ restaurantId, appVersion: packageInfo.version }),
       dataLoaders: {
         configLoaderByKey,
         choiceItemLoaderById,
@@ -66,9 +80,9 @@ const fetchOfflineQuery = async (operation, variables) => {
 // Create a network layer from the fetch function
 const network = Network.create(fetchOfflineQuery);
 const store = new Store(new RecordSource());
-const environment = new Environment({
+const relayEnvironemnt = new Environment({
   network,
   store,
 });
 
-export default environment;
+export default relayEnvironemnt;

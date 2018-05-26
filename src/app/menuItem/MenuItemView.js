@@ -2,10 +2,10 @@
 
 import { Common } from '@microbusiness/common-javascript';
 import { TextInput } from '@microbusiness/redux-form-react-native-elements';
-import { ListItemSeparator, TouchableItem } from '@microbusiness/common-react-native';
+import { ListItemSeparator } from '@microbusiness/common-react-native';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -25,7 +25,7 @@ const MenuItemView = ({
   handleSubmit,
   menuItemPrice: {
     menuItem: { name, description, imageUrl },
-    rules: { mustChooseSize, mustChooseDietaryOption },
+    rules: { mustChooseSize, mustChooseDietaryOption, minNumberOfSideDishes, maxNumberOfSideDishes },
   },
   isAddingOrder,
   menuItemPrice,
@@ -70,10 +70,18 @@ const MenuItemView = ({
       {otherChoiceItemPrices.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('wouldYouLikeSomeSides.message')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>{t('sides.message')}</Text>
+            <Text>
+              {minNumberOfSideDishes > 0 ? t('sides.minSidesMessage').replace('{minNumberOfSideDishes}', minNumberOfSideDishes) : ''}{' '}
+              {maxNumberOfSideDishes > 0 ? t('sides.maxSidesMessage').replace('{maxNumberOfSideDishes}', maxNumberOfSideDishes) : ''}
+            </Text>
             <ListItemSeparator />
           </View>
-          <ChoiceItemPrices choiceItemPrices={otherChoiceItemPrices} />
+          <ChoiceItemPrices
+            choiceItemPrices={otherChoiceItemPrices}
+            minNumberOfChoiceItemPrices={minNumberOfSideDishes}
+            maxNumberOfChoiceItemPrices={maxNumberOfSideDishes}
+          />
         </View>
       )}
     </ScrollView>
@@ -82,20 +90,8 @@ const MenuItemView = ({
         <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
         <QuantityControl value={quantity} onChange={onQuantityChanged} />
       </View>
-
-      {valid &&
-        isAddingOrder && (
-        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-          <Text style={Styles.text}>{t('addToOrder.button').replace('{quantity}', quantity)}</Text>
-        </TouchableItem>
-      )}
-
-      {valid &&
-        !isAddingOrder && (
-        <TouchableItem onPress={handleSubmit} style={Styles.addOrUpdateButtoncontainer}>
-          <Text style={Styles.text}>{t('updateOrder.button')}</Text>
-        </TouchableItem>
-      )}
+      {isAddingOrder && <Button onPress={handleSubmit} title={t('addToOrder.button').replace('{quantity}', quantity)} disabled={!valid} />}
+      {!isAddingOrder && <Button onPress={handleSubmit} title={t('updateOrder.button')} disabled={!valid} />}
     </View>
   </View>
 );

@@ -18,6 +18,7 @@ export default createRefetchContainer(
               name
               hostname
               port
+              maxLineWidth
             }
             images {
               logoImageUrl
@@ -25,6 +26,11 @@ export default createRefetchContainer(
               secondaryLandingPageBackgroundImageUrl
               primaryTopBannerImageUrl
               secondaryTopBannerImageUrl
+            }
+            languages {
+              defaultDisplay
+              printOnCustomerReceipt
+              printOnKitchenReceipt
             }
             documentTemplates {
               name
@@ -49,7 +55,7 @@ export default createRefetchContainer(
                 name
               }
               customers {
-                id
+                customerId
                 name
                 type
               }

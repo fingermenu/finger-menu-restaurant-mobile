@@ -17,18 +17,7 @@
             {
               "name": "user",
               "description": null,
-              "args": [
-                {
-                  "name": "appVersion",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "User",
@@ -40,18 +29,7 @@
             {
               "name": "viewer",
               "description": null,
-              "args": [
-                {
-                  "name": "appVersion",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Viewer",
@@ -90,16 +68,6 @@
           ],
           "inputFields": null,
           "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "String",
-          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -2133,7 +2101,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2157,7 +2137,19 @@
               "deprecationReason": null
             },
             {
-              "name": "descriptionToPrint",
+              "name": "descriptionToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "descriptionToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2230,6 +2222,16 @@
         },
         {
           "kind": "SCALAR",
+          "name": "String",
+          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
           "name": "Int",
           "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. ",
           "fields": null,
@@ -2282,7 +2284,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2306,7 +2320,19 @@
               "deprecationReason": null
             },
             {
-              "name": "descriptionToPrint",
+              "name": "descriptionToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "descriptionToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2548,7 +2574,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2572,7 +2610,19 @@
               "deprecationReason": null
             },
             {
-              "name": "descriptionToPrint",
+              "name": "descriptionToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "descriptionToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2972,7 +3022,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -2996,7 +3058,19 @@
               "deprecationReason": null
             },
             {
-              "name": "descriptionToPrint",
+              "name": "descriptionToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "descriptionToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -3662,7 +3736,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -3686,7 +3772,19 @@
               "deprecationReason": null
             },
             {
-              "name": "descriptionToPrint",
+              "name": "descriptionToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "descriptionToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -3921,7 +4019,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -4010,7 +4120,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "customerId",
               "description": null,
               "args": [],
               "type": {
@@ -4097,7 +4207,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -4248,7 +4370,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -4543,6 +4677,18 @@
               "deprecationReason": null
             },
             {
+              "name": "languages",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "RestaurantLanguages",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "printers",
               "description": null,
               "args": [],
@@ -4685,6 +4831,53 @@
         },
         {
           "kind": "OBJECT",
+          "name": "RestaurantLanguages",
+          "description": null,
+          "fields": [
+            {
+              "name": "defaultDisplay",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "printOnCustomerReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "printOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "Printer",
           "description": null,
           "fields": [
@@ -4717,9 +4910,13 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -4729,9 +4926,29 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "maxLineWidth",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -4850,7 +5067,19 @@
               "deprecationReason": null
             },
             {
-              "name": "nameToPrint",
+              "name": "nameToPrintOnKitchenReceipt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "nameToPrintOnCustomerReceipt",
               "description": null,
               "args": [],
               "type": {
@@ -5286,7 +5515,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "orderMenuItemPriceId",
               "description": null,
               "args": [],
               "type": {
@@ -5445,7 +5674,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "paymentGroupId",
               "description": null,
               "args": [],
               "type": {
@@ -5492,7 +5721,7 @@
           "description": null,
           "fields": [
             {
-              "name": "id",
+              "name": "orderChoiceItemPriceId",
               "description": null,
               "args": [],
               "type": {
@@ -7184,16 +7413,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "name",
               "description": null,
               "type": {
@@ -7341,16 +7560,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "name",
               "description": null,
               "type": {
@@ -7458,16 +7667,6 @@
           "description": null,
           "fields": null,
           "inputFields": [
-            {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "name",
               "description": null,
@@ -7613,16 +7812,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -7730,7 +7919,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "customerId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -7805,16 +7994,6 @@
           "description": null,
           "fields": null,
           "inputFields": [
-            {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "correlationId",
               "description": null,
@@ -7917,7 +8096,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "orderMenuItemPriceId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8054,7 +8233,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "paymentGroupId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8095,7 +8274,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "id",
+              "name": "orderChoiceItemPriceId",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -8218,16 +8397,6 @@
           "description": null,
           "fields": null,
           "inputFields": [
-            {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "id",
               "description": null,
@@ -8379,16 +8548,6 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "id",
               "description": null,
               "type": {
@@ -8458,16 +8617,6 @@
           "description": null,
           "fields": null,
           "inputFields": [
-            {
-              "name": "appVersion",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
             {
               "name": "questionAndAnswers",
               "description": null,

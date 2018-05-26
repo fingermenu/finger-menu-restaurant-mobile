@@ -32,14 +32,14 @@ class TableSetupContainer extends Component {
 
   createCustomerList = (numberOfAdults, numberOfChildren) => {
     const adults = Range(0, numberOfAdults).reduce((reduction, index) => {
-      const id = cuid();
+      const customerId = cuid();
 
-      return reduction.set(id, Map({ id, name: `Guest ${index + 1}`, type: 'A' }));
+      return reduction.set(customerId, Map({ customerId, name: `Guest ${index + 1}`, type: 'A' }));
     }, OrderedMap());
     const children = Range(0, numberOfChildren).reduce((reduction, index) => {
-      const id = cuid();
+      const customerId = cuid();
 
-      return reduction.set(id, Map({ id, name: `Kid ${index + 1}`, type: 'C' }));
+      return reduction.set(customerId, Map({ customerId, name: `Kid ${index + 1}`, type: 'C' }));
     }, OrderedMap());
 
     return adults.merge(children);

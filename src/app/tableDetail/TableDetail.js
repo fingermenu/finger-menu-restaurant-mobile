@@ -12,7 +12,6 @@ import { environment } from '../../framework/relay';
 import TableDetailRelayContainer from './TableDetailRelayContainer';
 import { DefaultColor } from '../../style';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
-import packageInfo from '../../../package.json';
 
 class TableDetail extends Component {
   static navigationOptions = {
@@ -44,14 +43,13 @@ class TableDetail extends Component {
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query TableDetailQuery($appVersion: String, $restaurantId: ID!, $tableId: ID, $lastOrderCorrelationId: ID, $tableIdForTableQuery: ID!) {
-            user(appVersion: $appVersion) {
+          query TableDetailQuery($restaurantId: ID!, $tableId: ID, $lastOrderCorrelationId: ID, $tableIdForTableQuery: ID!) {
+            user {
               ...TableDetailRelayContainer_user
             }
           }
         `}
         variables={{
-          appVersion: packageInfo.version,
           tableId: this.props.tableId,
           lastOrderCorrelationId: this.props.lastOrderCorrelationId,
           tableIdForTableQuery: this.props.tableId,

@@ -1,7 +1,9 @@
 // @flow
 
+import { Map } from 'immutable';
 import { GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import RestaurantImages from './RestaurantImages';
+import RestaurantLanguages from './RestaurantLanguages';
 import Printer from './Printer';
 import DocumentTemplate from './DocumentTemplate';
 
@@ -10,7 +12,11 @@ export default new GraphQLObjectType({
   fields: {
     images: {
       type: RestaurantImages,
-      resolve: _ => (_.get('images') ? _.get('images') : null),
+      resolve: _ => (_.get('images') ? _.get('images') : Map()),
+    },
+    languages: {
+      type: RestaurantLanguages,
+      resolve: _ => (_.get('languages') ? _.get('languages') : Map()),
     },
     printers: {
       type: new GraphQLList(new GraphQLNonNull(Printer)),

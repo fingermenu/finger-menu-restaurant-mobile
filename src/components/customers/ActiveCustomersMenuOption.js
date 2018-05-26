@@ -10,7 +10,7 @@ import { DefaultColor } from '../../style';
 
 class ActiveCustomersMenuOption extends Component {
   handleActiveCustomerChanged = () => {
-    this.props.onActiveCustomerChanged(this.props.id);
+    this.props.onActiveCustomerChanged(this.props.customerId);
   };
 
   render = () => {
@@ -35,7 +35,7 @@ class ActiveCustomersMenuOption extends Component {
 }
 
 ActiveCustomersMenuOption.propTypes = {
-  id: PropTypes.string.isRequired,
+  customerId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onActiveCustomerChanged: PropTypes.func.isRequired,

@@ -16,20 +16,33 @@ const ParentTag = new GraphQLObjectType({
     },
     name: {
       type: GraphQLString,
-      resolve: async (_, args, { language, dataLoaders: { configLoaderByKey } }) => Common.getTranslation(_, 'name', language, configLoaderByKey),
+      resolve: async (_, args, { language, dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToDisplay(_, 'name', language, dataLoaders, fingerMenuContext),
     },
-    nameToPrint: {
+    nameToPrintOnKitchenReceipt: {
       type: GraphQLString,
-      resolve: async (_, args, { dataLoaders: { configLoaderByKey } }) => Common.getTranslationToPrint(_, 'name', configLoaderByKey),
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnKitchenReceipt(_, 'name', dataLoaders, fingerMenuContext),
+    },
+    nameToPrintOnCustomerReceipt: {
+      type: GraphQLString,
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnCustomerReceipt(_, 'name', dataLoaders, fingerMenuContext),
     },
     description: {
       type: GraphQLString,
-      resolve: async (_, args, { language, dataLoaders: { configLoaderByKey } }) =>
-        Common.getTranslation(_, 'description', language, configLoaderByKey),
+      resolve: async (_, args, { language, dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToDisplay(_, 'description', language, dataLoaders, fingerMenuContext),
     },
-    descriptionToPrint: {
+    descriptionToPrintOnKitchenReceipt: {
       type: GraphQLString,
-      resolve: async (_, args, { dataLoaders: { configLoaderByKey } }) => Common.getTranslationToPrint(_, 'description', configLoaderByKey),
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnKitchenReceipt(_, 'description', dataLoaders, fingerMenuContext),
+    },
+    descriptionToPrintOnCustomerReceipt: {
+      type: GraphQLString,
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnCustomerReceipt(_, 'description', dataLoaders, fingerMenuContext),
     },
     imageUrl: {
       type: GraphQLString,
@@ -56,20 +69,33 @@ export default new GraphQLObjectType({
     },
     name: {
       type: GraphQLString,
-      resolve: async (_, args, { language, dataLoaders: { configLoaderByKey } }) => Common.getTranslation(_, 'name', language, configLoaderByKey),
+      resolve: async (_, args, { language, dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToDisplay(_, 'name', language, dataLoaders, fingerMenuContext),
     },
-    nameToPrint: {
+    nameToPrintOnKitchenReceipt: {
       type: GraphQLString,
-      resolve: async (_, args, { dataLoaders: { configLoaderByKey } }) => Common.getTranslationToPrint(_, 'name', configLoaderByKey),
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnKitchenReceipt(_, 'name', dataLoaders, fingerMenuContext),
+    },
+    nameToPrintOnCustomerReceipt: {
+      type: GraphQLString,
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnCustomerReceipt(_, 'name', dataLoaders, fingerMenuContext),
     },
     description: {
       type: GraphQLString,
-      resolve: async (_, args, { language, dataLoaders: { configLoaderByKey } }) =>
-        Common.getTranslation(_, 'description', language, configLoaderByKey),
+      resolve: async (_, args, { language, dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToDisplay(_, 'description', language, dataLoaders, fingerMenuContext),
     },
-    descriptionToPrint: {
+    descriptionToPrintOnKitchenReceipt: {
       type: GraphQLString,
-      resolve: async (_, args, { dataLoaders: { configLoaderByKey } }) => Common.getTranslationToPrint(_, 'description', configLoaderByKey),
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnKitchenReceipt(_, 'description', dataLoaders, fingerMenuContext),
+    },
+    descriptionToPrintOnCustomerReceipt: {
+      type: GraphQLString,
+      resolve: async (_, args, { dataLoaders, fingerMenuContext }) =>
+        Common.getTranslationToPrintOnCustomerReceipt(_, 'description', dataLoaders, fingerMenuContext),
     },
     imageUrl: {
       type: GraphQLString,

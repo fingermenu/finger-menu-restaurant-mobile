@@ -14,7 +14,7 @@ export default createRefetchContainer(
           lastOrderCorrelationId
           name
           customers {
-            id
+            customerId
             name
             type
           }
@@ -34,9 +34,9 @@ export default createRefetchContainer(
               placedAt
               cancelledAt
               details {
-                id
+                orderMenuItemPriceId
                 paymentGroup {
-                  id
+                  paymentGroupId
                   discount
                   paidAt
                 }
@@ -46,19 +46,25 @@ export default createRefetchContainer(
                   menuItem {
                     id
                     name
-                    nameToPrint
+                    nameToPrintOnCustomerReceipt
+                    nameToPrintOnKitchenReceipt
                     imageUrl
                   }
                 }
                 quantity
                 notes
                 customer {
-                  name
+                  customerId
+                }
+                servingTime {
                   id
+                  tag {
+                    nameToPrintOnKitchenReceipt
+                  }
                 }
                 paid
                 orderChoiceItemPrices {
-                  id
+                  orderChoiceItemPriceId
                   notes
                   quantity
                   paid
@@ -68,7 +74,8 @@ export default createRefetchContainer(
                     choiceItem {
                       id
                       name
-                      nameToPrint
+                      nameToPrintOnCustomerReceipt
+                      nameToPrintOnKitchenReceipt
                     }
                   }
                 }

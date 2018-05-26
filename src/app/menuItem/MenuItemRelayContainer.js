@@ -55,6 +55,8 @@ export default createRefetchContainer(
           rules {
             mustChooseSize
             mustChooseDietaryOption
+            minNumberOfSideDishes
+            maxNumberOfSideDishes
           }
         }
       }
