@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import int from 'int';
 import MenuActionButtonView from './MenuActionButtonView';
@@ -39,7 +39,7 @@ const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-  navigateToMenu: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+  navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuActionButtonContainer);

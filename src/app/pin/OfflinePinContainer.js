@@ -8,7 +8,7 @@ import { AsyncStorage } from 'react-native';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import PinView from './PinView';
 import { eventPrefix } from '../../framework/AnalyticHelper';
 import PackageBundleHelper from '../../framework/PackageBundleHelper';
@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   userAccessActions: bindActionCreators(userAccessActions, dispatch),
-  navigateToTables: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
+  navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OfflinePinContainer);

@@ -11,8 +11,8 @@ import { SignUpSignInContainer } from '@microbusiness/common-react-native';
 import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StackActions, NavigationActions, createStackNavigator } from 'react-navigation';
-import { createNavigationPropConstructor, createReactNavigationReduxMiddleware, initializeListeners } from 'react-navigation-redux-helpers';
+import { NavigationActions, StackNavigator } from 'react-navigation';
+import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { bindActionCreators } from 'redux';
 import { Alert, BackHandler, Platform, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ import { SplashContainer } from '../splash';
 import AppNavigationStack from './AppNavigationStack';
 import { configureStore } from '../../framework/redux';
 
-const AppNavigator = createStackNavigator(
+const AppNavigator = StackNavigator(
   {
     Splash: {
       screen: SplashContainer,
@@ -64,7 +64,7 @@ const navigationReducer = (state, action) => {
   switch (action.type) {
   case UserAccessActionTypes.USER_ACCESS_SIGNOUT_IN_PROGRESS:
     newState = AppNavigator.router.getStateForAction(
-      StackActions.reset({
+      NavigationActions.reset({
         index: 0,
         actions: [
           NavigationActions.navigate({
@@ -80,7 +80,7 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
     if (action.payload.get('userExists')) {
       newState = AppNavigator.router.getStateForAction(
-        StackActions.reset({
+        NavigationActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({
@@ -92,7 +92,7 @@ const navigationReducer = (state, action) => {
       );
     } else {
       newState = AppNavigator.router.getStateForAction(
-        StackActions.reset({
+        NavigationActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({
@@ -110,7 +110,7 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_FACEBOOK_SUCCEEDED:
     newState = AppNavigator.router.getStateForAction(
-      StackActions.reset({
+      NavigationActions.reset({
         index: 0,
         actions: [
           NavigationActions.navigate({
@@ -134,7 +134,7 @@ const navigationReducer = (state, action) => {
 const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', state => {
   return state.navigation;
 });
-const navigationPropConstructor = createNavigationPropConstructor('root');
+const addListener = createReduxBoundAddListener('root');
 
 export const reduxStore = configureStore(navigationReducer, reactNavigationMiddleware);
 
@@ -179,8 +179,6 @@ class AppWithNavigationState extends Component {
   state = {};
 
   componentDidMount = () => {
-    initializeListeners('root', this.props.navigation);
-
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
         const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), this.props.navigation);
@@ -265,18 +263,20 @@ class AppWithNavigationState extends Component {
     this.popupDialog = ref;
   };
 
-  render = () => {
-    const navigation = navigationPropConstructor(this.props.dispatch, this.props.navigation);
-
-    return (
-      <View style={{ flex: 1 }}>
-        <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay>
-          <View />
-        </PopupDialog>
-        <AppNavigator navigation={navigation} />
-      </View>
-    );
-  };
+  render = () => (
+    <View style={{ flex: 1 }}>
+      <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay>
+        <View />
+      </PopupDialog>
+      <AppNavigator
+        navigation={{
+          dispatch: this.props.dispatch,
+          state: this.props.navigation,
+          addListener,
+        }}
+      />
+    </View>
+  );
 }
 
 AppWithNavigationState.propTypes = {

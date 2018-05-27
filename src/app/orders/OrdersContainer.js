@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Immutable, { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import OrdersView from './OrdersView';
 import { PlaceOrder } from '../../framework/relay/mutations';
 import { OrderProp } from './PropTypes';
@@ -312,7 +312,8 @@ const mapDispatchToProps = dispatch => ({
   escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
-  navigateToOrderConfirmed: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
+  navigateToOrderConfirmed: () =>
+    dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'OrderConfirmed' })] })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrdersContainer);

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { createBottomTabNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { DefaultColor } from '../../style';
 import i18n from '../../i18n';
@@ -45,6 +45,7 @@ const tabScreens = {
 };
 
 const tabConfig = {
+  tabBarPosition: 'bottom',
   animationEnabled: true,
   swipeEnabled: false,
   lazy: true,
@@ -77,7 +78,7 @@ const createHomeNavigationTab = ({ initialRouteName } = {}) => {
     });
 
     render = () => {
-      const HomeNavigationTab = createBottomTabNavigator(tabScreens, { ...tabConfig, initialRouteName });
+      const HomeNavigationTab = TabNavigator(tabScreens, { ...tabConfig, initialRouteName });
 
       return <HomeNavigationTab screenProps={{ t: i18n.getFixedT() }} />;
     };

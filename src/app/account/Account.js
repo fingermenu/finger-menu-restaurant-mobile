@@ -4,7 +4,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { translate } from 'react-i18next';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import Styles from './Styles';
 
@@ -17,7 +17,17 @@ const Account = ({ t, navigateToPin }) => (
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  navigateToPin: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Pin' })] })),
+  navigateToPin: () =>
+    dispatch(
+      NavigationActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({
+            routeName: 'Pin',
+          }),
+        ],
+      }),
+    ),
   goBack: () => dispatch(NavigationActions.back()),
 });
 
