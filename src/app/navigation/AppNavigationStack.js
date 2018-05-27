@@ -1,6 +1,6 @@
 // @flow
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { HomeNavigationTab, HomeNavigationOrdersTab } from './HomeNavigationTab';
 import { DefaultColor } from '../../style';
 import { MenuItem } from '../menuItem';
@@ -12,7 +12,7 @@ import { OrderConfirmedContainer } from '../orderConfirmed';
 import { Pin } from '../pin/';
 import { CustomersContainer } from '../customers';
 
-export default StackNavigator(
+export default createStackNavigator(
   {
     Pin: {
       screen: Pin,

@@ -4,8 +4,8 @@ import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-
 import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
+import { StackActions, NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import MenuView from './MenuView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
@@ -125,7 +125,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
-  navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
+  navigateToOrders: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);

@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
 import TableDetailView from './TableDetailView';
 import { TableProp } from './PropTypes';
 import { UpdateTable, UpdateOrder } from '../../framework/relay/mutations';
@@ -486,7 +486,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
-  navigateToHome: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+  navigateToHome: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
   navigateToTableSetup: () => dispatch(NavigationActions.navigate({ routeName: 'TableSetup' })),
   goBack: () => dispatch(NavigationActions.back()),
 });

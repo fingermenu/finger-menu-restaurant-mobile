@@ -5,7 +5,7 @@ import { Map, Range, OrderedMap } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cuid from 'cuid';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { translate } from 'react-i18next';
 import { bindActionCreators } from 'redux';
@@ -149,7 +149,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
-  navigateToLanding: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
+  navigateToLanding: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Landing' })] })),
   goBack: () => dispatch(NavigationActions.back()),
 });
 
