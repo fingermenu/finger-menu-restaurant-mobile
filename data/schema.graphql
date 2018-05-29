@@ -140,6 +140,40 @@ input DateRange {
   to: String!
 }
 
+type DepartmentCategory implements Node {
+  id: ID!
+  tag: Tag
+}
+
+type DepartmentCategoryReport {
+  documentCategory: DepartmentCategory
+  totalSale: Float!
+  departmentSubCategoryReport: DepartmentSubCategoryReport
+}
+
+"""A connection to a list of items."""
+type DepartmentCategoryTypeConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [DepartmentCategoryTypeEdge]
+}
+
+"""An edge in a connection."""
+type DepartmentCategoryTypeEdge {
+  """The item at the end of the edge"""
+  node: DepartmentCategory
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type DepartmentSubCategoryReport {
+  documentCategory: DepartmentCategory
+  totalSale: Float!
+}
+
 type DietaryOption implements Node {
   id: ID!
   tag: Tag
@@ -462,10 +496,12 @@ type ParentRestaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
+  departmentCategoryReport(dateRange: DateRange!): [DepartmentCategoryReport!]
 }
 
 type ParentTag implements Node {
   id: ID!
+  key: String
   name: String
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
@@ -555,6 +591,7 @@ type Restaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
+  departmentCategoryReport(dateRange: DateRange!): [DepartmentCategoryReport!]
   parentRestaurant: ParentRestaurant
 }
 
@@ -717,6 +754,7 @@ type TableTypeEdge {
 
 type Tag implements Node {
   id: ID!
+  key: String
   name: String
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
@@ -782,7 +820,7 @@ type UpdateTablePayload {
 type User implements Node {
   id: ID!
   tag(tagId: ID!): Tag
-  tags(after: String, first: Int, before: String, last: Int, tagIds: [ID!], name: String, description: String, level: Int, forDisplay: Boolean, sortOption: String): TagTypeConnection
+  tags(after: String, first: Int, before: String, last: Int, tagIds: [ID!], code: String, name: String, description: String, level: Int, forDisplay: Boolean, sortOption: String): TagTypeConnection
   choiceItem(choiceItemId: ID!): ChoiceItem
   choiceItems(after: String, first: Int, before: String, last: Int, choiceItemIds: [ID!], name: String, description: String, sortOption: String): ChoiceItemTypeConnection
   choiceItemPrice(choiceItemPriceId: ID!): ChoiceItemPrice
@@ -809,6 +847,8 @@ type User implements Node {
   sizes(after: String, first: Int, before: String, last: Int, sizeIds: [ID!], sortOption: String): SizeTypeConnection
   dishType(dishTypeId: ID!): DishType
   dishTypes(after: String, first: Int, before: String, last: Int, dishTypeIds: [ID!], sortOption: String): DishTypeTypeConnection
+  departmentCategory(departmentCategoryId: ID!): DepartmentCategory
+  departmentCategorys(after: String, first: Int, before: String, last: Int, departmentCategoryIds: [ID!], sortOption: String): DepartmentCategoryTypeConnection
 }
 
 type UserFeedback implements Node {
