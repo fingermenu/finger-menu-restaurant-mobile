@@ -20,8 +20,8 @@ import CodePush from 'react-native-code-push';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 import Config from '../../framework/config';
 import { SplashContainer } from '../splash';
-import AppNavigationStack from './AppNavigationStack';
 import { configureStore } from '../../framework/redux';
+import AppDrawer from './AppDrawer';
 
 const AppNavigator = StackNavigator(
   {
@@ -49,7 +49,7 @@ const AppNavigator = StackNavigator(
       path: '/SignUpSignIn',
     },
     App: {
-      screen: AppNavigationStack,
+      screen: AppDrawer,
       path: '/App',
     },
   },
@@ -249,7 +249,7 @@ class AppWithNavigationState extends Component {
           break;
         }
       },
-      ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate(receivedBytes / totalBytes * 100),
+      ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate((receivedBytes / totalBytes) * 100),
     );
   };
 
@@ -320,6 +320,11 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {
-  withRef: true,
-})(AppWithNavigationState);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  null,
+  {
+    withRef: true,
+  },
+)(AppWithNavigationState);

@@ -16,6 +16,7 @@ export default StackNavigator(
   {
     Pin: {
       screen: Pin,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     Tables: {
       screen: Tables,
@@ -28,21 +29,27 @@ export default StackNavigator(
     },
     Landing: {
       screen: LandingContainer,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     Home: {
       screen: HomeNavigationTab,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     HomeOrders: {
       screen: HomeNavigationOrdersTab,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     MenuItem: {
       screen: MenuItem,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     OrderConfirmed: {
       screen: OrderConfirmedContainer,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
     Customers: {
       screen: CustomersContainer,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
   },
   {
