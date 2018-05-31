@@ -33,6 +33,8 @@ class HeaderContainer extends Component {
       customers={this.props.customers}
       activeCustomerId={this.props.activeCustomerId}
       onEditCustomerNamePressed={this.handleEditCustomerNamePressed}
+      showOpenDrawerIcon={this.props.showOpenDrawerIcon}
+      onOpenDrawerIconPressed={this.props.openDrawer}
     />
   );
 }
@@ -43,11 +45,14 @@ HeaderContainer.propTypes = {
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
   navigateToCustomers: PropTypes.func.isRequired,
+  showOpenDrawerIcon: PropTypes.bool,
+  openDrawer: PropTypes.func.isRequired,
 };
 
 HeaderContainer.defaultProps = {
   backgroundImageUrl: null,
   activeCustomerId: null,
+  showOpenDrawerIcon: false,
 };
 
 const mapStateToProps = state => ({
@@ -62,6 +67,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   navigateToCustomers: () => dispatch(NavigationActions.navigate({ routeName: 'Customers' })),
+  openDrawer: () => dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' })),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(HeaderContainer));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(translate()(HeaderContainer));

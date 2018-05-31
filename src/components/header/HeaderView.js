@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ImageBackground, View, Text } from 'react-native';
-import { Icon } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import { TouchableIcon } from '@microbusiness/common-react-native';
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
@@ -15,15 +14,35 @@ import { ImageUtility } from '../image';
 import { DefaultColor, DefaultStyles } from '../../style';
 import { CustomerProp } from '../../framework/applicationState';
 
-const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerChanged, customers, activeCustomerId, onEditCustomerNamePressed }) => (
+const HeaderView = ({
+  onLanguageChanged,
+  backgroundImageUrl,
+  onActiveCustomerChanged,
+  customers,
+  activeCustomerId,
+  onEditCustomerNamePressed,
+  showOpenDrawerIcon,
+  onOpenDrawerIconPressed,
+}) => (
   <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
-    <View />
+    {showOpenDrawerIcon ? (
+      <TouchableIcon
+        onPress={onOpenDrawerIconPressed}
+        iconName="ios-menu"
+        iconType="ionicon"
+        iconColor="white"
+        pressColor={DefaultColor.touchableIconPressColor}
+        iconDisabledColor={DefaultColor.defaultFontColorDisabled}
+        iconContainerStyle={DefaultStyles.iconContainerStyle}
+      />
+    ) : (
+      <View />
+    )}
     {customers.length > 0 && (
       <View style={DefaultStyles.rowContainer}>
         <Menu>
           <MenuTrigger>
             <View style={DefaultStyles.rowContainer}>
-              <Icon name="person-outline" color="white" />
               <Text style={[DefaultStyles.primaryLabelFont, Styles.guestName]}>
                 {customers.find(customer => customer.customerId === activeCustomerId).name}
               </Text>
@@ -45,7 +64,7 @@ const HeaderView = ({ onLanguageChanged, backgroundImageUrl, onActiveCustomerCha
           onPress={onEditCustomerNamePressed}
           iconName="account-edit"
           iconType="material-community"
-          iconColor={DefaultColor.iconColor}
+          iconColor="white"
           pressColor={DefaultColor.touchableIconPressColor}
           iconDisabledColor={DefaultColor.defaultFontColorDisabled}
           iconContainerStyle={DefaultStyles.iconContainerStyle}
@@ -71,10 +90,14 @@ HeaderView.propTypes = {
   onEditCustomerNamePressed: PropTypes.func.isRequired,
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
+  showOpenDrawerIcon: PropTypes.bool,
+  onOpenDrawerIconPressed: PropTypes.func,
 };
 
 HeaderView.defaultProps = {
   activeCustomerId: null,
+  showOpenDrawerIcon: false,
+  onOpenDrawerIconPressed: null,
 };
 
 export default HeaderView;
