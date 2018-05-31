@@ -60,12 +60,10 @@ class PinView extends Component {
 
   validate = pins => {
     const pinString = pins.reduce((reduction, pin) => reduction + pin.value, '');
-    const { matchingPin, secretPin, onSecretPinMatched, onPinMatched } = this.props;
+    const { matchingPin, onPinMatched } = this.props;
 
     // If matching pin
-    if (pinString === secretPin) {
-      onSecretPinMatched();
-    } else if (pinString === matchingPin) {
+    if (pinString === matchingPin) {
       onPinMatched();
     } else {
       this.setState({ error: true });
@@ -115,9 +113,7 @@ class PinView extends Component {
 }
 
 PinView.propTypes = {
-  secretPin: PropTypes.string.isRequired,
   matchingPin: PropTypes.string.isRequired,
-  onSecretPinMatched: PropTypes.func.isRequired,
   onPinMatched: PropTypes.func.isRequired,
 };
 

@@ -1,10 +1,8 @@
 // @flow
 
-import * as userAccessActions from '@microbusiness/common-react/src/userAccess/Actions';
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import * as asyncStorageActions from '@microbusiness/common-react/src/asyncStorage/Actions';
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
 import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +10,6 @@ import { NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import PinView from './PinView';
 import { eventPrefix } from '../../framework/AnalyticHelper';
-import PackageBundleHelper from '../../framework/PackageBundleHelper';
 
 class PinContainer extends Component {
   componentDidMount = () => {
@@ -25,18 +22,6 @@ class PinContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
   };
 
-  cleanDevice = async () => {
-    await PackageBundleHelper.cleanAllData();
-
-    this.props.userAccessActions.signOut();
-  };
-
-  handleSecretPinMatched = () => {
-    AsyncStorage.clear(() => {
-      this.cleanDevice();
-    });
-  };
-
   handlePinMatched = () => {
     this.props.googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}Pin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
@@ -44,19 +29,11 @@ class PinContainer extends Component {
     this.props.navigateToTables();
   };
 
-  render = () => (
-    <PinView
-      secretPin="1875"
-      matchingPin={this.props.restaurant.pin}
-      onSecretPinMatched={this.handleSecretPinMatched}
-      onPinMatched={this.handlePinMatched}
-    />
-  );
+  render = () => <PinView matchingPin={this.props.restaurant.pin} onPinMatched={this.handlePinMatched} />;
 }
 
 PinContainer.propTypes = {
   asyncStorageActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  userAccessActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTables: PropTypes.func.isRequired,
 };
@@ -67,9 +44,11 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = dispatch => ({
   asyncStorageActions: bindActionCreators(asyncStorageActions, dispatch),
-  userAccessActions: bindActionCreators(userAccessActions, dispatch),
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   navigateToTables: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Tables' })] })),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PinContainer);
