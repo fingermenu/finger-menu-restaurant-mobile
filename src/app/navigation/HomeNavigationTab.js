@@ -75,6 +75,10 @@ const createHomeNavigationTab = ({ initialRouteName } = {}) => {
   return class HomeNavigation extends Component {
     static navigationOptions = () => ({
       headerTitle: <HeaderContainer />,
+      headerTintColor: DefaultColor.headerIconDefaultColor,
+      headerStyle: {
+        backgroundColor: DefaultColor.defaultBannerColor,
+      },
     });
 
     render = () => {
