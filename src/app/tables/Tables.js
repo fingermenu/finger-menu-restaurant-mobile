@@ -19,7 +19,7 @@ import { screenNamePrefix } from '../../framework/AnalyticHelper';
 class Tables extends Component {
   static navigationOptions = () => ({
     title: 'Tables',
-    headerTitle: <HeaderContainer />,
+    headerTitle: <HeaderContainer showOpenDrawerIcon />,
     headerTintColor: DefaultColor.headerIconDefaultColor,
     headerStyle: {
       backgroundColor: DefaultColor.defaultBannerColor,
@@ -91,4 +91,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(Tables));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(translate()(Tables));

@@ -7,8 +7,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   touchableContainer: {
     flexDirection: 'row',
@@ -19,6 +17,21 @@ export default StyleSheet.create({
     width: Sizes.iconWidth,
     height: Sizes.iconHeight,
     paddingRight: 5,
+  },
+  languageMenuContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  restaurantNameContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  restaurantName: {
+    color: DefaultColor.defaultBackgroundColor,
   },
   guestName: {
     color: DefaultColor.defaultBackgroundColor,

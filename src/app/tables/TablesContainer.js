@@ -41,7 +41,7 @@ class TablesContainer extends Component {
   componentDidMount = () => {
     const {
       user: {
-        restaurant: { id, pin, configurations, packageBundle },
+        restaurant: { id, pin, name, configurations, packageBundle },
       },
       installedPackageBundleChecksum,
     } = this.props;
@@ -49,7 +49,7 @@ class TablesContainer extends Component {
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
     this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
-    this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(configurations) }));
+    this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, name, configurations: Immutable.fromJS(configurations) }));
 
     if (packageBundle.checksum.localeCompare(installedPackageBundleChecksum) !== 0) {
       this.installLatestPackageBundle(installedPackageBundleChecksum, packageBundle);
@@ -165,4 +165,7 @@ const mapDispatchToProps = dispatch => ({
   notificationActions: bindActionCreators(notificationActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TablesContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TablesContainer);

@@ -11,6 +11,7 @@ export default createRefetchContainer(
         id
         restaurant(restaurantId: $restaurantId) {
           id
+          name
           pin
           configurations {
             printers {

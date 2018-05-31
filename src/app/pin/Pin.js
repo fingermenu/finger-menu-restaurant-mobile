@@ -23,11 +23,11 @@ class Pin extends Component {
 
   static getDerivedStateFromProps = nextProps => {
     const {
-      restaurant: { id, pin, configurations },
+      restaurant: { id, pin, name, configurations },
     } = nextProps;
 
     if (id && pin && configurations && id !== nextProps.activeRestaurant.id) {
-      nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
+      nextProps.applicationStateActions.setActiveRestaurant(Map({ id, pin, name, configurations: Immutable.fromJS(JSON.parse(configurations)) }));
     }
 
     return null;
@@ -102,4 +102,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Pin);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Pin);

@@ -29,7 +29,7 @@ class HeaderContainer extends Component {
     <HeaderView
       onLanguageChanged={this.handleLanguageChanged}
       onActiveCustomerChanged={this.handleActiveCustomerChanged}
-      backgroundImageUrl={this.props.backgroundImageUrl}
+      restaurantName={this.props.restaurantName}
       customers={this.props.customers}
       activeCustomerId={this.props.activeCustomerId}
       onEditCustomerNamePressed={this.handleEditCustomerNamePressed}
@@ -41,22 +41,22 @@ class HeaderContainer extends Component {
 
 HeaderContainer.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  backgroundImageUrl: PropTypes.string,
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
   activeCustomerId: PropTypes.string,
   navigateToCustomers: PropTypes.func.isRequired,
   showOpenDrawerIcon: PropTypes.bool,
   openDrawer: PropTypes.func.isRequired,
+  restaurantName: PropTypes.string,
 };
 
 HeaderContainer.defaultProps = {
-  backgroundImageUrl: null,
   activeCustomerId: null,
   showOpenDrawerIcon: false,
+  restaurantName: '',
 };
 
 const mapStateToProps = state => ({
-  backgroundImageUrl: state.applicationState.getIn(['activeRestaurant', 'configurations', 'images', 'primaryTopBannerImageUrl']),
+  restaurantName: state.applicationState.getIn(['activeRestaurant', 'name']),
   customers: state.applicationState
     .getIn(['activeCustomers', 'customers'])
     .valueSeq()

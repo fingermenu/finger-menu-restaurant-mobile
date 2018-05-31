@@ -1,10 +1,10 @@
 // @flow
 
+import { TouchableIcon } from '@microbusiness/common-react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ImageBackground, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { TouchableIcon } from '@microbusiness/common-react-native';
 import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import Styles from './Styles';
 import { LangaugeSelectorMenuOption } from '../languageSelector';
@@ -15,8 +15,8 @@ import { DefaultColor, DefaultStyles } from '../../style';
 import { CustomerProp } from '../../framework/applicationState';
 
 const HeaderView = ({
+  restaurantName,
   onLanguageChanged,
-  backgroundImageUrl,
   onActiveCustomerChanged,
   customers,
   activeCustomerId,
@@ -24,8 +24,8 @@ const HeaderView = ({
   showOpenDrawerIcon,
   onOpenDrawerIconPressed,
 }) => (
-  <ImageBackground style={Styles.container} source={{ uri: backgroundImageUrl }} resizeMode="stretch">
-    {showOpenDrawerIcon ? (
+  <View style={Styles.container}>
+    {showOpenDrawerIcon && (
       <TouchableIcon
         onPress={onOpenDrawerIconPressed}
         iconName="ios-menu"
@@ -35,9 +35,10 @@ const HeaderView = ({
         iconDisabledColor={DefaultColor.defaultFontColorDisabled}
         iconContainerStyle={DefaultStyles.iconContainerStyle}
       />
-    ) : (
-      <View />
     )}
+    <View style={Styles.restaurantNameContainer}>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.restaurantName]}>{restaurantName}</Text>
+    </View>
     {customers.length > 0 && (
       <View style={DefaultStyles.rowContainer}>
         <Menu>
@@ -71,7 +72,7 @@ const HeaderView = ({
         />
       </View>
     )}
-    <Menu>
+    <Menu style={Styles.languageMenuContainer}>
       <MenuTrigger>
         <FastImage style={Styles.image} source={ImageUtility.getImageSource('languageSelector')} resizeMode={FastImage.resizeMode.contain} />
       </MenuTrigger>
@@ -81,7 +82,7 @@ const HeaderView = ({
         <LangaugeSelectorMenuOption isSelected={i18n.language.localeCompare('ja') === 0} language="ja" onLanguageChanged={onLanguageChanged} />
       </MenuOptions>
     </Menu>
-  </ImageBackground>
+  </View>
 );
 
 HeaderView.propTypes = {
@@ -92,12 +93,14 @@ HeaderView.propTypes = {
   activeCustomerId: PropTypes.string,
   showOpenDrawerIcon: PropTypes.bool,
   onOpenDrawerIconPressed: PropTypes.func,
+  restaurantName: PropTypes.string,
 };
 
 HeaderView.defaultProps = {
   activeCustomerId: null,
   showOpenDrawerIcon: false,
   onOpenDrawerIconPressed: null,
+  restaurantName: '',
 };
 
 export default HeaderView;
