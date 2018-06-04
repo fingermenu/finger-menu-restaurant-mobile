@@ -33,7 +33,7 @@ class AppDrawerMenuContainer extends Component {
       <ScrollView>
         <SafeAreaView style={Styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
           <DrawerItems {...this.props} />
-          <TouchableItem key="signout" onPress={lockScreen} delayPressIn={0}>
+          <TouchableItem key="lockScreen" onPress={lockScreen} delayPressIn={0}>
             <SafeAreaView forceInset={{ vertical: 'never' }}>
               <View style={Styles.item}>
                 <View style={Styles.icon}>

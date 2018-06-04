@@ -139,6 +139,8 @@ const addListener = createReduxBoundAddListener('root');
 export const reduxStore = configureStore(navigationReducer, reactNavigationMiddleware);
 
 class AppWithNavigationState extends Component {
+  state = {};
+
   static getDerivedStateFromProps = nextProps => {
     nextProps.notifications.keySeq().forEach(notificationId => {
       const notification = nextProps.notifications.get(notificationId);
@@ -175,8 +177,6 @@ class AppWithNavigationState extends Component {
 
     return null;
   };
-
-  state = {};
 
   componentDidMount = () => {
     if (Platform.OS === 'android') {

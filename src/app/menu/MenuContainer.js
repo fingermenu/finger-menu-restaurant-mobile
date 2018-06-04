@@ -12,6 +12,15 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class MenuContainer extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
+
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
       nextProps.relay.refetch(_ => _);
@@ -23,15 +32,6 @@ class MenuContainer extends Component {
 
     return null;
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      isRefreshing: false,
-      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
-    };
-  }
 
   componentDidMount = () => {
     this.props.applicationStateActions.clearActiveMenuItemPrice();
@@ -128,4 +128,7 @@ const mapDispatchToProps = dispatch => ({
   navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MenuContainer);

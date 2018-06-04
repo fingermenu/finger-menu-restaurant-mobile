@@ -17,6 +17,15 @@ import { eventPrefix } from '../../framework/AnalyticHelper';
 import PackageBundleHelper from '../../framework/PackageBundleHelper';
 
 class TablesContainer extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      isRefreshing: false,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
+
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
       nextProps.relay.refetch(_ => _);
@@ -28,15 +37,6 @@ class TablesContainer extends Component {
 
     return null;
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      isRefreshing: false,
-      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
-    };
-  }
 
   componentDidMount = () => {
     const {

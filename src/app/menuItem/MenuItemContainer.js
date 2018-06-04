@@ -11,6 +11,15 @@ import * as applicationStateActions from '../../framework/applicationState/Actio
 import MenuItemView from './MenuItemView';
 
 class MenuItemContainer extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      quantity: props.quantity,
+      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
+    };
+  }
+
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
       nextProps.relay.refetch(_ => _);
@@ -22,15 +31,6 @@ class MenuItemContainer extends Component {
 
     return null;
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      quantity: props.quantity,
-      selectedLanguage: props.selectedLanguage, // eslint-disable-line react/no-unused-state
-    };
-  }
 
   getSelectedChoiceItemPrices = values =>
     Immutable.fromJS(this.props.user.menuItemPrice.choiceItemPrices)
@@ -151,4 +151,7 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItemContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MenuItemContainer);

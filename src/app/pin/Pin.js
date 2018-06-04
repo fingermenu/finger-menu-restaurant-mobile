@@ -21,6 +21,8 @@ class Pin extends Component {
     header: null,
   });
 
+  state = {};
+
   static getDerivedStateFromProps = nextProps => {
     const {
       restaurant: { id, pin, name, configurations },
@@ -32,8 +34,6 @@ class Pin extends Component {
 
     return null;
   };
-
-  state = {};
 
   componentDidMount = () => {
     if (!this.props.activeRestaurant.id) {
