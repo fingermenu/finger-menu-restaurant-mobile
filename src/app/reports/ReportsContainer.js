@@ -29,7 +29,7 @@ class ReportsContainer extends Component {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  navigateToDailyReport: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'DailyReport' })] })),
+  navigateToDailyReport: () => dispatch(NavigationActions.navigate({ routeName: 'DailyReport' })),
 });
 
 export default connect(
