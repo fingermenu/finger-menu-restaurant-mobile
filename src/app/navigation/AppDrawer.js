@@ -4,7 +4,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import AppNavigationStack from './AppNavigationStack';
 import { AppDrawerMenuContainer } from '../../components/drawer';
-import { ReportsContainer } from '../reports';
+import Reports from '../reports';
 
 export default DrawerNavigator(
   {
@@ -13,7 +13,7 @@ export default DrawerNavigator(
       navigationOptions: () => ({ drawerLabel: 'Tables', drawerIcon: () => <Icon name="seat-recline-normal" type="material-community" /> }),
     },
     Reports: {
-      screen: ReportsContainer,
+      screen: Reports,
       navigationOptions: () => ({ drawerLabel: 'Reports', drawerIcon: () => <Icon name="report" type="material-icon" /> }),
     },
   },

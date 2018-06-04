@@ -3,10 +3,23 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { HeaderContainer } from '../../components/header/';
 import ReportsView from './ReportsView';
+import { DefaultColor } from '../../style';
 
 class ReportsContainer extends Component {
-  handleDailyReportClicked = () => {};
+  static navigationOptions = () => ({
+    title: 'Reports',
+    headerTitle: <HeaderContainer showOpenDrawerIcon />,
+    headerTintColor: DefaultColor.headerIconDefaultColor,
+    headerStyle: {
+      backgroundColor: DefaultColor.defaultBannerColor,
+    },
+  });
+
+  handleDailyReportClicked = () => {
+    this.props.navigateToDailyReport();
+  };
 
   render = () => {
     return <ReportsView onDailyReportClicked={this.handleDailyReportClicked} />;
@@ -16,8 +29,7 @@ class ReportsContainer extends Component {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  navigateToPin: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Pin' })] })),
-  goBack: () => dispatch(NavigationActions.back()),
+  navigateToDailyReport: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'DailyReport' })] })),
 });
 
 export default connect(
