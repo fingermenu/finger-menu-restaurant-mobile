@@ -7,7 +7,6 @@ import { DefaultColor } from '../../style';
 import i18n from '../../i18n';
 import { HeaderContainer } from '../../components/header';
 import { Menus } from '../menus';
-import { InfoContainer } from '../info';
 import { Orders } from '../orders';
 import { Account } from '../account';
 
@@ -16,14 +15,6 @@ const tabScreens = {
     screen: Menus,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} style={{ color: tintColor }} />,
-    },
-  },
-  Info: {
-    screen: InfoContainer,
-    navigationOptions: {
-      tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'} size={30} style={{ color: tintColor }} />
-      ),
     },
   },
   Orders: {

@@ -10,7 +10,7 @@ import Styles from './Styles';
 
 const Account = ({ t, navigateToPin }) => (
   <View style={Styles.waitressMode}>
-    <Button title={t('waitressMode.label')} onPress={navigateToPin} />
+    <Button title={t('waitressMode.button')} onPress={navigateToPin} />
   </View>
 );
 
@@ -31,4 +31,7 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(Account));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(translate()(Account));
