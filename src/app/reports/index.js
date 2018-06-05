@@ -2,16 +2,12 @@
 
 import { StackNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
-import ReportsContainer from './ReportsContainer';
-import { DailyReportContainer } from './dailyReport';
+import DailyReport from './DailyReport';
 
 export default StackNavigator(
   {
-    ReportsContainer: {
-      screen: ReportsContainer,
-    },
     DailyReport: {
-      screen: DailyReportContainer,
+      screen: DailyReport,
     },
   },
   {

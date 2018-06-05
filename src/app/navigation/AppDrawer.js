@@ -14,7 +14,7 @@ export default DrawerNavigator(
     },
     Reports: {
       screen: Reports,
-      navigationOptions: () => ({ drawerLabel: 'Reports', drawerIcon: () => <Icon name="report" type="material-icon" /> }),
+      navigationOptions: () => ({ drawerLabel: 'Daily Report', drawerIcon: () => <Icon name="report" type="material-icon" /> }),
     },
   },
   { contentComponent: AppDrawerMenuContainer },

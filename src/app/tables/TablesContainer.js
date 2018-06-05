@@ -144,6 +144,7 @@ TablesContainer.propTypes = {
   notificationActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   navigateToTableSetup: PropTypes.func.isRequired,
   navigateToTableDetail: PropTypes.func.isRequired,
+  selectedLanguage: PropTypes.string.isRequired,
   installedPackageBundleChecksum: PropTypes.string,
 };
 
