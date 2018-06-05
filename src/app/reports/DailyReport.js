@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ChronoUnit, ZonedDateTime } from 'js-joda';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import DailyReportRelayContainer from './DailyReportRelayContainer';
@@ -26,17 +25,6 @@ class DailyReport extends Component {
       backgroundColor: DefaultColor.defaultBannerColor,
     },
   });
-
-  state = {
-    from: ZonedDateTime.now()
-      .truncatedTo(ChronoUnit.DAYS)
-      .toString(),
-    to: ZonedDateTime.now()
-      .plusDays(1)
-      .truncatedTo(ChronoUnit.DAYS)
-      .plusSeconds(-1)
-      .toString(),
-  };
 
   componentDidMount = () => {
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
@@ -67,7 +55,7 @@ class DailyReport extends Component {
         `}
         variables={{
           restaurantId: this.props.restaurantId,
-          dateRange: { from: this.state.from, to: this.state.to },
+          dateRange: { from: this.props.from, to: this.props.to },
         }}
         render={this.renderRelayComponent}
       />
@@ -79,10 +67,18 @@ DailyReport.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
+  from: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
+  from: state.dailyReport.get('from').toString(),
+  to: state.dailyReport
+    .get('to')
+    .plusDays(1)
+    .plusSeconds(-1)
+    .toString(),
 });
 
 const mapDispatchToProps = dispatch => ({

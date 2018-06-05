@@ -5,7 +5,8 @@ import { NetInfoReducer } from '@microbusiness/common-react-native';
 import { EscPosPrinterReducer } from '@microbusiness/printer-react-native';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { ApplicationStateReducer } from '../../framework/applicationState';
+import { ApplicationStateReducer } from '../applicationState';
+import { DailyReportReducer } from '../../app/reports';
 
 export default function getReducers(navigationReducer) {
   return combineReducers({
@@ -17,6 +18,7 @@ export default function getReducers(navigationReducer) {
     asyncStorage: AsyncStorageReducer,
     escPosPrinter: EscPosPrinterReducer,
     notification: NotificationReducer,
+    dailyReport: DailyReportReducer,
     form: formReducer,
   });
 }
