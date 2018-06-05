@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { convert } from 'js-joda';
 import DailyReportView from './DailyReportView';
 
 class DailyReportContainer extends Component {
@@ -27,16 +28,22 @@ class DailyReportContainer extends Component {
   };
 
   render = () => {
-    return <DailyReportView />;
+    const { from, to } = this.props;
+
+    return <DailyReportView from={from} to={to} />;
   };
 }
 
 DailyReportContainer.propTypes = {
   selectedLanguage: PropTypes.string.isRequired,
+  from: PropTypes.instanceOf(Date).isRequired,
+  to: PropTypes.instanceOf(Date).isRequired,
 };
 
 const mapStateToProps = state => ({
   selectedLanguage: state.applicationState.get('selectedLanguage'),
+  from: convert(state.dailyReport.get('from')).toDate(),
+  to: convert(state.dailyReport.get('to')).toDate(),
 });
 
 export default connect(mapStateToProps)(DailyReportContainer);
