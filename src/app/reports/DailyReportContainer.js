@@ -3,8 +3,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { convert } from 'js-joda';
+import { bindActionCreators } from 'redux';
+import { LocalDate, LocalTime, DateTimeFormatter, ZonedDateTime, ZoneId } from 'js-joda';
 import DailyReportView from './DailyReportView';
+import * as dailyReportActions from './Actions';
+
+const dateTimeFormatter = DateTimeFormatter.ofPattern('dd-MM-yyyy');
 
 class DailyReportContainer extends Component {
   constructor(props, context) {
@@ -27,23 +31,47 @@ class DailyReportContainer extends Component {
     return null;
   };
 
+  handleFromDateChanged = date => {
+    this.props.dailyReportActions.fromDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+  };
+
+  handleToDateChanged = date => {
+    this.props.dailyReportActions.toDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+  };
+
   render = () => {
     const { from, to } = this.props;
 
-    return <DailyReportView from={from} to={to} />;
+    return (
+      <DailyReportView
+        dateFormat="DD-MM-YYYY"
+        from={from}
+        to={to}
+        onFromDateChanged={this.handleFromDateChanged}
+        onToDateChanged={this.handleToDateChanged}
+      />
+    );
   };
 }
 
 DailyReportContainer.propTypes = {
+  dailyReportActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   selectedLanguage: PropTypes.string.isRequired,
-  from: PropTypes.instanceOf(Date).isRequired,
-  to: PropTypes.instanceOf(Date).isRequired,
+  from: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  to: PropTypes.instanceOf(ZonedDateTime).isRequired,
 };
 
 const mapStateToProps = state => ({
   selectedLanguage: state.applicationState.get('selectedLanguage'),
-  from: convert(state.dailyReport.get('from')).toDate(),
-  to: convert(state.dailyReport.get('to')).toDate(),
+  from: state.dailyReport.get('from'),
+  to: state.dailyReport.get('to'),
 });
 
-export default connect(mapStateToProps)(DailyReportContainer);
+const mapDispatchToProps = dispatch => ({
+  dailyReportActions: bindActionCreators(dailyReportActions, dispatch),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DailyReportContainer);

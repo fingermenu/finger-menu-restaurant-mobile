@@ -4,21 +4,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import DatePicker from 'react-native-datepicker';
+import { convert, ZonedDateTime } from 'js-joda';
+import Styles from './Styles';
 
-const DailyReportView = ({ from, to }) => (
-  <View style={{ flex: 1, flexDirection: 'row' }}>
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-      <DatePicker mode="date" placeholder="From" date={from} confirmBtnText="Confirm" cancelBtnText="Cancel" format="DD-MM-YYYY" />
-    </View>
-    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-      <DatePicker mode="date" placeholder="To" date={to} confirmBtnText="Confirm" cancelBtnText="Cancel" format="DD-MM-YYYY" />
-    </View>
+const DailyReportView = ({ dateFormat, from, to, onFromDateChanged, onToDateChanged }) => (
+  <View style={Styles.dateRangeContainer}>
+    <DatePicker
+      mode="date"
+      placeholder="From"
+      date={convert(from).toDate()}
+      confirmBtnText="Confirm"
+      cancelBtnText="Cancel"
+      format={dateFormat}
+      onDateChange={onFromDateChanged}
+    />
+    <DatePicker
+      mode="date"
+      placeholder="To"
+      date={convert(to).toDate()}
+      confirmBtnText="Confirm"
+      cancelBtnText="Cancel"
+      format={dateFormat}
+      onDateChange={onToDateChanged}
+    />
   </View>
 );
 
 DailyReportView.propTypes = {
-  from: PropTypes.instanceOf(Date).isRequired,
-  to: PropTypes.instanceOf(Date).isRequired,
+  dateFormat: PropTypes.string.isRequired,
+  from: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  to: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  onFromDateChanged: PropTypes.func.isRequired,
+  onToDateChanged: PropTypes.func.isRequired,
 };
 
 export default DailyReportView;

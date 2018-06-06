@@ -9,12 +9,14 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { ChronoUnit, ZonedDateTime } from 'js-joda';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import DailyReportRelayContainer from './DailyReportRelayContainer';
 import { HeaderContainer } from '../../components/header/';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
+import * as dailyReportActions from './Actions';
 
 class DailyReport extends Component {
   static navigationOptions = () => ({
@@ -27,6 +29,8 @@ class DailyReport extends Component {
   });
 
   componentDidMount = () => {
+    this.props.dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    this.props.dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
   };
 
@@ -66,6 +70,7 @@ class DailyReport extends Component {
 DailyReport.propTypes = {
   applicationStateActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  dailyReportActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
@@ -84,6 +89,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
+  dailyReportActions: bindActionCreators(dailyReportActions, dispatch),
 });
 
 export default connect(
