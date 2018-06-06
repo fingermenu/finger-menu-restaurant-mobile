@@ -32,7 +32,13 @@ class DailyReportContainer extends Component {
   };
 
   handleFromDateChanged = date => {
-    this.props.dailyReportActions.fromDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+    const from = ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM);
+
+    if (from.toLocalDate().isAfter(this.props.to.toLocalDate())) {
+      this.props.dailyReportActions.toDateChanged(from);
+    }
+
+    this.props.dailyReportActions.fromDateChanged(from);
   };
 
   handleToDateChanged = date => {
