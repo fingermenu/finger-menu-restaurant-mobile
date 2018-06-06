@@ -5,16 +5,17 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import { convert, ZonedDateTime } from 'js-joda';
+import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-const DailyReportView = ({ dateFormat, from, to, onFromDateChanged, onToDateChanged }) => (
+const DailyReportView = ({ t, dateFormat, from, to, onFromDateChanged, onToDateChanged }) => (
   <View style={Styles.dateRangeContainer}>
     <DatePicker
       mode="date"
       placeholder="From"
       date={convert(from).toDate()}
-      confirmBtnText="Confirm"
-      cancelBtnText="Cancel"
+      confirmBtnText={t('confirm.button')}
+      cancelBtnText={t('cancel.button')}
       format={dateFormat}
       onDateChange={onFromDateChanged}
     />
@@ -24,8 +25,8 @@ const DailyReportView = ({ dateFormat, from, to, onFromDateChanged, onToDateChan
       date={convert(to).toDate()}
       minDate={convert(from).toDate()}
       maxDate={convert(from.plusMonths(1)).toDate()}
-      confirmBtnText="Confirm"
-      cancelBtnText="Cancel"
+      confirmBtnText={t('confirm.button')}
+      cancelBtnText={t('cancel.button')}
       format={dateFormat}
       onDateChange={onToDateChanged}
     />
@@ -40,4 +41,4 @@ DailyReportView.propTypes = {
   onToDateChanged: PropTypes.func.isRequired,
 };
 
-export default DailyReportView;
+export default translate()(DailyReportView);
