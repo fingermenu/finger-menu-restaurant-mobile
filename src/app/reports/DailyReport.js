@@ -59,7 +59,7 @@ class DailyReport extends Component {
         `}
         variables={{
           restaurantId: this.props.restaurantId,
-          dateRange: { from: this.props.from, to: this.props.to },
+          dateRange: this.props.dateRange,
         }}
         render={this.renderRelayComponent}
       />
@@ -72,18 +72,22 @@ DailyReport.propTypes = {
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   dailyReportActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  dateRange: PropTypes.shape({
+    from: PropTypes.string.isRequired,
+    to: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({
   restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  from: state.dailyReport.get('from').toString(),
-  to: state.dailyReport
-    .get('to')
-    .plusDays(1)
-    .plusSeconds(-1)
-    .toString(),
+  dateRange: {
+    from: state.dailyReport.get('from').toString(),
+    to: state.dailyReport
+      .get('to')
+      .plusDays(1)
+      .plusSeconds(-1)
+      .toString(),
+  },
 });
 
 const mapDispatchToProps = dispatch => ({
