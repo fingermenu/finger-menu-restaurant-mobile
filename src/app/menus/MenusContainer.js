@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TabNavigator } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import int from 'int';
 import { Menu } from '../menu';
@@ -53,9 +53,7 @@ class MenusContainer extends Component {
 
   getMenusTabConfig = () => {
     const MenusTabConfig = {
-      lazy: false,
-      tabBarPosition: 'top',
-      ...TabNavigator.Presets.AndroidTopTabs,
+      lazy: true,
       initialRouteName: this.props.menuId,
       tabBarOptions: {
         scrollEnabled: true,
@@ -81,7 +79,7 @@ class MenusContainer extends Component {
   };
 
   render = () => {
-    const MenuNavigationTab = TabNavigator(this.getMenusScreens(), this.getMenusTabConfig());
+    const MenuNavigationTab = createMaterialTopTabNavigator(this.getMenusScreens(), this.getMenusTabConfig());
 
     return <MenuNavigationTab />;
   };

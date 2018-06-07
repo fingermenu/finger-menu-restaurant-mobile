@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
 import OrderConfirmedView from './OrderConfirmedView';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
@@ -38,7 +38,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
-  navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
+  navigateToMenu: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderConfirmedContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OrderConfirmedContainer);

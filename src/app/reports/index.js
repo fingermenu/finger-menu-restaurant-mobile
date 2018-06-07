@@ -1,12 +1,12 @@
 // @flow
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
 import DailyReport from './DailyReport';
 
 export DailyReportReducer from './Reducer';
 
-export default StackNavigator(
+export default createStackNavigator(
   {
     DailyReport: {
       screen: DailyReport,

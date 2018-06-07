@@ -4,7 +4,7 @@ import * as userAccessActions from '@microbusiness/common-react/src/userAccess/A
 import { TouchableItem } from '@microbusiness/common-react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DrawerItems, SafeAreaView, NavigationActions } from 'react-navigation';
+import { DrawerItems, StackActions, SafeAreaView, NavigationActions } from 'react-navigation';
 import { AsyncStorage, ScrollView, View, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { bindActionCreators } from 'redux';
@@ -69,17 +69,7 @@ const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   userAccessActions: bindActionCreators(userAccessActions, dispatch),
-  lockScreen: () =>
-    dispatch(
-      NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: 'Pin',
-          }),
-        ],
-      }),
-    ),
+  lockScreen: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Pin' })] })),
 });
 
 export default connect(

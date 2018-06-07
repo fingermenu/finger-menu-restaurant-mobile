@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
-import { DrawerNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import AppNavigationStack from './AppNavigationStack';
 import { AppDrawerMenuContainer } from '../../components/drawer';
 import Reports from '../reports';
 
-export default DrawerNavigator(
+export default createDrawerNavigator(
   {
     Home: {
       screen: AppNavigationStack,

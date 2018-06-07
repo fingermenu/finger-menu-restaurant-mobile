@@ -4,7 +4,7 @@ import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-
 import { Map } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import MenuView from './MenuView';
@@ -38,7 +38,7 @@ class MenuContainer extends Component {
     this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
-  onViewMenuItemPressed = id => {
+  handleViewMenuItemPressed = id => {
     this.props.applicationStateActions.clearActiveOrderMenuItemPrice();
 
     const {
@@ -85,7 +85,7 @@ class MenuContainer extends Component {
       <MenuView
         menuItemPrices={menuItemPrices}
         inMemoryMenuItemPricesToOrder={inMemoryMenuItemPricesToOrder}
-        onViewMenuItemPressed={this.onViewMenuItemPressed}
+        onViewMenuItemPressed={this.handleViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
         isRefreshing={this.state.isRefreshing}
@@ -125,7 +125,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   navigateToMenuItem: () => dispatch(NavigationActions.navigate({ routeName: 'MenuItem' })),
-  navigateToOrders: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
+  navigateToOrders: () => dispatch(StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'HomeOrders' })] })),
 });
 
 export default connect(
