@@ -11,14 +11,14 @@ export default createRefetchContainer(
         id
         restaurant(restaurantId: $restaurantId) {
           departmentCategoryReport(dateRange: $dateRange) {
-            documentCategory {
+            departmentCategory {
               tag {
                 name
               }
             }
             totalSale
             departmentSubCategoryReport {
-              documentCategory {
+              departmentCategory {
                 tag {
                   name
                 }

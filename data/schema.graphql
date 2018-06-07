@@ -146,7 +146,7 @@ type DepartmentCategory implements Node {
 }
 
 type DepartmentCategoryReport {
-  documentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory
   totalSale: Float!
   departmentSubCategoryReport: DepartmentSubCategoryReport
 }
@@ -170,7 +170,7 @@ type DepartmentCategoryTypeEdge {
 }
 
 type DepartmentSubCategoryReport {
-  documentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory
   totalSale: Float!
 }
 
