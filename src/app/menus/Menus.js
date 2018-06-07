@@ -8,7 +8,7 @@ import { graphql, QueryRenderer } from 'react-relay';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { offlineEnvironment as environment } from '../../framework/relay';
+import { environment } from '../../framework/relay';
 import MenusRelayContainer from './MenusRelayContainer';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
@@ -62,4 +62,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menus);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Menus);

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavigationActions } from 'react-navigation';
+import { DrawerActions, NavigationActions } from 'react-navigation';
 import HeaderView from './HeaderView';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { CustomerProp } from '../../framework/applicationState';
@@ -67,7 +67,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   applicationStateActions: bindActionCreators(applicationStateActions, dispatch),
   navigateToCustomers: () => dispatch(NavigationActions.navigate({ routeName: 'Customers' })),
-  openDrawer: () => dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' })),
+  openDrawer: () => dispatch(DrawerActions.openDrawer()),
 });
 
 export default connect(
