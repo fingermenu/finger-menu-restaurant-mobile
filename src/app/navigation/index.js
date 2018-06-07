@@ -131,9 +131,7 @@ const navigationReducer = (state, action) => {
 };
 
 // Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
-const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', state => {
-  return state.navigation;
-});
+const reactNavigationMiddleware = createReactNavigationReduxMiddleware('root', state => state.navigation);
 const navigationPropConstructor = createNavigationPropConstructor('root');
 
 export const reduxStore = configureStore(navigationReducer, reactNavigationMiddleware);
