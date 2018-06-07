@@ -69,7 +69,7 @@
     "react-native-swiper": "^1.5.13",
     "react-native-tcp": "^3.3.0",
     "react-native-vector-icons": "4.6.0",
-    "react-native-zip-archive": "^2.2.5",
+    "react-native-zip-archive": "^2.2.6",
     "react-navigation": "1.5.12",
     "react-navigation-redux-helpers": "^1.0.6",
     "react-redux": "5.0.7",
