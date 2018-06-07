@@ -14,10 +14,9 @@ import PropTypes from 'prop-types';
 import { NavigationActions, StackNavigator } from 'react-navigation';
 import { createReduxBoundAddListener, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { bindActionCreators } from 'redux';
-import { Alert, BackHandler, Platform, View } from 'react-native';
+import { Alert, BackHandler, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import CodePush from 'react-native-code-push';
-import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 import Config from '../../framework/config';
 import { SplashContainer } from '../splash';
 import { configureStore } from '../../framework/redux';
@@ -64,15 +63,7 @@ const navigationReducer = (state, action) => {
   switch (action.type) {
   case UserAccessActionTypes.USER_ACCESS_SIGNOUT_IN_PROGRESS:
     newState = AppNavigator.router.getStateForAction(
-      NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: 'SignUpSignIn',
-          }),
-        ],
-        key: null,
-      }),
+      NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
       state,
     );
     break;
@@ -80,27 +71,12 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
     if (action.payload.get('userExists')) {
       newState = AppNavigator.router.getStateForAction(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'App',
-            }),
-          ],
-        }),
+        NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
         state,
       );
     } else {
       newState = AppNavigator.router.getStateForAction(
-        NavigationActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'SignUpSignIn',
-            }),
-          ],
-          key: null,
-        }),
+        NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
         state,
       );
     }
@@ -110,14 +86,7 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_FACEBOOK_SUCCEEDED:
     newState = AppNavigator.router.getStateForAction(
-      NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: 'App',
-          }),
-        ],
-      }),
+      NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
       state,
     );
     break;
@@ -264,18 +233,13 @@ class AppWithNavigationState extends Component {
   };
 
   render = () => (
-    <View style={{ flex: 1 }}>
-      <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay>
-        <View />
-      </PopupDialog>
-      <AppNavigator
-        navigation={{
-          dispatch: this.props.dispatch,
-          state: this.props.navigation,
-          addListener,
-        }}
-      />
-    </View>
+    <AppNavigator
+      navigation={{
+        dispatch: this.props.dispatch,
+        state: this.props.navigation,
+        addListener,
+      }}
+    />
   );
 }
 
