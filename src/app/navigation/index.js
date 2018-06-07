@@ -64,15 +64,7 @@ const navigationReducer = (state, action) => {
   switch (action.type) {
   case UserAccessActionTypes.USER_ACCESS_SIGNOUT_IN_PROGRESS:
     newState = AppNavigator.router.getStateForAction(
-      StackActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: 'SignUpSignIn',
-          }),
-        ],
-        key: null,
-      }),
+      StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
       state,
     );
     break;
@@ -80,27 +72,12 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
     if (action.payload.get('userExists')) {
       newState = AppNavigator.router.getStateForAction(
-        StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'App',
-            }),
-          ],
-        }),
+        StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
         state,
       );
     } else {
       newState = AppNavigator.router.getStateForAction(
-        StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: 'SignUpSignIn',
-            }),
-          ],
-          key: null,
-        }),
+        StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
         state,
       );
     }
@@ -110,14 +87,7 @@ const navigationReducer = (state, action) => {
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
   case UserAccessActionTypes.USER_ACCESS_SIGNIN_WITH_FACEBOOK_SUCCEEDED:
     newState = AppNavigator.router.getStateForAction(
-      StackActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: 'App',
-          }),
-        ],
-      }),
+      StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
       state,
     );
     break;
