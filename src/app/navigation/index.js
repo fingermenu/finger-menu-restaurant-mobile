@@ -26,7 +26,6 @@ const AppNavigator = StackNavigator(
   {
     Splash: {
       screen: SplashContainer,
-      path: '/',
     },
     SignUpSignIn: {
       screen: props => (
@@ -57,7 +56,8 @@ const AppNavigator = StackNavigator(
   },
 );
 
-const navigationReducer = (state, action) => {
+const routerInitialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Splash'));
+const navigationReducer = (state = routerInitialState, action) => {
   let newState;
 
   switch (action.type) {
