@@ -3,6 +3,7 @@
 import { createStackNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
 import DailyReport from './DailyReport';
+import { Pin } from '../pin/';
 
 export DailyReportReducer from './Reducer';
 
@@ -10,6 +11,10 @@ export default createStackNavigator(
   {
     DailyReport: {
       screen: DailyReport,
+    },
+    Pin: {
+      screen: Pin,
+      navigationOptions: () => ({ drawerLockMode: 'locked-closed' }),
     },
   },
   {

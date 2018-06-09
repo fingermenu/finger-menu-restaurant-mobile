@@ -14,10 +14,9 @@ import PropTypes from 'prop-types';
 import { StackActions, NavigationActions, createStackNavigator } from 'react-navigation';
 import { createNavigationPropConstructor, createReactNavigationReduxMiddleware, initializeListeners } from 'react-navigation-redux-helpers';
 import { bindActionCreators } from 'redux';
-import { Alert, BackHandler, Platform, View } from 'react-native';
+import { Alert, BackHandler, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import CodePush from 'react-native-code-push';
-import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 import Config from '../../framework/config';
 import { SplashContainer } from '../splash';
 import { configureStore } from '../../framework/redux';
@@ -27,7 +26,6 @@ const AppNavigator = createStackNavigator(
   {
     Splash: {
       screen: SplashContainer,
-      path: '/',
     },
     SignUpSignIn: {
       screen: props => (
@@ -46,11 +44,9 @@ const AppNavigator = createStackNavigator(
           displayEnvironmentSelector
         />
       ),
-      path: '/SignUpSignIn',
     },
     App: {
       screen: AppDrawer,
-      path: '/App',
     },
   },
   {
@@ -58,7 +54,8 @@ const AppNavigator = createStackNavigator(
   },
 );
 
-const navigationReducer = (state, action) => {
+const routerInitialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Splash'));
+const navigationReducer = (state = routerInitialState, action) => {
   let newState;
 
   switch (action.type) {
@@ -67,6 +64,7 @@ const navigationReducer = (state, action) => {
       StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
       state,
     );
+
     break;
 
   case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
@@ -81,6 +79,7 @@ const navigationReducer = (state, action) => {
         state,
       );
     }
+
     break;
 
   case UserAccessActionTypes.USER_ACCESS_SIGNUP_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
@@ -90,10 +89,12 @@ const navigationReducer = (state, action) => {
       StackActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
       state,
     );
+
     break;
 
   default:
     newState = AppNavigator.router.getStateForAction(action, state);
+
     break;
   }
 
@@ -236,14 +237,7 @@ class AppWithNavigationState extends Component {
   render = () => {
     const navigation = navigationPropConstructor(this.props.dispatch, this.props.navigation);
 
-    return (
-      <View style={{ flex: 1 }}>
-        <PopupDialog ref={this.setPopupDialogRef} dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })} width={200} haveOverlay>
-          <View />
-        </PopupDialog>
-        <AppNavigator navigation={navigation} />
-      </View>
-    );
+    return <AppNavigator navigation={navigation} />;
   };
 }
 
