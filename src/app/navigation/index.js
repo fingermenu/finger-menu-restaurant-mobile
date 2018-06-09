@@ -44,11 +44,9 @@ const AppNavigator = StackNavigator(
           displayEnvironmentSelector
         />
       ),
-      path: '/SignUpSignIn',
     },
     App: {
       screen: AppDrawer,
-      path: '/App',
     },
   },
   {
@@ -66,6 +64,7 @@ const navigationReducer = (state = routerInitialState, action) => {
       NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'SignUpSignIn' })], key: null }),
       state,
     );
+
     break;
 
   case UserAccessActionTypes.USER_ACCESS_GET_CURRENT_USER_SUCCEEDED:
@@ -80,6 +79,7 @@ const navigationReducer = (state = routerInitialState, action) => {
         state,
       );
     }
+
     break;
 
   case UserAccessActionTypes.USER_ACCESS_SIGNUP_WITH_USERNAME_AND_PASSWORD_SUCCEEDED:
@@ -89,10 +89,12 @@ const navigationReducer = (state = routerInitialState, action) => {
       NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'App' })] }),
       state,
     );
+
     break;
 
   default:
     newState = AppNavigator.router.getStateForAction(action, state);
+
     break;
   }
 
