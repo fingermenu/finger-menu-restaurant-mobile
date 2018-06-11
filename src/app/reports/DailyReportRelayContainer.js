@@ -10,14 +10,14 @@ export default createRefetchContainer(
       fragment DailyReportRelayContainer_user on User {
         id
         restaurant(restaurantId: $restaurantId) {
-          departmentCategoryReport(dateRange: $dateRange) {
+          departmentCategoriesReport(dateRange: $dateRange) {
             departmentCategory {
               tag {
                 name
               }
             }
             totalSale
-            departmentSubCategoryReport {
+            departmentSubCategoriesReport {
               departmentCategory {
                 tag {
                   name
