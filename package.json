@@ -1,7 +1,7 @@
 {
   "name": "FingerMenuRestaurant",
   "description": "Finger Menu Restaurant",
-  "version": "0.5.46",
+  "version": "0.5.47",
   "author": {
     "name": "FingerMenu Ltd",
     "email": "fingermenu.ltd@gmail.com",
@@ -64,7 +64,7 @@
     "react-native-fs": "^2.10.14",
     "react-native-google-analytics-bridge": "^5.8.0",
     "react-native-popup-dialog": "^0.14.48",
-    "react-native-popup-menu": "^0.13.1",
+    "react-native-popup-menu": "^0.13.2",
     "react-native-restart": "0.0.6",
     "react-native-swiper": "^1.5.13",
     "react-native-tcp": "^3.3.0",

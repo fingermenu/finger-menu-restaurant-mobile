@@ -46,7 +46,7 @@ class MenuContainer extends Component {
     navigateToMenuItem();
   };
 
-  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { prevSelectedLanguage }) => {
+  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { selectedLanguage: prevSelectedLanguage }) => {
     if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
       relay.refetch(_ => _);
 

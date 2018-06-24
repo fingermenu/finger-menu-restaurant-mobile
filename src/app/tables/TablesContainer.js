@@ -46,7 +46,7 @@ class TablesContainer extends Component {
     }
   };
 
-  static getDerivedStateFromProps = ({ selectedLanguage, relay }, { prevSelectedLanguage }) => {
+  static getDerivedStateFromProps = ({ selectedLanguage, relay }, { selectedLanguage: prevSelectedLanguage }) => {
     if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
       relay.refetch(_ => _);
 
