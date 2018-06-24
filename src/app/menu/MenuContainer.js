@@ -41,16 +41,16 @@ class MenuContainer extends Component {
   };
 
   handleViewMenuItemPressed = id => {
-    const { applicationStateActions, navigateToMenuItem } = this.props;
-
-    applicationStateActions.clearActiveOrderMenuItemPrice();
-
     const {
       user: {
         servingTimes: { edges: servingTimesEdges },
         menu: { tags: menuTags },
       },
+      applicationStateActions,
+      navigateToMenuItem,
     } = this.props;
+    applicationStateActions.clearActiveOrderMenuItemPrice();
+
     const servingTimes = servingTimesEdges.map(_ => _.node);
     const filteredServingTime = servingTimes.filter(servingTime => menuTags.find(menuTag => menuTag.id.localeCompare(servingTime.tag.id) === 0));
 
