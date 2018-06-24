@@ -28,7 +28,7 @@ class MenuContainer extends Component {
     googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
-  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { prevSelectedLanguage }) => {
+  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { selectedLanguage: prevSelectedLanguage }) => {
     if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
       relay.refetch(_ => _);
 
@@ -49,7 +49,6 @@ class MenuContainer extends Component {
       applicationStateActions,
       navigateToMenuItem,
     } = this.props;
-
     applicationStateActions.clearActiveOrderMenuItemPrice();
 
     const servingTimes = servingTimesEdges.map(_ => _.node);
