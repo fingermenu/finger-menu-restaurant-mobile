@@ -28,7 +28,19 @@ class MenuContainer extends Component {
     googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
-  onViewMenuItemPressed = id => {
+  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { selectedLanguage: prevSelectedLanguage }) => {
+    if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
+      relay.refetch(_ => _);
+
+      return {
+        selectedLanguage,
+      };
+    }
+
+    return null;
+  };
+
+  handleViewMenuItemPressed = id => {
     const { applicationStateActions, navigateToMenuItem } = this.props;
 
     applicationStateActions.clearActiveOrderMenuItemPrice();
@@ -44,18 +56,6 @@ class MenuContainer extends Component {
 
     applicationStateActions.setActiveMenuItemPrice(Map({ id, servingTimeId: filteredServingTime.length > 0 ? filteredServingTime[0].id : null }));
     navigateToMenuItem();
-  };
-
-  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { selectedLanguage: prevSelectedLanguage }) => {
-    if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
-      relay.refetch(_ => _);
-
-      return {
-        selectedLanguage,
-      };
-    }
-
-    return null;
   };
 
   handleRefresh = () => {
@@ -91,7 +91,7 @@ class MenuContainer extends Component {
       <MenuView
         menuItemPrices={menuItemPrices}
         inMemoryMenuItemPricesToOrder={inMemoryMenuItemPricesToOrder}
-        onViewMenuItemPressed={this.onViewMenuItemPressed}
+        onViewMenuItemPressed={this.handleViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
         isRefreshing={isRefreshing}
