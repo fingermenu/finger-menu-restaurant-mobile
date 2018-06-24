@@ -12,13 +12,19 @@ import { eventPrefix } from '../../framework/AnalyticHelper';
 
 class OfflinePinContainer extends Component {
   handlePinMatched = () => {
-    this.props.googleAnalyticsTrackerActions.trackEvent(
+    const { googleAnalyticsTrackerActions, navigateToTables } = this.props;
+
+    googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}OfflinePin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
-    this.props.navigateToTables();
+    navigateToTables();
   };
 
-  render = () => <PinView matchingPin={this.props.pin} onPinMatched={this.handlePinMatched} />;
+  render = () => {
+    const { pin } = this.props;
+
+    return <PinView matchingPin={pin} onPinMatched={this.handlePinMatched} />;
+  };
 }
 
 OfflinePinContainer.propTypes = {

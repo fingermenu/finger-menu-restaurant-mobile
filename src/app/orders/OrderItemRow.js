@@ -34,19 +34,25 @@ class OrderItemRow extends Component {
 
   handleRemoveOrderPressed = () => {
     if (this.onRemoveOrderPressedDebounced) {
-      this.onRemoveOrderPressedDebounced(this.props.orderItem);
+      const { orderItem } = this.props;
+
+      this.onRemoveOrderPressedDebounced(orderItem);
     }
   };
 
   handleViewOrderItemPressed = () => {
     if (this.onViewOrderItemPressedDebounced) {
-      this.onViewOrderItemPressedDebounced(this.props.orderItem);
+      const { orderItem } = this.props;
+
+      this.onViewOrderItemPressedDebounced(orderItem);
     }
   };
 
   handleOrderItemSelected = () => {
     if (this.onOrderSelectedDebounced) {
-      this.onOrderSelectedDebounced(this.props.orderItem, !this.props.isSelected);
+      const { orderItem, isSelected } = this.props;
+
+      this.onOrderSelectedDebounced(orderItem, !isSelected);
     }
   };
 
@@ -96,21 +102,35 @@ class OrderItemRow extends Component {
             />
           )}
           <View style={Styles.quantityContainer}>
-            <Text style={DefaultStyles.primaryFont}>{quantity}x</Text>
+            <Text style={DefaultStyles.primaryFont}>
+              {quantity}
+              x
+            </Text>
           </View>
           <View style={Styles.titleContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {name}
+            </Text>
             {notes &&
               notes.trim() && (
               <Text style={DefaultStyles.primaryFont}>
-                {t('notes.label')}: {notes}
+                {t('notes.label')}
+                  :
+                {notes}
               </Text>
             )}
             {this.renderChoiceItemPrices(orderChoiceItemPrices)}
           </View>
           <View style={DefaultStyles.rowContainer}>
-            {paid && <Text style={Styles.paid}>{t('paid.label')}</Text>}
-            <Text style={DefaultStyles.primaryLabelFont}>${totalPrice.toFixed(2)}</Text>
+            {paid && (
+              <Text style={Styles.paid}>
+                {t('paid.label')}
+              </Text>
+            )}
+            <Text style={DefaultStyles.primaryLabelFont}>
+              $
+              {totalPrice.toFixed(2)}
+            </Text>
             {orderItemIsEditable && showRemove ? (
               <TouchableIcon
                 onPress={this.handleRemoveOrderPressed}

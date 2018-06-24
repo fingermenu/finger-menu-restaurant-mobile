@@ -33,34 +33,37 @@ class NumberPad extends Component {
     }
 
     this.updateIndex(id);
-    this.props.onNumberPressed(id);
+
+    const { onNumberPressed } = this.props;
+
+    onNumberPressed(id);
   };
 
   updateIndex = id => {
-    this.setState({ numbers: this.state.numbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true) });
+    this.setState(({ numbers: prevNumbers }) => ({
+      numbers: prevNumbers.map(_ => _.set('isSelected', false)).setIn([id.toString(), 'isSelected'], true),
+    }));
   };
 
   keyExtractor = item => item.get('id').toString();
 
-  renderNumber = item => (
-    <Number
-      item={item.item.toJS()}
-      numberHeight={this.props.numberHeight}
-      supportHighlight={this.props.supportHighlight}
-      onNumberPressed={this.onNumberPressed}
-    />
-  );
+  renderNumber = item => {
+    const { numberHeight, supportHighlight } = this.props;
+
+    return <Number item={item.item.toJS()} numberHeight={numberHeight} supportHighlight={supportHighlight} onNumberPressed={this.onNumberPressed} />;
+  };
 
   render = () => {
     const { isHorizontal, numColumns, supportReset, maxNumber } = this.props;
-    let numbers;
+    const { numbers } = this.state;
+    let newNumbers;
 
     if (supportReset && maxNumber === 10) {
-      const number0 = this.state.numbers.get('0');
-      const button0 = this.state.numbers.get('-1');
-      const button1 = this.state.numbers.get('-2');
+      const number0 = numbers.get('0');
+      const button0 = numbers.get('-1');
+      const button1 = numbers.get('-2');
 
-      numbers = this.state.numbers
+      newNumbers = numbers
         .filterNot(val => val.get('id') === number0.get('id') || val.get('id') === button0.get('id') || val.get('id') === button1.get('id'))
         .sort((val1, val2) => int(val1.get('id')).cmp(val2.get('id')))
         .toList()
@@ -69,7 +72,7 @@ class NumberPad extends Component {
         .push(button1)
         .toArray();
     } else {
-      numbers = this.state.numbers
+      newNumbers = numbers
         .sort((val1, val2) => int(val1.get('id')).cmp(val2.get('id')))
         .valueSeq()
         .toArray();
@@ -78,9 +81,9 @@ class NumberPad extends Component {
     return (
       <View style={Styles.container}>
         {isHorizontal ? (
-          <FlatList data={numbers} horizontal renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+          <FlatList data={newNumbers} horizontal renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
         ) : (
-          <FlatList data={numbers} numColumns={numColumns} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
+          <FlatList data={newNumbers} numColumns={numColumns} renderItem={this.renderNumber} keyExtractor={this.keyExtractor} />
         )}
       </View>
     );

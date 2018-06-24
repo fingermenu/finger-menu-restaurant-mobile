@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 
 class SplashContainer extends Component {
   componentDidMount = () => {
-    this.props.userAccessActions.getCurrentUser();
+    const { userAccessActions } = this.props;
+
+    userAccessActions.getCurrentUser();
   };
 
   render = () => <LoadingInProgress />;
@@ -28,4 +30,7 @@ const mapDispatchToProps = dispatch => ({
   userAccessActions: bindActionCreators(userAccessActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SplashContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SplashContainer);

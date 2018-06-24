@@ -17,7 +17,11 @@ class TableView extends Component {
     this.onTablePressed = debounce(props.onTablePressed, config.navigationDelay);
   }
 
-  handleTablePressed = () => this.onTablePressed(this.props.table);
+  handleTablePressed = () => {
+    const { table, onTablePressed } = this.props;
+
+    onTablePressed(table);
+  };
 
   render = () => {
     const {
@@ -39,8 +43,12 @@ class TableView extends Component {
             onPress={this.handleTablePressed}
           />
           <View style={Styles.tableTextContainer}>
-            <Text>{numberOfAdults ? numberOfAdults : 0}</Text>
-            <Text>{numberOfChildren ? numberOfChildren : 0}</Text>
+            <Text>
+              {numberOfAdults ? numberOfAdults : 0}
+            </Text>
+            <Text>
+              {numberOfChildren ? numberOfChildren : 0}
+            </Text>
           </View>
         </View>
       </View>

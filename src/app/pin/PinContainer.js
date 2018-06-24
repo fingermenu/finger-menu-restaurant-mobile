@@ -15,21 +15,31 @@ class PinContainer extends Component {
   componentDidMount = () => {
     const {
       restaurant: { id, pin, configurations },
+      asyncStorageActions,
     } = this.props;
 
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
+    asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
+    asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
+    asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
   };
 
   handlePinMatched = () => {
-    this.props.googleAnalyticsTrackerActions.trackEvent(
+    const { googleAnalyticsTrackerActions, navigateToTables } = this.props;
+
+    googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}Pin-navigate`, optionalValues: Map({ label: 'Tables', value: 0 }) }),
     );
-    this.props.navigateToTables();
+
+    navigateToTables();
   };
 
-  render = () => <PinView matchingPin={this.props.restaurant.pin} onPinMatched={this.handlePinMatched} />;
+  render = () => {
+    const {
+      restaurant: { pin },
+    } = this.props;
+
+    return <PinView matchingPin={pin} onPinMatched={this.handlePinMatched} />;
+  };
 }
 
 PinContainer.propTypes = {
@@ -38,8 +48,15 @@ PinContainer.propTypes = {
   navigateToTables: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, props) => ({
-  restaurant: props.user.restaurants.edges[0].node,
+const mapStateToProps = (
+  state,
+  {
+    user: {
+      restaurants: { edges },
+    },
+  },
+) => ({
+  restaurant: edges[0].node,
 });
 
 const mapDispatchToProps = dispatch => ({

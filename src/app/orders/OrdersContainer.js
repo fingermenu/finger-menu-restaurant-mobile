@@ -26,20 +26,22 @@ class OrdersContainer extends Component {
     };
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => _);
+  static getDerivedStateFromProps = ({ selectedLanguage, relay }, { selectedLanguage: prevSelectedLanguage }) => {
+    if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
+      relay.refetch(_ => _);
 
       return {
-        selectedLanguage: nextProps.selectedLanguage,
+        selectedLanguage: selectedLanguage,
       };
     }
 
     return null;
   };
 
-  convertOrderToOrderRequest = order =>
-    order.update('details', details =>
+  convertOrderToOrderRequest = order => {
+    const { customers } = this.props;
+
+    return order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
 
@@ -51,7 +53,7 @@ class OrdersContainer extends Component {
               notes: detail.get('notes'),
               paid: detail.get('paid'),
               servingTimeId: detail.get('servingTimeId'),
-              customer: this.props.customers.find(_ => _.customerId === detail.getIn(['customer', 'customerId'])),
+              customer: customers.find(_ => _.customerId === detail.getIn(['customer', 'customerId'])),
               orderChoiceItemPrices: detail.get('orderChoiceItemPrices').map(orderChoiceItemPrice => {
                 const choiceItemPrice = orderChoiceItemPrice.get('choiceItemPrice');
 
@@ -71,15 +73,25 @@ class OrdersContainer extends Component {
           .delete('menuItemPrice');
       }),
     );
+  };
 
   handleViewOrderItemPressed = ({ groupId, servingTimeId, menuItemPrice: { id: menuItemPriceId } }) => {
-    this.props.applicationStateActions.clearActiveMenuItemPrice();
-    this.props.applicationStateActions.setActiveOrderMenuItemPrice(Map({ groupId, menuItemPriceId, servingTimeId }));
-    this.props.navigateToMenuItem();
+    const { applicationStateActions, navigateToMenuItem } = this.props;
+
+    applicationStateActions.clearActiveMenuItemPrice();
+    applicationStateActions.setActiveOrderMenuItemPrice(Map({ groupId, menuItemPriceId, servingTimeId }));
+    navigateToMenuItem();
   };
 
   handleConfirmOrderPressed = () => {
-    const inMemoryOrder = Immutable.fromJS(this.props.inMemoryOrder);
+    const {
+      inMemoryOrder: nativeInMemoryOrder,
+      relay: { environment },
+      user,
+      applicationStateActions,
+      googleAnalyticsTrackerActions,
+    } = this.props;
+    const inMemoryOrder = Immutable.fromJS(nativeInMemoryOrder);
     const orderRequest = this.convertOrderToOrderRequest(inMemoryOrder);
     const {
       navigateToOrderConfirmed,
@@ -91,7 +103,7 @@ class OrdersContainer extends Component {
     } = this.props;
 
     PlaceOrder(
-      this.props.relay.environment,
+      environment,
       orderRequest.merge(Map({ customers, restaurantId, tableId })).toJS(),
       inMemoryOrder.get('details').map(detail => detail.get('menuItemPrice')),
       inMemoryOrder
@@ -100,14 +112,14 @@ class OrdersContainer extends Component {
         .map(orderChoiceItemPrice => orderChoiceItemPrice.get('choiceItemPrice')),
       {},
       {
-        user: this.props.user,
+        user,
       },
       {
         onSuccess: response => {
           this.printOrder(response);
-          this.props.applicationStateActions.clearActiveOrder();
-          this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId }));
-          this.props.googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: `${eventPrefix}Orders-orderPlaced` }));
+          applicationStateActions.clearActiveOrder();
+          applicationStateActions.setActiveOrderTopInfo(Map({ correlationId: response.correlationId }));
+          googleAnalyticsTrackerActions.trackEvent(Map({ category: 'ui-customer', action: `${eventPrefix}Orders-orderPlaced` }));
           navigateToOrderConfirmed();
         },
       },
@@ -115,17 +127,22 @@ class OrdersContainer extends Component {
   };
 
   handleRemoveOrderPressed = ({ groupId }) => {
-    this.props.applicationStateActions.removeItemsFromActiveOrder(Map({ groupId }));
+    const { applicationStateActions } = this.props;
+
+    applicationStateActions.removeItemsFromActiveOrder(Map({ groupId }));
   };
 
   handleRefresh = () => {
-    if (this.state.isRefreshing) {
+    const { isRefreshing } = this.state;
+    const { relay } = this.props;
+
+    if (isRefreshing) {
       return;
     }
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(_ => _, null, () => {
+    relay.refetch(_ => _, null, () => {
       this.setState({ isRefreshing: false });
     });
   };
@@ -133,7 +150,9 @@ class OrdersContainer extends Component {
   handleEndReached = () => true;
 
   handleNotesChanged = notes => {
-    this.props.applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
+    const { applicationStateActions } = this.props;
+
+    applicationStateActions.setActiveOrderTopInfo(Map({ notes }));
   };
 
   printOrder = ({ details, placedAt, notes }) => {
@@ -153,9 +172,10 @@ class OrdersContainer extends Component {
     const {
       printerConfig: { hostname, port, maxLineWidth },
       numberOfPrintCopiesForKitchen,
+      escPosPrinterActions,
     } = this.props;
 
-    this.props.escPosPrinterActions.printDocument(
+    escPosPrinterActions.printDocument(
       Map({
         hostname,
         port,
@@ -183,6 +203,7 @@ class OrdersContainer extends Component {
         table: { name: tableName },
       },
     } = this.props;
+    const { isRefreshing } = this.state;
 
     const groupedOrdersDetails = Immutable.fromJS(orders)
       .flatMap(order => order.getIn(['node', 'details']))
@@ -216,7 +237,7 @@ class OrdersContainer extends Component {
         notes={inMemoryOrder.notes}
         menus={menus}
         customers={customers}
-        isRefreshing={this.state.isRefreshing}
+        isRefreshing={isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onNotesChanged={this.handleNotesChanged}

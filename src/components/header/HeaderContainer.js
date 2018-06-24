@@ -13,30 +13,40 @@ import { CustomerProp } from '../../framework/applicationState';
 
 class HeaderContainer extends Component {
   handleLanguageChanged = language => {
-    this.props.i18n.changeLanguage(language);
-    this.props.applicationStateActions.selectedLanguageChanged(language);
+    const { i18n, applicationStateActions } = this.props;
+
+    i18n.changeLanguage(language);
+    applicationStateActions.selectedLanguageChanged(language);
   };
 
   handleActiveCustomerChanged = customerId => {
-    this.props.applicationStateActions.activeCustomerChanged(Map({ customerId }));
+    const { applicationStateActions } = this.props;
+
+    applicationStateActions.activeCustomerChanged(Map({ customerId }));
   };
 
   handleEditCustomerNamePressed = () => {
-    this.props.navigateToCustomers();
+    const { navigateToCustomers } = this.props;
+
+    navigateToCustomers();
   };
 
-  render = () => (
-    <HeaderView
-      onLanguageChanged={this.handleLanguageChanged}
-      onActiveCustomerChanged={this.handleActiveCustomerChanged}
-      restaurantName={this.props.restaurantName}
-      customers={this.props.customers}
-      activeCustomerId={this.props.activeCustomerId}
-      onEditCustomerNamePressed={this.handleEditCustomerNamePressed}
-      showOpenDrawerIcon={this.props.showOpenDrawerIcon}
-      onOpenDrawerIconPressed={this.props.openDrawer}
-    />
-  );
+  render = () => {
+    const { restaurantName, customers, activeCustomerId, showOpenDrawerIcon, openDrawer } = this.props;
+
+    return (
+      <HeaderView
+        onLanguageChanged={this.handleLanguageChanged}
+        onActiveCustomerChanged={this.handleActiveCustomerChanged}
+        restaurantName={restaurantName}
+        customers={customers}
+        activeCustomerId={activeCustomerId}
+        onEditCustomerNamePressed={this.handleEditCustomerNamePressed}
+        showOpenDrawerIcon={showOpenDrawerIcon}
+        onOpenDrawerIconPressed={openDrawer}
+      />
+    );
+  };
 }
 
 HeaderContainer.propTypes = {

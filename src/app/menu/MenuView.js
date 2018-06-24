@@ -10,21 +10,31 @@ import { translate } from 'react-i18next';
 import { DishTypesProp, MenuItemPricesProp } from './PropTypes';
 import MenuItemRow from './MenuItemRow';
 import MenuFooterView from './MenuFooterView';
-import { ListItemSeparator } from '../../components/list/';
+import { ListItemSeparator } from '../../components/list';
 import Styles from './Styles';
 
 class MenuView extends Component {
-  getTotalOrderQuantity = () => this.props.inMemoryMenuItemPricesToOrder.reduce((total, value) => total + value.quantity, 0);
+  getTotalOrderQuantity = () => {
+    const { inMemoryMenuItemPricesToOrder } = this.props;
 
-  hasOrdered = item => !!this.props.inMemoryMenuItemPricesToOrder.find(_ => _.id.localeCompare(item.id) === 0);
+    return inMemoryMenuItemPricesToOrder.reduce((total, value) => total + value.quantity, 0);
+  };
+
+  hasOrdered = item => {
+    const { inMemoryMenuItemPricesToOrder } = this.props;
+
+    return !!inMemoryMenuItemPricesToOrder.find(_ => _.id.localeCompare(item.id) === 0);
+  };
 
   keyExtractor = item => item.id;
 
   renderItemSeparator = () => <ListItemSeparator />;
 
-  renderRow = info => (
-    <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={this.props.onViewMenuItemPressed} />
-  );
+  renderRow = info => {
+    const { onViewMenuItemPressed } = this.props;
+
+    return <MenuItemRow menuItemPrice={info.item} isOrdered={this.hasOrdered(info.item)} onViewMenuItemPressed={onViewMenuItemPressed} />;
+  };
 
   render = () => {
     const { t, dishTypes, inMemoryMenuItemPricesToOrder, isRefreshing, onEndReached, onRefresh, menuItemPrices, onViewOrderPressed } = this.props;
@@ -47,7 +57,9 @@ class MenuView extends Component {
             dishTypeWithMenuItemPrices =>
               dishTypeWithMenuItemPrices.menuItemPrices.length > 0 && (
                 <View key={dishTypeWithMenuItemPrices.tag.id}>
-                  <Text style={Styles.dishTypeText}>{dishTypeWithMenuItemPrices.tag.name}</Text>
+                  <Text style={Styles.dishTypeText}>
+                    {dishTypeWithMenuItemPrices.tag.name}
+                  </Text>
                   <FlatList
                     data={dishTypeWithMenuItemPrices.menuItemPrices
                       .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
@@ -63,7 +75,11 @@ class MenuView extends Component {
               ),
           )}
           {menuItemPrices.length !== menuItemPricesWithoutDishType.length &&
-            menuItemPricesWithoutDishType.length > 0 && <Text style={Styles.dishTypeText}>{t('others.label')}</Text>}
+            menuItemPricesWithoutDishType.length > 0 && (
+            <Text style={Styles.dishTypeText}>
+              {t('others.label')}
+            </Text>
+          )}
           <FlatList
             data={menuItemPricesWithoutDishType
               .slice() // Reason to call slice here is Javascript sort function does not work on immutable array

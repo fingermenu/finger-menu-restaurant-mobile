@@ -31,10 +31,10 @@ CustomersView.propTypes = {
   customers: PropTypes.arrayOf(CustomerProp).isRequired,
 };
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state, { customers }) => {
   const initialValues = {};
 
-  props.customers.map(customer => {
+  customers.map(customer => {
     initialValues[customer.customerId] = customer.name;
   });
 

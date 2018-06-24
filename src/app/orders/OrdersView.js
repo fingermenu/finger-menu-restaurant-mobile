@@ -31,13 +31,15 @@ class OrdersView extends Component {
   };
 
   getOrderItems = orderItems => {
+    const { customers } = this.props;
+
     return Immutable.fromJS(orderItems)
       .groupBy(item => item.getIn(['customer', 'customerId']))
       .mapEntries(([key, value]) => [
         key,
         {
           data: value.toJS(),
-          categoryTitle: this.getCustomerName(this.props.customers, key),
+          categoryTitle: this.getCustomerName(customers, key),
           categoryKey: key,
         },
       ])
@@ -47,8 +49,10 @@ class OrdersView extends Component {
   };
 
   handleOrderConfirmed = () => {
+    const { onConfirmOrderPressed } = this.props;
+
     this.confirmOrderPopupDialogRef.dismiss();
-    this.props.onConfirmOrderPressed();
+    onConfirmOrderPressed();
   };
 
   handleOrderConfirmedCancelled = () => {
@@ -56,7 +60,9 @@ class OrdersView extends Component {
   };
 
   handleConfirmOrderPressed = () => {
-    if (this.props.inMemoryOrderItems.length > 0) {
+    const { inMemoryOrderItems } = this.props;
+
+    if (inMemoryOrderItems.length > 0) {
       this.confirmOrderPopupDialogRef.show();
     }
   };
@@ -64,21 +70,20 @@ class OrdersView extends Component {
   keyExtractor = item => item.orderMenuItemPriceId;
 
   renderOrderItem = info => {
-    const isInMemoryOrder = !!this.props.inMemoryOrderItems.find(
-      item => item.orderMenuItemPriceId.localeCompare(info.item.orderMenuItemPriceId) === 0,
-    );
+    const { inMemoryOrderItems, onViewOrderItemPressed, onRemoveOrderPressed, customers } = this.props;
+    const isInMemoryOrder = !!inMemoryOrderItems.find(item => item.orderMenuItemPriceId.localeCompare(info.item.orderMenuItemPriceId) === 0);
 
     return (
       <OrderItemRow
         orderItem={info.item}
         menuItemCurrentPrice={info.item.currentPrice}
-        onViewOrderItemPressed={this.props.onViewOrderItemPressed}
-        onRemoveOrderPressed={this.props.onRemoveOrderPressed}
+        onViewOrderItemPressed={onViewOrderItemPressed}
+        onRemoveOrderPressed={onRemoveOrderPressed}
         popupDialog={this.popupDialog}
         orderItemIsEditable={isInMemoryOrder}
         showRemove={isInMemoryOrder}
         backgroundColor={isInMemoryOrder ? null : '#C7C8C9'}
-        customers={this.props.customers}
+        customers={customers}
       />
     );
   };
@@ -89,7 +94,9 @@ class OrdersView extends Component {
     return (
       <View style={Styles.sectionHeader}>
         <Icon name="person-outline" color={DefaultColor.iconColor} />
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>{section.categoryTitle}</Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>
+          {section.categoryTitle}
+        </Text>
       </View>
     );
   };
@@ -111,7 +118,9 @@ class OrdersView extends Component {
           ref={this.setConfirmOrderPopupDialogRef}
         >
           <View style={Styles.popupDialogContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>{t('areYouSureToPlaceYourOrderNow.message')}</Text>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogText]}>
+              {t('areYouSureToPlaceYourOrderNow.message')}
+            </Text>
             <View style={[DefaultStyles.rowContainer, Styles.popupDialogButtonContainer]}>
               <Button
                 title={t('placeOrder.button')}
@@ -129,8 +138,12 @@ class OrdersView extends Component {
           </View>
         </PopupDialog>
         <View style={Styles.headerContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', tableName)}</Text>
-          <Text style={DefaultStyles.primaryLabelFont}>{t('yourOrder.label')}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>
+            {t('table.label').replace('{tableName}', tableName)}
+          </Text>
+          <Text style={DefaultStyles.primaryLabelFont}>
+            {t('yourOrder.label')}
+          </Text>
         </View>
 
         {inMemoryOrderItems.length + orderItems.length > 0 ? (
@@ -147,7 +160,9 @@ class OrdersView extends Component {
         ) : (
           orderItems.length === 0 && (
             <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
-              <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>
+                {t('noOrdersHaveBeenPlacedYet.message')}
+              </Text>
             </ScrollView>
           )
         )}

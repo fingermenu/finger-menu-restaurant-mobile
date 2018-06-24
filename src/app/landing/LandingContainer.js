@@ -16,7 +16,9 @@ class LandingContainer extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Landing` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Landing` }));
   };
 
   render = () => {

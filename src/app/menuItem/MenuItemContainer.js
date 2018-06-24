@@ -32,8 +32,17 @@ class MenuItemContainer extends Component {
     return null;
   };
 
-  getSelectedChoiceItemPrices = values =>
-    Immutable.fromJS(this.props.user.menuItemPrice.choiceItemPrices)
+  getSelectedChoiceItemPrices = values => {
+    const {
+      user: {
+        menuItemPrice: {
+          choiceItemPrices,
+          menuItem: { id },
+        },
+      },
+    } = this.props;
+
+    return Immutable.fromJS(choiceItemPrices)
       .filter(choiceItemPrice => values[choiceItemPrice.get('id')] || values.sizes[choiceItemPrice.get('id')])
       .map(choiceItemPrice =>
         Map({
@@ -43,12 +52,11 @@ class MenuItemContainer extends Component {
           paid: false,
           choiceItemPrice: Map({
             id: choiceItemPrice.get('id'),
-            choiceItem: Map({
-              id: this.props.user.menuItemPrice.menuItem.id,
-            }),
+            choiceItem: Map({ id }),
           }),
         }),
       );
+  };
 
   handleQuantityChanged = quantity => {
     this.setState({ quantity });
@@ -65,9 +73,12 @@ class MenuItemContainer extends Component {
           menuItem: { id: menuItemId },
         },
       },
+      applicationStateActions,
+      goBack,
     } = this.props;
     const groupId = activeOrderMenuItemPriceGroupId ? activeOrderMenuItemPriceGroupId : cuid();
-    const items = Range(0, this.state.quantity).reduce(reduction => {
+    const { quantity } = this.state;
+    const items = Range(0, quantity).reduce(reduction => {
       const orderMenuItemPriceId = cuid();
 
       return reduction.set(
@@ -91,8 +102,8 @@ class MenuItemContainer extends Component {
       );
     }, OrderedMap());
 
-    this.props.applicationStateActions.addOrUpdateItemsInActiveOrder(Map({ items, groupId }));
-    this.props.goBack();
+    applicationStateActions.addOrUpdateItemsInActiveOrder(Map({ items, groupId }));
+    goBack();
   };
 
   render = () => {
@@ -100,6 +111,7 @@ class MenuItemContainer extends Component {
       activeOrderMenuItemPriceGroupId,
       user: { dietaryOptions, sizes, menuItemPrice },
     } = this.props;
+    const { quantity } = this.state;
 
     return (
       <MenuItemView
@@ -108,7 +120,7 @@ class MenuItemContainer extends Component {
         sizes={sizes.edges.map(_ => _.node)}
         isAddingOrder={activeOrderMenuItemPriceGroupId === null}
         onSubmit={this.handleSubmit}
-        quantity={this.state.quantity}
+        quantity={quantity}
         onQuantityChanged={this.handleQuantityChanged}
       />
     );

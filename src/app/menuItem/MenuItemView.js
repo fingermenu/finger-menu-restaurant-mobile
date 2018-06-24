@@ -43,16 +43,27 @@ const MenuItemView = ({
       </View>
       <View style={Styles.descriptionContainer}>
         <View style={Styles.nameContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
-          {menuItemPrice.currentPrice !== 0 && <Text style={Styles.price}>${menuItemPrice.currentPrice.toFixed(2)}</Text>}
+          <Text style={DefaultStyles.primaryTitleFont}>
+            {name}
+          </Text>
+          {menuItemPrice.currentPrice !== 0 && (
+            <Text style={Styles.price}>
+              $
+              {menuItemPrice.currentPrice.toFixed(2)}
+            </Text>
+          )}
         </View>
-        <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
+        <Text style={DefaultStyles.primaryLabelFont}>
+          {description}
+        </Text>
       </View>
       <Field name="notes" component={TextInput} placeholder={t('notes.placeholder')} />
       {choiceItemPricesOfTypeSize.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('sizes.label')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('sizes.label')}
+            </Text>
             <ListItemSeparator />
           </View>
           <SizeItemPrices sizeItemPrices={choiceItemPricesOfTypeSize} mustChooseSize={mustChooseSize} />
@@ -61,7 +72,9 @@ const MenuItemView = ({
       {choiceItemPricesOfTypeDietaryOption.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('dietaryOptions.label')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('dietaryOptions.label')}
+            </Text>
             <ListItemSeparator />
           </View>
           <DietaryOptions dietaryOptions={choiceItemPricesOfTypeDietaryOption} mustChooseDietaryOption={mustChooseDietaryOption} />
@@ -70,9 +83,12 @@ const MenuItemView = ({
       {otherChoiceItemPrices.length > 0 && (
         <View style={Styles.optionsContainer}>
           <View style={Styles.choiceItemSectionHeader}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('sides.message')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('sides.message')}
+            </Text>
             <Text>
-              {minNumberOfSideDishes > 0 ? t('sides.minSidesMessage').replace('{minNumberOfSideDishes}', minNumberOfSideDishes) : ''}{' '}
+              {minNumberOfSideDishes > 0 ? t('sides.minSidesMessage').replace('{minNumberOfSideDishes}', minNumberOfSideDishes) : ''}
+              {' '}
               {maxNumberOfSideDishes > 0 ? t('sides.maxSidesMessage').replace('{maxNumberOfSideDishes}', maxNumberOfSideDishes) : ''}
             </Text>
             <ListItemSeparator />
@@ -87,7 +103,9 @@ const MenuItemView = ({
     </ScrollView>
     <View>
       <View style={Styles.quantityContainer}>
-        <Text style={DefaultStyles.primaryLabelFont}>{t('quantity.label')}</Text>
+        <Text style={DefaultStyles.primaryLabelFont}>
+          {t('quantity.label')}
+        </Text>
         <QuantityControl value={quantity} onChange={onQuantityChanged} />
       </View>
       {isAddingOrder && <Button onPress={handleSubmit} title={t('addToOrder.button').replace('{quantity}', quantity)} disabled={!valid} />}

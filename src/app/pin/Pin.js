@@ -23,6 +23,23 @@ class Pin extends Component {
 
   state = {};
 
+  componentDidMount = () => {
+    const {
+      activeRestaurant: { id },
+      asyncStorageActions,
+      googleAnalyticsTrackerActions,
+    } = this.props;
+
+    if (!id) {
+      asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
+      asyncStorageActions.readValue(Map({ key: 'pin' }));
+      asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
+      asyncStorageActions.readValue(Map({ key: 'installedPackageBundleChecksum' }));
+    }
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Pin` }));
+  };
+
   static getDerivedStateFromProps = nextProps => {
     const {
       restaurant: { id, pin, name, configurations },
@@ -33,17 +50,6 @@ class Pin extends Component {
     }
 
     return null;
-  };
-
-  componentDidMount = () => {
-    if (!this.props.activeRestaurant.id) {
-      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantId' }));
-      this.props.asyncStorageActions.readValue(Map({ key: 'pin' }));
-      this.props.asyncStorageActions.readValue(Map({ key: 'restaurantConfigurations' }));
-      this.props.asyncStorageActions.readValue(Map({ key: 'installedPackageBundleChecksum' }));
-    }
-
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Pin` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -58,8 +64,12 @@ class Pin extends Component {
     return <LoadingInProgress />;
   };
 
-  render() {
-    if (this.props.activeRestaurant.id) {
+  render = () => {
+    const {
+      activeRestaurant: { id },
+    } = this.props;
+
+    if (id) {
       return <OfflinePinContainer />;
     }
 
@@ -77,7 +87,7 @@ class Pin extends Component {
         render={this.renderRelayComponent}
       />
     );
-  }
+  };
 }
 
 Pin.propTypes = {

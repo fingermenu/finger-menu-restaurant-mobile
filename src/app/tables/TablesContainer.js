@@ -26,34 +26,36 @@ class TablesContainer extends Component {
     };
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => _);
-
-      return {
-        selectedLanguage: nextProps.selectedLanguage,
-      };
-    }
-
-    return null;
-  };
-
   componentDidMount = () => {
     const {
       user: {
         restaurant: { id, pin, name, configurations, packageBundle },
       },
       installedPackageBundleChecksum,
+      asyncStorageActions,
+      applicationStateActions,
     } = this.props;
 
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
-    this.props.asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
-    this.props.applicationStateActions.setActiveRestaurant(Map({ id, pin, name, configurations: Immutable.fromJS(configurations) }));
+    asyncStorageActions.writeValue(Map({ key: 'restaurantId', value: id }));
+    asyncStorageActions.writeValue(Map({ key: 'pin', value: pin }));
+    asyncStorageActions.writeValue(Map({ key: 'restaurantConfigurations', value: JSON.stringify(configurations) }));
+    applicationStateActions.setActiveRestaurant(Map({ id, pin, name, configurations: Immutable.fromJS(configurations) }));
 
     if (packageBundle.checksum.localeCompare(installedPackageBundleChecksum) !== 0) {
       this.installLatestPackageBundle(installedPackageBundleChecksum, packageBundle);
     }
+  };
+
+  static getDerivedStateFromProps = ({ selectedLanguage, relay }, { prevSelectedLanguage }) => {
+    if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
+      relay.refetch(_ => _);
+
+      return {
+        selectedLanguage,
+      };
+    }
+
+    return null;
   };
 
   setActiveCustomers = table => {
@@ -70,7 +72,9 @@ class TablesContainer extends Component {
       OrderedMap(),
     );
 
-    this.props.applicationStateActions.setActiveCustomers(
+    const { applicationStateActions } = this.props;
+
+    applicationStateActions.setActiveCustomers(
       Map({
         reservationNotes: table.notes,
         customers,
@@ -80,61 +84,77 @@ class TablesContainer extends Component {
   };
 
   installLatestPackageBundle = async (installedPackageBundleChecksum, packageBundle) => {
+    const { asyncStorageActions, notificationActions } = this.props;
+
     try {
       await new PackageBundleHelper(installedPackageBundleChecksum, packageBundle).installPackageBundle();
 
-      this.props.asyncStorageActions.writeValue(Map({ key: 'installedPackageBundleChecksum', value: packageBundle.checksum }));
+      asyncStorageActions.writeValue(Map({ key: 'installedPackageBundleChecksum', value: packageBundle.checksum }));
     } catch (ex) {
-      this.props.notificationActions.add(ex.message, NotificationType.ERROR);
+      notificationActions.add(ex.message, NotificationType.ERROR);
     }
   };
 
   handleTablePressed = table => {
+    const { applicationStateActions, googleAnalyticsTrackerActions, navigateToTableDetail, navigateToTableSetup } = this.props;
+
     if (!table.tableState || table.tableState.key === 'empty' || table.tableState.key === 'reserved') {
       if (table.tableState.key === 'reserved') {
         this.setActiveCustomers(table);
       } else {
-        this.props.applicationStateActions.clearActiveCustomers();
+        applicationStateActions.clearActiveCustomers();
       }
 
-      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
-      this.props.googleAnalyticsTrackerActions.trackEvent(
+      applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      googleAnalyticsTrackerActions.trackEvent(
         Map({ category: 'ui-waiter', action: `${eventPrefix}Tables-navigate`, optionalValues: Map({ label: 'Table Setup', value: 0 }) }),
       );
-      this.props.navigateToTableSetup();
+      navigateToTableSetup();
     } else if (table.tableState.key === 'taken' || table.tableState.key === 'paid') {
       this.setActiveCustomers(table);
-      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
-      this.props.googleAnalyticsTrackerActions.trackEvent(
+      applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      googleAnalyticsTrackerActions.trackEvent(
         Map({ category: 'ui-waiter', action: `${eventPrefix}Tables-navigate`, optionalValues: Map({ label: 'Table Detail', value: 0 }) }),
       );
-      this.props.navigateToTableDetail(table);
+      navigateToTableDetail(table);
     }
   };
 
   handleRefresh = () => {
-    if (this.state.isRefreshing) {
+    const { isRefreshing } = this.state;
+    const { relay } = this.props;
+
+    if (isRefreshing) {
       return;
     }
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(_ => _, null, () => {
+    relay.refetch(_ => _, null, () => {
       this.setState({ isRefreshing: false });
     });
   };
 
   handleEndReached = () => true;
 
-  render = () => (
-    <TablesView
-      tables={this.props.user.tables.edges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
-      onTablePressed={this.handleTablePressed}
-      isRefreshing={this.state.isRefreshing}
-      onRefresh={this.handleRefresh}
-      onEndReached={this.handleEndReached}
-    />
-  );
+  render = () => {
+    const {
+      user: {
+        tables: { edges: tableEdges },
+      },
+    } = this.props;
+    const { isRefreshing } = this.state;
+
+    return (
+      <TablesView
+        tables={tableEdges.map(_ => _.node).sort((node1, node2) => int(node1.sortOrderIndex).cmp(node2.sortOrderIndex))}
+        onTablePressed={this.handleTablePressed}
+        isRefreshing={isRefreshing}
+        onRefresh={this.handleRefresh}
+        onEndReached={this.handleEndReached}
+      />
+    );
+  };
 }
 
 TablesContainer.propTypes = {

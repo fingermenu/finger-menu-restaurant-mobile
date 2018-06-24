@@ -67,19 +67,21 @@ export default class FingerMenuRestaurant extends Component {
     };
   }
 
-  render() {
-    if (this.state.isLoading) {
+  render = () => {
+    const { isLoading, store } = this.state;
+
+    if (isLoading) {
       return <LoadingInProgress />;
     }
 
     return (
       <I18nextProvider i18n={i18n}>
-        <Provider store={this.state.store}>
+        <Provider store={store}>
           <MenuProvider>
             <Navigation />
           </MenuProvider>
         </Provider>
       </I18nextProvider>
     );
-  }
+  };
 }

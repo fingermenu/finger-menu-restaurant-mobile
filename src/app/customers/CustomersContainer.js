@@ -23,26 +23,29 @@ class CustomersContainer extends Component {
   };
 
   handleSubmit = values => {
-    const customers = Immutable.fromJS(this.props.customers).map(customer => customer.set('name', values[customer.get('customerId')]));
+    const { customers: customersWithoutNameSet, activeCustomerId, applicationStateActions, goBack } = this.props;
+    const customers = Immutable.fromJS(customersWithoutNameSet).map(customer => customer.set('name', values[customer.get('customerId')]));
 
     this.updateTable(customers.toJS(), {
       onSuccess: () => {
-        this.props.applicationStateActions.setActiveCustomers(
+        applicationStateActions.setActiveCustomers(
           Map({
             customers,
-            activeCustomerId: this.props.activeCustomerId,
+            activeCustomerId,
           }),
         );
-        this.props.goBack();
+        goBack();
       },
     });
   };
 
   updateTable = (customers, callbacks) => {
+    const { tableId: id } = this.props;
+
     UpdateTable(
       Environment,
       {
-        id: this.props.tableId,
+        id,
         customers: customers,
       },
       {},
@@ -52,7 +55,9 @@ class CustomersContainer extends Component {
   };
 
   render = () => {
-    return <CustomersView customers={this.props.customers} onSubmit={this.handleSubmit} />;
+    const { customers } = this.props;
+
+    return <CustomersView customers={customers} onSubmit={this.handleSubmit} />;
   };
 }
 
@@ -78,4 +83,7 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomersContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CustomersContainer);

@@ -16,10 +16,16 @@ class OrderConfirmedContainer extends Component {
   });
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}OrderConfirmed` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}OrderConfirmed` }));
   };
 
-  render = () => <OrderConfirmedView onFingerMenuPressed={this.props.navigateToMenu} restaurantLogoImageUrl={this.props.restaurantLogoImageUrl} />;
+  render = () => {
+    const { navigateToMenu, restaurantLogoImageUrl } = this.props;
+
+    return <OrderConfirmedView onFingerMenuPressed={navigateToMenu} restaurantLogoImageUrl={restaurantLogoImageUrl} />;
+  };
 }
 
 OrderConfirmedContainer.propTypes = {

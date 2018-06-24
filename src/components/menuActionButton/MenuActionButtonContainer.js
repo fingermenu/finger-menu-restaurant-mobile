@@ -13,14 +13,18 @@ import { MenusProp } from './PropTypes';
 
 class MenuActionButtonContainer extends Component {
   onMenuActionButtonPressed = id => {
-    this.props.applicationStateActions.setActiveMenu(Map({ id }));
-    this.props.navigateToMenu();
+    const { applicationStateActions, navigateToMenu } = this.props;
+
+    applicationStateActions.setActiveMenu(Map({ id }));
+    navigateToMenu();
   };
 
   render = () => {
+    const { menus } = this.props;
+
     return (
       <MenuActionButtonView
-        menus={this.props.menus
+        menus={menus
           .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
           .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))}
         onMenuActionButtonPressed={this.onMenuActionButtonPressed}

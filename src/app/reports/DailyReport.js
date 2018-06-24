@@ -9,14 +9,19 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ChronoUnit, ZonedDateTime } from 'js-joda';
+import { ChronoUnit, LocalDate, LocalTime, DateTimeFormatter, ZonedDateTime, ZoneId } from 'js-joda';
+import { View } from 'react-native';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import DailyReportRelayContainer from './DailyReportRelayContainer';
-import { HeaderContainer } from '../../components/header/';
+import { HeaderContainer } from '../../components/header';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 import * as dailyReportActions from './Actions';
+import FilterCriteriaView from './FilterCriteriaView';
+import Styles from './Styles';
+
+const dateTimeFormatter = DateTimeFormatter.ofPattern('dd-MM-yyyy');
 
 class DailyReport extends Component {
   static navigationOptions = () => ({
@@ -29,24 +34,64 @@ class DailyReport extends Component {
   });
 
   componentDidMount = () => {
-    this.props.dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
-    this.props.dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
+    const { dailyReportActions, googleAnalyticsTrackerActions } = this.props;
+
+    dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
+  };
+
+  handleFromDateChanged = date => {
+    const from = ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM);
+    const { to, dailyReportActions } = this.props;
+
+    if (from.toLocalDate().isAfter(to.toLocalDate())) {
+      dailyReportActions.toDateChanged(from);
+    }
+
+    dailyReportActions.fromDateChanged(from);
+  };
+
+  handleToDateChanged = date => {
+    const { dailyReportActions } = this.props;
+
+    dailyReportActions.toDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+  };
+
+  addFilterCriteria = children => {
+    const { from, to } = this.props;
+
+    return (
+      <View style={Styles.mainContainer}>
+        <FilterCriteriaView
+          dateFormat="DD-MM-YYYY"
+          from={from}
+          to={to}
+          onFromDateChanged={this.handleFromDateChanged}
+          onToDateChanged={this.handleToDateChanged}
+        />
+        <View style={Styles.resultContainer}>
+          {children}
+        </View>
+      </View>
+    );
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
     if (error) {
-      return <ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />;
+      return this.addFilterCriteria(<ErrorMessageWithRetry errorMessage={error.message} onRetryPressed={retry} />);
     }
 
     if (props) {
-      return <DailyReportRelayContainer user={props.user} />;
+      return this.addFilterCriteria(<DailyReportRelayContainer user={props.user} />);
     }
 
-    return <LoadingInProgress />;
+    return this.addFilterCriteria(<LoadingInProgress />);
   };
 
   render = () => {
+    const { dateRange, restaurantId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -58,8 +103,8 @@ class DailyReport extends Component {
           }
         `}
         variables={{
-          restaurantId: this.props.restaurantId,
-          dateRange: this.props.dateRange,
+          restaurantId,
+          dateRange,
         }}
         render={this.renderRelayComponent}
       />
@@ -76,6 +121,8 @@ DailyReport.propTypes = {
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
   }).isRequired,
+  from: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  to: PropTypes.instanceOf(ZonedDateTime).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -88,6 +135,8 @@ const mapStateToProps = state => ({
       .plusSeconds(-1)
       .toString(),
   },
+  from: state.dailyReport.get('from'),
+  to: state.dailyReport.get('to'),
 });
 
 const mapDispatchToProps = dispatch => ({

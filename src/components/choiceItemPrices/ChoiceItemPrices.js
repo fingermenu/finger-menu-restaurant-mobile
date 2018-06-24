@@ -9,29 +9,30 @@ import ChoiceItemPrice from './ChoiceItemPrice';
 
 class ChoiceItemPrices extends Component {
   validateMustChooseNumberOfChoiceItemPrices = (_, values) => {
-    if (this.props.minNumberOfChoiceItemPrices > 0 || this.props.maxNumberOfChoiceItemPrices > 0) {
+    const { minNumberOfChoiceItemPrices, maxNumberOfChoiceItemPrices, choiceItemPrices } = this.props;
+
+    if (minNumberOfChoiceItemPrices > 0 || maxNumberOfChoiceItemPrices > 0) {
       const convertedValues = Immutable.fromJS(values);
       const menuItemPricesIds = convertedValues
         .keySeq()
-        .filter(key => this.props.choiceItemPrices.find(choiceItemPrice => choiceItemPrice.id.localeCompare(key) === 0));
+        .filter(key => choiceItemPrices.find(choiceItemPrice => choiceItemPrice.id.localeCompare(key) === 0));
 
-      if (this.props.minNumberOfChoiceItemPrices > 0) {
-        const hasMinNumberOfChoiceItemPrices =
-          menuItemPricesIds.filter(id => convertedValues.get(id)).count() >= this.props.minNumberOfChoiceItemPrices;
+      if (minNumberOfChoiceItemPrices > 0) {
+        const hasMinNumberOfChoiceItemPrices = menuItemPricesIds.filter(id => convertedValues.get(id)).count() >= minNumberOfChoiceItemPrices;
 
         if (hasMinNumberOfChoiceItemPrices) {
-          if (this.props.maxNumberOfChoiceItemPrices > 0) {
-            return menuItemPricesIds.filter(id => convertedValues.get(id)).count() <= this.props.maxNumberOfChoiceItemPrices
+          if (maxNumberOfChoiceItemPrices > 0) {
+            return menuItemPricesIds.filter(id => convertedValues.get(id)).count() <= maxNumberOfChoiceItemPrices
               ? undefined
-              : `No more than ${this.props.minNumberOfChoiceItemPrices} of Choice Options can be selected`;
+              : `No more than ${minNumberOfChoiceItemPrices} of Choice Options can be selected`;
           }
         } else {
-          return `At least ${this.props.minNumberOfChoiceItemPrices} of Choice Options is required`;
+          return `At least ${minNumberOfChoiceItemPrices} of Choice Options is required`;
         }
-      } else if (this.props.maxNumberOfChoiceItemPrices > 0) {
-        return menuItemPricesIds.filter(id => convertedValues.get(id)).count() <= this.props.maxNumberOfChoiceItemPrices
+      } else if (maxNumberOfChoiceItemPrices > 0) {
+        return menuItemPricesIds.filter(id => convertedValues.get(id)).count() <= maxNumberOfChoiceItemPrices
           ? undefined
-          : `No more than ${this.props.minNumberOfChoiceItemPrices} of Choice Options can be selected`;
+          : `No more than ${minNumberOfChoiceItemPrices} of Choice Options can be selected`;
       }
 
       return undefined;
@@ -46,7 +47,11 @@ class ChoiceItemPrices extends Component {
     <ChoiceItemPrice choiceItemPrice={item} validateMustChooseNumberOfChoiceItemPrices={this.validateMustChooseNumberOfChoiceItemPrices} />
   );
 
-  render = () => <FlatList data={this.props.choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+  render = () => {
+    const { choiceItemPrices } = this.props;
+
+    return <FlatList data={choiceItemPrices} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+  };
 }
 
 ChoiceItemPrices.propTypes = {

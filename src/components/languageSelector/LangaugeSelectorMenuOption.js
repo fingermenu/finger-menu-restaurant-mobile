@@ -10,7 +10,9 @@ import Styles from './Styles';
 
 class LanguageSelectorMenuOption extends Component {
   handleLanguageChanged = () => {
-    this.props.onLanguageChanged(this.props.language);
+    const { language, onLanguageChanged } = this.props;
+
+    onLanguageChanged(language);
   };
 
   render = () => {
@@ -26,7 +28,9 @@ class LanguageSelectorMenuOption extends Component {
             activeOpacity={0.7}
           />
           <View style={Styles.iconTextContainer}>
-            <Text style={isSelected ? Styles.selectedIconText : Styles.IconText}>{language}</Text>
+            <Text style={isSelected ? Styles.selectedIconText : Styles.IconText}>
+              {language}
+            </Text>
           </View>
         </View>
       </MenuOption>

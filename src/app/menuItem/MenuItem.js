@@ -23,7 +23,9 @@ class MenuItem extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}MenuItem` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}MenuItem` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -32,13 +34,17 @@ class MenuItem extends Component {
     }
 
     if (props) {
-      return <MenuItemRelayContainer user={props.user} menuItemPriceId={this.props.menuItemPriceId} />;
+      const { menuItemPriceId } = this.props;
+
+      return <MenuItemRelayContainer user={props.user} menuItemPriceId={menuItemPriceId} />;
     }
 
     return <LoadingInProgress />;
   };
 
   render = () => {
+    const { menuItemPriceId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -50,7 +56,7 @@ class MenuItem extends Component {
           }
         `}
         variables={{
-          menuItemPriceId: this.props.menuItemPriceId,
+          menuItemPriceId,
         }}
         render={this.renderRelayComponent}
       />

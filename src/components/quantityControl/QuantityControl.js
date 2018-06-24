@@ -18,8 +18,9 @@ class QuantityControl extends Component {
 
   getValue = () => {
     const { value } = this.props;
+    const { value: stateValue } = this.state;
 
-    return value ? value : this.state.value;
+    return value ? value : stateValue;
   };
 
   handleValueDecrease = () => {
@@ -57,7 +58,9 @@ class QuantityControl extends Component {
         iconColor={DefaultColor.iconColor}
         iconDisabledColor={DefaultColor.defaultFontColorDisabled}
       />
-      <Text style={DefaultStyles.primaryFont}>{this.getValue()}</Text>
+      <Text style={DefaultStyles.primaryFont}>
+        {this.getValue()}
+      </Text>
       <TouchableIcon
         iconName="plus"
         iconContainerStyle={DefaultStyles.iconContainerStyle}

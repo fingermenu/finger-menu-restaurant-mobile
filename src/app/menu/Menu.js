@@ -14,7 +14,9 @@ import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
 class Menu extends Component {
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -30,6 +32,8 @@ class Menu extends Component {
   };
 
   render = () => {
+    const { menuId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -41,7 +45,7 @@ class Menu extends Component {
           }
         `}
         variables={{
-          menuId: this.props.menuId,
+          menuId,
         }}
         render={this.renderRelayComponent}
       />

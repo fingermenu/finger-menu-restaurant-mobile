@@ -26,7 +26,9 @@ const TableSetupView = ({
 }) => (
   <View style={Styles.container}>
     <View style={DefaultStyles.rowContainer}>
-      <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', name)}</Text>
+      <Text style={DefaultStyles.primaryTitleFont}>
+        {t('table.label').replace('{tableName}', name)}
+      </Text>
     </View>
     <View>
       <View style={Styles.tableTextContainer}>

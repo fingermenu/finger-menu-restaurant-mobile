@@ -19,7 +19,13 @@ class MenuItemRow extends Component {
     this.onViewMenuItemPressedDebounced = debounce(props.onViewMenuItemPressed, config.navigationDelay);
   }
 
-  onViewMenuItemPressed = () => this.onViewMenuItemPressedDebounced(this.props.menuItemPrice.id);
+  onViewMenuItemPressed = () => {
+    const {
+      menuItemPrice: { id },
+    } = this.props;
+
+    this.onViewMenuItemPressedDebounced(id);
+  };
 
   render = () => {
     const {
@@ -36,17 +42,28 @@ class MenuItemRow extends Component {
     return (
       <TouchableItem onPress={this.onViewMenuItemPressed}>
         <View style={Styles.rowContainer}>
-          <View>{imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}</View>
+          <View>
+            {imageUrl ? <FastImage style={Styles.image} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} /> : <View />}
+          </View>
           <View style={Styles.columnTextContainer}>
-            <Text style={DefaultStyles.primaryTitleFont}>{name}</Text>
-            <Text style={DefaultStyles.primaryLabelFont}>{description}</Text>
+            <Text style={DefaultStyles.primaryTitleFont}>
+              {name}
+            </Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {description}
+            </Text>
           </View>
           {isOrdered > 0 && (
             <View style={Styles.columnOrderedIconContainer}>
               <Icon name="ios-checkmark-circle" type="ionicon" size={25} color={DefaultColor.actionButtonColor} />
             </View>
           )}
-          {priceToDisplay !== 0 && <Text style={DefaultStyles.primaryFont}>${priceToDisplay.toFixed(2)}</Text>}
+          {priceToDisplay !== 0 && (
+            <Text style={DefaultStyles.primaryFont}>
+              $
+              {priceToDisplay.toFixed(2)}
+            </Text>
+          )}
         </View>
       </TouchableItem>
     );

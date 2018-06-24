@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import TablesRelayContainer from './TablesRelayContainer';
-import { HeaderContainer } from '../../components/header/';
+import { HeaderContainer } from '../../components/header';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 
@@ -27,15 +27,17 @@ class Tables extends Component {
   });
 
   componentDidMount = () => {
-    this.props.applicationStateActions.clearActiveTable();
-    this.props.applicationStateActions.clearActiveCustomers();
+    const { applicationStateActions, i18n, defaultDisplayLanguage, googleAnalyticsTrackerActions } = this.props;
 
-    const language = this.props.defaultDisplayLanguage ? this.props.defaultDisplayLanguage : 'en_NZ';
+    applicationStateActions.clearActiveTable();
+    applicationStateActions.clearActiveCustomers();
 
-    this.props.i18n.changeLanguage(language);
-    this.props.applicationStateActions.selectedLanguageChanged(language);
+    const language = defaultDisplayLanguage ? defaultDisplayLanguage : 'en_NZ';
 
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Tables` }));
+    i18n.changeLanguage(language);
+    applicationStateActions.selectedLanguageChanged(language);
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Tables` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -51,6 +53,8 @@ class Tables extends Component {
   };
 
   render = () => {
+    const { restaurantId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -62,7 +66,7 @@ class Tables extends Component {
           }
         `}
         variables={{
-          restaurantId: this.props.restaurantId,
+          restaurantId,
         }}
         render={this.renderRelayComponent}
       />

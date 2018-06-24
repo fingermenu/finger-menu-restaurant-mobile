@@ -3,7 +3,7 @@
 import { createStackNavigator } from 'react-navigation';
 import { DefaultColor } from '../../style';
 import DailyReport from './DailyReport';
-import { Pin } from '../pin/';
+import { Pin } from '../pin';
 
 export DailyReportReducer from './Reducer';
 
