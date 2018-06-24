@@ -112,6 +112,89 @@ export const reduxStore = configureStore(navigationReducer, reactNavigationMiddl
 class AppWithNavigationState extends Component {
   state = {};
 
+  componentDidMount = () => {
+    const { navigation, goBack, netInfo, netInfoActions, appUpdaterActions, notificationActions } = this.props;
+
+    if (Platform.OS === 'android') {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), navigation);
+
+        if (newState !== navigation) {
+          goBack();
+
+          return true;
+        }
+
+        return true;
+      });
+    }
+
+    netInfoActions.refreshState(Map());
+
+    CodePush.sync(
+      {
+        updateDialog: true,
+        installMode: CodePush.InstallMode.IMMEDIATE,
+      },
+      status => {
+        switch (status) {
+        case CodePush.SyncStatus.UPDATE_INSTALLED:
+          appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.UNKNOWN_ERROR:
+          if (netInfo.netInfoExists && netInfo.isConnected) {
+            notificationActions.add('Failed to update the application', NotificationType.ERROR);
+          }
+
+          appUpdaterActions.failed('Failed to update the application');
+
+          break;
+
+        case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+          appUpdaterActions.downloadingUpdate(0);
+
+          break;
+
+        case CodePush.SyncStatus.INSTALLING_UPDATE:
+          appUpdaterActions.installingUpdate();
+
+          break;
+
+        case CodePush.SyncStatus.UP_TO_DATE:
+          appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
+          appUpdaterActions.checkingForUpdate();
+
+          break;
+
+        case CodePush.SyncStatus.UPDATE_IGNORED:
+          appUpdaterActions.succeeded();
+
+          break;
+
+        case CodePush.SyncStatus.SYNC_IN_PROGRESS:
+        case CodePush.SyncStatus.AWAITING_USER_ACTION:
+          break;
+
+        default:
+          break;
+        }
+      },
+      ({ receivedBytes, totalBytes }) => appUpdaterActions.downloadingUpdate((receivedBytes / totalBytes) * 100),
+    );
+  };
+
+  componentWillUnmount = () => {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress');
+    }
+  };
+
   static getDerivedStateFromProps = nextProps => {
     nextProps.notifications.keySeq().forEach(notificationId => {
       const notification = nextProps.notifications.get(notificationId);
@@ -149,100 +232,23 @@ class AppWithNavigationState extends Component {
     return null;
   };
 
-  componentDidMount = () => {
-    if (Platform.OS === 'android') {
-      BackHandler.addEventListener('hardwareBackPress', () => {
-        const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), this.props.navigation);
-
-        if (newState !== this.props.navigation) {
-          this.props.goBack();
-
-          return true;
-        }
-
-        return true;
-      });
-    }
-
-    this.props.netInfoActions.refreshState(Map());
-
-    CodePush.sync(
-      {
-        updateDialog: true,
-        installMode: CodePush.InstallMode.IMMEDIATE,
-      },
-      status => {
-        switch (status) {
-        case CodePush.SyncStatus.UPDATE_INSTALLED:
-          this.props.appUpdaterActions.succeeded();
-
-          break;
-
-        case CodePush.SyncStatus.UNKNOWN_ERROR:
-          if (this.props.netInfo.netInfoExists && this.props.netInfo.isConnected) {
-            this.props.notificationActions.add('Failed to update the application', NotificationType.ERROR);
-          }
-
-          this.props.appUpdaterActions.failed('Failed to update the application');
-
-          break;
-
-        case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
-          this.props.appUpdaterActions.downloadingUpdate(0);
-
-          break;
-
-        case CodePush.SyncStatus.INSTALLING_UPDATE:
-          this.props.appUpdaterActions.installingUpdate();
-
-          break;
-
-        case CodePush.SyncStatus.UP_TO_DATE:
-          this.props.appUpdaterActions.succeeded();
-
-          break;
-
-        case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
-          this.props.appUpdaterActions.checkingForUpdate();
-
-          break;
-
-        case CodePush.SyncStatus.UPDATE_IGNORED:
-          this.props.appUpdaterActions.succeeded();
-
-          break;
-
-        case CodePush.SyncStatus.SYNC_IN_PROGRESS:
-        case CodePush.SyncStatus.AWAITING_USER_ACTION:
-          break;
-
-        default:
-          break;
-        }
-      },
-      ({ receivedBytes, totalBytes }) => this.props.appUpdaterActions.downloadingUpdate((receivedBytes / totalBytes) * 100),
-    );
-  };
-
-  componentWillUnmount = () => {
-    if (Platform.OS === 'android') {
-      BackHandler.removeEventListener('hardwareBackPress');
-    }
-  };
-
   setPopupDialogRef = ref => {
     this.popupDialog = ref;
   };
 
-  render = () => (
-    <AppNavigator
-      navigation={{
-        dispatch: this.props.dispatch,
-        state: this.props.navigation,
-        addListener,
-      }}
-    />
-  );
+  render = () => {
+    const { dispatch, navigation } = this.props;
+
+    return (
+      <AppNavigator
+        navigation={{
+          dispatch,
+          state: navigation,
+          addListener,
+        }}
+      />
+    );
+  };
 }
 
 AppWithNavigationState.propTypes = {

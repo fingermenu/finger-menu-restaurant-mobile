@@ -7,8 +7,10 @@ import { translate } from 'react-i18next';
 
 class RemoveOrderPopupContainer extends Component {
   onRemoveOrderConfirmed = () => {
+    const { onRemoveOrderPressed, orderItemIdToRemove } = this.props;
+
     this.popupDialog.dismiss();
-    this.props.onRemoveOrderPressed(this.props.orderItemIdToRemove);
+    onRemoveOrderPressed(orderItemIdToRemove);
   };
 
   onRemoveOrderCancelled = () => this.popupDialog.dismiss();
@@ -37,7 +39,9 @@ class RemoveOrderPopupContainer extends Component {
         ref={this.setPopupDialogRef}
       >
         <View>
-          <Text>{t('areYouSureToRemoveThisOrder.message')}</Text>
+          <Text>
+            {t('areYouSureToRemoveThisOrder.message')}
+          </Text>
         </View>
       </PopupDialog>
     );

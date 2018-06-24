@@ -23,7 +23,9 @@ class TableDetail extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableDetail` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableDetail` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -38,7 +40,9 @@ class TableDetail extends Component {
     return <LoadingInProgress />;
   };
 
-  render() {
+  render = () => {
+    const { tableId, lastOrderCorrelationId, restaurantId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -50,15 +54,15 @@ class TableDetail extends Component {
           }
         `}
         variables={{
-          tableId: this.props.tableId,
-          lastOrderCorrelationId: this.props.lastOrderCorrelationId,
-          tableIdForTableQuery: this.props.tableId,
-          restaurantId: this.props.restaurantId,
+          tableId,
+          lastOrderCorrelationId,
+          tableIdForTableQuery: tableId,
+          restaurantId,
         }}
         render={this.renderRelayComponent}
       />
     );
-  }
+  };
 }
 
 TableDetail.propTypes = {
@@ -87,4 +91,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TableDetail);

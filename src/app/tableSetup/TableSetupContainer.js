@@ -27,7 +27,9 @@ class TableSetupContainer extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableSetup` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}TableSetup` }));
   };
 
   createCustomerList = (numberOfAdults, numberOfChildren) => {
@@ -46,71 +48,80 @@ class TableSetupContainer extends Component {
   };
 
   handleResetTablePressed = () => {
-    this.props.googleAnalyticsTrackerActions.trackEvent(
+    const { googleAnalyticsTrackerActions, goBack, applicationStateActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reset Table', value: 0 }) }),
     );
     this.updateTable({ name: '', notes: '', lastOrderCorrelationId: '' }, [], 'empty', {
       onSuccess: () => {
-        this.props.googleAnalyticsTrackerActions.trackEvent(
+        googleAnalyticsTrackerActions.trackEvent(
           Map({
             category: 'ui-waiter',
             action: `${eventPrefix}TableSetup-navigate`,
             optionalValues: Map({ label: 'Going back - Reset Table', value: 0 }),
           }),
         );
-        this.props.applicationStateActions.clearActiveCustomers();
-        this.props.goBack();
+        applicationStateActions.clearActiveCustomers();
+        goBack();
       },
     });
   };
 
   handleSetupTablePressed = values => {
+    const { googleAnalyticsTrackerActions, navigateToLanding, applicationStateActions } = this.props;
     const customers = this.createCustomerList(values.numberOfAdults, values.numberOfChildren);
 
     this.updateTable(values, customers.valueSeq().toJS(), 'taken', {
       onSuccess: () => {
-        this.props.applicationStateActions.setActiveCustomers(
+        applicationStateActions.setActiveCustomers(
           Map({
             customers,
             activeCustomerId: customers.keySeq().first(),
             reservationNotes: values.notes,
           }),
         );
-        this.props.applicationStateActions.clearActiveOrder();
-        this.props.googleAnalyticsTrackerActions.trackEvent(
+        applicationStateActions.clearActiveOrder();
+        googleAnalyticsTrackerActions.trackEvent(
           Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-navigate`, optionalValues: Map({ label: 'Landing', value: 0 }) }),
         );
-        this.props.navigateToLanding();
+        navigateToLanding();
       },
     });
   };
 
   handleReserveTablePressed = values => {
-    this.props.googleAnalyticsTrackerActions.trackEvent(
+    const { googleAnalyticsTrackerActions, goBack, applicationStateActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackEvent(
       Map({ category: 'ui-waiter', action: `${eventPrefix}TableSetup-buttonPress`, optionalValues: Map({ label: 'Reserve Table', value: 0 }) }),
     );
     const customers = this.createCustomerList(values.numberOfAdults, values.numberOfChildren);
 
     this.updateTable(values, customers.valueSeq().toJS(), 'reserved', {
       onSuccess: () => {
-        this.props.googleAnalyticsTrackerActions.trackEvent(
+        googleAnalyticsTrackerActions.trackEvent(
           Map({
             category: 'ui-waiter',
             action: `${eventPrefix}TableSetup-navigate`,
             optionalValues: Map({ label: 'Going back - Reserve button', value: 0 }),
           }),
         );
-        this.props.applicationStateActions.clearActiveCustomers();
-        this.props.goBack();
+        applicationStateActions.clearActiveCustomers();
+        goBack();
       },
     });
   };
 
   updateTable = (values, customers, tableStateKey, callbacks) => {
+    const {
+      table: { id },
+    } = this.props;
+
     UpdateTable(
       Environment,
       {
-        id: this.props.table.id,
+        id,
         tableState: tableStateKey,
         customers: customers,
         notes: values.notes,
@@ -122,14 +133,18 @@ class TableSetupContainer extends Component {
     );
   };
 
-  render = () => (
-    <TableSetupView
-      table={this.props.table}
-      onSetupTablePressed={this.handleSetupTablePressed}
-      onReserveTablePressed={this.handleReserveTablePressed}
-      onResetTablePressed={this.handleResetTablePressed}
-    />
-  );
+  render = () => {
+    const { table } = this.props;
+
+    return (
+      <TableSetupView
+        table={table}
+        onSetupTablePressed={this.handleSetupTablePressed}
+        onReserveTablePressed={this.handleReserveTablePressed}
+        onResetTablePressed={this.handleResetTablePressed}
+      />
+    );
+  };
 }
 
 TableSetupContainer.propTypes = {
@@ -153,4 +168,7 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(TableSetupContainer));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(translate()(TableSetupContainer));

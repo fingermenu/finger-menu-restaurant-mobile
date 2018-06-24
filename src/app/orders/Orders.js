@@ -23,7 +23,9 @@ class Orders extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Orders` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Orders` }));
   };
 
   renderRelayComponent = ({ error, props, retry }) => {
@@ -32,15 +34,17 @@ class Orders extends Component {
     }
 
     if (props) {
-      return (
-        <OrdersRelayContainer user={props.user} menuItemPriceIds={this.props.menuItemPriceIds} choiceItemPriceIds={this.props.choiceItemPriceIds} />
-      );
+      const { menuItemPriceIds, choiceItemPriceIds } = this.props;
+
+      return <OrdersRelayContainer user={props.user} menuItemPriceIds={menuItemPriceIds} choiceItemPriceIds={choiceItemPriceIds} />;
     }
 
     return <LoadingInProgress />;
   };
 
   render = () => {
+    const { restaurantId, tableId, menuItemPriceIds, choiceItemPriceIds, correlationId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -52,11 +56,11 @@ class Orders extends Component {
           }
         `}
         variables={{
-          restaurantId: this.props.restaurantId,
-          tableId: this.props.tableId,
-          menuItemPriceIds: this.props.menuItemPriceIds,
-          choiceItemPriceIds: this.props.choiceItemPriceIds,
-          correlationId: this.props.correlationId,
+          restaurantId,
+          tableId,
+          menuItemPriceIds,
+          choiceItemPriceIds,
+          correlationId,
         }}
         render={this.renderRelayComponent}
       />
@@ -99,4 +103,7 @@ const mapDispatchToProps = dispatch => ({
   googleAnalyticsTrackerActions: bindActionCreators(googleAnalyticsTrackerActions, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Orders);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Orders);

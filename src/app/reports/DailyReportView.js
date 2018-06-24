@@ -1,10 +1,22 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { translate } from 'react-i18next';
 
-const FilterCriteriaView = () => <Text>Daily report comes here</Text>;
+class FilterCriteriaView extends Component {
+  render = () => {
+    /* const departmentCategoriesReport = this.props.departmentCategoriesReport;
+
+       * const groupedByRootCategory = departmentCategoriesReport.groupBy(departmentCategory => departmentCategory);
+       */
+    return (
+      <Text>
+Test
+      </Text>
+    );
+  };
+}
 
 FilterCriteriaView.propTypes = {};
 

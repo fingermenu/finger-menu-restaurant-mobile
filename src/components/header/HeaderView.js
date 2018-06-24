@@ -37,7 +37,9 @@ const HeaderView = ({
       />
     )}
     <View style={Styles.restaurantNameContainer}>
-      <Text style={[DefaultStyles.primaryLabelFont, Styles.restaurantName]}>{restaurantName}</Text>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.restaurantName]}>
+        {restaurantName}
+      </Text>
     </View>
     {customers.length > 0 && (
       <View style={DefaultStyles.rowContainer}>

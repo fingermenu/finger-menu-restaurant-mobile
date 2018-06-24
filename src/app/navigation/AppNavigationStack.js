@@ -9,7 +9,7 @@ import { TableSetupContainer } from '../tableSetup';
 import { LandingContainer } from '../landing';
 import { TableDetail } from '../tableDetail';
 import { OrderConfirmedContainer } from '../orderConfirmed';
-import { Pin } from '../pin/';
+import { Pin } from '../pin';
 import { CustomersContainer } from '../customers';
 
 export default StackNavigator(

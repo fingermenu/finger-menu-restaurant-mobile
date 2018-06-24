@@ -16,7 +16,9 @@ class LandingContainer extends Component {
   };
 
   componentDidMount = () => {
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Landing` }));
+    const { googleAnalyticsTrackerActions } = this.props;
+
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Landing` }));
   };
 
   render = () => {
@@ -45,4 +47,7 @@ const mapDispatchToProps = dispatch => ({
   navigateToMenu: () => dispatch(NavigationActions.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'Home' })] })),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LandingContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LandingContainer);

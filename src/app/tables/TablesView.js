@@ -16,7 +16,11 @@ import { DefaultStyles, ScreenSize } from '../../style';
 class TablesView extends Component {
   keyExtractor = item => item.id;
 
-  renderItem = item => <TableView table={item.item} onTablePressed={this.props.onTablePressed} />;
+  renderItem = item => {
+    const { onTablePressed } = this.props;
+
+    return <TableView table={item.item} onTablePressed={onTablePressed} />;
+  };
 
   renderBadgeSummaryItem = item => {
     const style = Common.getTableStyle(item.key);
@@ -32,15 +36,17 @@ class TablesView extends Component {
             source={ImageUtility.getImageSource(item.key)}
             activeOpacity={0.7}
           />
-          <Text>{item.count}</Text>
+          <Text>
+            {item.count}
+          </Text>
         </View>
       </TouchableItem>
     );
   };
 
   render = () => {
-    const { t, onEndReached, onRefresh, isRefreshing } = this.props;
-    const groupedTables = Immutable.fromJS(this.props.tables)
+    const { t, onEndReached, onRefresh, isRefreshing, tables } = this.props;
+    const groupedTables = Immutable.fromJS(tables)
       .groupBy(t => (t.has('tableState') ? t.getIn(['tableState', 'key']) : 'empty'))
       .mapEntries(([key, value]) => [
         key,
@@ -56,10 +62,12 @@ class TablesView extends Component {
     return (
       <View style={Styles.container}>
         <View>
-          <Text style={DefaultStyles.primaryTitleFont}>{t('manageTable.label')}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>
+            {t('manageTable.label')}
+          </Text>
         </View>
         <FlatList
-          data={this.props.tables}
+          data={tables}
           keyExtractor={this.keyExtractor}
           numColumns={3}
           renderItem={this.renderItem}

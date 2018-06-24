@@ -21,25 +21,17 @@ class MenuContainer extends Component {
     };
   }
 
-  static getDerivedStateFromProps = (nextProps, prevState) => {
-    if (nextProps.selectedLanguage.localeCompare(prevState.selectedLanguage) !== 0) {
-      nextProps.relay.refetch(_ => _);
-
-      return {
-        selectedLanguage: nextProps.selectedLanguage,
-      };
-    }
-
-    return null;
-  };
-
   componentDidMount = () => {
-    this.props.applicationStateActions.clearActiveMenuItemPrice();
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
+    const { applicationStateActions, googleAnalyticsTrackerActions } = this.props;
+
+    applicationStateActions.clearActiveMenuItemPrice();
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Menu` }));
   };
 
   onViewMenuItemPressed = id => {
-    this.props.applicationStateActions.clearActiveOrderMenuItemPrice();
+    const { applicationStateActions, navigateToMenuItem } = this.props;
+
+    applicationStateActions.clearActiveOrderMenuItemPrice();
 
     const {
       user: {
@@ -50,20 +42,33 @@ class MenuContainer extends Component {
     const servingTimes = servingTimesEdges.map(_ => _.node);
     const filteredServingTime = servingTimes.filter(servingTime => menuTags.find(menuTag => menuTag.id.localeCompare(servingTime.tag.id) === 0));
 
-    this.props.applicationStateActions.setActiveMenuItemPrice(
-      Map({ id, servingTimeId: filteredServingTime.length > 0 ? filteredServingTime[0].id : null }),
-    );
-    this.props.navigateToMenuItem();
+    applicationStateActions.setActiveMenuItemPrice(Map({ id, servingTimeId: filteredServingTime.length > 0 ? filteredServingTime[0].id : null }));
+    navigateToMenuItem();
+  };
+
+  static getDerivedStateFromProps = ({ relay, selectedLanguage }, { prevSelectedLanguage }) => {
+    if (selectedLanguage.localeCompare(prevSelectedLanguage) !== 0) {
+      relay.refetch(_ => _);
+
+      return {
+        selectedLanguage,
+      };
+    }
+
+    return null;
   };
 
   handleRefresh = () => {
-    if (this.state.isRefreshing) {
+    const { isRefreshing } = this.state;
+    const { relay } = this.props;
+
+    if (isRefreshing) {
       return;
     }
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(_ => _, null, () => {
+    relay.refetch(_ => _, null, () => {
       this.setState({ isRefreshing: false });
     });
   };
@@ -79,6 +84,7 @@ class MenuContainer extends Component {
       inMemoryMenuItemPricesToOrder,
       navigateToOrders,
     } = this.props;
+    const { isRefreshing } = this.state;
     const dishTypes = dishTypesEdges.map(_ => _.node);
 
     return (
@@ -88,7 +94,7 @@ class MenuContainer extends Component {
         onViewMenuItemPressed={this.onViewMenuItemPressed}
         onAddMenuItemToOrder={this.onAddMenuItemToOrder}
         onRemoveMenuItemFromOrder={this.onRemoveMenuItemFromOrder}
-        isRefreshing={this.state.isRefreshing}
+        isRefreshing={isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onViewOrderPressed={navigateToOrders}

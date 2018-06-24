@@ -33,8 +33,14 @@ class MenusContainer extends Component {
     return null;
   };
 
-  getMenusScreens = () =>
-    this.props.user.restaurant.menus
+  getMenusScreens = () => {
+    const {
+      user: {
+        restaurant: { menus },
+      },
+    } = this.props;
+
+    return menus
       .slice() // Reason to call slice here is Javascript sort function does not work on immutable array
       .sort((menu1, menu2) => int(menu1.sortOrderIndex).cmp(menu2.sortOrderIndex))
       .reduce((reduction, menu) => {
@@ -50,13 +56,15 @@ class MenusContainer extends Component {
 
         return reduction;
       }, {});
+  };
 
   getMenusTabConfig = () => {
+    const { menuId } = this.props;
     const MenusTabConfig = {
       lazy: false,
       tabBarPosition: 'top',
       ...TabNavigator.Presets.AndroidTopTabs,
-      initialRouteName: this.props.menuId,
+      initialRouteName: menuId,
       tabBarOptions: {
         scrollEnabled: true,
         showIcon: false,

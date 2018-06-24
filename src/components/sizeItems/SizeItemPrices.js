@@ -13,7 +13,9 @@ import { DefaultStyles } from '../../style';
 
 class SizeItemPrices extends Component {
   validateMustChooseSize = sizes => {
-    if (this.props.mustChooseSize) {
+    const { mustChooseSize } = this.props;
+
+    if (mustChooseSize) {
       return Immutable.fromJS(sizes).some(size => size) ? undefined : 'Size is required';
     }
 
@@ -21,28 +23,40 @@ class SizeItemPrices extends Component {
   };
 
   renderItem = id => {
+    const { sizeItemPrices } = this.props;
     const {
       currentPrice,
       choiceItem: { name },
-    } = this.props.sizeItemPrices.find(_ => _.id.localeCompare(id) === 0);
+    } = sizeItemPrices.find(_ => _.id.localeCompare(id) === 0);
 
     return (
       <View style={Styles.optionContainer}>
-        <Text style={DefaultStyles.primaryLabelFont}>{name}</Text>
-        {currentPrice !== 0 && <Text style={[DefaultStyles.primaryLabelFont, Styles.price]}>${currentPrice.toFixed(2)}</Text>}
+        <Text style={DefaultStyles.primaryLabelFont}>
+          {name}
+        </Text>
+        {currentPrice !== 0 && (
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.price]}>
+            $
+            {currentPrice.toFixed(2)}
+          </Text>
+        )}
       </View>
     );
   };
 
-  render = () => (
-    <Field
-      ids={this.props.sizeItemPrices.map(sizeItemPrice => sizeItemPrice.id)}
-      name="sizes"
-      component={RadioButtonGroup}
-      renderItem={this.renderItem}
-      validate={this.validateMustChooseSize}
-    />
-  );
+  render = () => {
+    const { sizeItemPrices } = this.props;
+
+    return (
+      <Field
+        ids={sizeItemPrices.map(sizeItemPrice => sizeItemPrice.id)}
+        name="sizes"
+        component={RadioButtonGroup}
+        renderItem={this.renderItem}
+        validate={this.validateMustChooseSize}
+      />
+    );
+  };
 }
 
 SizeItemPrices.propTypes = {

@@ -14,7 +14,7 @@ import { View } from 'react-native';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
 import DailyReportRelayContainer from './DailyReportRelayContainer';
-import { HeaderContainer } from '../../components/header/';
+import { HeaderContainer } from '../../components/header';
 import * as applicationStateActions from '../../framework/applicationState/Actions';
 import { screenNamePrefix } from '../../framework/AnalyticHelper';
 import * as dailyReportActions from './Actions';
@@ -34,23 +34,28 @@ class DailyReport extends Component {
   });
 
   componentDidMount = () => {
-    this.props.dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
-    this.props.dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
-    this.props.googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
+    const { dailyReportActions, googleAnalyticsTrackerActions } = this.props;
+
+    dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
   };
 
   handleFromDateChanged = date => {
     const from = ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM);
+    const { to, dailyReportActions } = this.props;
 
-    if (from.toLocalDate().isAfter(this.props.to.toLocalDate())) {
-      this.props.dailyReportActions.toDateChanged(from);
+    if (from.toLocalDate().isAfter(to.toLocalDate())) {
+      dailyReportActions.toDateChanged(from);
     }
 
-    this.props.dailyReportActions.fromDateChanged(from);
+    dailyReportActions.fromDateChanged(from);
   };
 
   handleToDateChanged = date => {
-    this.props.dailyReportActions.toDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+    const { dailyReportActions } = this.props;
+
+    dailyReportActions.toDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
   };
 
   addFilterCriteria = children => {
@@ -65,7 +70,9 @@ class DailyReport extends Component {
           onFromDateChanged={this.handleFromDateChanged}
           onToDateChanged={this.handleToDateChanged}
         />
-        <View style={Styles.resultContainer}>{children}</View>
+        <View style={Styles.resultContainer}>
+          {children}
+        </View>
       </View>
     );
   };
@@ -83,6 +90,8 @@ class DailyReport extends Component {
   };
 
   render = () => {
+    const { dateRange, restaurantId } = this.props;
+
     return (
       <QueryRenderer
         environment={environment}
@@ -94,8 +103,8 @@ class DailyReport extends Component {
           }
         `}
         variables={{
-          restaurantId: this.props.restaurantId,
-          dateRange: this.props.dateRange,
+          restaurantId,
+          dateRange,
         }}
         render={this.renderRelayComponent}
       />

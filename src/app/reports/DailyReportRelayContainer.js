@@ -12,6 +12,7 @@ export default createRefetchContainer(
         restaurant(restaurantId: $restaurantId) {
           departmentCategoriesReport(dateRange: $dateRange) {
             departmentCategory {
+              id
               tag {
                 name
               }

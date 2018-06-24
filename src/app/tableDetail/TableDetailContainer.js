@@ -1,5 +1,6 @@
 // @flow
 
+import { ImmutableEx } from '@microbusiness/common-javascript';
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import cuid from 'cuid';
 import Immutable, { List, Map, OrderedMap } from 'immutable';
@@ -20,10 +21,16 @@ class TableDetailContainer extends Component {
   };
 
   setTableStateToEmpty = callbacks => {
+    const {
+      relay: { environment },
+      table: { id },
+      user,
+    } = this.props;
+
     UpdateTable(
-      this.props.relay.environment,
+      environment,
       {
-        id: this.props.table.id,
+        id,
         tableState: 'empty',
         customers: [],
         notes: '',
@@ -31,22 +38,28 @@ class TableDetailContainer extends Component {
       },
       {},
       {
-        user: this.props.user,
+        user,
       },
       callbacks,
     );
   };
 
   setTableStateToPaid = callbacks => {
+    const {
+      relay: { environment },
+      table: { id },
+      user,
+    } = this.props;
+
     UpdateTable(
-      this.props.relay.environment,
+      environment,
       {
-        id: this.props.table.id,
+        id,
         tableState: 'paid',
       },
       {},
       {
-        user: this.props.user,
+        user,
       },
       callbacks,
     );
@@ -66,7 +79,9 @@ class TableDetailContainer extends Component {
       OrderedMap(),
     );
 
-    this.props.applicationStateActions.setActiveCustomers(
+    const { applicationStateActions } = this.props;
+
+    applicationStateActions.setActiveCustomers(
       Map({
         reservationNotes: table.notes,
         customers,
@@ -76,9 +91,11 @@ class TableDetailContainer extends Component {
   };
 
   handleResetTablePressed = () => {
+    const { goBack } = this.props;
+
     this.setTableStateToEmpty({
       onSuccess: () => {
-        this.props.goBack();
+        goBack();
       },
     });
   };
@@ -88,6 +105,7 @@ class TableDetailContainer extends Component {
       user: {
         orders: { edges },
       },
+      goBack,
     } = this.props;
     const orders = edges.map(_ => _.node);
     let totalUpdated = 0;
@@ -108,7 +126,7 @@ class TableDetailContainer extends Component {
 
             this.setTableStateToPaid({
               onSuccess: () => {
-                this.props.goBack();
+                goBack();
               },
             });
           },
@@ -152,6 +170,7 @@ class TableDetailContainer extends Component {
       user: {
         orders: { edges },
       },
+      goBack,
     } = this.props;
     const allOrders = edges.map(_ => _.node);
     const orders = allOrders.filter(order =>
@@ -201,7 +220,7 @@ class TableDetailContainer extends Component {
 
             this.setTableStateToPaid({
               onSuccess: () => {
-                this.props.goBack();
+                goBack();
               },
             });
           },
@@ -219,10 +238,11 @@ class TableDetailContainer extends Component {
           table: { name: tableName },
         },
         printOnCustomerReceiptLanguage,
+        escPosPrinterActions,
       } = this.props;
       const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
 
-      this.props.escPosPrinterActions.printDocument(
+      escPosPrinterActions.printDocument(
         Map({
           hostname,
           port,
@@ -235,31 +255,43 @@ class TableDetailContainer extends Component {
   };
 
   handleRefresh = () => {
-    if (this.state.isRefreshing) {
+    const { isRefreshing } = this.state;
+    const { relay } = this.props;
+
+    if (isRefreshing) {
       return;
     }
 
     this.setState({ isRefreshing: true });
 
-    this.props.relay.refetch(_ => _, null, () => {
+    relay.refetch(_ => _, null, () => {
       this.setState({ isRefreshing: false });
     });
   };
 
   handleGiveToGuestPressed = () => {
-    const { table } = this.props;
+    const {
+      applicationStateActions,
+      user: {
+        orders: { edges },
+      },
+      table,
+    } = this.props;
 
     this.setActiveCustomers(table);
 
-    if (this.props.user.orders.edges.length > 0) {
-      const { correlationId } = this.props.user.orders.edges[0].node;
+    if (edges.length > 0) {
+      const { navigateToHome } = this.props;
+      const { correlationId } = edges[0].node;
 
-      this.props.applicationStateActions.clearActiveOrder();
-      this.props.applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
-      this.props.navigateToHome();
+      applicationStateActions.clearActiveOrder();
+      applicationStateActions.setActiveOrderTopInfo(Map({ correlationId }));
+      navigateToHome();
     } else {
-      this.props.applicationStateActions.setActiveTable(Immutable.fromJS(table));
-      this.props.navigateToTableSetup();
+      const { navigateToTableSetup } = this.props;
+
+      applicationStateActions.setActiveTable(Immutable.fromJS(table));
+      navigateToTableSetup();
     }
   };
 
@@ -272,6 +304,7 @@ class TableDetailContainer extends Component {
         orders: { edges: orders },
       },
       printOnKitchenReceiptLanguage,
+      escPosPrinterActions,
     } = this.props;
     const documentContent = orders
       .map(_ => _.node)
@@ -280,7 +313,7 @@ class TableDetailContainer extends Component {
       )
       .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
 
-    this.props.escPosPrinterActions.printDocument(
+    escPosPrinterActions.printDocument(
       Map({
         hostname,
         port,
@@ -300,12 +333,13 @@ class TableDetailContainer extends Component {
         orders: { edges: orders },
       },
       printOnCustomerReceiptLanguage,
+      escPosPrinterActions,
     } = this.props;
 
     const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
     const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
 
-    this.props.escPosPrinterActions.printDocument(
+    escPosPrinterActions.printDocument(
       Map({
         hostname,
         port,
@@ -341,15 +375,17 @@ class TableDetailContainer extends Component {
             discount = foundSelectedOrder ? paymentGroupDiscount : null;
           }
         }
+        const servingTimeId = detail.getIn(['servingTime', 'id']);
 
-        return detail
-          .merge(
+        return ImmutableEx.removeUndefinedProps(
+          detail.merge(
             Map({
               paymentGroup: Map({
                 paymentGroupId: id,
                 discount,
                 paidAt: detail.getIn(['paymentGroup', 'paidAt']),
               }),
+              servingTimeId,
               menuItemPriceId: menuItemPrice.get('id'),
               quantity: detail.get('quantity'),
               notes: detail.get('notes'),
@@ -372,7 +408,9 @@ class TableDetailContainer extends Component {
                   .delete('choiceItemPrice');
               }),
             }),
-          )
+          ),
+        )
+          .delete('servingTime')
           .delete('menuItemPrice');
       }),
     );
@@ -380,12 +418,15 @@ class TableDetailContainer extends Component {
   updateOrder = (orderToUpdate, selectedOrders, setAllMenuItemPricesPaid, paymentGroup, callbacks) => {
     const order = Immutable.fromJS(orderToUpdate);
     const orderUpdateRequest = this.convertOrderToOrderRequest(order, selectedOrders, setAllMenuItemPricesPaid, paymentGroup);
+    const {
+      relay: { environment },
+      restaurantId,
+      table: { id },
+    } = this.props;
 
     UpdateOrder(
-      this.props.relay.environment,
-      orderUpdateRequest
-        .merge(Map({ restaurantId: this.props.restaurantId, tableId: this.props.table.id, paymentGroupId: paymentGroup.paymentGroupId }))
-        .toJS(),
+      environment,
+      orderUpdateRequest.merge(Map({ restaurantId, tableId: id, paymentGroupId: paymentGroup.paymentGroupId })).toJS(),
       order.get('details').map(detail => detail.get('menuItemPrice')),
       order
         .get('details')
@@ -410,6 +451,7 @@ class TableDetailContainer extends Component {
       customerReceiptTemplate,
       kitchenOrderTemplate,
     } = this.props;
+    const { isRefreshing } = this.state;
 
     return (
       <TableDetailView
@@ -420,7 +462,7 @@ class TableDetailContainer extends Component {
         onSetPaidAndResetPressed={this.handleSetPaidAndResetPressed}
         onSplitPaidPressed={this.handleSplitPaidPressed}
         onSplitPaidAndPrintReceiptPressed={this.handleSplitPaidAndPrintReceiptPressed}
-        isRefreshing={this.state.isRefreshing}
+        isRefreshing={isRefreshing}
         onRefresh={this.handleRefresh}
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
@@ -455,7 +497,7 @@ TableDetailContainer.defaultProps = {
   printOnCustomerReceiptLanguage: null,
 };
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state, { user: { table } }) => {
   const activeTable = state.applicationState.get('activeTable');
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
   const printerConfig = configurations.get('printers').isEmpty()
@@ -473,7 +515,7 @@ const mapStateToProps = (state, props) => {
 
   return {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-    table: props.user.table,
+    table,
     tableId: activeTable.get('id'),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
@@ -491,4 +533,7 @@ const mapDispatchToProps = dispatch => ({
   goBack: () => dispatch(NavigationActions.back()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableDetailContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TableDetailContainer);

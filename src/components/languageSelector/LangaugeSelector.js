@@ -11,7 +11,9 @@ import Styles from './Styles';
 
 class LanguageSelector extends Component {
   changeLanguage = () => {
-    this.props.changeLanguage(this.props.language);
+    const { language, changeLanguage } = this.props;
+
+    changeLanguage(language);
   };
 
   render = () => {

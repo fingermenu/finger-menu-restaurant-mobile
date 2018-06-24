@@ -17,7 +17,9 @@ class AppDrawerMenuContainer extends Component {
   cleanDevice = async () => {
     await PackageBundleHelper.cleanAllData();
 
-    this.props.userAccessActions.signOut();
+    const { userAccessActions } = this.props;
+
+    userAccessActions.signOut();
   };
 
   handleSignOut = () => {
@@ -39,7 +41,9 @@ class AppDrawerMenuContainer extends Component {
                 <View style={Styles.icon}>
                   <Icon name="lock" type="material-community" />
                 </View>
-                <Text style={Styles.label}>{t('lockScreen.label')}</Text>
+                <Text style={Styles.label}>
+                  {t('lockScreen.label')}
+                </Text>
               </View>
             </SafeAreaView>
           </TouchableItem>
@@ -49,7 +53,9 @@ class AppDrawerMenuContainer extends Component {
                 <View style={Styles.icon}>
                   <Icon name="logout" type="material-community" />
                 </View>
-                <Text style={Styles.label}>{t('signOut.label')}</Text>
+                <Text style={Styles.label}>
+                  {t('signOut.label')}
+                </Text>
               </View>
             </SafeAreaView>
           </TouchableItem>

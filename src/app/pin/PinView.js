@@ -13,6 +13,7 @@ import packageInfo from '../../../package.json';
 class PinView extends Component {
   constructor() {
     super();
+
     this.state = {
       error: false,
       pins: this.getPinArray(),
@@ -20,8 +21,10 @@ class PinView extends Component {
   }
 
   componentDidUpdate = () => {
-    if (!this.state.error && this.state.pins.every(pin => pin.value !== null)) {
-      this.validate(this.state.pins);
+    const { error, pins } = this.state;
+
+    if (!error && pins.every(pin => pin.value !== null)) {
+      this.validate(pins);
     }
   };
 
@@ -41,20 +44,20 @@ class PinView extends Component {
   };
 
   setPinNumber = number => {
-    let pins;
+    let newPins;
+    const { error, pins } = this.state;
 
-    if (this.state.error) {
+    if (error) {
       // If already has error, reset pins to empty after starting entering new pni
-      pins = Immutable.fromJS(this.getPinArray());
+      newPins = Immutable.fromJS(this.getPinArray());
     } else {
-      pins = Immutable.fromJS(this.state.pins);
+      newPins = Immutable.fromJS(pins);
     }
 
-    const pinIndexToSet = pins.findIndex(pin => pin.get('value') === null);
+    const pinIndexToSet = newPins.findIndex(pin => pin.get('value') === null);
 
     if (pinIndexToSet !== -1) {
-      const newPins = pins.setIn([pinIndexToSet, 'value'], number).toJS();
-      this.setState({ pins: newPins, error: false });
+      this.setState({ pins: newPins.setIn([pinIndexToSet, 'value'], number).toJS(), error: false });
     }
   };
 
@@ -86,17 +89,28 @@ class PinView extends Component {
   };
 
   render = () => {
+    const { pins, error } = this.state;
+
     return (
       <View style={Styles.container}>
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>Version {packageInfo.version}</Text>
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>Enter Your Pin</Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>
+          Version
+          {packageInfo.version}
+        </Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.text]}>
+Enter Your Pin
+        </Text>
         <View style={Styles.pinContainer}>
-          <FlatList data={this.state.pins} renderItem={this.renderPinItem} horizontal keyExtractor={this.keyExtractor} />
+          <FlatList data={pins} renderItem={this.renderPinItem} horizontal keyExtractor={this.keyExtractor} />
         </View>
-        {this.state.error ? (
-          <Text style={[DefaultStyles.primaryTitleFont, Styles.errorText]}>Invalid Pin</Text>
+        {error ? (
+          <Text style={[DefaultStyles.primaryTitleFont, Styles.errorText]}>
+Invalid Pin
+          </Text>
         ) : (
-          <Text style={Styles.text}>---</Text>
+          <Text style={Styles.text}>
+---
+          </Text>
         )}
         <View style={Styles.pinPadContainer}>
           <NumberPad

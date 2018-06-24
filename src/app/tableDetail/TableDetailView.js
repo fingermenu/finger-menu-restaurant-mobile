@@ -33,13 +33,18 @@ class TableDetailView extends Component {
     isSplitPaymentMode: false,
   };
 
-  getTotal = () => (this.state.isSplitPaymentMode ? this.getCalculatedOrderItemsTotal(this.state.selectedOrders) : this.getRemainingTotal());
+  getTotal = () => {
+    const { isSplitPaymentMode, selectedOrders } = this.state;
+
+    return isSplitPaymentMode ? this.getCalculatedOrderItemsTotal(selectedOrders) : this.getRemainingTotal();
+  };
 
   getBalanceToPayAndDiscount = () => {
+    const { discountType } = this.state;
     const total = this.getTotal();
     const discount = this.convertStringDiscountValueToDecimal();
 
-    switch (this.state.discountType) {
+    switch (discountType) {
     case '$': {
       const balanceToPay = discount <= total ? total - discount : total;
 
@@ -47,7 +52,7 @@ class TableDetailView extends Component {
     }
 
     case '%': {
-      const balanceToPay = discount <= 100 ? total * (100 - discount) / 100 : total;
+      const balanceToPay = discount <= 100 ? (total * (100 - discount)) / 100 : total;
 
       return { balanceToPay, discount: total - balanceToPay };
     }
@@ -98,8 +103,10 @@ class TableDetailView extends Component {
     this.printReceiptPopupDialog = popupDialog;
   };
 
-  getRemainingTotal = () =>
-    this.props.orders.reduce(
+  getRemainingTotal = () => {
+    const { orders } = this.props;
+
+    return orders.reduce(
       (remainingTotal, order) =>
         remainingTotal +
         this.getCalculatedOrderItemsTotal(
@@ -109,6 +116,7 @@ class TableDetailView extends Component {
         ),
       0,
     );
+  };
 
   getDiscountDisplayValue = () => {
     const discount = this.convertStringDiscountValueToDecimal();
@@ -117,23 +125,28 @@ class TableDetailView extends Component {
     return discountType === '%' ? (discount ? discount : '0') + discountType : discountType + (discount ? discount.toFixed(2) : '0.00');
   };
 
-  getOrderItems = orderItems =>
-    Immutable.fromJS(orderItems)
+  getOrderItems = orderItems => {
+    const { table } = this.props;
+
+    return Immutable.fromJS(orderItems)
       .groupBy(item => item.getIn(['customer', 'customerId']))
       .mapEntries(([key, value]) => [
         key,
         {
           data: value.toJS(),
-          categoryTitle: this.getCustomerName(this.props.table, key),
+          categoryTitle: this.getCustomerName(table, key),
           categoryKey: key,
         },
       ])
       .sortBy(_ => _.categoryTitle)
       .valueSeq()
       .toJS();
+  };
 
   convertStringDiscountValueToDecimal = () => {
-    const discountStr = this.state.discount ? this.state.discount.trim() : '';
+    const { discount } = this.state;
+
+    const discountStr = discount ? discount.trim() : '';
     if (!TableDetailView.isDecimal(discountStr)) {
       return 0;
     }
@@ -158,8 +171,10 @@ class TableDetailView extends Component {
   };
 
   handleResetTableConfirmed = () => {
+    const { onResetTablePressed } = this.props;
+
     this.resetPopupDialog.dismiss();
-    this.props.onResetTablePressed();
+    onResetTablePressed();
   };
 
   handleResetTableCancelled = () => {
@@ -169,8 +184,10 @@ class TableDetailView extends Component {
   handleResetTablePressed = () => this.resetPopupDialog.show();
 
   handleRePrintForKitchenConfirmed = () => {
+    const { onRePrintForKitchen } = this.props;
+
     this.rePrintForKitchenPopupDialog.dismiss();
-    this.props.onRePrintForKitchen();
+    onRePrintForKitchen();
   };
 
   handleRePrintForKitchenCancelled = () => {
@@ -180,8 +197,10 @@ class TableDetailView extends Component {
   handleRePrintForKitchenPressed = () => this.rePrintForKitchenPopupDialog.show();
 
   handlePrintReceiptConfirmed = () => {
+    const { onPrintReceipt } = this.props;
+
     this.printReceiptPopupDialog.dismiss();
-    this.props.onPrintReceipt();
+    onPrintReceipt();
   };
 
   handlePrintReceiptCancelled = () => {
@@ -191,21 +210,25 @@ class TableDetailView extends Component {
   handlePrintReceiptPressed = () => this.printReceiptPopupDialog.show();
 
   handleSetTablePaidConfirmed = () => {
+    const { onSetPaidPressed } = this.props;
+
     this.paidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    this.props.onSetPaidPressed(discount);
+    onSetPaidPressed(discount);
   };
 
   handleSetTablePaidAndResetConfirmed = () => {
+    const { onSetPaidAndResetPressed } = this.props;
+
     this.paidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    this.props.onSetPaidAndResetPressed(discount);
+    onSetPaidAndResetPressed(discount);
   };
 
   handleSetTablePaidCancelled = () => {
@@ -213,7 +236,13 @@ class TableDetailView extends Component {
   };
 
   handleSetTablePaidPressed = () => {
-    if (this.props.table.tableState.key === 'taken') {
+    const {
+      table: {
+        tableState: { key },
+      },
+    } = this.props;
+
+    if (key === 'taken') {
       this.paidPopupDialog.show();
     }
   };
@@ -231,27 +260,27 @@ class TableDetailView extends Component {
   };
 
   handleSplitPayConfirmed = () => {
-    this.splitPaidPopupDialog.dismiss();
-
+    const { onSplitPaidPressed } = this.props;
     const { selectedOrders } = this.state;
 
+    this.splitPaidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    this.props.onSplitPaidPressed(discount, selectedOrders);
+    onSplitPaidPressed(discount, selectedOrders);
   };
 
   handleSplitPayConfirmedAndPrintReceipt = () => {
-    this.splitPaidPopupDialog.dismiss();
-
     const { selectedOrders } = this.state;
+    const { onSplitPaidAndPrintReceiptPressed } = this.props;
 
+    this.splitPaidPopupDialog.dismiss();
     this.setState({ selectedOrders: List() });
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    this.props.onSplitPaidAndPrintReceiptPressed(discount, selectedOrders);
+    onSplitPaidAndPrintReceiptPressed(discount, selectedOrders);
   };
 
   handlePayCustomCancelled = () => {
@@ -260,21 +289,25 @@ class TableDetailView extends Component {
 
   handleOrderSelected = (order, isSelected) => {
     if (isSelected) {
-      this.setState({ selectedOrders: this.state.selectedOrders.push(Immutable.fromJS(order)) });
+      this.setState(({ selectedOrders: prevSelectedOrders }) => ({ selectedOrders: prevSelectedOrders.push(Immutable.fromJS(order)) }));
     } else {
-      this.setState({ selectedOrders: this.state.selectedOrders.filterNot(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) });
+      this.setState(({ selectedOrders: prevSelectedOrders }) => ({
+        selectedOrders: prevSelectedOrders.filterNot(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId),
+      }));
     }
   };
 
   handleSectionHeaderSelected = (section, isSelected) => {
     if (isSelected) {
-      this.setState({ selectedOrders: this.state.selectedOrders.merge(Immutable.fromJS(section.data).filterNot(_ => _.get('paid'))) });
+      this.setState(({ selectedOrders: prevSelectedOrders }) => ({
+        selectedOrders: prevSelectedOrders.merge(Immutable.fromJS(section.data).filterNot(_ => _.get('paid'))),
+      }));
     } else {
-      this.setState({
-        selectedOrders: this.state.selectedOrders.filterNot(
+      this.setState(({ selectedOrders: prevSelectedOrders }) => ({
+        selectedOrders: prevSelectedOrders.filterNot(
           _ => section.data.find(order => order.orderMenuItemPriceId === _.get('orderMenuItemPriceId')) !== undefined,
         ),
-      });
+      }));
     }
   };
 
@@ -303,6 +336,7 @@ class TableDetailView extends Component {
   renderSplitPaymentPopupDialog = (slideAnimation, tableName) => {
     const { t } = this.props;
     const popupDialogSize = getPopupDialogSizes();
+    const { selectedOrders } = this.state;
 
     return (
       <PopupDialog
@@ -316,16 +350,21 @@ class TableDetailView extends Component {
           <View>
             <View style={Styles.paymentSummaryTotalRow}>
               <Text style={DefaultStyles.primaryLabelFont}>
-                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(this.state.selectedOrders).toFixed(2))}
+                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(selectedOrders).toFixed(2))}
               </Text>
-              <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
+              <Text style={DefaultStyles.primaryLabelFont}>
+                {t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}
+              </Text>
             </View>
             <View style={Styles.paymentSummaryBalanceRow}>
               <Text style={DefaultStyles.primaryTitleFont}>
                 {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
               </Text>
             </View>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> {t('confirmPayment.message')}</Text>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> 
+              {' '}
+              {t('confirmPayment.message')}
+            </Text>
             <View style={Styles.popupDialogButtonsContainer}>
               <Button
                 title={t('confirm.button')}
@@ -401,8 +440,12 @@ class TableDetailView extends Component {
       >
         <View style={Styles.popupDialogContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', this.getRemainingTotal().toFixed(2))}</Text>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('total.label').replace('{total}', this.getRemainingTotal().toFixed(2))}
+            </Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}
+            </Text>
           </View>
           <View style={Styles.paymentSummaryBalanceRow}>
             <Text style={DefaultStyles.primaryTitleFont}>
@@ -452,7 +495,9 @@ class TableDetailView extends Component {
         ref={this.setRePrintForKitchenPopupDialogRef}
       >
         <View style={Styles.popupDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToRePrintForKitchen.message')}</Text>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
+            {t('areYouSureToRePrintForKitchen.message')}
+          </Text>
           <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('rePrintForKitchen.button')}
@@ -485,7 +530,9 @@ class TableDetailView extends Component {
         ref={this.setPrintReceiptPopupDialogRef}
       >
         <View style={Styles.popupDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>{t('areYouSureToPrintReceipt.message')}</Text>
+          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
+            {t('areYouSureToPrintReceipt.message')}
+          </Text>
           <View style={Styles.popupDialogButtonsContainer}>
             <Button
               title={t('printReceipt.button')}
@@ -507,12 +554,13 @@ class TableDetailView extends Component {
 
   renderSplitPaymentButtons = () => {
     const { t } = this.props;
+    const { selectedOrders } = this.state;
 
     return (
       <View style={Styles.mainScreenButtonsContainer}>
         <Button
-          title={t('payItems.button').replace('{numberOfItems}', this.state.selectedOrders.count())}
-          disabled={this.state.selectedOrders.isEmpty() || !this.isDiscountValid()}
+          title={t('payItems.button').replace('{numberOfItems}', selectedOrders.count())}
+          disabled={selectedOrders.isEmpty() || !this.isDiscountValid()}
           onPress={this.handlePayCustomPayPressed}
         />
         <Button title={t('cancelPayment.button')} onPress={this.handleCancelCustomPayPressed} />
@@ -573,18 +621,22 @@ class TableDetailView extends Component {
     );
   };
 
-  renderOrderItemRow = info => (
-    <OrderItemRow
-      orderItem={info.item}
-      menuItem={info.item.menuItemPrice.menuItem}
-      menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
-      enableMultiSelection={this.state.isSplitPaymentMode}
-      onOrderSelected={this.handleOrderSelected}
-      isSelected={!!this.state.selectedOrders.find(_ => _.get('orderMenuItemPriceId') === info.item.orderMenuItemPriceId)}
-      orderItemIsEditable
-      showRemove={false}
-    />
-  );
+  renderOrderItemRow = info => {
+    const { isSplitPaymentMode, selectedOrders } = this.state;
+
+    return (
+      <OrderItemRow
+        orderItem={info.item}
+        menuItem={info.item.menuItemPrice.menuItem}
+        menuItemCurrentPrice={info.item.menuItemPrice.currentPrice}
+        enableMultiSelection={isSplitPaymentMode}
+        onOrderSelected={this.handleOrderSelected}
+        isSelected={!!selectedOrders.find(_ => _.get('orderMenuItemPriceId') === info.item.orderMenuItemPriceId)}
+        orderItemIsEditable
+        showRemove={false}
+      />
+    );
+  };
 
   renderSelectedPayingItem = info => (
     <OrderItemRow
@@ -598,13 +650,15 @@ class TableDetailView extends Component {
   );
 
   renderSectionHeader = ({ section }) => {
+    const { isSplitPaymentMode, selectedOrders } = this.state;
     const isSectionSelected = section.data.every(
-      order => !!this.state.selectedOrders.find(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) || order.paid,
+      order => !!selectedOrders.find(_ => _.get('orderMenuItemPriceId') === order.orderMenuItemPriceId) || order.paid,
     );
     const isAllSectionOrdersPaid = section.data.every(order => order.paid);
+
     return (
       <View style={Styles.sectionHeader}>
-        {!isAllSectionOrdersPaid && this.state.isSplitPaymentMode ? (
+        {!isAllSectionOrdersPaid && isSplitPaymentMode ? (
           <CheckBox
             center
             size={28}
@@ -618,7 +672,9 @@ class TableDetailView extends Component {
           <View />
         )}
         <Icon name="person-outline" color={DefaultColor.iconColor} />
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>{section.categoryTitle}</Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.sectionTitle]}>
+          {section.categoryTitle}
+        </Text>
       </View>
     );
   };
@@ -640,6 +696,7 @@ class TableDetailView extends Component {
     const totalPrice = OrderHelper.calculateTotalPriceAndDiscountForMultuipleOrders(immutableOrders)
       .get('totalPrice')
       .toFixed(2);
+    const { isSplitPaymentMode, discount } = this.state;
 
     return (
       <View style={Styles.container}>
@@ -650,7 +707,9 @@ class TableDetailView extends Component {
         {this.renderPrintReceiptPopupDialog(slideAnimation)}
 
         <View style={Styles.headerContainer}>
-          <Text style={DefaultStyles.primaryTitleFont}>{t('table.label').replace('{tableName}', name)}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>
+            {t('table.label').replace('{tableName}', name)}
+          </Text>
           <Badge
             value={tableState.name}
             textStyle={Styles.tableText}
@@ -658,7 +717,10 @@ class TableDetailView extends Component {
             containerStyle={[Styles.tableBadgeContainer, Styles.tableBadgeTaken]}
             wrapperStyle={Styles.tableBadgeWrapper}
           />
-          <Text style={DefaultStyles.primaryTitleFont}>${totalPrice}</Text>
+          <Text style={DefaultStyles.primaryTitleFont}>
+            $
+            {totalPrice}
+          </Text>
         </View>
         {orders.length > 0 ? (
           <SectionList
@@ -674,17 +736,21 @@ class TableDetailView extends Component {
           />
         ) : (
           <ScrollView contentContainerStyle={Styles.emptyOrdersContainer}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('noOrdersHaveBeenPlacedYet.message')}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('noOrdersHaveBeenPlacedYet.message')}
+            </Text>
           </ScrollView>
         )}
         <View style={Styles.paymentSummaryContainer}>
           <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', totalPrice)}</Text>
+            <Text style={DefaultStyles.primaryLabelFont}>
+              {t('total.label').replace('{total}', totalPrice)}
+            </Text>
             <View style={DefaultStyles.rowContainer}>
               <Input
                 placeholder={t('discount.placeholder')}
                 onChangeText={this.handleDiscountValueChanged}
-                value={this.state.discount}
+                value={discount}
                 containerStyle={{ width: 100 }}
                 keyboardType="numeric"
               />
@@ -702,7 +768,7 @@ class TableDetailView extends Component {
             </Text>
           </View>
         </View>
-        {this.state.isSplitPaymentMode ? this.renderSplitPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
+        {isSplitPaymentMode ? this.renderSplitPaymentButtons() : this.renderDefaultPaymentButtons(tableState)}
       </View>
     );
   };

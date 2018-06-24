@@ -9,11 +9,13 @@ import DietaryOption from './DietaryOption';
 
 class DietaryOptions extends Component {
   validateMustChooseDietaryOption = (_, values) => {
-    if (this.props.mustChooseDietaryOption) {
+    const { mustChooseDietaryOption, dietaryOptions } = this.props;
+
+    if (mustChooseDietaryOption) {
       const convertedValues = Immutable.fromJS(values);
       const dietaryOptionIds = convertedValues
         .keySeq()
-        .filter(key => this.props.dietaryOptions.find(dietaryOption => dietaryOption.id.localeCompare(key) === 0));
+        .filter(key => dietaryOptions.find(dietaryOption => dietaryOption.id.localeCompare(key) === 0));
 
       return dietaryOptionIds.find(id => convertedValues.get(id)) ? undefined : 'Dietry Option is required';
     }
@@ -25,7 +27,11 @@ class DietaryOptions extends Component {
 
   renderItem = ({ item }) => <DietaryOption dietaryOption={item} validateMustChooseDietaryOption={this.validateMustChooseDietaryOption} />;
 
-  render = () => <FlatList data={this.props.dietaryOptions} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+  render = () => {
+    const { dietaryOptions } = this.props;
+
+    return <FlatList data={dietaryOptions} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+  };
 }
 
 DietaryOptions.propTypes = {

@@ -10,7 +10,9 @@ import { DefaultColor } from '../../style';
 
 class ActiveCustomersMenuOption extends Component {
   handleActiveCustomerChanged = () => {
-    this.props.onActiveCustomerChanged(this.props.customerId);
+    const { onActiveCustomerChanged, customerId } = this.props;
+
+    onActiveCustomerChanged(customerId);
   };
 
   render = () => {
@@ -26,7 +28,9 @@ class ActiveCustomersMenuOption extends Component {
             activeOpacity={0.7}
           />
           <View style={Styles.iconTextContainer}>
-            <Text style={isSelected ? Styles.selectedIconText : Styles.IconText}>{name}</Text>
+            <Text style={isSelected ? Styles.selectedIconText : Styles.IconText}>
+              {name}
+            </Text>
           </View>
         </View>
       </MenuOption>
