@@ -20,6 +20,7 @@ export default createRefetchContainer(
             totalSale
             departmentSubCategoriesReport {
               departmentCategory {
+                id
                 tag {
                   name
                 }

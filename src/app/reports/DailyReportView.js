@@ -1,23 +1,56 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { SectionList, Text } from 'react-native';
 import { translate } from 'react-i18next';
 
-class FilterCriteriaView extends Component {
-  render = () => {
-    /* const departmentCategoriesReport = this.props.departmentCategoriesReport;
-
-       * const groupedByRootCategory = departmentCategoriesReport.groupBy(departmentCategory => departmentCategory);
-       */
+class DailyReportView extends Component {
+  renderDepartmentCategoryHeader = ({
+    section: {
+      departmentCategory: {
+        tag: { name },
+      },
+    },
+  }) => {
     return (
-      <Text>
-Test
+      <Text style={{ fontWeight: 'bold' }}>
+        {name}
       </Text>
+    );
+  };
+
+  renderDepartmentSubCategoryHeader = ({
+    item: {
+      departmentCategory: {
+        id,
+        tag: { name },
+      },
+    },
+  }) => (
+    <Text key={id}>
+      {name}
+    </Text>
+  );
+
+  render = () => {
+    const { departmentCategoriesReport } = this.props;
+    const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
+      ({ departmentCategory, departmentSubCategoriesReport }) => ({
+        departmentCategory,
+        data: departmentSubCategoriesReport,
+      }),
+    );
+
+    return (
+      <SectionList
+        sections={departmentCategoriesReportPopulatedWithSectionData}
+        renderSectionHeader={this.renderDepartmentCategoryHeader}
+        renderItem={this.renderDepartmentSubCategoryHeader}
+      />
     );
   };
 }
 
-FilterCriteriaView.propTypes = {};
+DailyReportView.propTypes = {};
 
-export default translate()(FilterCriteriaView);
+export default translate()(DailyReportView);
