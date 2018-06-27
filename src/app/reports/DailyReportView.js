@@ -29,12 +29,21 @@ class DailyReportView extends Component {
         id,
         tag: { name },
       },
+      totalSale,
     },
   }) => (
     <View key={id} style={Styles.departmentSubCategorySection}>
-      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
-        {name}
-      </Text>
+      <View style={Styles.departmentSubCategoryTitleContainer}>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
+          {name}
+        </Text>
+      </View>
+      <View style={Styles.departmentSubCategoryTotalPriceContainer}>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
+          $
+          {totalSale}
+        </Text>
+      </View>
     </View>
   );
 

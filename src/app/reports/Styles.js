@@ -32,7 +32,20 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  departmentSubCategoryTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   departmentSubCategoryTitle: {
+    fontWeight: '400',
+  },
+  departmentSubCategoryTotalPriceContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  departmentSubCategoryTotalPrice: {
     fontWeight: '400',
   },
 });
