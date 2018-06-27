@@ -1,23 +1,27 @@
 // @flow
 
 import React, { Component } from 'react';
-import { SectionList, Text } from 'react-native';
+import { SectionList, Text, View } from 'react-native';
 import { translate } from 'react-i18next';
+import { DefaultStyles } from '../../style';
+import Styles from './Styles';
 
 class DailyReportView extends Component {
+  keyExtractor = ({ departmentCategory: { id } }) => id;
+
   renderDepartmentCategoryHeader = ({
     section: {
       departmentCategory: {
         tag: { name },
       },
     },
-  }) => {
-    return (
-      <Text style={{ fontWeight: 'bold' }}>
+  }) => (
+    <View style={Styles.departmentCategorySection}>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryTitle]}>
         {name}
       </Text>
-    );
-  };
+    </View>
+  );
 
   renderDepartmentSubCategoryHeader = ({
     item: {
@@ -27,9 +31,11 @@ class DailyReportView extends Component {
       },
     },
   }) => (
-    <Text key={id}>
-      {name}
-    </Text>
+    <View key={id} style={Styles.departmentSubCategorySection}>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
+        {name}
+      </Text>
+    </View>
   );
 
   render = () => {
@@ -46,6 +52,7 @@ class DailyReportView extends Component {
         sections={departmentCategoriesReportPopulatedWithSectionData}
         renderSectionHeader={this.renderDepartmentCategoryHeader}
         renderItem={this.renderDepartmentSubCategoryHeader}
+        keyExtractor={this.keyExtractor}
       />
     );
   };
