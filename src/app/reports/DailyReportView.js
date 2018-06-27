@@ -5,6 +5,7 @@ import { SectionList, Text, View } from 'react-native';
 import { translate } from 'react-i18next';
 import { DefaultStyles } from '../../style';
 import Styles from './Styles';
+import { ListItemSeparator } from '../../components/list';
 
 class DailyReportView extends Component {
   keyExtractor = ({ departmentCategory: { id } }) => id;
@@ -47,6 +48,8 @@ class DailyReportView extends Component {
     </View>
   );
 
+  renderSeparator = () => <ListItemSeparator />;
+
   render = () => {
     const { departmentCategoriesReport } = this.props;
     const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
@@ -61,6 +64,7 @@ class DailyReportView extends Component {
         sections={departmentCategoriesReportPopulatedWithSectionData}
         renderSectionHeader={this.renderDepartmentCategoryHeader}
         renderItem={this.renderDepartmentSubCategoryHeader}
+        ItemSeparatorComponent={this.renderSeparator}
         keyExtractor={this.keyExtractor}
       />
     );
