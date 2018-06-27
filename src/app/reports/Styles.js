@@ -8,11 +8,9 @@ export default StyleSheet.create({
     flex: 1,
   },
   dateRangeContainer: {
-    flex: 1,
     flexDirection: 'row',
   },
   resultContainer: {
-    flex: 1,
     flexDirection: 'row',
   },
   departmentCategoryHeaderSection: {
