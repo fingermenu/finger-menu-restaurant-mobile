@@ -17,10 +17,21 @@ class DailyReportView extends Component {
       },
     },
   }) => (
-    <View style={Styles.departmentCategorySection}>
-      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryTitle]}>
+    <View style={Styles.departmentCategoryHeaderSection}>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryHeaderTitle]}>
         {name}
       </Text>
+    </View>
+  );
+
+  renderDepartmentCategoryFooter = ({ section: { totalSale } }) => (
+    <View style={Styles.departmentCategoryFooterSection}>
+      <View style={Styles.departmentCategoryTotalPriceContainer}>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTitle]}>
+          $
+          {totalSale.toFixed(2)}
+        </Text>
+      </View>
     </View>
   );
 
@@ -42,7 +53,7 @@ class DailyReportView extends Component {
       <View style={Styles.departmentSubCategoryTotalPriceContainer}>
         <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
           $
-          {totalSale}
+          {totalSale.toFixed(2)}
         </Text>
       </View>
     </View>
@@ -53,8 +64,9 @@ class DailyReportView extends Component {
   render = () => {
     const { departmentCategoriesReport } = this.props;
     const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
-      ({ departmentCategory, departmentSubCategoriesReport }) => ({
+      ({ departmentCategory, totalSale, departmentSubCategoriesReport }) => ({
         departmentCategory,
+        totalSale,
         data: departmentSubCategoriesReport,
       }),
     );
@@ -63,6 +75,7 @@ class DailyReportView extends Component {
       <SectionList
         sections={departmentCategoriesReportPopulatedWithSectionData}
         renderSectionHeader={this.renderDepartmentCategoryHeader}
+        renderSectionFooter={this.renderDepartmentCategoryFooter}
         renderItem={this.renderDepartmentSubCategoryHeader}
         ItemSeparatorComponent={this.renderSeparator}
         keyExtractor={this.keyExtractor}

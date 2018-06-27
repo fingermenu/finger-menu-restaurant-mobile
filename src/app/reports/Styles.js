@@ -15,14 +15,29 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  departmentCategorySection: {
+  departmentCategoryHeaderSection: {
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     padding: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  departmentCategoryTitle: {
+  departmentCategoryHeaderTitle: {
+    fontWeight: '700',
+  },
+  departmentCategoryFooterSection: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  departmentCategoryTotalPriceContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  departmentCategoryFooterTitle: {
     fontWeight: '700',
   },
   departmentSubCategorySection: {
