@@ -2,20 +2,20 @@
 
 import ActionTypes from './ActionTypes';
 
-export function fromDateChanged(date) {
+export function fromDateTimeChanged(datetime) {
   return {
-    type: ActionTypes.DAILY_REPORT_FROM_DATE_CHANGED,
+    type: ActionTypes.DAILY_REPORT_FROM_DATETIME_CHANGED,
     payload: {
-      date,
+      datetime,
     },
   };
 }
 
-export function toDateChanged(date) {
+export function toDateTimeChanged(datetime) {
   return {
-    type: ActionTypes.DAILY_REPORT_TO_DATE_CHANGED,
+    type: ActionTypes.DAILY_REPORT_TO_DATETIME_CHANGED,
     payload: {
-      date,
+      datetime,
     },
   };
 }

@@ -4,6 +4,9 @@ import { StyleSheet } from 'react-native';
 import { DefaultColor } from '../../style';
 
 export default StyleSheet.create({
+  datePicker: {
+    width: 200,
+  },
   mainContainer: {
     flex: 1,
   },

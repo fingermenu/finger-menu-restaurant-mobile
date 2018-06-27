@@ -5,11 +5,11 @@ import initialState from './InitialState';
 
 export default (state = initialState, action) => {
   switch (action.type) {
-  case ActionTypes.DAILY_REPORT_FROM_DATE_CHANGED:
-    return state.set('from', action.payload.date);
+  case ActionTypes.DAILY_REPORT_FROM_DATETIME_CHANGED:
+    return state.set('from', action.payload.datetime);
 
-  case ActionTypes.DAILY_REPORT_TO_DATE_CHANGED:
-    return state.set('to', action.payload.date);
+  case ActionTypes.DAILY_REPORT_TO_DATETIME_CHANGED:
+    return state.set('to', action.payload.datetime);
 
   default:
     return state;
