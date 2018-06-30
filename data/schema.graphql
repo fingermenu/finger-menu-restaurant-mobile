@@ -146,8 +146,9 @@ type DepartmentCategory implements Node {
 }
 
 type DepartmentCategoryReport {
-  departmentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory!
   totalSale: Float!
+  quantity: Int!
   departmentSubCategoriesReport: [DepartmentSubCategoryReport!]
 }
 
@@ -170,8 +171,9 @@ type DepartmentCategoryTypeEdge {
 }
 
 type DepartmentSubCategoryReport {
-  departmentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory!
   totalSale: Float!
+  quantity: Int!
 }
 
 type DietaryOption implements Node {
