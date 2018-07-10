@@ -1294,11 +1294,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateRange",
+                    "name": "DateTimeRange",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1678,11 +1678,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateRange",
+                    "name": "DateTimeRange",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -4717,14 +4717,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "DateRange",
+                      "name": "DateTimeRange",
                       "ofType": null
                     }
                   },
@@ -5217,7 +5217,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "DateRange",
+          "name": "DateTimeRange",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -5671,14 +5671,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "DateRange",
+                      "name": "DateTimeRange",
                       "ofType": null
                     }
                   },

@@ -10,7 +10,7 @@ export default createRefetchContainer(
       fragment DailyReportRelayContainer_user on User {
         id
         restaurant(restaurantId: $restaurantId) {
-          departmentCategoriesReport(dateRange: $dateRange) {
+          departmentCategoriesReport(dateTimeRange: $dateTimeRange) {
             departmentCategory {
               id
               tag {
@@ -33,7 +33,7 @@ export default createRefetchContainer(
     `,
   },
   graphql`
-    query DailyReportRelayContainerFragmentQuery($restaurantId: ID!, $dateRange: DateRange!) {
+    query DailyReportRelayContainerFragmentQuery($restaurantId: ID!, $dateTimeRange: DateTimeRange!) {
       user {
         ...DailyReportRelayContainer_user
       }

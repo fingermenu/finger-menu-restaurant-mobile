@@ -19,3 +19,13 @@ export function toDateTimeChanged(datetime) {
     },
   };
 }
+
+export function dateTimeRangeChanged(from, to) {
+  return {
+    type: ActionTypes.DAILY_REPORT_DATETIME_RANGE_CHANGED,
+    payload: {
+      from,
+      to,
+    },
+  };
+}

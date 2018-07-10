@@ -50,7 +50,9 @@ class DailyReport extends Component {
     const { to, dailyReportActions } = this.props;
 
     if (from.toLocalDateTime().isAfter(to.toLocalDateTime())) {
-      dailyReportActions.toDateTimeChanged(from);
+      dailyReportActions.dateTimeRangeChanged(from, from.plusDays(1));
+
+      return;
     }
 
     dailyReportActions.fromDateTimeChanged(from);
@@ -94,13 +96,13 @@ class DailyReport extends Component {
   };
 
   render = () => {
-    const { dateRange, restaurantId } = this.props;
+    const { dateTimeRange, restaurantId } = this.props;
 
     return (
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query DailyReportQuery($restaurantId: ID!, $dateRange: DateRange!) {
+          query DailyReportQuery($restaurantId: ID!, $dateTimeRange: DateTimeRange!) {
             user {
               ...DailyReportRelayContainer_user
             }
@@ -108,7 +110,7 @@ class DailyReport extends Component {
         `}
         variables={{
           restaurantId,
-          dateRange,
+          dateTimeRange,
         }}
         render={this.renderRelayComponent}
       />
@@ -121,7 +123,7 @@ DailyReport.propTypes = {
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   dailyReportActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
-  dateRange: PropTypes.shape({
+  dateTimeRange: PropTypes.shape({
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
   }).isRequired,
@@ -131,7 +133,7 @@ DailyReport.propTypes = {
 
 const mapStateToProps = state => ({
   restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  dateRange: {
+  dateTimeRange: {
     from: state.dailyReport.get('from').toString(),
     to: state.dailyReport.get('to').toString(),
   },
