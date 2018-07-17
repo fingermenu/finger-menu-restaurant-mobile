@@ -45,6 +45,7 @@
     "js-joda": "^1.8.2",
     "lodash.debounce": "^4.0.8",
     "monet": "^0.8.10",
+    "pad": "^2.1.0",
     "parse": "^1.11.1",
     "prop-types": "15.6.2",
     "react": "16.4.1",

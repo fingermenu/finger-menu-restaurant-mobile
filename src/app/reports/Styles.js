@@ -33,12 +33,28 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  departmentCategoryTotalPriceContainer: {
+  departmentCategoryTotalSaleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  departmentCategoryTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  departmentCategoryQuantityContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   departmentCategoryFooterTitle: {
+    fontWeight: '700',
+  },
+  departmentCategoryFooterTotalSale: {
+    fontWeight: '700',
+  },
+  departmentCategoryFooterQuantity: {
     fontWeight: '700',
   },
   departmentSubCategorySection: {
@@ -56,12 +72,20 @@ export default StyleSheet.create({
   departmentSubCategoryTitle: {
     fontWeight: '400',
   },
-  departmentSubCategoryTotalPriceContainer: {
+  departmentSubCategoryTotalSale: {
+    fontWeight: '400',
+  },
+  departmentSubCategoryQuantity: {
+    fontWeight: '400',
+  },
+  departmentSubCategoryQuantityContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  departmentSubCategoryTotalPrice: {
-    fontWeight: '400',
+  departmentSubCategoryTotalSaleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });

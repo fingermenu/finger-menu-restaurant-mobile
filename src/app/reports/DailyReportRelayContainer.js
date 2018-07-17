@@ -14,17 +14,21 @@ export default createRefetchContainer(
             departmentCategory {
               id
               tag {
+                key
                 name
               }
             }
+            quantity
             totalSale
             departmentSubCategoriesReport {
               departmentCategory {
                 id
                 tag {
+                  key
                   name
                 }
               }
+              quantity
               totalSale
             }
           }
