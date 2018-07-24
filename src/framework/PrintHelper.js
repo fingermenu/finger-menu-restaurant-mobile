@@ -221,7 +221,7 @@ export default class PrintHelper {
   };
 
   static convertTotalGstToPrintableString = (totalPrice, maxLineWidth) =>
-    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${(totalPrice * 3 / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
+    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${((totalPrice * 3) / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
 
   static getPrintableOrderDetailsForReceipt = (details, maxLineWidth) => {
     if (details.isEmpty()) {
@@ -320,4 +320,6 @@ export default class PrintHelper {
       })
       .reduce((receipt1, receipt2) => receipt1 + endOfLine + receipt2, '');
   };
+
+  static convertDepartmentCategoriesReportIntoPrintableDocument = (/* departmentCategoriesReport, template, maxLineWidth */) => {};
 }
