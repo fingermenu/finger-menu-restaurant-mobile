@@ -81,6 +81,7 @@ i18next.init({
         updateCustomers: { button: 'Update Customers' },
         lockScreen: { label: 'Lock screen' },
         dailyReport: { button: 'Daily Report' },
+        print: { button: 'Print' },
       },
     },
     zh: {
@@ -153,6 +154,7 @@ i18next.init({
         updateCustomers: { button: '更新客户' },
         lockScreen: { label: '锁屏' },
         dailyReport: { button: '每日报告' },
+        print: { button: '打印' },
       },
     },
     ja: {
@@ -228,6 +230,7 @@ i18next.init({
         updateCustomers: { button: '顧客を更新する' },
         lockScreen: { label: 'ロック画面' },
         dailyReport: { button: '日報' },
+        print: { button: '印刷する' },
       },
     },
   },

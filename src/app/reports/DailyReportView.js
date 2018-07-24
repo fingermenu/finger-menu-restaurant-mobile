@@ -1,8 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { SectionList, Text, View } from 'react-native';
+import { SectionList, Text, View, ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
 import { translate } from 'react-i18next';
+import PropTypes from 'prop-types';
 import pad from 'pad';
 import { DefaultStyles } from '../../style';
 import Styles from './Styles';
@@ -75,7 +77,7 @@ class DailyReportView extends Component {
   renderSeparator = () => <ListItemSeparator />;
 
   render = () => {
-    const { departmentCategoriesReport } = this.props;
+    const { t, departmentCategoriesReport, onPrintPressed } = this.props;
     const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
       ({ departmentCategory, totalSale, quantity, departmentSubCategoriesReport }) => ({
         departmentCategory,
@@ -86,18 +88,23 @@ class DailyReportView extends Component {
     );
 
     return (
-      <SectionList
-        sections={departmentCategoriesReportPopulatedWithSectionData}
-        renderSectionHeader={this.renderDepartmentCategoryHeader}
-        renderSectionFooter={this.renderDepartmentCategoryFooter}
-        renderItem={this.renderDepartmentSubCategoryHeader}
-        ItemSeparatorComponent={this.renderSeparator}
-        keyExtractor={this.keyExtractor}
-      />
+      <ScrollView>
+        <SectionList
+          sections={departmentCategoriesReportPopulatedWithSectionData}
+          renderSectionHeader={this.renderDepartmentCategoryHeader}
+          renderSectionFooter={this.renderDepartmentCategoryFooter}
+          renderItem={this.renderDepartmentSubCategoryHeader}
+          ItemSeparatorComponent={this.renderSeparator}
+          keyExtractor={this.keyExtractor}
+        />
+        <Button onPress={onPrintPressed} title={t('print.button')} />
+      </ScrollView>
     );
   };
 }
 
-DailyReportView.propTypes = {};
+DailyReportView.propTypes = {
+  onPrintPressed: PropTypes.func.isRequired,
+};
 
 export default translate()(DailyReportView);

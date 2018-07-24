@@ -26,6 +26,8 @@ class DailyReportContainer extends Component {
     return null;
   };
 
+  handlePrint = () => {};
+
   render = () => {
     const {
       user: {
@@ -33,7 +35,7 @@ class DailyReportContainer extends Component {
       },
     } = this.props;
 
-    return <DailyReportView departmentCategoriesReport={departmentCategoriesReport} />;
+    return <DailyReportView departmentCategoriesReport={departmentCategoriesReport} onPrintPressed={this.handlePrint} />;
   };
 }
 
