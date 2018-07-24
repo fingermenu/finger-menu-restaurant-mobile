@@ -77,7 +77,7 @@ class DailyReportView extends Component {
   renderSeparator = () => <ListItemSeparator />;
 
   render = () => {
-    const { t, departmentCategoriesReport, onPrintPressed } = this.props;
+    const { t, departmentCategoriesReport, canPrint, onPrintPressed } = this.props;
     const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
       ({ departmentCategory, totalSale, quantity, departmentSubCategoriesReport }) => ({
         departmentCategory,
@@ -97,7 +97,7 @@ class DailyReportView extends Component {
           ItemSeparatorComponent={this.renderSeparator}
           keyExtractor={this.keyExtractor}
         />
-        <Button onPress={onPrintPressed} title={t('print.button')} />
+        {canPrint && <Button onPress={onPrintPressed} title={t('print.button')} />}
       </ScrollView>
     );
   };
@@ -105,6 +105,7 @@ class DailyReportView extends Component {
 
 DailyReportView.propTypes = {
   onPrintPressed: PropTypes.func.isRequired,
+  canPrint: PropTypes.bool.isRequired,
 };
 
 export default translate()(DailyReportView);
