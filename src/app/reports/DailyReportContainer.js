@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { ZonedDateTime } from 'js-joda';
 import DailyReportView from './DailyReportView';
 import PrinterHelper from '../../framework/PrintHelper';
 
@@ -38,11 +39,15 @@ class DailyReportContainer extends Component {
       departmentCategoryDailyReportTemplate,
       printerConfig: { hostname, port, maxLineWidth },
       escPosPrinterActions,
+      from,
+      to,
     } = this.props;
     const { selectedLanguage } = this.state;
     const documentContent = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
       departmentCategoriesReport,
       departmentCategoryDailyReportTemplate,
+      from,
+      to,
       maxLineWidth,
     );
 
@@ -79,6 +84,8 @@ class DailyReportContainer extends Component {
 DailyReportContainer.propTypes = {
   escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   selectedLanguage: PropTypes.string.isRequired,
+  from: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  to: PropTypes.instanceOf(ZonedDateTime).isRequired,
 };
 
 const mapStateToProps = state => {
@@ -97,6 +104,8 @@ const mapStateToProps = state => {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
     printerConfig,
     departmentCategoryDailyReportTemplate: departmentCategoryDailyReportTemplate ? departmentCategoryDailyReportTemplate.get('template') : null,
+    from: state.dailyReport.get('from'),
+    to: state.dailyReport.get('to'),
   };
 };
 
