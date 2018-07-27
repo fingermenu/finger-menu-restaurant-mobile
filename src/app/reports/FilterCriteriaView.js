@@ -8,33 +8,35 @@ import { convert, ZonedDateTime } from 'js-joda';
 import { translate } from 'react-i18next';
 import Styles from './Styles';
 
-const FilterCriteriaView = ({ t, dateFormat, from, to, onFromDateChanged, onToDateChanged }) => (
+const FilterCriteriaView = ({ t, dateTimeFormat, from, to, onFromDateChanged, onToDateChanged }) => (
   <View style={Styles.dateRangeContainer}>
     <DatePicker
-      mode="date"
+      mode="datetime"
       placeholder="From"
       date={convert(from).toDate()}
       confirmBtnText={t('confirm.button')}
       cancelBtnText={t('cancel.button')}
-      format={dateFormat}
+      format={dateTimeFormat}
       onDateChange={onFromDateChanged}
+      style={Styles.datePicker}
     />
     <DatePicker
-      mode="date"
+      mode="datetime"
       placeholder="To"
       date={convert(to).toDate()}
       minDate={convert(from).toDate()}
       maxDate={convert(from.plusMonths(1)).toDate()}
       confirmBtnText={t('confirm.button')}
       cancelBtnText={t('cancel.button')}
-      format={dateFormat}
+      format={dateTimeFormat}
       onDateChange={onToDateChanged}
+      style={Styles.datePicker}
     />
   </View>
 );
 
 FilterCriteriaView.propTypes = {
-  dateFormat: PropTypes.string.isRequired,
+  dateTimeFormat: PropTypes.string.isRequired,
   from: PropTypes.instanceOf(ZonedDateTime).isRequired,
   to: PropTypes.instanceOf(ZonedDateTime).isRequired,
   onFromDateChanged: PropTypes.func.isRequired,

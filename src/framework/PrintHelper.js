@@ -221,7 +221,7 @@ export default class PrintHelper {
   };
 
   static convertTotalGstToPrintableString = (totalPrice, maxLineWidth) =>
-    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${(totalPrice * 3 / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
+    PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${((totalPrice * 3) / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
 
   static getPrintableOrderDetailsForReceipt = (details, maxLineWidth) => {
     if (details.isEmpty()) {
@@ -318,6 +318,39 @@ export default class PrintHelper {
           .replace(/{TableName}/g, tableName)
           .replace(/{OrderList}/g, orderList);
       })
-      .reduce((receipt1, receipt2) => receipt1 + endOfLine + receipt2, '');
+      .reduce((reduction, value) => reduction + endOfLine + value, '');
+  };
+
+  static convertDepartmentCategoriesReportIntoPrintableDocument = (departmentCategoriesReport, template, from, to, maxLineWidth) => {
+    const departmentCategories = departmentCategoriesReport
+      .map(departmentCategoryReport => {
+        const subCategoriesReport = departmentCategoryReport.departmentSubCategoriesReport.map(departmentSubCategoryReport => {
+          return PrintHelper.alignTextsOnEachEdge(
+            PrintHelper.pad(departmentSubCategoryReport.departmentCategory.tag.key, 5) + departmentSubCategoryReport.departmentCategory.tag.name,
+            PrintHelper.pad(departmentSubCategoryReport.quantity.toString(), 5) +
+              PrintHelper.pad('$' + departmentSubCategoryReport.totalSale.toFixed(2), 6),
+            maxLineWidth,
+          );
+        });
+
+        const title = PrintHelper.splitTextIntoMultipleLines(departmentCategoryReport.departmentCategory.tag.name, maxLineWidth);
+        const footer = PrintHelper.alignTextsOnEachEdge(
+          '',
+          PrintHelper.pad(departmentCategoryReport.quantity.toString(), 5) + PrintHelper.pad('$' + departmentCategoryReport.totalSale.toFixed(2), 6),
+          maxLineWidth,
+        );
+
+        return title + subCategoriesReport + endOfLine + endOfLine + footer;
+      })
+      .reduce((reduction, value) => reduction + endOfLine + value, '');
+
+    return template
+      .replace('\r', '')
+      .replace('\n', '')
+      .replace(/{CR}/g, '')
+      .replace(/{LF}/g, '\n')
+      .replace(/{FromDateTime}/g, from ? from.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')) : '')
+      .replace(/{ToDateTime}/g, to ? to.format(DateTimeFormatter.ofPattern('dd-MM-yyyy HH:mm:ss')) : '')
+      .replace(/{DepartmentCategories}/g, departmentCategories);
   };
 }

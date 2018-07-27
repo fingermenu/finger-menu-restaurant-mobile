@@ -1294,11 +1294,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateRange",
+                    "name": "DateTimeRange",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1678,11 +1678,11 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateRange",
+                    "name": "DateTimeRange",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -4717,14 +4717,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "DateRange",
+                      "name": "DateTimeRange",
                       "ofType": null
                     }
                   },
@@ -5217,7 +5217,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "DateRange",
+          "name": "DateTimeRange",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -5264,9 +5264,13 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "OBJECT",
-                "name": "DepartmentCategory",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DepartmentCategory",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5281,6 +5285,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "quantity",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
               },
@@ -5368,9 +5388,13 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "OBJECT",
-                "name": "DepartmentCategory",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "DepartmentCategory",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -5385,6 +5409,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "quantity",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
               },
@@ -5631,14 +5671,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "dateRange",
+                  "name": "dateTimeRange",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "DateRange",
+                      "name": "DateTimeRange",
                       "ofType": null
                     }
                   },

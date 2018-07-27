@@ -135,7 +135,7 @@ input CustomerInput {
   type: String
 }
 
-input DateRange {
+input DateTimeRange {
   from: String!
   to: String!
 }
@@ -146,8 +146,9 @@ type DepartmentCategory implements Node {
 }
 
 type DepartmentCategoryReport {
-  departmentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory!
   totalSale: Float!
+  quantity: Int!
   departmentSubCategoriesReport: [DepartmentSubCategoryReport!]
 }
 
@@ -170,8 +171,9 @@ type DepartmentCategoryTypeEdge {
 }
 
 type DepartmentSubCategoryReport {
-  departmentCategory: DepartmentCategory
+  departmentCategory: DepartmentCategory!
   totalSale: Float!
+  quantity: Int!
 }
 
 type DietaryOption implements Node {
@@ -496,7 +498,7 @@ type ParentRestaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
-  departmentCategoriesReport(dateRange: DateRange!): [DepartmentCategoryReport!]
+  departmentCategoriesReport(dateTimeRange: DateTimeRange!): [DepartmentCategoryReport!]
 }
 
 type ParentTag implements Node {
@@ -591,7 +593,7 @@ type Restaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
-  departmentCategoriesReport(dateRange: DateRange!): [DepartmentCategoryReport!]
+  departmentCategoriesReport(dateTimeRange: DateTimeRange!): [DepartmentCategoryReport!]
   parentRestaurant: ParentRestaurant
 }
 
@@ -836,13 +838,13 @@ type User implements Node {
   restaurant(restaurantId: ID!): Restaurant
   restaurants(after: String, first: Int, before: String, last: Int, restaurantIds: [ID!], name: String, status: Boolean, inheritParentRestaurantMenus: Boolean, sortOption: String): RestaurantTypeConnection
   order(orderId: ID!): Order
-  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateRange: DateRange, includeCancelledOrders: Boolean, tableId: ID, name: String, notes: String, sortOption: String): OrderTypeConnection
+  orders(after: String, first: Int, before: String, last: Int, orderIds: [ID!], correlationId: ID, restaurantId: ID!, dateTimeRange: DateTimeRange, includeCancelledOrders: Boolean, tableId: ID, name: String, notes: String, sortOption: String): OrderTypeConnection
   servingTime(servingTimeId: ID!): ServingTime
   servingTimes(after: String, first: Int, before: String, last: Int, servingTimeIds: [ID!], sortOption: String): ServingTimeTypeConnection
   dietaryOption(dietaryOptionId: ID!): DietaryOption
   dietaryOptions(after: String, first: Int, before: String, last: Int, dietaryOptionIds: [ID!], sortOption: String): DietaryOptionTypeConnection
   userFeedback(userFeedbackId: ID!): UserFeedback
-  userFeedbacks(after: String, first: Int, before: String, last: Int, userFeedbackIds: [ID!], others: String, dateRange: DateRange, sortOption: String): UserFeedbackTypeConnection
+  userFeedbacks(after: String, first: Int, before: String, last: Int, userFeedbackIds: [ID!], others: String, dateTimeRange: DateTimeRange, sortOption: String): UserFeedbackTypeConnection
   size(sizeId: ID!): Size
   sizes(after: String, first: Int, before: String, last: Int, sizeIds: [ID!], sortOption: String): SizeTypeConnection
   dishType(dishTypeId: ID!): DishType

@@ -1,10 +1,14 @@
 // @flow
 
-import { List, Map } from 'immutable';
+import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
+import { Map } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { ZonedDateTime } from 'js-joda';
 import DailyReportView from './DailyReportView';
+import PrinterHelper from '../../framework/PrintHelper';
 
 class DailyReportContainer extends Component {
   constructor(props, context) {
@@ -27,68 +31,89 @@ class DailyReportContainer extends Component {
     return null;
   };
 
-  render = () => {
-    const departmentCategoriesReport = List.of(
-      Map({
-        departmentCategory: Map({ id: 'id1', tag: Map({ name: 'Parent Category 1' }) }),
-        totalSale: 1.11,
-        departmentSubCategoriesReport: List.of(
-          Map({
-            departmentCategory: Map({ id: 'id1-1', tag: Map({ name: 'Sub Parent Category 1 - 1' }) }),
-            totalSale: 11.22,
-            departmentSubCategoriesReport: Map(),
-          }),
-        ),
-      }),
-      Map({
-        departmentCategory: Map({ id: 'id2', tag: Map({ name: 'Parent Category 2' }) }),
-        totalSale: 2.1,
-        departmentSubCategoriesReport: List.of(
-          Map({
-            departmentCategory: Map({ id: 'id2-1', tag: Map({ name: 'Sub Parent Category 2 - 1' }) }),
-            totalSale: 22.22,
-            departmentSubCategoriesReport: Map(),
-          }),
-          Map({
-            departmentCategory: Map({ id: 'id2-2', tag: Map({ name: 'Sub Parent Category 2 - 1' }) }),
-            totalSale: 13.44,
-            departmentSubCategoriesReport: Map(),
-          }),
-        ),
-      }),
-      Map({
-        departmentCategory: Map({ id: 'id3', tag: Map({ name: 'Parent Category 3' }) }),
-        totalSale: 3,
-        departmentSubCategoriesReport: List.of(
-          Map({
-            departmentCategory: Map({ id: 'id3-1', tag: Map({ name: 'Sub Parent Category 3 - 1' }) }),
-            totalSale: 31.22,
-            departmentSubCategoriesReport: Map(),
-          }),
-          Map({
-            departmentCategory: Map({ id: 'id3-2', tag: Map({ name: 'Sub Parent Category 3 - 2' }) }),
-            totalSale: 32.33,
-            departmentSubCategoriesReport: Map(),
-          }),
-          Map({
-            departmentCategory: Map({ id: 'id3-3', tag: Map({ name: 'Sub Parent Category 3 - 3' }) }),
-            totalSale: 33.44,
-            departmentSubCategoriesReport: Map(),
-          }),
-        ),
-      }),
+  handlePrint = () => {
+    const {
+      user: {
+        restaurant: { departmentCategoriesReport },
+      },
+      departmentCategoryDailyReportTemplate,
+      printerConfig: { hostname, port, maxLineWidth },
+      escPosPrinterActions,
+      from,
+      to,
+    } = this.props;
+    const { selectedLanguage } = this.state;
+    const documentContent = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
+      departmentCategoriesReport,
+      departmentCategoryDailyReportTemplate,
+      from,
+      to,
+      maxLineWidth,
     );
 
-    return <DailyReportView departmentCategoriesReport={departmentCategoriesReport.toJS()} />;
+    escPosPrinterActions.printDocument(
+      Map({
+        hostname,
+        port,
+        documentContent,
+        numberOfCopies: 1,
+        language: selectedLanguage,
+      }),
+    );
+  };
+
+  render = () => {
+    const {
+      user: {
+        restaurant: { departmentCategoriesReport },
+      },
+      departmentCategoryDailyReportTemplate,
+      printerConfig,
+    } = this.props;
+
+    return (
+      <DailyReportView
+        departmentCategoriesReport={departmentCategoriesReport}
+        canPrint={!!departmentCategoryDailyReportTemplate && !!printerConfig}
+        onPrintPressed={this.handlePrint}
+      />
+    );
   };
 }
 
 DailyReportContainer.propTypes = {
+  escPosPrinterActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   selectedLanguage: PropTypes.string.isRequired,
+  from: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  to: PropTypes.instanceOf(ZonedDateTime).isRequired,
 };
 
-const mapStateToProps = state => ({
-  selectedLanguage: state.applicationState.get('selectedLanguage'),
+const mapStateToProps = state => {
+  const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
+  const printerConfig = configurations.get('printers').isEmpty()
+    ? null
+    : configurations
+      .get('printers')
+      .first()
+      .toJS();
+  const departmentCategoryDailyReportTemplate = configurations
+    .get('documentTemplates')
+    .find(documentTemplate => documentTemplate.get('name').localeCompare('DepartmentCategoryDailyReport') === 0);
+
+  return {
+    selectedLanguage: state.applicationState.get('selectedLanguage'),
+    printerConfig,
+    departmentCategoryDailyReportTemplate: departmentCategoryDailyReportTemplate ? departmentCategoryDailyReportTemplate.get('template') : null,
+    from: state.dailyReport.get('from'),
+    to: state.dailyReport.get('to'),
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  escPosPrinterActions: bindActionCreators(escPosPrinterActions, dispatch),
 });
 
-export default connect(mapStateToProps)(DailyReportContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DailyReportContainer);

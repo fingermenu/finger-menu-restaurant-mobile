@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ChronoUnit, LocalDate, LocalTime, DateTimeFormatter, ZonedDateTime, ZoneId } from 'js-joda';
+import { ChronoUnit, LocalDateTime, DateTimeFormatter, ZonedDateTime, ZoneId } from 'js-joda';
 import { View } from 'react-native';
 import { environment } from '../../framework/relay';
 import { DefaultColor } from '../../style';
@@ -21,7 +21,7 @@ import * as dailyReportActions from './Actions';
 import FilterCriteriaView from './FilterCriteriaView';
 import Styles from './Styles';
 
-const dateTimeFormatter = DateTimeFormatter.ofPattern('dd-MM-yyyy');
+const dateTimeFormatter = DateTimeFormatter.ofPattern('dd-MM-yyyy, HH:mm');
 
 class DailyReport extends Component {
   static navigationOptions = () => ({
@@ -36,26 +36,32 @@ class DailyReport extends Component {
   componentDidMount = () => {
     const { dailyReportActions, googleAnalyticsTrackerActions } = this.props;
 
-    dailyReportActions.fromDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
-    dailyReportActions.toDateChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    dailyReportActions.fromDateTimeChanged(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    dailyReportActions.toDateTimeChanged(
+      ZonedDateTime.now()
+        .truncatedTo(ChronoUnit.DAYS)
+        .plusDays(1),
+    );
     googleAnalyticsTrackerActions.trackScreenView(Map({ screenName: `${screenNamePrefix}Daily Report` }));
   };
 
-  handleFromDateChanged = date => {
-    const from = ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM);
+  handleFromDateChanged = datetime => {
+    const from = ZonedDateTime.of(LocalDateTime.parse(datetime, dateTimeFormatter), ZoneId.SYSTEM);
     const { to, dailyReportActions } = this.props;
 
-    if (from.toLocalDate().isAfter(to.toLocalDate())) {
-      dailyReportActions.toDateChanged(from);
+    if (from.toLocalDateTime().isAfter(to.toLocalDateTime())) {
+      dailyReportActions.dateTimeRangeChanged(from, from.plusDays(1));
+
+      return;
     }
 
-    dailyReportActions.fromDateChanged(from);
+    dailyReportActions.fromDateTimeChanged(from);
   };
 
-  handleToDateChanged = date => {
+  handleToDateChanged = datetime => {
     const { dailyReportActions } = this.props;
 
-    dailyReportActions.toDateChanged(ZonedDateTime.of(LocalDate.parse(date, dateTimeFormatter), LocalTime.MIDNIGHT, ZoneId.SYSTEM));
+    dailyReportActions.toDateTimeChanged(ZonedDateTime.of(LocalDateTime.parse(datetime, dateTimeFormatter), ZoneId.SYSTEM));
   };
 
   addFilterCriteria = children => {
@@ -64,7 +70,7 @@ class DailyReport extends Component {
     return (
       <View style={Styles.mainContainer}>
         <FilterCriteriaView
-          dateFormat="DD-MM-YYYY"
+          dateTimeFormat="DD-MM-YYYY, HH:mm"
           from={from}
           to={to}
           onFromDateChanged={this.handleFromDateChanged}
@@ -90,13 +96,13 @@ class DailyReport extends Component {
   };
 
   render = () => {
-    const { dateRange, restaurantId } = this.props;
+    const { dateTimeRange, restaurantId } = this.props;
 
     return (
       <QueryRenderer
         environment={environment}
         query={graphql`
-          query DailyReportQuery($restaurantId: ID!, $dateRange: DateRange!) {
+          query DailyReportQuery($restaurantId: ID!, $dateTimeRange: DateTimeRange!) {
             user {
               ...DailyReportRelayContainer_user
             }
@@ -104,7 +110,7 @@ class DailyReport extends Component {
         `}
         variables={{
           restaurantId,
-          dateRange,
+          dateTimeRange,
         }}
         render={this.renderRelayComponent}
       />
@@ -117,7 +123,7 @@ DailyReport.propTypes = {
   googleAnalyticsTrackerActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   dailyReportActions: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   restaurantId: PropTypes.string.isRequired,
-  dateRange: PropTypes.shape({
+  dateTimeRange: PropTypes.shape({
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
   }).isRequired,
@@ -127,13 +133,9 @@ DailyReport.propTypes = {
 
 const mapStateToProps = state => ({
   restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-  dateRange: {
+  dateTimeRange: {
     from: state.dailyReport.get('from').toString(),
-    to: state.dailyReport
-      .get('to')
-      .plusDays(1)
-      .plusSeconds(-1)
-      .toString(),
+    to: state.dailyReport.get('to').toString(),
   },
   from: state.dailyReport.get('from'),
   to: state.dailyReport.get('to'),
