@@ -324,23 +324,25 @@ export default class PrintHelper {
   static convertDepartmentCategoriesReportIntoPrintableDocument = (departmentCategoriesReport, template, from, to, maxLineWidth) => {
     const departmentCategories = departmentCategoriesReport
       .map(departmentCategoryReport => {
-        const subCategoriesReport = departmentCategoryReport.departmentSubCategoriesReport.map(departmentSubCategoryReport => {
-          return PrintHelper.alignTextsOnEachEdge(
-            PrintHelper.pad(departmentSubCategoryReport.departmentCategory.tag.key, 5) + departmentSubCategoryReport.departmentCategory.tag.name,
-            PrintHelper.pad(departmentSubCategoryReport.quantity.toString(), 5) +
-              PrintHelper.pad('$' + departmentSubCategoryReport.totalSale.toFixed(2), 6),
-            maxLineWidth,
-          );
-        });
+        const subCategoriesReport = departmentCategoryReport.departmentSubCategoriesReport
+          .map(departmentSubCategoryReport => {
+            return PrintHelper.alignTextsOnEachEdge(
+              PrintHelper.pad(departmentSubCategoryReport.departmentCategory.tag.key, 5) + departmentSubCategoryReport.departmentCategory.tag.name,
+              PrintHelper.pad(departmentSubCategoryReport.quantity.toString(), 5) +
+                PrintHelper.pad('$' + departmentSubCategoryReport.totalSale.toFixed(2), 8),
+              maxLineWidth,
+            );
+          })
+          .reduce((reduction, value) => reduction + endOfLine + value, '');
 
         const title = PrintHelper.splitTextIntoMultipleLines(departmentCategoryReport.departmentCategory.tag.name, maxLineWidth);
         const footer = PrintHelper.alignTextsOnEachEdge(
           '',
-          PrintHelper.pad(departmentCategoryReport.quantity.toString(), 5) + PrintHelper.pad('$' + departmentCategoryReport.totalSale.toFixed(2), 6),
+          PrintHelper.pad(departmentCategoryReport.quantity.toString(), 5) + PrintHelper.pad('$' + departmentCategoryReport.totalSale.toFixed(2), 8),
           maxLineWidth,
         );
 
-        return title + subCategoriesReport + endOfLine + endOfLine + footer;
+        return title + subCategoriesReport + endOfLine + footer;
       })
       .reduce((reduction, value) => reduction + endOfLine + value, '');
 
