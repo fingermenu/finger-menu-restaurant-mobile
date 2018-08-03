@@ -100,7 +100,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSetPaidPressed = discount => {
+  handleSetPaidPressed = ({ discount, eftpos, cash }) => {
     const {
       user: {
         orders: { edges },
@@ -115,7 +115,7 @@ class TableDetailContainer extends Component {
         order,
         null,
         true,
-        { paymentGroupId: cuid(), discount },
+        { paymentGroupId: cuid(), discount, cash, eftpos },
         {
           onSuccess: () => {
             totalUpdated = totalUpdated + 1;
@@ -135,7 +135,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSetPaidAndResetPressed = discount => {
+  handleSetPaidAndResetPressed = ({ discount, eftpos, cash }) => {
     const {
       user: {
         orders: { edges },
@@ -149,7 +149,7 @@ class TableDetailContainer extends Component {
         order,
         null,
         true,
-        { paymentGroupId: cuid(), discount },
+        { paymentGroupId: cuid(), discount, cash, eftpos },
         {
           onSuccess: () => {
             totalUpdated = totalUpdated + 1;
@@ -165,7 +165,7 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSplitPaidPressed = (discount, selectedOrders, printCallback) => {
+  handleSplitPaidPressed = ({ discount, eftpos, cash }, selectedOrders, printCallback) => {
     const {
       user: {
         orders: { edges },
@@ -189,7 +189,7 @@ class TableDetailContainer extends Component {
         order,
         selectedOrders,
         false,
-        { paymentGroupId, discount },
+        { paymentGroupId, discount, cash, eftpos },
         {
           onSuccess: response => {
             totalUpdated = totalUpdated + 1;
@@ -229,8 +229,8 @@ class TableDetailContainer extends Component {
     });
   };
 
-  handleSplitPaidAndPrintReceiptPressed = (discount, selectedOrders) => {
-    this.handleSplitPaidPressed(discount, selectedOrders, details => {
+  handleSplitPaidAndPrintReceiptPressed = ({ discount, eftpos, cash }, selectedOrders) => {
+    this.handleSplitPaidPressed({ discount, eftpos, cash }, selectedOrders, details => {
       const {
         printerConfig: { hostname, port, maxLineWidth },
         customerReceiptTemplate,
@@ -352,19 +352,30 @@ class TableDetailContainer extends Component {
 
   handleEndReached = () => true;
 
-  convertOrderToOrderRequest = (order, selectedOrders, setAllMenuItemPricesPaid, { paymentGroupId, discount: paymentGroupDiscount }) =>
+  convertOrderToOrderRequest = (
+    order,
+    selectedOrders,
+    setAllMenuItemPricesPaid,
+    { paymentGroupId, discount: paymentGroupDiscount, eftpos: paymentGroupEftpos, cash: paymentGroupCash },
+  ) =>
     order.update('details', details =>
       details.map(detail => {
         const menuItemPrice = detail.get('menuItemPrice');
         let id;
+        let eftpos;
+        let cash;
         let discount;
 
         if (detail.get('paid')) {
           id = detail.getIn(['paymentGroup', 'paymentGroupId']);
+          eftpos = detail.getIn(['paymentGroup', 'eftpos']);
+          cash = detail.getIn(['paymentGroup', 'cash']);
           discount = detail.getIn(['paymentGroup', 'discount']);
         } else {
           if (setAllMenuItemPricesPaid) {
             id = paymentGroupId;
+            cash = paymentGroupCash;
+            eftpos = paymentGroupEftpos;
             discount = paymentGroupDiscount;
           } else {
             const foundSelectedOrder = selectedOrders.find(
@@ -372,6 +383,8 @@ class TableDetailContainer extends Component {
             );
 
             id = foundSelectedOrder ? paymentGroupId : null;
+            eftpos = foundSelectedOrder ? paymentGroupEftpos : null;
+            cash = foundSelectedOrder ? paymentGroupCash : null;
             discount = foundSelectedOrder ? paymentGroupDiscount : null;
           }
         }
@@ -383,6 +396,8 @@ class TableDetailContainer extends Component {
               paymentGroup: Map({
                 paymentGroupId: id,
                 discount,
+                cash,
+                eftpos,
                 paidAt: detail.getIn(['paymentGroup', 'paidAt']),
               }),
               servingTimeId,

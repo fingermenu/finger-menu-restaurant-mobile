@@ -29,6 +29,8 @@ const mutation = graphql`
             paymentGroup {
               paymentGroupId
               discount
+              eftpos
+              cash
               paidAt
             }
             quantity

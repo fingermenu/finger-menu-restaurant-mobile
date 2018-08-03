@@ -37,6 +37,8 @@ export default createRefetchContainer(
                 orderMenuItemPriceId
                 paymentGroup {
                   paymentGroupId
+                  eftpos
+                  cash
                   discount
                   paidAt
                 }

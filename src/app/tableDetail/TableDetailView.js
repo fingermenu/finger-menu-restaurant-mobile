@@ -1,5 +1,6 @@
 // @flow
 
+import { Common } from '@microbusiness/common-javascript';
 import Immutable, { List } from 'immutable';
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
@@ -15,10 +16,14 @@ import { TableProp } from './PropTypes';
 import config from '../../framework/config';
 import OrderHelper from '../../framework/OrderHelper';
 import { ListItemSeparator } from '../../components/list';
+import SplitPaymentPopupDialogContentView from './SplitPaymentPopupDialogContentView';
+import FullPaymentPopupDialogContentView from './FullPaymentPopupDialogContentView';
+import ResetTablePopupDialogContentView from './ResetTablePopupDialogContentView';
+import RePrintForKitchenPopupDialogContentView from './RePrintForKitchenPopupDialogContentView';
+import PrintReceiptPopupDialogContentView from './PrintReceiptPopupDialogContentView';
+import DefaultPaymentButtonsView from './DefaultPaymentButtonsView';
 
 class TableDetailView extends Component {
-  static isDecimal = strValue => !isNaN(parseFloat(strValue)) && isFinite(strValue);
-
   constructor(props, context) {
     super(props, context);
 
@@ -147,7 +152,7 @@ class TableDetailView extends Component {
     const { discount } = this.state;
 
     const discountStr = discount ? discount.trim() : '';
-    if (!TableDetailView.isDecimal(discountStr)) {
+    if (!Common.isDecimal(discountStr)) {
       return 0;
     }
 
@@ -209,7 +214,7 @@ class TableDetailView extends Component {
 
   handlePrintReceiptPressed = () => this.printReceiptPopupDialog.show();
 
-  handleSetTablePaidConfirmed = () => {
+  handleSetTablePaidConfirmed = ({ eftpos, cash }) => {
     const { onSetPaidPressed } = this.props;
 
     this.paidPopupDialog.dismiss();
@@ -217,10 +222,10 @@ class TableDetailView extends Component {
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    onSetPaidPressed(discount);
+    onSetPaidPressed({ discount, eftpos, cash });
   };
 
-  handleSetTablePaidAndResetConfirmed = () => {
+  handleSetTablePaidAndResetConfirmed = ({ eftpos, cash }) => {
     const { onSetPaidAndResetPressed } = this.props;
 
     this.paidPopupDialog.dismiss();
@@ -228,7 +233,7 @@ class TableDetailView extends Component {
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    onSetPaidAndResetPressed(discount);
+    onSetPaidAndResetPressed({ discount, eftpos, cash });
   };
 
   handleSetTablePaidCancelled = () => {
@@ -259,7 +264,7 @@ class TableDetailView extends Component {
     this.setState({ isSplitPaymentMode: false, selectedOrders: List() });
   };
 
-  handleSplitPayConfirmed = () => {
+  handleSplitPayConfirmed = ({ eftpos, cash }) => {
     const { onSplitPaidPressed } = this.props;
     const { selectedOrders } = this.state;
 
@@ -268,10 +273,10 @@ class TableDetailView extends Component {
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    onSplitPaidPressed(discount, selectedOrders);
+    onSplitPaidPressed({ discount, eftpos, cash }, selectedOrders);
   };
 
-  handleSplitPayConfirmedAndPrintReceipt = () => {
+  handleSplitPayConfirmedAndPrintReceipt = ({ eftpos, cash }) => {
     const { selectedOrders } = this.state;
     const { onSplitPaidAndPrintReceiptPressed } = this.props;
 
@@ -280,7 +285,7 @@ class TableDetailView extends Component {
 
     const { discount } = this.getBalanceToPayAndDiscount();
 
-    onSplitPaidAndPrintReceiptPressed(discount, selectedOrders);
+    onSplitPaidAndPrintReceiptPressed({ discount, eftpos, cash }, selectedOrders);
   };
 
   handlePayCustomCancelled = () => {
@@ -317,7 +322,7 @@ class TableDetailView extends Component {
     if (!discountStr) {
       this.setState({ discount: '' });
     } else {
-      if (!TableDetailView.isDecimal(discount)) {
+      if (!Common.isDecimal(discount)) {
         return;
       }
 
@@ -346,47 +351,14 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setSplitPaidPopupDialogRef}
       >
-        <View style={Styles.popupDialogContainer}>
-          <View>
-            <View style={Styles.paymentSummaryTotalRow}>
-              <Text style={DefaultStyles.primaryLabelFont}>
-                {t('total.label').replace('{total}', this.getCalculatedOrderItemsTotal(selectedOrders).toFixed(2))}
-              </Text>
-              <Text style={DefaultStyles.primaryLabelFont}>
-                {t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}
-              </Text>
-            </View>
-            <View style={Styles.paymentSummaryBalanceRow}>
-              <Text style={DefaultStyles.primaryTitleFont}>
-                {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
-              </Text>
-            </View>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}> 
-              {' '}
-              {t('confirmPayment.message')}
-            </Text>
-            <View style={Styles.popupDialogButtonsContainer}>
-              <Button
-                title={t('confirm.button')}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-                onPress={this.handleSplitPayConfirmed}
-              />
-              <Button
-                title={t('confirmAndPrintReceipt.button')}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-                onPress={this.handleSplitPayConfirmedAndPrintReceipt}
-              />
-              <Button
-                title={t('cancel.button')}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-                onPress={this.handlePayCustomCancelled}
-              />
-            </View>
-          </View>
-        </View>
+        <SplitPaymentPopupDialogContentView
+          total={this.getCalculatedOrderItemsTotal(selectedOrders)}
+          discount={this.getDiscountDisplayValue()}
+          balanceToPay={this.getBalanceToPayAndDiscount().balanceToPay}
+          onPaidButtonPressed={this.handleSplitPayConfirmed}
+          onPaidAndPrintButtonPressed={this.handleSplitPayConfirmedAndPrintReceipt}
+          onCancelButtonPressed={this.handlePayCustomCancelled}
+        />
       </PopupDialog>
     );
   };
@@ -403,25 +375,11 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setResetPopupDialogRef}
       >
-        <View style={Styles.popupDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
-            {t('areYouSureToResetTable.message').replace('{tableName}', tableName)}
-          </Text>
-          <View style={Styles.popupDialogButtonsContainer}>
-            <Button
-              title={t('resetTable.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleResetTableConfirmed}
-            />
-            <Button
-              title={t('cancel.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleResetTableCancelled}
-            />
-          </View>
-        </View>
+        <ResetTablePopupDialogContentView
+          tableName={tableName}
+          onResetButtonPressed={this.handleResetTableConfirmed}
+          onCancelButtonPressed={this.handleResetTableCancelled}
+        />
       </PopupDialog>
     );
   };
@@ -438,46 +396,16 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setPaidPopupDialogRef}
       >
-        <View style={Styles.popupDialogContainer}>
-          <View style={Styles.paymentSummaryTotalRow}>
-            <Text style={DefaultStyles.primaryLabelFont}>
-              {t('total.label').replace('{total}', this.getRemainingTotal().toFixed(2))}
-            </Text>
-            <Text style={DefaultStyles.primaryLabelFont}>
-              {t('discount.label').replace('{discount}', this.getDiscountDisplayValue())}
-            </Text>
-          </View>
-          <View style={Styles.paymentSummaryBalanceRow}>
-            <Text style={DefaultStyles.primaryTitleFont}>
-              {t('balanceToPay.label').replace('{balanceToPay}', this.getBalanceToPayAndDiscount().balanceToPay.toFixed(2))}
-            </Text>
-          </View>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
-            {t('areYouSureToPayTableInFull.message').replace('{tableName}', tableName)}
-          </Text>
-          <View style={Styles.popupDialogButtonsContainer}>
-            <Button
-              title={t('payNow.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleSetTablePaidConfirmed}
-            />
-            {canPrintReceipt && (
-              <Button
-                title={t('payAndResetTableNow.button')}
-                containerStyle={Styles.buttonContainer}
-                buttonStyle={Styles.button}
-                onPress={this.handleSetTablePaidAndResetConfirmed}
-              />
-            )}
-            <Button
-              title={t('cancel.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleSetTablePaidCancelled}
-            />
-          </View>
-        </View>
+        <FullPaymentPopupDialogContentView
+          tableName={tableName}
+          total={this.getRemainingTotal()}
+          discount={this.getDiscountDisplayValue()}
+          balanceToPay={this.getBalanceToPayAndDiscount().balanceToPay}
+          canPrintReceipt={canPrintReceipt}
+          onPaidButtonPressed={this.handleSetTablePaidConfirmed}
+          onPaidAndResetButtonPressed={this.handleSetTablePaidAndResetConfirmed}
+          onCancelButtonPressed={this.handleSetTablePaidCancelled}
+        />
       </PopupDialog>
     );
   };
@@ -494,25 +422,10 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setRePrintForKitchenPopupDialogRef}
       >
-        <View style={Styles.popupDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
-            {t('areYouSureToRePrintForKitchen.message')}
-          </Text>
-          <View style={Styles.popupDialogButtonsContainer}>
-            <Button
-              title={t('rePrintForKitchen.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleRePrintForKitchenConfirmed}
-            />
-            <Button
-              title={t('cancel.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handleRePrintForKitchenCancelled}
-            />
-          </View>
-        </View>
+        <RePrintForKitchenPopupDialogContentView
+          onPrintButtonPressed={this.handleRePrintForKitchenConfirmed}
+          onCancelButtonPressed={this.handleRePrintForKitchenCancelled}
+        />
       </PopupDialog>
     );
   };
@@ -529,25 +442,10 @@ class TableDetailView extends Component {
         dialogAnimation={slideAnimation}
         ref={this.setPrintReceiptPopupDialogRef}
       >
-        <View style={Styles.popupDialogContainer}>
-          <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
-            {t('areYouSureToPrintReceipt.message')}
-          </Text>
-          <View style={Styles.popupDialogButtonsContainer}>
-            <Button
-              title={t('printReceipt.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handlePrintReceiptConfirmed}
-            />
-            <Button
-              title={t('cancel.button')}
-              containerStyle={Styles.buttonContainer}
-              buttonStyle={Styles.button}
-              onPress={this.handlePrintReceiptCancelled}
-            />
-          </View>
-        </View>
+        <PrintReceiptPopupDialogContentView
+          onPrintButtonPressed={this.handlePrintReceiptConfirmed}
+          onCancelButtonPressed={this.handlePrintReceiptCancelled}
+        />
       </PopupDialog>
     );
   };
@@ -569,55 +467,24 @@ class TableDetailView extends Component {
   };
 
   renderDefaultPaymentButtons = tableState => {
-    const { t, orders, canPrintReceipt, canPrintKitchenOrder } = this.props;
+    const { orders, canPrintReceipt, canPrintKitchenOrder } = this.props;
 
     return (
-      <View>
-        <View style={Styles.mainScreenButtonsContainer}>
-          <Button
-            title={t('fullPayment.button')}
-            titleStyle={DefaultStyles.primaryButtonTitle}
-            disabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
-            onPress={this.handleSetTablePaidPressed}
-          />
-          <Button
-            title={t('splitPayment.button')}
-            titleStyle={DefaultStyles.primaryButtonTitle}
-            disabled={tableState.key === 'paid' || orders.length === 0}
-            onPress={this.handleCustomPayPressed}
-          />
-          <Button
-            title={t('resetTable.button')}
-            titleStyle={DefaultStyles.primaryButtonTitle}
-            backgroundColor={DefaultColor.defaultButtonColor}
-            onPress={this.handleResetTablePressed}
-          />
-          <Button
-            title={t('giveToGuest.button')}
-            titleStyle={DefaultStyles.primaryButtonTitle}
-            disabled={tableState.key !== 'taken'}
-            onPress={this.onGiveToGuestPressedDebounced}
-          />
-        </View>
-        <View style={Styles.mainScreenButtonsContainer}>
-          {canPrintReceipt && (
-            <Button
-              title={t('printReceipt.button')}
-              titleStyle={DefaultStyles.primaryButtonTitle}
-              disabled={orders.length === 0}
-              onPress={this.handlePrintReceiptPressed}
-            />
-          )}
-          {canPrintKitchenOrder && (
-            <Button
-              title={t('rePrintForKitchen.button')}
-              titleStyle={DefaultStyles.primaryButtonTitle}
-              disabled={orders.length === 0}
-              onPress={this.handleRePrintForKitchenPressed}
-            />
-          )}
-        </View>
-      </View>
+      <DefaultPaymentButtonsView
+        fullPaymentDisabled={tableState.key === 'paid' || orders.length === 0 || !this.isDiscountValid()}
+        onFullPaymentButtonPressed={this.handleSetTablePaidPressed}
+        splitPaymentDisabled={tableState.key === 'paid' || orders.length === 0}
+        onSplitPaymentButtonPressed={this.handleCustomPayPressed}
+        onResetButtonPressed={this.handleResetTablePressed}
+        giveToGuestDisabled={tableState.key !== 'taken'}
+        onGiveToGuestButtonPressed={this.onGiveToGuestPressedDebounced}
+        canPrintReceipt={canPrintReceipt}
+        printReceiptDisabled={orders.length === 0}
+        onPrintReceiptButtonPressed={this.handlePrintReceiptPressed}
+        canPrintKitchenOrder={canPrintKitchenOrder}
+        rePrintKitchenDisabled={orders.length === 0}
+        onRePrintKitchenButtonPressed={this.handleRePrintForKitchenPressed}
+      />
     );
   };
 
@@ -718,7 +585,7 @@ class TableDetailView extends Component {
             wrapperStyle={Styles.tableBadgeWrapper}
           />
           <Text style={DefaultStyles.primaryTitleFont}>
-            $
+$
             {totalPrice}
           </Text>
         </View>
