@@ -220,6 +220,22 @@ export default class PrintHelper {
     return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10), maxLineWidth);
   };
 
+  static convertEftposToPrintableString = (eftpos, maxLineWidth) => {
+    if (!eftpos) {
+      return '';
+    }
+
+    return PrintHelper.alignTextsOnEachEdge('Eftpos', PrintHelper.padStart(`$${eftpos.toFixed(2)}`, 10), maxLineWidth) + endOfLine;
+  };
+
+  static convertCashToPrintableString = (cash, maxLineWidth) => {
+    if (!cash) {
+      return '';
+    }
+
+    return PrintHelper.alignTextsOnEachEdge('Cash', PrintHelper.padStart(`$${cash.toFixed(2)}`, 10), maxLineWidth) + endOfLine;
+  };
+
   static convertTotalGstToPrintableString = (totalPrice, maxLineWidth) =>
     PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${((totalPrice * 3) / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
 
@@ -290,6 +306,8 @@ export default class PrintHelper {
       .map(items => {
         const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(items);
         const totalPrice = totalPriceAndDiscount.get('totalPrice');
+        const eftpos = items.first().getIn(['paymentGroup', 'eftpos']);
+        const cash = items.first().getIn(['paymentGroup', 'cash']);
 
         const orderList =
           PrintHelper.getPrintableOrderDetailsForReceipt(items, maxLineWidth) +
@@ -298,6 +316,8 @@ export default class PrintHelper {
           endOfLine +
           PrintHelper.convertTotalDiscountToPrintableString(totalPriceAndDiscount.get('discount'), maxLineWidth) +
           PrintHelper.convertTotalPriceToPrintableString(totalPrice, maxLineWidth) +
+          PrintHelper.convertEftposToPrintableString(eftpos, maxLineWidth) +
+          PrintHelper.convertCashToPrintableString(cash, maxLineWidth) +
           PrintHelper.convertTotalGstToPrintableString(totalPrice, maxLineWidth);
 
         const paidAt = items.first().getIn(['paymentGroup', 'paidAt']);

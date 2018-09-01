@@ -100,7 +100,7 @@ def enableProguardInReleaseBuilds = false
 
 ext.versionMajor = 0
 ext.versionMinor = 5
-ext.versionPatch = 63
+ext.versionPatch = 65
 ext.isSnapshot = false
 ext.minimumSdkVersion = 16
 
@@ -112,8 +112,8 @@ android {
         applicationId "com.fingermenurestaurant"
         targetSdkVersion 26
         minSdkVersion project.ext.minimumSdkVersion
-        versionCode 1600000563
-        versionName "0.5.63"
+        versionCode 1600000565
+        versionName "0.5.65"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
