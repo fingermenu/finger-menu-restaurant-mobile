@@ -10,10 +10,14 @@ import { DefaultStyles } from '../../style';
 import EftposAndCashSplitView from './EftposAndCashSplitView';
 
 class FullPaymentPopupDialogContentView extends Component {
-  state = {
-    eftpos: 0.0,
-    cash: 0.0,
-  };
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      eftpos: props.balanceToPay,
+      cash: 0.0,
+    };
+  }
 
   handleEftposAndCashValuesChanged = ({ eftpos, cash }) => {
     this.setState({ eftpos, cash });
@@ -39,17 +43,11 @@ class FullPaymentPopupDialogContentView extends Component {
     return (
       <View style={Styles.popupDialogContainer}>
         <View style={Styles.paymentSummaryTotalRow}>
-          <Text style={DefaultStyles.primaryLabelFont}>
-            {t('total.label').replace('{total}', total.toFixed(2))}
-          </Text>
-          <Text style={DefaultStyles.primaryLabelFont}>
-            {t('discount.label').replace('{discount}', discount)}
-          </Text>
+          <Text style={DefaultStyles.primaryLabelFont}>{t('total.label').replace('{total}', total.toFixed(2))}</Text>
+          <Text style={DefaultStyles.primaryLabelFont}>{t('discount.label').replace('{discount}', discount)}</Text>
         </View>
         <View style={Styles.paymentSummaryBalanceRow}>
-          <Text style={DefaultStyles.primaryTitleFont}>
-            {t('balanceToPay.label').replace('{balanceToPay}', balanceToPay.toFixed(2))}
-          </Text>
+          <Text style={DefaultStyles.primaryTitleFont}>{t('balanceToPay.label').replace('{balanceToPay}', balanceToPay.toFixed(2))}</Text>
         </View>
         <EftposAndCashSplitView balanceToPay={balanceToPay} onValuesChanged={this.handleEftposAndCashValuesChanged} />
         <Text style={[DefaultStyles.primaryLabelFont, Styles.popupDialogConfirmText]}>
