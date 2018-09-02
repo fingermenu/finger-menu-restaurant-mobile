@@ -26,6 +26,35 @@ export default StyleSheet.create({
   departmentCategoryHeaderTitle: {
     fontWeight: '700',
   },
+  departmentCategoryTotalFooterSection: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  departmentCategoryTotalTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  departmentCategoryTotalQuantityContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  departmentCategoryFooterTotalQuantity: {
+    fontWeight: '700',
+  },
+  departmentCategoryTotalTotalSaleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  departmentCategoryFooterTotalTotalSale: {
+    fontWeight: '700',
+  },
   departmentCategoryFooterSection: {
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     padding: 5,

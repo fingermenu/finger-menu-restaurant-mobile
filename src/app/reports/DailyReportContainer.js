@@ -34,7 +34,9 @@ class DailyReportContainer extends Component {
   handlePrint = () => {
     const {
       user: {
-        restaurant: { departmentCategoriesReport },
+        restaurant: {
+          departmentCategoriesRootReport: { departmentCategoriesReport },
+        },
       },
       departmentCategoryDailyReportTemplate,
       printerConfig: { hostname, port, maxLineWidth },
@@ -65,7 +67,7 @@ class DailyReportContainer extends Component {
   render = () => {
     const {
       user: {
-        restaurant: { departmentCategoriesReport },
+        restaurant: { departmentCategoriesRootReport },
       },
       departmentCategoryDailyReportTemplate,
       printerConfig,
@@ -73,7 +75,7 @@ class DailyReportContainer extends Component {
 
     return (
       <DailyReportView
-        departmentCategoriesReport={departmentCategoriesReport}
+        departmentCategoriesRootReport={departmentCategoriesRootReport}
         canPrint={!!departmentCategoryDailyReportTemplate && !!printerConfig}
         onPrintPressed={this.handlePrint}
       />

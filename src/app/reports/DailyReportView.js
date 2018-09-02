@@ -21,9 +21,7 @@ class DailyReportView extends Component {
     },
   }) => (
     <View style={Styles.departmentCategoryHeaderSection}>
-      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryHeaderTitle]}>
-        {name}
-      </Text>
+      <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryHeaderTitle]}>{name}</Text>
     </View>
   );
 
@@ -31,13 +29,11 @@ class DailyReportView extends Component {
     <View style={Styles.departmentCategoryFooterSection}>
       <View style={Styles.departmentCategoryTitleContainer} />
       <View style={Styles.departmentCategoryQuantityContainer}>
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterQuantity]}>
-          {quantity}
-        </Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterQuantity]}>{quantity}</Text>
       </View>
       <View style={Styles.departmentCategoryTotalSaleContainer}>
         <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalSale]}>
-          $
+$
           {totalSale.toFixed(2)}
         </Text>
       </View>
@@ -56,18 +52,14 @@ class DailyReportView extends Component {
   }) => (
     <View key={id} style={Styles.departmentSubCategorySection}>
       <View style={Styles.departmentSubCategoryTitleContainer}>
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>
-          {pad(key ? key : '', 5) + ' ' + name}
-        </Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTitle]}>{pad(key ? key : '', 5) + ' ' + name}</Text>
       </View>
       <View style={Styles.departmentSubCategoryQuantityContainer}>
-        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryQuantity]}>
-          {quantity}
-        </Text>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryQuantity]}>{quantity}</Text>
       </View>
       <View style={Styles.departmentSubCategoryTotalSaleContainer}>
         <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentSubCategoryTotalSale]}>
-          $
+$
           {totalSale.toFixed(2)}
         </Text>
       </View>
@@ -77,7 +69,12 @@ class DailyReportView extends Component {
   renderSeparator = () => <ListItemSeparator />;
 
   render = () => {
-    const { t, departmentCategoriesReport, canPrint, onPrintPressed } = this.props;
+    const {
+      t,
+      departmentCategoriesRootReport: { departmentCategoriesReport, totalSale, quantity },
+      canPrint,
+      onPrintPressed,
+    } = this.props;
     const departmentCategoriesReportPopulatedWithSectionData = departmentCategoriesReport.map(
       ({ departmentCategory, totalSale, quantity, departmentSubCategoriesReport }) => ({
         departmentCategory,
@@ -97,6 +94,18 @@ class DailyReportView extends Component {
           ItemSeparatorComponent={this.renderSeparator}
           keyExtractor={this.keyExtractor}
         />
+        <View style={Styles.departmentCategoryTotalFooterSection}>
+          <View style={Styles.departmentCategoryTotalTitleContainer} />
+          <View style={Styles.departmentCategoryTotalQuantityContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalQuantity]}>{quantity}</Text>
+          </View>
+          <View style={Styles.departmentCategoryTotalTotalSaleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalTotalSale]}>
+$
+              {totalSale.toFixed(2)}
+            </Text>
+          </View>
+        </View>
         {canPrint && <Button onPress={onPrintPressed} title={t('print.button')} />}
       </ScrollView>
     );

@@ -152,6 +152,12 @@ type DepartmentCategoryReport {
   departmentSubCategoriesReport: [DepartmentSubCategoryReport!]
 }
 
+type DepartmentCategoryRootReport {
+  departmentCategoriesReport: [DepartmentCategoryReport!]
+  totalSale: Float!
+  quantity: Int!
+}
+
 """A connection to a list of items."""
 type DepartmentCategoryTypeConnection {
   """Information to aid in pagination."""
@@ -498,7 +504,7 @@ type ParentRestaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
-  departmentCategoriesReport(dateTimeRange: DateTimeRange!): [DepartmentCategoryReport!]
+  departmentCategoriesRootReport(dateTimeRange: DateTimeRange!): DepartmentCategoryRootReport!
 }
 
 type ParentTag implements Node {
@@ -597,7 +603,7 @@ type Restaurant implements Node {
   tables: [Table!]
   configurations: RestaurantConfigurations!
   packageBundle: PackageBundle
-  departmentCategoriesReport(dateTimeRange: DateTimeRange!): [DepartmentCategoryReport!]
+  departmentCategoriesRootReport(dateTimeRange: DateTimeRange!): DepartmentCategoryRootReport!
   parentRestaurant: ParentRestaurant
 }
 
