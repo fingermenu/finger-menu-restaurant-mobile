@@ -55,6 +55,53 @@ export default StyleSheet.create({
   departmentCategoryFooterTotalTotalSale: {
     fontWeight: '700',
   },
+
+  eftposSection: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  eftposTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  eftposTitle: {
+    fontWeight: '700',
+  },
+  eftposContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  eftpos: {
+    fontWeight: '700',
+  },
+  cashSection: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  cashTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  cashTitle: {
+    fontWeight: '700',
+  },
+  cashContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  cash: {
+    fontWeight: '700',
+  },
   departmentCategoryFooterSection: {
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     padding: 5,

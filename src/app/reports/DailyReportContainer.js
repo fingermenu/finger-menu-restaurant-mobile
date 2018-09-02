@@ -34,9 +34,7 @@ class DailyReportContainer extends Component {
   handlePrint = () => {
     const {
       user: {
-        restaurant: {
-          departmentCategoriesRootReport: { departmentCategoriesReport },
-        },
+        restaurant: { departmentCategoriesRootReport },
       },
       departmentCategoryDailyReportTemplate,
       printerConfig: { hostname, port, maxLineWidth },
@@ -46,7 +44,7 @@ class DailyReportContainer extends Component {
     } = this.props;
     const { selectedLanguage } = this.state;
     const documentContent = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
-      departmentCategoriesReport,
+      departmentCategoriesRootReport,
       departmentCategoryDailyReportTemplate,
       from,
       to,

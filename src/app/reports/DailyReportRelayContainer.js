@@ -11,8 +11,10 @@ export default createRefetchContainer(
         id
         restaurant(restaurantId: $restaurantId) {
           departmentCategoriesRootReport(dateTimeRange: $dateTimeRange) {
-            quantity
+            eftpos
+            cash
             totalSale
+            quantity
             departmentCategoriesReport {
               departmentCategory {
                 id
@@ -21,8 +23,8 @@ export default createRefetchContainer(
                   name
                 }
               }
-              quantity
               totalSale
+              quantity
               departmentSubCategoriesReport {
                 departmentCategory {
                   id
@@ -31,8 +33,8 @@ export default createRefetchContainer(
                     name
                   }
                 }
-                quantity
                 totalSale
+                quantity
               }
             }
           }

@@ -71,7 +71,7 @@ $
   render = () => {
     const {
       t,
-      departmentCategoriesRootReport: { departmentCategoriesReport, totalSale, quantity },
+      departmentCategoriesRootReport: { departmentCategoriesReport, eftpos, cash, totalSale, quantity },
       canPrint,
       onPrintPressed,
     } = this.props;
@@ -103,6 +103,28 @@ $
             <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalTotalSale]}>
 $
               {totalSale.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+        <View style={Styles.eftposSection}>
+          <View style={Styles.eftposTitleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.eftposTitle]}>Eftpos</Text>
+          </View>
+          <View style={Styles.eftposContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.eftpos]}>
+$
+              {eftpos.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+        <View style={Styles.cashSection}>
+          <View style={Styles.cashTitleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.cashTitle]}>Cash</Text>
+          </View>
+          <View style={Styles.cashContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.cash]}>
+$
+              {cash.toFixed(2)}
             </Text>
           </View>
         </View>
