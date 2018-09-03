@@ -84,6 +84,8 @@ i18next.init({
         lockScreen: { label: 'Lock screen' },
         dailyReport: { button: 'Daily Report' },
         print: { button: 'Print' },
+        eftposOnly: { button: 'Eftpos Only' },
+        cashOnly: { button: 'Cash Only' },
       },
     },
     zh: {
@@ -159,6 +161,8 @@ i18next.init({
         lockScreen: { label: '锁屏' },
         dailyReport: { button: '每日报告' },
         print: { button: '打印' },
+        eftposOnly: { button: '仅限Eftpos' },
+        cashOnly: { button: '只收现金' },
       },
     },
     ja: {
@@ -237,6 +241,8 @@ i18next.init({
         lockScreen: { label: 'ロック画面' },
         dailyReport: { button: '日報' },
         print: { button: '印刷する' },
+        eftposOnly: { button: 'Eftposのみ' },
+        cashOnly: { button: '現金のみ' },
       },
     },
   },
