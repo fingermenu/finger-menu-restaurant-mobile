@@ -212,14 +212,6 @@ export default class PrintHelper {
     return PrintHelper.alignTextsOnEachEdge('Total Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10), maxLineWidth) + endOfLine;
   };
 
-  static convertDiscountToPrintableString = (discount, maxLineWidth) => {
-    if (!discount) {
-      return '';
-    }
-
-    return endOfLine + PrintHelper.alignTextsOnEachEdge('Discount', PrintHelper.padStart(`-$${discount.toFixed(2)}`, 10), maxLineWidth);
-  };
-
   static convertEftposToPrintableString = (eftpos, maxLineWidth) => {
     if (!eftpos) {
       return '';
@@ -254,49 +246,44 @@ export default class PrintHelper {
       return detail.getIn(['menuItemPrice', 'id']) + choiceItemPriceIds;
     });
 
-    return (
-      groupedDetails
-        .keySeq()
-        .map(key =>
-          groupedDetails
-            .get(key)
+    return groupedDetails
+      .keySeq()
+      .map(key =>
+        groupedDetails
+          .get(key)
+          .reduce(
+            (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
+            Map(),
+          ),
+      )
+      .reduce(
+        (menuItemsDetail, detail) =>
+          menuItemsDetail +
+          endOfLine +
+          PrintHelper.alignTextsOnEachEdge(
+            detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnCustomerReceipt']),
+            PrintHelper.convertPriceAndQuantityToPrintableString(detail.getIn(['menuItemPrice', 'currentPrice']), detail.get('quantity').toString()),
+            maxLineWidth,
+          ) +
+          endOfLine +
+          detail
+            .get('orderChoiceItemPrices')
             .reduce(
-              (reduction, detail) => (reduction.isEmpty() ? detail : reduction.update('quantity', quantity => quantity + detail.get('quantity'))),
-              Map(),
+              (reduction, orderChoiceItemPrice) =>
+                reduction +
+                PrintHelper.alignTextsOnEachEdge(
+                  ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnCustomerReceipt']),
+                  PrintHelper.convertPriceAndQuantityToPrintableString(
+                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                    (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
+                  ),
+                  maxLineWidth,
+                ) +
+                endOfLine,
+              '',
             ),
-        )
-        .reduce(
-          (menuItemsDetail, detail) =>
-            menuItemsDetail +
-            endOfLine +
-            PrintHelper.alignTextsOnEachEdge(
-              detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnCustomerReceipt']),
-              PrintHelper.convertPriceAndQuantityToPrintableString(
-                detail.getIn(['menuItemPrice', 'currentPrice']),
-                detail.get('quantity').toString(),
-              ),
-              maxLineWidth,
-            ) +
-            endOfLine +
-            detail
-              .get('orderChoiceItemPrices')
-              .reduce(
-                (reduction, orderChoiceItemPrice) =>
-                  reduction +
-                  PrintHelper.alignTextsOnEachEdge(
-                    ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnCustomerReceipt']),
-                    PrintHelper.convertPriceAndQuantityToPrintableString(
-                      orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
-                      (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
-                    ),
-                    maxLineWidth,
-                  ) +
-                  endOfLine,
-                '',
-              ),
-          '',
-        ) + PrintHelper.convertDiscountToPrintableString(details.first().getIn(['paymentGroup', 'discount']))
-    );
+        '',
+      );
   };
 
   static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template, maxLineWidth) => {
