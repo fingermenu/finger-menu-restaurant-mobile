@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { TabNavigator } from 'react-navigation';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DefaultColor } from '../../style';
 import i18n from '../../i18n';
 import { HeaderContainer } from '../../components/header';
@@ -14,14 +14,16 @@ const tabScreens = {
   Menus: {
     screen: Menus,
     navigationOptions: {
-      tabBarIcon: ({ tintColor, focused }) => <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} style={{ color: tintColor }} />,
+      tabBarIcon: ({ tintColor, focused }) => (
+        <MaterialCommunityIcons name={focused ? 'home' : 'home-outline'} size={30} style={{ color: tintColor }} />
+      ),
     },
   },
   Orders: {
     screen: Orders,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-list-box' : 'ios-list-box-outline'} size={30} style={{ color: tintColor }} />
+        <MaterialCommunityIcons name={focused ? 'file-document-box' : 'file-document-box-outline'} size={30} style={{ color: tintColor }} />
       ),
     },
   },
@@ -29,7 +31,7 @@ const tabScreens = {
     screen: Account,
     navigationOptions: {
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons name={focused ? 'ios-notifications' : 'ios-notifications-outline'} size={30} style={{ color: tintColor }} />
+        <MaterialCommunityIcons name={focused ? 'bell' : 'bell-outline'} size={30} style={{ color: tintColor }} />
       ),
     },
   },
