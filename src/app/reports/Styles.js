@@ -39,20 +39,25 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  departmentCategoryTotalQuantityContainer: {
+  titleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  departmentCategoryGrandQuantityContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  departmentCategoryFooterTotalQuantity: {
+  departmentCategoryFooterGrandQuantity: {
     fontWeight: '700',
   },
-  departmentCategoryTotalTotalSaleContainer: {
+  departmentCategoryGrandTotalSaleContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  departmentCategoryFooterTotalTotalSale: {
+  departmentCategoryFooterGrandTotalSale: {
     fontWeight: '700',
   },
 

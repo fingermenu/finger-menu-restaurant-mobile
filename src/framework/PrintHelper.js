@@ -356,7 +356,7 @@ export default class PrintHelper {
         .reduce((reduction, value) => reduction + endOfLine + value, '') +
       endOfLine +
       PrintHelper.alignTextsOnEachEdge(
-        'Total',
+        'Grand Total',
         PrintHelper.pad(departmentCategoriesRootReport.quantity.toString(), 5) +
           PrintHelper.pad('$' + departmentCategoriesRootReport.totalSale.toFixed(2), 8),
         maxLineWidth,

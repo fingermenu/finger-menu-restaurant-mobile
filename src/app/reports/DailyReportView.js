@@ -95,12 +95,14 @@ $
           keyExtractor={this.keyExtractor}
         />
         <View style={Styles.departmentCategoryTotalFooterSection}>
-          <View style={Styles.departmentCategoryTotalTitleContainer} />
-          <View style={Styles.departmentCategoryTotalQuantityContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalQuantity]}>{quantity}</Text>
+          <View style={Styles.departmentCategoryTotalTitleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.titleContainer]}>Grand Total</Text>
           </View>
-          <View style={Styles.departmentCategoryTotalTotalSaleContainer}>
-            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterTotalTotalSale]}>
+          <View style={Styles.departmentCategoryGrandQuantityContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterGrandQuantity]}>{quantity}</Text>
+          </View>
+          <View style={Styles.departmentCategoryGrandTotalSaleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterGrandTotalSale]}>
 $
               {totalSale.toFixed(2)}
             </Text>
