@@ -19,6 +19,18 @@ class FullPaymentPopupDialogContentView extends Component {
     };
   }
 
+  static getDerivedStateFromProps = ({ balanceToPay }, { balanceToPay: currentBalanceToPay }) => {
+    if (balanceToPay === currentBalanceToPay) {
+      return null;
+    }
+
+    return {
+      balanceToPay: balanceToPay,
+      eftpos: balanceToPay,
+      cash: 0.0,
+    };
+  };
+
   handleEftposAndCashValuesChanged = ({ eftpos, cash }) => {
     this.setState({ eftpos, cash });
   };
