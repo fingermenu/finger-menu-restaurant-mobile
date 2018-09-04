@@ -113,10 +113,11 @@ class AppWithNavigationState extends Component {
   state = {};
 
   componentDidMount = () => {
-    const { navigation, goBack, netInfo, netInfoActions, appUpdaterActions, notificationActions } = this.props;
+    const { netInfo, netInfoActions, appUpdaterActions, notificationActions } = this.props;
 
     if (Platform.OS === 'android') {
       BackHandler.addEventListener('hardwareBackPress', () => {
+        const { navigation, goBack } = this.props;
         const newState = AppNavigator.router.getStateForAction(NavigationActions.back(), navigation);
 
         if (newState !== navigation) {
