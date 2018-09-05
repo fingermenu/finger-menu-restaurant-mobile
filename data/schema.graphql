@@ -232,6 +232,7 @@ type DishTypeTypeEdge {
 
 type DocumentTemplate {
   name: String
+  maxLineWidthDivisionFactor: Int
   template: String!
 }
 
