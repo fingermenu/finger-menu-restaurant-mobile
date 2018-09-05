@@ -40,9 +40,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
   },
   titleContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    fontWeight: '700',
   },
   departmentCategoryGrandQuantityContainer: {
     flex: 1,
@@ -60,7 +58,29 @@ export default StyleSheet.create({
   departmentCategoryFooterGrandTotalSale: {
     fontWeight: '700',
   },
-
+  discountSection: {
+    backgroundColor: DefaultColor.secondaryBackgroundColor,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  discountTitleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  discountTitle: {
+    fontWeight: '700',
+  },
+  discountContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  discount: {
+    fontWeight: '700',
+  },
   eftposSection: {
     backgroundColor: DefaultColor.secondaryBackgroundColor,
     padding: 5,

@@ -27,7 +27,9 @@ class DailyReportView extends Component {
 
   renderDepartmentCategoryFooter = ({ section: { totalSale, quantity } }) => (
     <View style={Styles.departmentCategoryFooterSection}>
-      <View style={Styles.departmentCategoryTitleContainer} />
+      <View style={Styles.departmentCategoryTitleContainer}>
+        <Text style={[DefaultStyles.primaryLabelFont, Styles.titleContainer]}>Total</Text>
+      </View>
       <View style={Styles.departmentCategoryQuantityContainer}>
         <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterQuantity]}>{quantity}</Text>
       </View>
@@ -105,6 +107,17 @@ $
             <Text style={[DefaultStyles.primaryLabelFont, Styles.departmentCategoryFooterGrandTotalSale]}>
 $
               {totalSale.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+        <View style={Styles.discountSection}>
+          <View style={Styles.discountTitleContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.discountTitle]}>Discount</Text>
+          </View>
+          <View style={Styles.discountContainer}>
+            <Text style={[DefaultStyles.primaryLabelFont, Styles.discount]}>
+              -$
+              {(totalSale - eftpos - cash).toFixed(2)}
             </Text>
           </View>
         </View>

@@ -345,7 +345,7 @@ export default class PrintHelper {
 
           const title = PrintHelper.splitTextIntoMultipleLines(departmentCategoryReport.departmentCategory.tag.name, maxLineWidth);
           const footer = PrintHelper.alignTextsOnEachEdge(
-            '',
+            'Total',
             PrintHelper.pad(departmentCategoryReport.quantity.toString(), 5) +
               PrintHelper.pad('$' + departmentCategoryReport.totalSale.toFixed(2), 8),
             maxLineWidth,
@@ -355,10 +355,21 @@ export default class PrintHelper {
         })
         .reduce((reduction, value) => reduction + endOfLine + value, '') +
       endOfLine +
+      endOfLine +
+      endOfLine +
       PrintHelper.alignTextsOnEachEdge(
         'Grand Total',
         PrintHelper.pad(departmentCategoriesRootReport.quantity.toString(), 5) +
           PrintHelper.pad('$' + departmentCategoriesRootReport.totalSale.toFixed(2), 8),
+        maxLineWidth,
+      ) +
+      endOfLine +
+      PrintHelper.alignTextsOnEachEdge(
+        'Eftpos',
+        PrintHelper.pad(
+          '-$' + (departmentCategoriesRootReport.totalSale - departmentCategoriesRootReport.eftpos - departmentCategoriesRootReport.cash).toFixed(2),
+          8,
+        ),
         maxLineWidth,
       ) +
       endOfLine +
