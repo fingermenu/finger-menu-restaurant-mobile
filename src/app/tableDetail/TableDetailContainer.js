@@ -234,13 +234,19 @@ class TableDetailContainer extends Component {
       const {
         printerConfig: { hostname, port, maxLineWidth },
         customerReceiptTemplate,
+        customerReceiptTemplateMaxLineWidthDivisionFactor,
         user: {
           table: { name: tableName },
         },
         printOnCustomerReceiptLanguage,
         escPosPrinterActions,
       } = this.props;
-      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
+      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+        details,
+        tableName,
+        customerReceiptTemplate,
+        Math.floor(maxLineWidth / customerReceiptTemplateMaxLineWidthDivisionFactor),
+      );
 
       escPosPrinterActions.printDocument(
         Map({
@@ -299,6 +305,7 @@ class TableDetailContainer extends Component {
     const {
       printerConfig: { hostname, port, maxLineWidth },
       kitchenOrderTemplate,
+      kitchenOrderTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
         orders: { edges: orders },
@@ -309,7 +316,14 @@ class TableDetailContainer extends Component {
     const documentContent = orders
       .map(_ => _.node)
       .map(({ details, placedAt, notes }) =>
-        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(details, placedAt, notes, tableName, kitchenOrderTemplate, maxLineWidth),
+        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+          details,
+          placedAt,
+          notes,
+          tableName,
+          kitchenOrderTemplate,
+          Math.floor(maxLineWidth / kitchenOrderTemplateMaxLineWidthDivisionFactor),
+        ),
       )
       .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
 
@@ -328,6 +342,7 @@ class TableDetailContainer extends Component {
     const {
       printerConfig: { hostname, port, maxLineWidth },
       customerReceiptTemplate,
+      customerReceiptTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
         orders: { edges: orders },
@@ -337,7 +352,12 @@ class TableDetailContainer extends Component {
     } = this.props;
 
     const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(details, tableName, customerReceiptTemplate, maxLineWidth);
+    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+      details,
+      tableName,
+      customerReceiptTemplate,
+      Math.floor(maxLineWidth / customerReceiptTemplateMaxLineWidthDivisionFactor),
+    );
 
     escPosPrinterActions.printDocument(
       Map({
@@ -500,14 +520,18 @@ TableDetailContainer.propTypes = {
   tableId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
+  kitchenOrderTemplateMaxLineWidthDivisionFactor: PropTypes.number,
   customerReceiptTemplate: PropTypes.string,
+  customerReceiptTemplateMaxLineWidthDivisionFactor: PropTypes.number,
   printOnKitchenReceiptLanguage: PropTypes.string,
   printOnCustomerReceiptLanguage: PropTypes.string,
 };
 
 TableDetailContainer.defaultProps = {
   kitchenOrderTemplate: null,
+  kitchenOrderTemplateMaxLineWidthDivisionFactor: 1,
   customerReceiptTemplate: null,
+  customerReceiptTemplateMaxLineWidthDivisionFactor: 1,
   printOnKitchenReceiptLanguage: null,
   printOnCustomerReceiptLanguage: null,
 };
@@ -534,7 +558,9 @@ const mapStateToProps = (state, { user: { table } }) => {
     tableId: activeTable.get('id'),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
+    kitchenOrderTemplateMaxLineWidthDivisionFactor: kitchenOrderTemplate ? kitchenOrderTemplate.get('maxLineWidthDivisionFactor') : 1,
     customerReceiptTemplate: customerReceiptTemplate ? customerReceiptTemplate.get('template') : null,
+    customerReceiptTemplateMaxLineWidthDivisionFactor: customerReceiptTemplate ? customerReceiptTemplate.get('maxLineWidthDivisionFactor') : 1,
     printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
     printOnCustomerReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnCustomerReceipt']),
   };

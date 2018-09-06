@@ -38,6 +38,7 @@ export default createRefetchContainer(
                 documentTemplates {
                   name
                   template
+                  maxLineWidthDivisionFactor
                 }
                 numberOfPrintCopiesForKitchen
               }

@@ -37,6 +37,7 @@ class DailyReportContainer extends Component {
         restaurant: { departmentCategoriesRootReport },
       },
       departmentCategoryDailyReportTemplate,
+      departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor,
       printerConfig: { hostname, port, maxLineWidth },
       escPosPrinterActions,
       from,
@@ -48,7 +49,7 @@ class DailyReportContainer extends Component {
       departmentCategoryDailyReportTemplate,
       from,
       to,
-      maxLineWidth,
+      Math.floor(maxLineWidth / departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor),
     );
 
     escPosPrinterActions.printDocument(
@@ -86,6 +87,13 @@ DailyReportContainer.propTypes = {
   selectedLanguage: PropTypes.string.isRequired,
   from: PropTypes.instanceOf(ZonedDateTime).isRequired,
   to: PropTypes.instanceOf(ZonedDateTime).isRequired,
+  departmentCategoryDailyReportTemplate: PropTypes.string,
+  departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: PropTypes.number,
+};
+
+DailyReportContainer.defaultProps = {
+  departmentCategoryDailyReportTemplate: null,
+  departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: 1,
 };
 
 const mapStateToProps = state => {
@@ -104,6 +112,9 @@ const mapStateToProps = state => {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
     printerConfig,
     departmentCategoryDailyReportTemplate: departmentCategoryDailyReportTemplate ? departmentCategoryDailyReportTemplate.get('template') : null,
+    departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: departmentCategoryDailyReportTemplate
+      ? departmentCategoryDailyReportTemplate.get('maxLineWidthDivisionFactor')
+      : 1,
     from: state.dailyReport.get('from'),
     to: state.dailyReport.get('to'),
   };

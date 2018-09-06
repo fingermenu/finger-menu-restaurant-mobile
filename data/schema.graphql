@@ -66,9 +66,11 @@ type CancelOrderPayload {
 type ChoiceItem implements Node {
   id: ID!
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   description: String
+  descriptionWithLanguages: [StringWithLanguage!]
   descriptionToPrintOnKitchenReceipt: String
   descriptionToPrintOnCustomerReceipt: String
   choiceItemPageUrl: String
@@ -232,7 +234,7 @@ type DishTypeTypeEdge {
 
 type DocumentTemplate {
   name: String
-  maxLineWidthDivisionFactor: Int
+  maxLineWidthDivisionFactor: Float
   template: String!
 }
 
@@ -274,9 +276,11 @@ type LanguageTypeEdge {
 type Menu implements Node {
   id: ID!
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   description: String
+  descriptionWithLanguages: [StringWithLanguage!]
   descriptionToPrintOnKitchenReceipt: String
   descriptionToPrintOnCustomerReceipt: String
   menuPageUrl: String
@@ -289,9 +293,11 @@ type Menu implements Node {
 type MenuItem implements Node {
   id: ID!
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   description: String
+  descriptionWithLanguages: [StringWithLanguage!]
   descriptionToPrintOnKitchenReceipt: String
   descriptionToPrintOnCustomerReceipt: String
   menuItemPageUrl: String
@@ -493,6 +499,7 @@ type PageInfo {
 type ParentRestaurant implements Node {
   id: ID!
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   websiteUrl: String
@@ -514,9 +521,11 @@ type ParentTag implements Node {
   id: ID!
   key: String
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   description: String
+  descriptionWithLanguages: [StringWithLanguage!]
   descriptionToPrintOnKitchenReceipt: String
   descriptionToPrintOnCustomerReceipt: String
   imageUrl: String
@@ -592,6 +601,7 @@ input QuestionAndAnswerInput {
 type Restaurant implements Node {
   id: ID!
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   websiteUrl: String
@@ -697,6 +707,11 @@ type SizeTypeEdge {
   cursor: String!
 }
 
+type StringWithLanguage {
+  language: String!
+  value: String
+}
+
 input SubmitUserFeedbackInput {
   questionAndAnswers: [QuestionAndAnswerInput!]
   others: String
@@ -713,6 +728,7 @@ type Table implements Node {
   id: ID!
   customers: [Customer!]
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   status: String
@@ -726,6 +742,7 @@ type TableState implements Node {
   id: ID!
   key: String
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   imageUrl: String
@@ -771,9 +788,11 @@ type Tag implements Node {
   id: ID!
   key: String
   name: String
+  nameWithLanguages: [StringWithLanguage!]
   nameToPrintOnKitchenReceipt: String
   nameToPrintOnCustomerReceipt: String
   description: String
+  descriptionWithLanguages: [StringWithLanguage!]
   descriptionToPrintOnKitchenReceipt: String
   descriptionToPrintOnCustomerReceipt: String
   imageUrl: String

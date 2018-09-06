@@ -8,14 +8,15 @@ const schema = {
   properties: {
     name: 'string?',
     template: 'string',
+    maxLineWidthDivisionFactor: 'float',
   },
 };
 
 export default class DocumentTemplate {
   static getSchema = () => schema;
 
-  constructor({ name, template }) {
-    this.object = ImmutableEx.removeUndefinedProps(Map({ name, template }));
+  constructor({ name, template, maxLineWidthDivisionFactor }) {
+    this.object = ImmutableEx.removeUndefinedProps(Map({ name, template, maxLineWidthDivisionFactor }));
   }
 
   getInfo = () => this.object;

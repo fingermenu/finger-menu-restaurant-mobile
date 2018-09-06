@@ -159,6 +159,7 @@ class OrdersContainer extends Component {
     const {
       printerConfig,
       kitchenOrderTemplate,
+      kitchenOrderTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
       },
@@ -185,7 +186,7 @@ class OrdersContainer extends Component {
           notes,
           tableName,
           kitchenOrderTemplate,
-          maxLineWidth,
+          Math.floor(maxLineWidth / kitchenOrderTemplateMaxLineWidthDivisionFactor),
         ),
         numberOfCopies: numberOfPrintCopiesForKitchen,
         language: printOnKitchenReceiptLanguage,
@@ -256,6 +257,7 @@ OrdersContainer.propTypes = {
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
   kitchenOrderTemplate: PropTypes.string,
+  kitchenOrderTemplateMaxLineWidthDivisionFactor: PropTypes.number,
   customers: CustomersProp.isRequired,
   numberOfPrintCopiesForKitchen: PropTypes.number,
   printOnKitchenReceiptLanguage: PropTypes.string,
@@ -263,6 +265,7 @@ OrdersContainer.propTypes = {
 
 OrdersContainer.defaultProps = {
   kitchenOrderTemplate: null,
+  kitchenOrderTemplateMaxLineWidthDivisionFactor: 1,
   numberOfPrintCopiesForKitchen: 1,
   printOnKitchenReceiptLanguage: null,
 };
@@ -323,6 +326,7 @@ const mapStateToProps = (state, ownProps) => {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     printerConfig,
     kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
+    kitchenOrderTemplateMaxLineWidthDivisionFactor: kitchenOrderTemplate ? kitchenOrderTemplate.get('maxLineWidthDivisionFactor') : 1,
     numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
     printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
   };

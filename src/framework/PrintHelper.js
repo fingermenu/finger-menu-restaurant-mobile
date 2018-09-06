@@ -365,7 +365,7 @@ export default class PrintHelper {
       ) +
       endOfLine +
       PrintHelper.alignTextsOnEachEdge(
-        'Eftpos',
+        'Discount',
         PrintHelper.pad(
           '-$' + (departmentCategoriesRootReport.totalSale - departmentCategoriesRootReport.eftpos - departmentCategoriesRootReport.cash).toFixed(2),
           8,
