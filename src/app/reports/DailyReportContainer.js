@@ -1,7 +1,7 @@
 // @flow
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
-import { Map } from 'immutable';
+import { Map, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -36,31 +36,44 @@ class DailyReportContainer extends Component {
       user: {
         restaurant: { departmentCategoriesRootReport },
       },
+      printers,
       departmentCategoryDailyReportTemplate,
-      departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor,
-      printerConfig: { hostname, port, maxLineWidth },
       escPosPrinterActions,
       from,
       to,
     } = this.props;
-    const { selectedLanguage } = this.state;
-    const documentContent = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
-      departmentCategoriesRootReport,
-      departmentCategoryDailyReportTemplate,
-      from,
-      to,
-      Math.floor(maxLineWidth / departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor),
-    );
 
-    escPosPrinterActions.printDocument(
-      Map({
-        hostname,
-        port,
-        documentContent,
-        numberOfCopies: 1,
-        language: selectedLanguage,
-      }),
-    );
+    if (!departmentCategoryDailyReportTemplate) {
+      return null;
+    }
+
+    const documents = departmentCategoryDailyReportTemplate
+      .get('linkedPrinters')
+      .flatMap(linkedPrinter => {
+        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+
+        if (!foundPrinter) {
+          return null;
+        }
+
+        const content = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
+          departmentCategoriesRootReport,
+          departmentCategoryDailyReportTemplate.get('template'),
+          from,
+          to,
+          Math.floor(foundPrinter.maxLineWidth / departmentCategoryDailyReportTemplate.get('maxLineWidthDivisionFactor')),
+        );
+
+        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      })
+      .filter(_ => _)
+      .toList();
+
+    if (documents.isEmpty()) {
+      return;
+    }
+
+    escPosPrinterActions.printDocument(Map({ documents }));
   };
 
   render = () => {
@@ -69,13 +82,12 @@ class DailyReportContainer extends Component {
         restaurant: { departmentCategoriesRootReport },
       },
       departmentCategoryDailyReportTemplate,
-      printerConfig,
     } = this.props;
 
     return (
       <DailyReportView
         departmentCategoriesRootReport={departmentCategoriesRootReport}
-        canPrint={!!departmentCategoryDailyReportTemplate && !!printerConfig}
+        canPrint={!!departmentCategoryDailyReportTemplate}
         onPrintPressed={this.handlePrint}
       />
     );
@@ -87,34 +99,19 @@ DailyReportContainer.propTypes = {
   selectedLanguage: PropTypes.string.isRequired,
   from: PropTypes.instanceOf(ZonedDateTime).isRequired,
   to: PropTypes.instanceOf(ZonedDateTime).isRequired,
-  departmentCategoryDailyReportTemplate: PropTypes.string,
-  departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: PropTypes.number,
-};
-
-DailyReportContainer.defaultProps = {
-  departmentCategoryDailyReportTemplate: null,
-  departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: 1,
 };
 
 const mapStateToProps = state => {
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
-  const printerConfig = configurations.get('printers').isEmpty()
-    ? null
-    : configurations
-      .get('printers')
-      .first()
-      .toJS();
+  const printers = configurations.get('printers').toJS();
   const departmentCategoryDailyReportTemplate = configurations
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('DepartmentCategoryDailyReport') === 0);
 
   return {
     selectedLanguage: state.applicationState.get('selectedLanguage'),
-    printerConfig,
-    departmentCategoryDailyReportTemplate: departmentCategoryDailyReportTemplate ? departmentCategoryDailyReportTemplate.get('template') : null,
-    departmentCategoryDailyReportTemplateMaxLineWidthDivisionFactor: departmentCategoryDailyReportTemplate
-      ? departmentCategoryDailyReportTemplate.get('maxLineWidthDivisionFactor')
-      : 1,
+    printers,
+    departmentCategoryDailyReportTemplate,
     from: state.dailyReport.get('from'),
     to: state.dailyReport.get('to'),
   };

@@ -3,7 +3,7 @@
 import { ImmutableEx } from '@microbusiness/common-javascript';
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
 import cuid from 'cuid';
-import Immutable, { List, Map, OrderedMap } from 'immutable';
+import Immutable, { List, Map, OrderedMap, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -232,31 +232,45 @@ class TableDetailContainer extends Component {
   handleSplitPaidAndPrintReceiptPressed = ({ discount, eftpos, cash }, selectedOrders) => {
     this.handleSplitPaidPressed({ discount, eftpos, cash }, selectedOrders, details => {
       const {
-        printerConfig: { hostname, port, maxLineWidth },
+        printers,
         customerReceiptTemplate,
-        customerReceiptTemplateMaxLineWidthDivisionFactor,
         user: {
           table: { name: tableName },
         },
-        printOnCustomerReceiptLanguage,
         escPosPrinterActions,
       } = this.props;
-      const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
-        details,
-        tableName,
-        customerReceiptTemplate,
-        Math.floor(maxLineWidth / customerReceiptTemplateMaxLineWidthDivisionFactor),
-      );
 
-      escPosPrinterActions.printDocument(
-        Map({
-          hostname,
-          port,
-          documentContent,
-          numberOfCopies: 1,
-          language: printOnCustomerReceiptLanguage,
-        }),
-      );
+      if (!customerReceiptTemplate) {
+        return null;
+      }
+
+      const documents = customerReceiptTemplate
+        .get('linkedPrinters')
+        .flatMap(linkedPrinter => {
+          const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+
+          if (!foundPrinter) {
+            return null;
+          }
+
+          const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+            details,
+            tableName,
+            customerReceiptTemplate.get('template'),
+            Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
+            linkedPrinter.get('language'),
+          );
+
+          return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+        })
+        .filter(_ => _)
+        .toList();
+
+      if (documents.isEmpty()) {
+        return;
+      }
+
+      escPosPrinterActions.printDocument(Map({ documents }));
     });
   };
 
@@ -303,71 +317,98 @@ class TableDetailContainer extends Component {
 
   handleRePrintForKitchen = () => {
     const {
-      printerConfig: { hostname, port, maxLineWidth },
+      printers,
       kitchenOrderTemplate,
-      kitchenOrderTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
         orders: { edges: orders },
       },
-      printOnKitchenReceiptLanguage,
       escPosPrinterActions,
     } = this.props;
-    const documentContent = orders
-      .map(_ => _.node)
-      .map(({ details, placedAt, notes }) =>
-        PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
-          details,
-          placedAt,
-          notes,
-          tableName,
-          kitchenOrderTemplate,
-          Math.floor(maxLineWidth / kitchenOrderTemplateMaxLineWidthDivisionFactor),
-        ),
-      )
-      .reduce((documentContent1, documentContent2) => documentContent1 + endOfLine + documentContent2, '');
 
-    escPosPrinterActions.printDocument(
-      Map({
-        hostname,
-        port,
-        documentContent,
-        numberOfCopies: 1,
-        language: printOnKitchenReceiptLanguage,
-      }),
-    );
+    if (!kitchenOrderTemplate) {
+      return null;
+    }
+
+    const documents = kitchenOrderTemplate
+      .get('linkedPrinters')
+      .flatMap(linkedPrinter => {
+        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+
+        if (!foundPrinter) {
+          return null;
+        }
+
+        const content = orders
+          .map(_ => _.node)
+          .map(({ details, placedAt, notes }) =>
+            PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+              details,
+              placedAt,
+              notes,
+              tableName,
+              kitchenOrderTemplate.get('template'),
+              Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
+              linkedPrinter.get('language'),
+            ),
+          )
+          .reduce((content1, content2) => content1 + endOfLine + content2, '');
+
+        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      })
+      .filter(_ => _)
+      .toList();
+
+    if (documents.isEmpty()) {
+      return;
+    }
+
+    escPosPrinterActions.printDocument(Map({ documents }));
   };
 
   handlePrintReceipt = () => {
     const {
-      printerConfig: { hostname, port, maxLineWidth },
+      printers,
       customerReceiptTemplate,
-      customerReceiptTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
         orders: { edges: orders },
       },
-      printOnCustomerReceiptLanguage,
       escPosPrinterActions,
     } = this.props;
 
-    const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-    const documentContent = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
-      details,
-      tableName,
-      customerReceiptTemplate,
-      Math.floor(maxLineWidth / customerReceiptTemplateMaxLineWidthDivisionFactor),
-    );
+    if (!customerReceiptTemplate) {
+      return null;
+    }
 
-    escPosPrinterActions.printDocument(
-      Map({
-        hostname,
-        port,
-        documentContent,
-        numberOfCopies: 1,
-        language: printOnCustomerReceiptLanguage,
-      }),
-    );
+    const documents = customerReceiptTemplate
+      .get('linkedPrinters')
+      .flatMap(linkedPrinter => {
+        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+
+        if (!foundPrinter) {
+          return null;
+        }
+
+        const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
+        const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+          details,
+          tableName,
+          customerReceiptTemplate.get('template'),
+          Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
+          linkedPrinter.get('language'),
+        );
+
+        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      })
+      .filter(_ => _)
+      .toList();
+
+    if (documents.isEmpty()) {
+      return;
+    }
+
+    escPosPrinterActions.printDocument(Map({ documents }));
   };
 
   handleEndReached = () => true;
@@ -482,7 +523,6 @@ class TableDetailContainer extends Component {
       user: {
         orders: { edges: orders },
       },
-      printerConfig,
       customerReceiptTemplate,
       kitchenOrderTemplate,
     } = this.props;
@@ -502,9 +542,9 @@ class TableDetailContainer extends Component {
         onEndReached={this.handleEndReached}
         onGiveToGuestPressed={this.handleGiveToGuestPressed}
         onRePrintForKitchen={this.handleRePrintForKitchen}
-        canPrintKitchenOrder={!!(kitchenOrderTemplate && printerConfig)}
+        canPrintKitchenOrder={!!kitchenOrderTemplate}
         onPrintReceipt={this.handlePrintReceipt}
-        canPrintReceipt={!!(customerReceiptTemplate && printerConfig)}
+        canPrintReceipt={!!customerReceiptTemplate}
       />
     );
   };
@@ -519,32 +559,12 @@ TableDetailContainer.propTypes = {
   table: TableProp.isRequired,
   tableId: PropTypes.string.isRequired,
   restaurantId: PropTypes.string.isRequired,
-  kitchenOrderTemplate: PropTypes.string,
-  kitchenOrderTemplateMaxLineWidthDivisionFactor: PropTypes.number,
-  customerReceiptTemplate: PropTypes.string,
-  customerReceiptTemplateMaxLineWidthDivisionFactor: PropTypes.number,
-  printOnKitchenReceiptLanguage: PropTypes.string,
-  printOnCustomerReceiptLanguage: PropTypes.string,
-};
-
-TableDetailContainer.defaultProps = {
-  kitchenOrderTemplate: null,
-  kitchenOrderTemplateMaxLineWidthDivisionFactor: 1,
-  customerReceiptTemplate: null,
-  customerReceiptTemplateMaxLineWidthDivisionFactor: 1,
-  printOnKitchenReceiptLanguage: null,
-  printOnCustomerReceiptLanguage: null,
 };
 
 const mapStateToProps = (state, { user: { table } }) => {
   const activeTable = state.applicationState.get('activeTable');
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
-  const printerConfig = configurations.get('printers').isEmpty()
-    ? null
-    : configurations
-      .get('printers')
-      .first()
-      .toJS();
+  const printers = configurations.get('printers').toJS();
   const kitchenOrderTemplate = configurations
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
@@ -556,13 +576,9 @@ const mapStateToProps = (state, { user: { table } }) => {
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
     table,
     tableId: activeTable.get('id'),
-    printerConfig,
-    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
-    kitchenOrderTemplateMaxLineWidthDivisionFactor: kitchenOrderTemplate ? kitchenOrderTemplate.get('maxLineWidthDivisionFactor') : 1,
-    customerReceiptTemplate: customerReceiptTemplate ? customerReceiptTemplate.get('template') : null,
-    customerReceiptTemplateMaxLineWidthDivisionFactor: customerReceiptTemplate ? customerReceiptTemplate.get('maxLineWidthDivisionFactor') : 1,
-    printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
-    printOnCustomerReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnCustomerReceipt']),
+    printers,
+    kitchenOrderTemplate,
+    customerReceiptTemplate,
   };
 };
 

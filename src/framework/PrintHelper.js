@@ -70,7 +70,7 @@ export default class PrintHelper {
     return Array(maxLength - str.length + 1).join(paddingChar) + str;
   };
 
-  static getPrintableOrderDetailsForKitchen = (details, maxLineWidth) => {
+  static getPrintableOrderDetailsForKitchen = (details, maxLineWidth, language) => {
     const groupedDetails = details.groupBy(detail => {
       const choiceItemPriceIds = detail
         .get('orderChoiceItemPrices')
@@ -92,61 +92,76 @@ export default class PrintHelper {
             Map(),
           ),
       )
-      .reduce(
-        (menuItemsDetail, detail) =>
+      .reduce((menuItemsDetail, detail) => {
+        const names = detail.getIn(['menuItemPrice', 'menuItem', 'nameWithLanguages']);
+        const nameToPrint = names.find(_ => _.get('language').localeCompare(language) === 0);
+        const defaultNameToPrint = names.find(_ => _.get('language').localeCompare('en_NZ') === 0);
+
+        return (
           menuItemsDetail +
           endOfLine +
           PrintHelper.splitTextIntoMultipleLines(
-            detail.get('quantity').toString() + '  ' + detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnKitchenReceipt']),
+            detail.get('quantity').toString() + '  ' + nameToPrint
+              ? nameToPrint.get('value')
+              : defaultNameToPrint
+                ? defaultNameToPrint.get('value')
+                : '',
             maxLineWidth,
           ) +
-          detail
-            .get('orderChoiceItemPrices')
-            .reduce(
-              (reduction, orderChoiceItemPrice) =>
-                reduction +
-                PrintHelper.splitTextIntoMultipleLines(
-                  '  ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnKitchenReceipt']),
-                  maxLineWidth,
-                  '',
-                  false,
-                ),
-              '',
-            ) +
-          PrintHelper.splitTextIntoMultipleLines(detail.get('notes'), maxLineWidth, 'Notes: '),
-        '',
-      );
+          detail.get('orderChoiceItemPrices').reduce((reduction, orderChoiceItemPrice) => {
+            const names = orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameWithLanguages']);
+            const nameToPrint = names.find(_ => _.get('language').localeCompare(language) === 0);
+            const defaultNameToPrint = names.find(_ => _.get('language').localeCompare('en_NZ') === 0);
+
+            return (
+              reduction +
+              PrintHelper.splitTextIntoMultipleLines(
+                '  ' + nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
+                maxLineWidth,
+                '',
+                false,
+              )
+            );
+          }, '') +
+          PrintHelper.splitTextIntoMultipleLines(detail.get('notes'), maxLineWidth, 'Notes: ')
+        );
+      }, '');
   };
 
-  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details, maxLineWidth) =>
+  static getPrintableOrderDetailsForKitchenWithServingTime = (servingTime, details, maxLineWidth, language) =>
     PrintHelper.pad(servingTime, maxLineWidth, '-') +
     endOfLine +
     endOfLine +
-    PrintHelper.getPrintableOrderDetailsForKitchen(details, maxLineWidth) +
+    PrintHelper.getPrintableOrderDetailsForKitchen(details, maxLineWidth, language) +
     endOfLine +
     endOfLine;
 
-  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, tableName, template, maxLineWidth) => {
+  static convertOrderIntoPrintableDocumentForKitchen = (details, placedAt, notes, tableName, template, maxLineWidth, language) => {
     const immutableDetails = Immutable.fromJS(details);
     const detailsWithUnspecifiedServingTime = immutableDetails.filterNot(detail => !!detail.get('servingTime'));
     const detailsWithServingTimes = immutableDetails.filter(detail => !!detail.get('servingTime'));
     const groupedDetails = detailsWithServingTimes.groupBy(detail => detail.getIn(['servingTime', 'id']));
     let finalOrderList = groupedDetails
       .keySeq()
-      .map(servingTimeId =>
-        Map({
-          servingTimeNameToPrint: groupedDetails
-            .get(servingTimeId)
-            .first()
-            .getIn(['servingTime', 'tag', 'nameToPrintOnKitchenReceipt']),
+      .map(servingTimeId => {
+        const names = groupedDetails
+          .get(servingTimeId)
+          .first()
+          .getIn(['servingTime', 'tag', 'nameWithLanguages']);
+        const nameToPrint = names.find(_ => _.get('language').localeCompare(language) === 0);
+        const defaultNameToPrint = names.find(_ => _.get('language').localeCompare('en_NZ') === 0);
+
+        return Map({
+          servingTimeNameToPrint: nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
           details: groupedDetails.get(servingTimeId),
-        }),
-      )
+        });
+      })
       .map(groupedDetailsWithServingTime =>
         PrintHelper.getPrintableOrderDetailsForKitchenWithServingTime(
           groupedDetailsWithServingTime.get('servingTimeNameToPrint'),
           groupedDetailsWithServingTime.get('details'),
           maxLineWidth,
+          language,
         ),
       )
       .reduce((orderList1, orderList2) => orderList1 + endOfLine + orderList2, '');
@@ -231,7 +246,7 @@ export default class PrintHelper {
   static convertTotalGstToPrintableString = (totalPrice, maxLineWidth) =>
     PrintHelper.alignTextsOnEachEdge('includes GST of', PrintHelper.padStart(`$${((totalPrice * 3) / 23).toFixed(2)}`, 10), maxLineWidth) + endOfLine;
 
-  static getPrintableOrderDetailsForReceipt = (details, maxLineWidth) => {
+  static getPrintableOrderDetailsForReceipt = (details, maxLineWidth, language) => {
     if (details.isEmpty()) {
       return '';
     }
@@ -256,37 +271,43 @@ export default class PrintHelper {
             Map(),
           ),
       )
-      .reduce(
-        (menuItemsDetail, detail) =>
+      .reduce((menuItemsDetail, detail) => {
+        const names = detail.getIn(['menuItemPrice', 'menuItem', 'nameWithLanguages']);
+        const nameToPrint = names.find(_ => _.get('language').localeCompare(language) === 0);
+        const defaultNameToPrint = names.find(_ => _.get('language').localeCompare('en_NZ') === 0);
+
+        return (
           menuItemsDetail +
           endOfLine +
           PrintHelper.alignTextsOnEachEdge(
-            detail.getIn(['menuItemPrice', 'menuItem', 'nameToPrintOnCustomerReceipt']),
+            nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
             PrintHelper.convertPriceAndQuantityToPrintableString(detail.getIn(['menuItemPrice', 'currentPrice']), detail.get('quantity').toString()),
             maxLineWidth,
           ) +
           endOfLine +
-          detail
-            .get('orderChoiceItemPrices')
-            .reduce(
-              (reduction, orderChoiceItemPrice) =>
-                reduction +
-                PrintHelper.alignTextsOnEachEdge(
-                  ' ' + orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameToPrintOnCustomerReceipt']),
-                  PrintHelper.convertPriceAndQuantityToPrintableString(
-                    orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
-                    (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
-                  ),
-                  maxLineWidth,
-                ) +
-                endOfLine,
-              '',
-            ),
-        '',
-      );
+          detail.get('orderChoiceItemPrices').reduce((reduction, orderChoiceItemPrice) => {
+            const names = orderChoiceItemPrice.getIn(['choiceItemPrice', 'choiceItem', 'nameWithLanguages']);
+            const nameToPrint = names.find(_ => _.get('language').localeCompare(language) === 0);
+            const defaultNameToPrint = names.find(_ => _.get('language').localeCompare('en_NZ') === 0);
+
+            return (
+              reduction +
+              PrintHelper.alignTextsOnEachEdge(
+                '  ' + nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
+                PrintHelper.convertPriceAndQuantityToPrintableString(
+                  orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
+                  (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
+                ),
+                maxLineWidth,
+              ) +
+              endOfLine
+            );
+          }, '')
+        );
+      }, '');
   };
 
-  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template, maxLineWidth) => {
+  static convertOrderIntoPrintableDocumentForReceipt = (details, tableName, template, maxLineWidth, language) => {
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'paymentGroupId']));
 
     return groupedDetails
@@ -297,7 +318,7 @@ export default class PrintHelper {
         const cash = items.first().getIn(['paymentGroup', 'cash']);
 
         const orderList =
-          PrintHelper.getPrintableOrderDetailsForReceipt(items, maxLineWidth) +
+          PrintHelper.getPrintableOrderDetailsForReceipt(items, maxLineWidth, language) +
           endOfLine +
           Array(maxLineWidth + 1).join('-') +
           endOfLine +

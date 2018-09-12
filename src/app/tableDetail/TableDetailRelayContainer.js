@@ -48,8 +48,11 @@ export default createRefetchContainer(
                   menuItem {
                     id
                     name
-                    nameToPrintOnCustomerReceipt
-                    nameToPrintOnKitchenReceipt
+                    nameWithLanguages {
+                      language
+                      value
+                    }
+                    linkedPrinters
                     imageUrl
                   }
                 }
@@ -61,7 +64,10 @@ export default createRefetchContainer(
                 servingTime {
                   id
                   tag {
-                    nameToPrintOnKitchenReceipt
+                    nameWithLanguages {
+                      language
+                      value
+                    }
                   }
                 }
                 paid
@@ -76,8 +82,10 @@ export default createRefetchContainer(
                     choiceItem {
                       id
                       name
-                      nameToPrintOnCustomerReceipt
-                      nameToPrintOnKitchenReceipt
+                      nameWithLanguages {
+                        language
+                        value
+                      }
                     }
                   }
                 }

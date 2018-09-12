@@ -60,6 +60,11 @@ export default createRefetchContainer(
                   menuItem {
                     id
                     name
+                    nameWithLanguages {
+                      language
+                      value
+                    }
+                    linkedPrinters
                     imageUrl
                   }
                 }
@@ -81,6 +86,10 @@ export default createRefetchContainer(
                     choiceItem {
                       id
                       name
+                      nameWithLanguages {
+                        language
+                        value
+                      }
                     }
                   }
                 }

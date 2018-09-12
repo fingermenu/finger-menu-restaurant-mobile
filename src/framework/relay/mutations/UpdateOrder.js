@@ -46,16 +46,23 @@ const mutation = graphql`
               menuItem {
                 id
                 name
-                nameToPrintOnCustomerReceipt
-                nameToPrintOnKitchenReceipt
-                description
+                nameWithLanguages {
+                  language
+                  value
+                }
+                descriptionWithLanguages {
+                  language
+                  value
+                }
               }
             }
             servingTime {
               id
               tag {
-                nameToPrintOnCustomerReceipt
-                nameToPrintOnKitchenReceipt
+                nameWithLanguages {
+                  language
+                  value
+                }
               }
             }
             orderChoiceItemPrices {
@@ -69,9 +76,14 @@ const mutation = graphql`
                 choiceItem {
                   id
                   name
-                  nameToPrintOnCustomerReceipt
-                  nameToPrintOnKitchenReceipt
-                  description
+                  nameWithLanguages {
+                    language
+                    value
+                  }
+                  descriptionWithLanguages {
+                    language
+                    value
+                  }
                 }
               }
             }

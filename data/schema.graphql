@@ -236,6 +236,7 @@ type DocumentTemplate {
   name: String
   maxLineWidthDivisionFactor: Float
   template: String!
+  linkedPrinters: [LinkedPrinter!]
 }
 
 type GeoLocation {
@@ -273,6 +274,12 @@ type LanguageTypeEdge {
   cursor: String!
 }
 
+type LinkedPrinter {
+  name: String!
+  language: String!
+  numberOfPrints: Int!
+}
+
 type Menu implements Node {
   id: ID!
   name: String
@@ -303,6 +310,7 @@ type MenuItem implements Node {
   menuItemPageUrl: String
   imageUrl: String
   tags: [Tag!]
+  linkedPrinters: [String!]
 }
 
 type MenuItemPrice implements Node {

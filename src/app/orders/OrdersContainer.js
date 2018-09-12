@@ -4,7 +4,7 @@ import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/e
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Immutable, { Map } from 'immutable';
+import Immutable, { Range, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
@@ -157,41 +157,47 @@ class OrdersContainer extends Component {
 
   printOrder = ({ details, placedAt, notes }) => {
     const {
-      printerConfig,
+      printers,
       kitchenOrderTemplate,
-      kitchenOrderTemplateMaxLineWidthDivisionFactor,
       user: {
         table: { name: tableName },
       },
-      printOnKitchenReceiptLanguage,
-    } = this.props;
-
-    if (!kitchenOrderTemplate || !printerConfig) {
-      return;
-    }
-
-    const {
-      printerConfig: { hostname, port, maxLineWidth },
-      numberOfPrintCopiesForKitchen,
       escPosPrinterActions,
     } = this.props;
 
-    escPosPrinterActions.printDocument(
-      Map({
-        hostname,
-        port,
-        documentContent: PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+    if (!kitchenOrderTemplate) {
+      return;
+    }
+
+    const documents = kitchenOrderTemplate
+      .get('linkedPrinters')
+      .flatMap(linkedPrinter => {
+        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+
+        if (!foundPrinter) {
+          return null;
+        }
+
+        const content = PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
           details,
           placedAt,
           notes,
           tableName,
-          kitchenOrderTemplate,
-          Math.floor(maxLineWidth / kitchenOrderTemplateMaxLineWidthDivisionFactor),
-        ),
-        numberOfCopies: numberOfPrintCopiesForKitchen,
-        language: printOnKitchenReceiptLanguage,
-      }),
-    );
+          kitchenOrderTemplate.get('template'),
+          Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
+          linkedPrinter.get('language'),
+        );
+
+        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      })
+      .filter(_ => _)
+      .toList();
+
+    if (documents.isEmpty()) {
+      return;
+    }
+
+    escPosPrinterActions.printDocument(Map({ documents }));
   };
 
   render = () => {
@@ -256,28 +262,12 @@ OrdersContainer.propTypes = {
   navigateToMenuItem: PropTypes.func.isRequired,
   navigateToOrderConfirmed: PropTypes.func.isRequired,
   restaurantId: PropTypes.string.isRequired,
-  kitchenOrderTemplate: PropTypes.string,
-  kitchenOrderTemplateMaxLineWidthDivisionFactor: PropTypes.number,
   customers: CustomersProp.isRequired,
-  numberOfPrintCopiesForKitchen: PropTypes.number,
-  printOnKitchenReceiptLanguage: PropTypes.string,
-};
-
-OrdersContainer.defaultProps = {
-  kitchenOrderTemplate: null,
-  kitchenOrderTemplateMaxLineWidthDivisionFactor: 1,
-  numberOfPrintCopiesForKitchen: 1,
-  printOnKitchenReceiptLanguage: null,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const configurations = state.applicationState.getIn(['activeRestaurant', 'configurations']);
-  const printerConfig = configurations.get('printers').isEmpty()
-    ? null
-    : configurations
-      .get('printers')
-      .first()
-      .toJS();
+  const printers = configurations.get('printers').toJS();
   const kitchenOrderTemplate = configurations
     .get('documentTemplates')
     .find(documentTemplate => documentTemplate.get('name').localeCompare('KitchenOrder') === 0);
@@ -324,11 +314,8 @@ const mapStateToProps = (state, ownProps) => {
       .valueSeq()
       .toJS(),
     restaurantId: state.applicationState.getIn(['activeRestaurant', 'id']),
-    printerConfig,
-    kitchenOrderTemplate: kitchenOrderTemplate ? kitchenOrderTemplate.get('template') : null,
-    kitchenOrderTemplateMaxLineWidthDivisionFactor: kitchenOrderTemplate ? kitchenOrderTemplate.get('maxLineWidthDivisionFactor') : 1,
-    numberOfPrintCopiesForKitchen: configurations.get('numberOfPrintCopiesForKitchen'),
-    printOnKitchenReceiptLanguage: state.applicationState.getIn(['activeRestaurant', 'configurations', 'languages', 'printOnKitchenReceipt']),
+    printers,
+    kitchenOrderTemplate,
   };
 };
 

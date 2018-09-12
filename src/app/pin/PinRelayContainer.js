@@ -39,6 +39,11 @@ export default createRefetchContainer(
                   name
                   template
                   maxLineWidthDivisionFactor
+                  linkedPrinters {
+                    name
+                    language
+                    numberOfPrints
+                  }
                 }
                 numberOfPrintCopiesForKitchen
               }
