@@ -4,7 +4,7 @@ import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/e
 import * as googleAnalyticsTrackerActions from '@microbusiness/google-analytics-react-native/src/googleAnalyticsTracker/Actions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Immutable, { Range, Map } from 'immutable';
+import Immutable, { List, Map, Range } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
@@ -169,29 +169,33 @@ class OrdersContainer extends Component {
       return;
     }
 
-    const documents = kitchenOrderTemplate
-      .get('linkedPrinters')
-      .flatMap(linkedPrinter => {
-        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+    const documents = kitchenOrderTemplate.get('linkedPrinters').flatMap(linkedPrinter => {
+      const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
 
-        if (!foundPrinter) {
-          return null;
-        }
+      if (!foundPrinter) {
+        return List();
+      }
 
-        const content = PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
-          details,
-          placedAt,
-          notes,
-          tableName,
-          kitchenOrderTemplate.get('template'),
-          Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
-          linkedPrinter.get('language'),
-        );
+      const filteredDetails = details.filter(({ menuItemPrice: { menuItem: { linkedPrinters } } }) =>
+        linkedPrinters.find(_ => _.localeCompare(foundPrinter.name) === 0),
+      );
 
-        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
-      })
-      .filter(_ => _)
-      .toList();
+      if (filteredDetails.length === 0) {
+        return List();
+      }
+
+      const content = PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+        filteredDetails,
+        placedAt,
+        notes,
+        tableName,
+        kitchenOrderTemplate.get('template'),
+        Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
+        linkedPrinter.get('language'),
+      );
+
+      return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+    });
 
     if (documents.isEmpty()) {
       return;

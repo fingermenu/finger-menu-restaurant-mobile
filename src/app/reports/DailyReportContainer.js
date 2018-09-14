@@ -1,7 +1,7 @@
 // @flow
 
 import * as escPosPrinterActions from '@microbusiness/printer-react-native/src/escPosPrinter/Actions';
-import { Map, Range } from 'immutable';
+import { List, Map, Range } from 'immutable';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -47,27 +47,23 @@ class DailyReportContainer extends Component {
       return null;
     }
 
-    const documents = departmentCategoryDailyReportTemplate
-      .get('linkedPrinters')
-      .flatMap(linkedPrinter => {
-        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+    const documents = departmentCategoryDailyReportTemplate.get('linkedPrinters').flatMap(linkedPrinter => {
+      const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
 
-        if (!foundPrinter) {
-          return null;
-        }
+      if (!foundPrinter) {
+        return List();
+      }
 
-        const content = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
-          departmentCategoriesRootReport,
-          departmentCategoryDailyReportTemplate.get('template'),
-          from,
-          to,
-          Math.floor(foundPrinter.maxLineWidth / departmentCategoryDailyReportTemplate.get('maxLineWidthDivisionFactor')),
-        );
+      const content = PrinterHelper.convertDepartmentCategoriesReportIntoPrintableDocument(
+        departmentCategoriesRootReport,
+        departmentCategoryDailyReportTemplate.get('template'),
+        from,
+        to,
+        Math.floor(foundPrinter.maxLineWidth / departmentCategoryDailyReportTemplate.get('maxLineWidthDivisionFactor')),
+      );
 
-        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
-      })
-      .filter(_ => _)
-      .toList();
+      return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+    });
 
     if (documents.isEmpty()) {
       return;

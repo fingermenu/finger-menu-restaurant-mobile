@@ -244,27 +244,23 @@ class TableDetailContainer extends Component {
         return null;
       }
 
-      const documents = customerReceiptTemplate
-        .get('linkedPrinters')
-        .flatMap(linkedPrinter => {
-          const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+      const documents = customerReceiptTemplate.get('linkedPrinters').flatMap(linkedPrinter => {
+        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
 
-          if (!foundPrinter) {
-            return null;
-          }
+        if (!foundPrinter) {
+          return List();
+        }
 
-          const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
-            details,
-            tableName,
-            customerReceiptTemplate.get('template'),
-            Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
-            linkedPrinter.get('language'),
-          );
+        const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+          details,
+          tableName,
+          customerReceiptTemplate.get('template'),
+          Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
+          linkedPrinter.get('language'),
+        );
 
-          return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
-        })
-        .filter(_ => _)
-        .toList();
+        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      });
 
       if (documents.isEmpty()) {
         return;
@@ -330,34 +326,42 @@ class TableDetailContainer extends Component {
       return null;
     }
 
-    const documents = kitchenOrderTemplate
-      .get('linkedPrinters')
-      .flatMap(linkedPrinter => {
-        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+    const documents = kitchenOrderTemplate.get('linkedPrinters').flatMap(linkedPrinter => {
+      const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
 
-        if (!foundPrinter) {
-          return null;
-        }
+      if (!foundPrinter) {
+        return List();
+      }
 
-        const content = orders
-          .map(_ => _.node)
-          .map(({ details, placedAt, notes }) =>
-            PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
-              details,
-              placedAt,
-              notes,
-              tableName,
-              kitchenOrderTemplate.get('template'),
-              Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
-              linkedPrinter.get('language'),
-            ),
-          )
-          .reduce((content1, content2) => content1 + endOfLine + content2, '');
+      const content = orders
+        .map(_ => _.node)
+        .map(({ details, placedAt, notes }) => {
+          const filteredDetails = details.filter(({ menuItemPrice: { menuItem: { linkedPrinters } } }) =>
+            linkedPrinters.find(_ => _.localeCompare(foundPrinter.name) === 0),
+          );
 
-        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
-      })
-      .filter(_ => _)
-      .toList();
+          if (filteredDetails.length === 0) {
+            return '';
+          }
+
+          return PrinterHelper.convertOrderIntoPrintableDocumentForKitchen(
+            filteredDetails,
+            placedAt,
+            notes,
+            tableName,
+            kitchenOrderTemplate.get('template'),
+            Math.floor(foundPrinter.maxLineWidth / kitchenOrderTemplate.get('maxLineWidthDivisionFactor')),
+            linkedPrinter.get('language'),
+          );
+        })
+        .reduce((content1, content2) => (content2 ? content1 + endOfLine + content2 : content1), '');
+
+      if (!content) {
+        return List();
+      }
+
+      return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+    });
 
     if (documents.isEmpty()) {
       return;
@@ -381,28 +385,24 @@ class TableDetailContainer extends Component {
       return null;
     }
 
-    const documents = customerReceiptTemplate
-      .get('linkedPrinters')
-      .flatMap(linkedPrinter => {
-        const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
+    const documents = customerReceiptTemplate.get('linkedPrinters').flatMap(linkedPrinter => {
+      const foundPrinter = printers.find(({ name }) => name.localeCompare(linkedPrinter.get('name')) === 0);
 
-        if (!foundPrinter) {
-          return null;
-        }
+      if (!foundPrinter) {
+        return List();
+      }
 
-        const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-        const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
-          details,
-          tableName,
-          customerReceiptTemplate.get('template'),
-          Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
-          linkedPrinter.get('language'),
-        );
+      const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
+      const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+        details,
+        tableName,
+        customerReceiptTemplate.get('template'),
+        Math.floor(foundPrinter.maxLineWidth / customerReceiptTemplate.get('maxLineWidthDivisionFactor')),
+        linkedPrinter.get('language'),
+      );
 
-        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
-      })
-      .filter(_ => _)
-      .toList();
+      return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+    });
 
     if (documents.isEmpty()) {
       return;

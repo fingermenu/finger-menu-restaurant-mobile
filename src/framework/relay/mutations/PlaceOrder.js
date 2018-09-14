@@ -55,6 +55,7 @@ const mutation = graphql`
                   language
                   value
                 }
+                linkedPrinters
               }
             }
             servingTime {
