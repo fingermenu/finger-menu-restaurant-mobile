@@ -251,7 +251,7 @@ class TableDetailContainer extends Component {
           return List();
         }
 
-        const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+        const contents = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
           details,
           tableName,
           customerReceiptTemplate.get('template'),
@@ -259,7 +259,9 @@ class TableDetailContainer extends Component {
           linkedPrinter.get('language'),
         );
 
-        return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+        return contents.flatMap(content =>
+          Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content })),
+        );
       });
 
       if (documents.isEmpty()) {
@@ -393,7 +395,7 @@ class TableDetailContainer extends Component {
       }
 
       const details = Immutable.fromJS(orders.map(_ => _.node)).flatMap(order => order.get('details'));
-      const content = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
+      const contents = PrinterHelper.convertOrderIntoPrintableDocumentForReceipt(
         details,
         tableName,
         customerReceiptTemplate.get('template'),
@@ -401,7 +403,9 @@ class TableDetailContainer extends Component {
         linkedPrinter.get('language'),
       );
 
-      return Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content }));
+      return contents.flatMap(content =>
+        Range(0, linkedPrinter.get('numberOfPrints')).map(() => Map({ hostname: foundPrinter.hostname, port: foundPrinter.port, content })),
+      );
     });
 
     if (documents.isEmpty()) {

@@ -1,5 +1,6 @@
 // @flow
 
+import { Common } from '@microbusiness/common-javascript';
 import Immutable, { Map, Range } from 'immutable';
 import { ZonedDateTime, ZoneId, DateTimeFormatter } from 'js-joda';
 import OrderHelper from './OrderHelper';
@@ -311,6 +312,7 @@ export default class PrintHelper {
     const groupedDetails = details.groupBy(item => item.getIn(['paymentGroup', 'paymentGroupId']));
 
     return groupedDetails
+      .filter(items => Common.isNotNullAndUndefined(items.first().getIn(['paymentGroup', 'paymentGroupId'])))
       .map(items => {
         const totalPriceAndDiscount = OrderHelper.calculateTotalPriceAndDiscount(items);
         const totalPrice = totalPriceAndDiscount.get('totalPrice');
@@ -346,7 +348,7 @@ export default class PrintHelper {
           .replace(/{TableName}/g, tableName)
           .replace(/{OrderList}/g, orderList);
       })
-      .reduce((reduction, value) => reduction + endOfLine + value, '');
+      .toList();
   };
 
   static convertDepartmentCategoriesReportIntoPrintableDocument = (departmentCategoriesRootReport, template, from, to, maxLineWidth) => {
