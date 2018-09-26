@@ -102,11 +102,9 @@ export default class PrintHelper {
           menuItemsDetail +
           endOfLine +
           PrintHelper.splitTextIntoMultipleLines(
-            detail.get('quantity').toString() + '  ' + nameToPrint
-              ? nameToPrint.get('value')
-              : defaultNameToPrint
-                ? defaultNameToPrint.get('value')
-                : '',
+            detail.get('quantity').toString() +
+              '  ' +
+              (nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : ''),
             maxLineWidth,
           ) +
           detail.get('orderChoiceItemPrices').reduce((reduction, orderChoiceItemPrice) => {
@@ -117,7 +115,7 @@ export default class PrintHelper {
             return (
               reduction +
               PrintHelper.splitTextIntoMultipleLines(
-                '  ' + nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
+                '  ' + (nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : ''),
                 maxLineWidth,
                 '',
                 false,
@@ -294,7 +292,7 @@ export default class PrintHelper {
             return (
               reduction +
               PrintHelper.alignTextsOnEachEdge(
-                '  ' + nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : '',
+                '  ' + (nameToPrint ? nameToPrint.get('value') : defaultNameToPrint ? defaultNameToPrint.get('value') : ''),
                 PrintHelper.convertPriceAndQuantityToPrintableString(
                   orderChoiceItemPrice.getIn(['choiceItemPrice', 'currentPrice']),
                   (detail.get('quantity') * orderChoiceItemPrice.get('quantity')).toString(),
